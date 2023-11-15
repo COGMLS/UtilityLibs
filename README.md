@@ -10,7 +10,10 @@ This repository is destinated to store the development of important common utili
 
 ## Libraries Available:
 
-
+| Name | Documentation | Version | Notes |
+| ---- | ------------- | ------- | ----- |
+| LoggerLib | [LoggerLibDoc.md](/Libraries/LoggerLib/LoggerLib.md) | 1.1.0-rc | |
+| SettingsLib | [SettingsLibDoc.md](/Libraries/SettingsLib/SettingsLib.md) | 1.4.15-beta | |
 
 ## License
 
