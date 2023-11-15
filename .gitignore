@@ -1,7 +1,7 @@
 ﻿#####################################################################
 #                       Git Ignore Settings
-#                     Smart Auto Run Project
-#   Ver. 1.0            Date: 2022/11/27
+#                       Utility Libraries
+#   Ver. 1.0            Date: 2023/11/15
 #####################################################################
 
 #####################################################################
@@ -11,6 +11,10 @@
 [Tt]emp
 [Tt]est
 [Tt]ests
+
+# For consoles and files to make tests that has in the end of name will be ignored
+*_[Cc]onsole[Tt]est*
+*_Tt]est*
 
 #####################################################################
 # Visual Studio Code Git Ignore Settings:

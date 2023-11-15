@@ -4,7 +4,9 @@
 
 This repository is destinated to store the development of important common utility libraries used in projects like settings, directory and file management, but also for other purposes that can be commonly used in projects.
 
-> **NOTE:**This repository contains libraries that may be part of other projects and was ported to here. For those libraries, the code was generalized to allow a better approach to other solutions.
+> **NOTE:** This repository contains libraries that may be part of other projects and was ported to here. For those libraries, the code was generalized to allow a better approach to other solutions.
+
+> **NOTE:** The repository uses some console solutions for testing. All consoles and files that has in the end of name, the sequence ` `*`_[Cc]onsole[Tt]est*`*` ` or ` `*`_[Tt]est*`*` ` will be ignored by git.
 
 ## Libraries Available:
 
