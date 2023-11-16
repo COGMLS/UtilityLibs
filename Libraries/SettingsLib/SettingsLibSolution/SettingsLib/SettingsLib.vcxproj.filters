@@ -24,13 +24,28 @@
     <ClInclude Include="SettingsLibDef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsLib.hpp">
+    <ClInclude Include="SettingsLibConfigData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SettingsLibProperties.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SettingsLibMng.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsLib.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsLibCommonDataTypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsLibTools.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsLibCommonDefines.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsLibConfigDataW.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +56,16 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsLibConfigData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="SettingsLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsLibTools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsLibConfigDataW.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
