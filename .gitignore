@@ -13,7 +13,7 @@
 [Tt]ests
 
 # For consoles and files to make tests that has in the end of name will be ignored
-#*_[Cc]onsole[Tt]est*
+*_[Cc]onsole[Tt]est*
 *_Tt]est*
 
 #####################################################################
