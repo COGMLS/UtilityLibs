@@ -2,12 +2,15 @@
 
 The Settings Library is designed to facilitate developers to implement configuration file and configuration flags. The Settings Library was designed for C++ and C# languages.
 
+> **NOTE:** The SettingsLibSolution contains an exported settings library version from another project. The actual SettingsLib contains a generic version with improvements that can be better for some projects and with cross-platform support.
+
 ## Languages Available:
 
-* C
-* C++17
-* C# 10.0
-* PowerShell
+* C ***(Not ready)***
+* C++17 *(SettingsLibSolution)*
+* C++20 *(SettingsLib)*
+* C# 10.0 ***(Not ready)***
+* PowerShell ***(Not ready)***
 
 ## License
 
