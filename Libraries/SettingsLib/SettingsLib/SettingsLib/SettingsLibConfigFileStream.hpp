@@ -3,7 +3,7 @@
 #ifndef SETTINGS_LIB_CONFIG_FILE_STREAM_HPP
 #define SETTINGS_LIB_CONFIG_FILE_STREAM_HPP
 
-#ifndef WIN32
+#ifdef WIN32
 	#ifdef SETTINGS_LIB_EXPORTS
 		#define SETTINGS_LIB_API __declspec(dllexport)
 	#else
@@ -80,7 +80,7 @@ namespace SettingsLib
 
 			/**
 			 * @brief Reopen the configuration file stream
-			 * @return True if a successfull operation occur.
+			 * @return True if a successful operation occur.
 			 */
 			bool openConfigStream();
 

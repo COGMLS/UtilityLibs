@@ -1,4 +1,4 @@
-#include "ConfigFileStream.hpp"
+#include "SettingsLibConfigFileStream.hpp"
 
 SettingsLib::ConfigFileStream::ConfigFileStream()
 {
@@ -52,12 +52,16 @@ SettingsLib::ConfigFileStream::ConfigFileStream(std::filesystem::path cfgFilePat
 						if (sFs2Vmem == 0)
 						{
 							// Use the vector to analyze the lines:
-							
+							// Call function to analyze the line
 						}
 						else
 						{
 							this->errorsList->push_back(std::exception(std::string("Fail to read into the memory the cfgFileStream. Return " + std::to_string(sFs2Vmem)).c_str()));
 						}
+					}
+					else
+					{
+						
 					}
 				}
 				else
