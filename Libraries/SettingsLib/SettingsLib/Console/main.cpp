@@ -1,101 +1,139 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
-class A
-{
-	public:
-		union uA
-		{
-			std::vector<int>* pv;
-			int* pi;
-			double d;
-		};
+#include "SettingsIniTools.hpp"
+#include "SettingsLibDataTypes.hpp"
 
-		uA d;
-		std::string name;
-		int t = 0;
-
-		A(std::vector<int> v, std::string name)
-		{
-			t = 1;
-			this->name = name;
-			this->d.pv = new std::vector<int>;
-			*this->d.pv = v;
-		}
-
-		A(int i, std::string name)
-		{
-			t = 2;
-			this->name = name;
-			this->d.pi = new int;
-			*this->d.pi = i;
-		}
-
-		A(double d, std::string name)
-		{
-			t = 3;
-			this->name = name;
-			this->d.d = d;
-		}
-
-		~A()
-		{
-			std::cout << "Destructor called for object " << this->name << " with data type (" << this->t << "). Using " << sizeof(uA) << " bytes for uA union type. ";
-			
-			switch (this->t)
-			{
-				case 1:
-				{
-					std::cout << "Using " << sizeof(this->d.pv) << " bytes for vector";
-					delete this->d.pv;
-					this->d.pv = nullptr;
-					break;
-				}
-				case 2:
-				{
-					std::cout << "Using " << sizeof(this->d.pi) << " bytes for int*";
-					delete this->d.pi;
-					this->d.pi = nullptr;
-					break;
-				}
-				case 3:
-				{
-					std::cout << "Using " << sizeof(this->d.d) << " bytes for double";
-				}
-				default:
-				{
-					break;
-				}
-			}
-
-			std::cout << std::endl;
-		}
-};
+#include "test.hpp"
+#include "debug.hpp"
 
 int main (int argc, const char* argv[], const char* argp[])
 {
 	std::cout << "Test Console" << std::endl;
 
-	A obj1(std::vector<int>{1,2,3,4,5}, "obj 1");
-	A obj2(12, "obj 2");
-	A obj3(3.14, "obj 3");
+	#ifdef TEST_TOOLS
 
-	std::vector<int>* v1 = obj1.d.pv;
-
-	std::cout << "Vector: ";
-	for (size_t i = 0; i < v1->size(); i++)
+	std::vector<std::string> lines = 
 	{
-		std::cout << " " << v1->at(i);
+		"test0=54",
+		"[LOADER]",
+		"DefaultProfileDelay=3000",
+		"MaxLogMemEntries=10",
+		"LogAutoSave = true",
+		"LogMaxFiles =30",
+		"ProfileLogMaxFiles= 30",
+		"MaxLogMemProfileEntries=20",
+		"ProfileAutoSave=true",
+		"UseDefaultInternalSettings = false #Test0",
+		"#Test1",
+		"; Test2",
+		"[Test] # Comment",
+		"Test1=10",
+		"Test12=Hello World",
+		"test20=1.25",
+		"[Test 1]",
+		"test30=1,36",
+		"test40= # Comment",
+		"test50= ; Comment",
+		"test60",
+		"",
+		"test 61",
+		" ",
+		"test 62=",
+		"test 63 = ",
+		"test 64 = Hello",
+		"test70=Hello2#Comment",
+		"test80=Hello World 2 # Comment",
+		"container1={1,2,3} #comment",
+		"container2= {3,4,5}",
+		"container3 = {7,8,9}"
+	};
+
+	std::string line = "";
+	std::string section = "";
+	std::string key = "";
+	std::string value = "";
+	std::string comment = "";
+
+	for (int l = 0; l < lines.size(); l++)
+	{
+		line = lines[l];
+		
+		int r = testToolsExtractIniData(l, &line, &section, &key, &value, &comment);
+
+		SettingsLib::Types::ConfigDataType* type = nullptr;
+		type = new SettingsLib::Types::ConfigDataType;
+		SettingsLib::Types::ConfigDataUnion* uData = nullptr;
+
+		int r2 = testToolsConvertValue(&value, type, uData);
+
+		line.clear();
+		section.clear();
+		key.clear();
+		value.clear();
+		comment.clear();
+
+		if (type != nullptr)
+		{
+			if (*type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING && uData != nullptr)
+			{
+				delete uData->s;
+				uData->s = nullptr;
+			}
+		}
+
+		if (type != nullptr)
+		{
+			delete type;
+			type = nullptr;
+		}
+
+		if (uData != nullptr)
+		{
+			delete uData;
+			uData = nullptr;
+		}
 	}
-	std::cout << std::endl;
 
-	std::cout << "Int pointer: " << *obj2.d.pi << std::endl;
 
-	std::cout << "Double: " << obj3.d.d << std::endl;
+	#endif // !TEST_TOOLS
 
-	obj1.~A();
-	obj2.~A();
-	obj3.~A();
+	SettingsLib::Types::ConfigDataStore s1;
+	s1 = "Hi";
+	s1 = 10;
+	s1 = -15;
+	s1 = 3.1415f;
+	s1 = true;
+
+	s1.cleanData();
+
+	s1 = "New Data!";
+
+	SettingsLib::Types::ConfigDataStore s2;
+
+	s2.setData("Hello");
+	s2.setData(39ull);
+	s2.setData(-85ll);
+	s2.setData(6.6159);
+	s2.setData(true);
+	s2.setData("Abc");
+
+	SettingsLib::Types::ConfigDataStore s3;
+
+	s3 = s1;
+
+	SettingsLib::Types::ConfigDataStore* s4 = new SettingsLib::Types::ConfigDataStore;
+
+	s4->setData("Test 4");
+
+	SettingsLib::Types::ConfigDataStore** s5;
+
+	s5 = &s4;
+
+	SettingsLib::Types::ConfigDataStore s6 = s2;
+
+	s6 = L"Hello World!";
 
 	return 0;
 }
