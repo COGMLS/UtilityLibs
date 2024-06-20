@@ -7,8 +7,6 @@
 
 #include "SettingsLibDefinitions.hpp"
 #include "SettingsLibDataTypes.hpp"
-#include "SettingsLibConfigData.hpp"
-#include "SettingsLibConfigDataW.hpp"
 #include "SettingsLibTools.hpp"
 #include "SettingsLibConfig.hpp"
 #include "SettingsLibVersionHelper.hpp"
