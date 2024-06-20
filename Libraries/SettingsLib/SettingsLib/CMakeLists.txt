@@ -33,5 +33,5 @@ project(SettingsLibProject VERSION 3.0.0 DESCRIPTION "Settings Library solution 
 #
 ###########################################################
 
-#add_subdirectory("SettingsLib")
+add_subdirectory("SettingsLib")
 add_subdirectory("Console")

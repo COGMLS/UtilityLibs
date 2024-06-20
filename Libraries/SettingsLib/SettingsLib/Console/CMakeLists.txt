@@ -43,9 +43,10 @@ project(SettingsLibTestConsole VERSION 0.0.1 DESCRIPTION "Console to test the Se
 
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
+include_directories("${SettingsLibReposRoot}/SettingsLib")
 
 # Define the executable properties:
-add_executable(SettingsLibTestConsole "main.cpp")
+add_executable(SettingsLibTestConsole "main.cpp" "test.hpp" "test.cpp" "debug.hpp" "debug.cpp")
 
 # Link the SettingsLibV2:
-#target_link_libraries(SettingsLibTestConsole SettingsLib)
+target_link_libraries(SettingsLibTestConsole SettingsLib)

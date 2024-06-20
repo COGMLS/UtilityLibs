@@ -15,6 +15,9 @@ cmake_minimum_required(VERSION 3.28)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Define local Settings Library project root var:
+set(SettingsLibraryRoot ${CMAKE_CURRENT_LIST_DIR})
+
 # Define if is Windows Environment:
 
 if(WIN32)
@@ -45,6 +48,7 @@ project(SettingsLib VERSION 3.0.0 DESCRIPTION "Settings Library.")
 
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
+#include_directories("${SettingsLibraryRoot}/Extensions/Ini")
 
 # Define to export the library methods if is Windows:
 if(WIN32)
@@ -59,25 +63,35 @@ if (WIN32)
 					SHARED
 					"dllmain.hpp" "dllmain.cpp"
 					"SettingsLib.hpp" "SettingsLib.cpp"
-					"SettingsLibConfig.hpp"
-					"SettingsLibConfigData.hpp"
-					"SettingsLibConfigDataW.hpp"
-					"SettingsLibDataTypes.hpp"
+					"SettingsLibConfig.hpp" "SettingsLibConfig.hpp"
+					"SettingsLibConfigFileStream.hpp" "SettingsLibConfigFileStream.cpp"
+					"SettingsLibDataTypes.hpp" "SettingsLibDataTypes.cpp"
 					"SettingsLibDefinitions.hpp"
-					"SettingsLibTools.hpp"
-					"SettingsLibVersionHelper.hpp"
+					"SettingsLibErrorCodes.hpp"
+					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
+					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
+					# Ini files:
+					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
+					"SettingsIniDefinitions.hpp"
+					"SettingsIniErrorCodes.hpp"
+					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
 				)
 else()
 	add_library(
 					SettingsLib
 					SHARED
 					"SettingsLib.hpp" "SettingsLib.cpp"
-					"SettingsLibConfig.hpp"
-					"SettingsLibConfigData.hpp"
-					"SettingsLibConfigDataW.hpp"
+					"SettingsLibConfig.hpp" "SettingsLibConfig.hpp"
+					"SettingsLibConfigFileStream.hpp" "SettingsLibConfigFileStream.cpp"
 					"SettingsLibDataTypes.hpp"
 					"SettingsLibDefinitions.hpp"
-					"SettingsLibTools.hpp"
-					"SettingsLibVersionHelper.hpp"
+					"SettingsLibErrorCodes.hpp"
+					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
+					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
+					# Ini files:
+					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
+					"SettingsIniDefinitions.hpp"
+					"SettingsIniErrorCodes.hpp"
+					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
 				)
 endif()
