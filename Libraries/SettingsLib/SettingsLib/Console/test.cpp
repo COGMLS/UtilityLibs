@@ -23,10 +23,9 @@ int testToolsExtractIniData (int i, std::string* line, std::string* section, std
 	return r;
 }
 
-int testToolsConvertValue (std::string* value, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataUnion* uData)
+int testToolsConvertValue (std::string* value, SettingsLib::Types::ConfigDataStore* valueStore)
 {
-	SettingsLib::Types::ConfigDataUnion* auData = uData;
-	int r2 = SettingsLib::Tools::Ini::convertValue(value, type, auData, false);
+	int r2 = SettingsLib::Tools::Ini::convertValue(value, valueStore, false);
 	std::string rs2 = "";
 
 	SettingsLib::ErrorCodes::IniRawValueConversionStatus iniS2 = static_cast<SettingsLib::ErrorCodes::IniRawValueConversionStatus>(r2);

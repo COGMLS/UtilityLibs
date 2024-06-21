@@ -45,6 +45,7 @@ int main (int argc, const char* argv[], const char* argp[])
 		"test 64 = Hello",
 		"test70=Hello2#Comment",
 		"test80=Hello World 2 # Comment",
+		"test90=\"Hello World 3\" # Comment",
 		"container1={1,2,3} #comment",
 		"container2= {3,4,5}",
 		"container3 = {7,8,9}"
@@ -62,11 +63,10 @@ int main (int argc, const char* argv[], const char* argp[])
 		
 		int r = testToolsExtractIniData(l, &line, &section, &key, &value, &comment);
 
-		SettingsLib::Types::ConfigDataType* type = nullptr;
-		type = new SettingsLib::Types::ConfigDataType;
-		SettingsLib::Types::ConfigDataUnion* uData = nullptr;
+		SettingsLib::Types::ConfigDataStore* objStore = nullptr;
+		objStore = new SettingsLib::Types::ConfigDataStore;
 
-		int r2 = testToolsConvertValue(&value, type, uData);
+		int r2 = testToolsConvertValue(&value, objStore);
 
 		line.clear();
 		section.clear();
@@ -74,31 +74,17 @@ int main (int argc, const char* argv[], const char* argp[])
 		value.clear();
 		comment.clear();
 
-		if (type != nullptr)
+		if (objStore != nullptr)
 		{
-			if (*type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING && uData != nullptr)
-			{
-				delete uData->s;
-				uData->s = nullptr;
-			}
-		}
-
-		if (type != nullptr)
-		{
-			delete type;
-			type = nullptr;
-		}
-
-		if (uData != nullptr)
-		{
-			delete uData;
-			uData = nullptr;
+			delete objStore;
+			objStore = nullptr;
 		}
 	}
 
-
 	#endif // !TEST_TOOLS
 
+	#ifdef TEST_OBJ_STORE
+	
 	SettingsLib::Types::ConfigDataStore s1;
 	s1 = "Hi";
 	s1 = 10;
@@ -134,6 +120,8 @@ int main (int argc, const char* argv[], const char* argp[])
 	SettingsLib::Types::ConfigDataStore s6 = s2;
 
 	s6 = L"Hello World!";
+
+	#endif // !TEST_OBJ_STORE
 
 	return 0;
 }
