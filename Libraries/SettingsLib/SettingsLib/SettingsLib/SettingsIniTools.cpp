@@ -429,7 +429,7 @@ int SettingsLib::Tools::Ini::extractIniDataLine(std::string* line, std::string* 
     return SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_FAIL_TO_DETERMINATE;
 }
 
-int identifyValueType (std::string* rawValue)
+int SettingsLib::Tools::Ini::identifyValueType (std::string* rawValue)
 {
 	if (rawValue == nullptr)
 	{
@@ -663,18 +663,30 @@ int identifyValueType (std::string* rawValue)
 	return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 }
 
-int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataUnion* uValue)
+int SettingsLib::Tools::Ini::convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore)
 {
 	// Test the rawValue and type pointers, they can't be nullptr
-	if (rawValue == nullptr || type == nullptr)
+	if (rawValue == nullptr)
 	{
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
 	}
 
 	// To avoid the possibility to send a used union data:
-	if (uValue != nullptr)
+	if (valueStore == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// Verify if the data holds a error type:
+	if (valueStore->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INIT_DATA_ERROR;
+	}
+
+	// Is the rawValue is empty, return a VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
 	}
 
 	bool isNegativeValue = false;		// Possible negative value
@@ -686,8 +698,10 @@ int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataType* ty
 
 	SettingsLib::ErrorCodes::IniRawValueConversionStatus returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
 
-	uValue = new SettingsLib::Types::ConfigDataUnion;
-	*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
+	if (!valueStore->cleanData())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+	}
 
 	char c = '\0';
 
@@ -752,83 +766,76 @@ int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataType* ty
 	// Consider a string when a invalid character was found:
 	if (hasInvalidChar4Num)
 	{
-		delete uValue;
-		uValue = nullptr;
-
-		*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
-
 		returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
 	}
 
 	// Try to convert the integer number:
-	if (isInteger)
+	if (isInteger && !hasInvalidChar4Num)
 	{
-		// Try to convert a negative number when a negative signal was found:
-		if (isNegativeValue)
+		bool isLL = false;
+		bool isULL = false;
+		long long cValue = 0ll;
+		unsigned long long cValue2 = 0ull;
+
+		// Test if the number is realy a negative number:
+		try
 		{
-			try
+			cValue = std::stoll(*rawValue);
+
+			isLL = true;
+
+			if (cValue < 0 && !isNegativeValue)
 			{
-				// Converted value:
-				long long cValue = 0;
+				isNegativeValue = true;
+			}
+		}
+		catch(const std::exception&)
+		{
+			// Do nothing.
+		}
 
-				cValue = std::stoll(*rawValue);
+		// Test if the number is realy a negative number:
+		try
+		{
+			cValue2 = std::stoull(*rawValue);
+			isULL = true;
+		}
+		catch(const std::exception&)
+		{
+			// Do nothing.
+		}
 
-				uValue->ll = cValue;
-
+		// The long long range is valid or a negative value was found:
+		if (isLL && isULL || isNegativeValue)
+		{
+			if (valueStore->setData(cValue) == 0)
+			{
 				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER;
 			}
-			catch(const std::exception&)
+			else
 			{
 				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 			}
 		}
-		else
+		else if (isULL && !isLL && !isNegativeValue)	// The long long range is not valid and a negative value wasn't found
 		{
-			try
+			if (valueStore->setData(cValue2) == 0)
 			{
-				// Converted value:
-				unsigned long long cValue = 0;
-
-				cValue = std::stoull(*rawValue);
-
-				// Verify if the value can be part of the long long data type:
-				if (cValue < LLONG_MAX && cValue > LLONG_MIN)
-				{
-					try
-					{
-						// Converted value
-						long long cValue2 = 0;
-
-						cValue2 = std::stoll(*rawValue);
-
-						uValue->ll = cValue2;
-						*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
-
-						returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER;
-					}
-					catch(const std::exception&)
-					{
-						uValue->ull = cValue;
-						*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER;
-
-						returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER;
-					}
-				}
-
-				uValue->ull = cValue;
-				*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER;
-
 				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER;
 			}
-			catch(const std::exception&)
+			else
 			{
 				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 			}
+		}
+		else	// Fail to apply the value, treat as a string:
+		{
+			returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
 		}
 	}
 
 	// Try convert the decimal number:
-	if (isFpNumber)
+	if (isFpNumber && !hasInvalidChar4Num)
 	{
 		try
 		{
@@ -837,38 +844,46 @@ int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataType* ty
 
 			cValue = std::stod(*rawValue);
 
-			uValue->d = cValue;
-			*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT;
-
-			returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT;
+			if (valueStore->setData(cValue) == 0)
+			{
+				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT;
+			}
+			else
+			{
+				returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+			}
 		}
 		catch(const std::exception&)
 		{
-			returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+			returnCode = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNKNOWN_ERROR;
 		}
 	}
 
-	if (returnCode == SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL)
-	{
-		delete uValue;
-		uValue = nullptr;
-		*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
-		return returnCode;
-	}
-
-	return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNKNOWN_ERROR;
+	return returnCode;
 }
 
-int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataUnion* uValue, bool trimSpaces)
+int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore, bool trimSpaces)
 {
-	if (rawValue == nullptr || type == nullptr)
+	if (rawValue == nullptr)
 	{
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
 	}
 
-	if (uValue != nullptr)
+	if (valueStore == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// Verify if the data holds a error type:
+	if (valueStore->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INIT_DATA_ERROR;
+	}
+
+	// Is the rawValue is empty, return a VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
 	}
 
 	//
@@ -879,6 +894,8 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	bool isString = false;					// Determinate if is a string type. A literal string is determinated when the first non-space character is a quote. Otherwise, will consider all data as string when foundLiteralStrOpenMark is false.
 	bool isBoolean = false;					// Determinate if is a boolean type
 	bool isNumber = true;					// Determinate if is a number (integer / decimal)
+
+	int setDataStatus = -10;				// Hold the status code from setData from ConfigDataStore
 
 	// Test conversion result:
 	SettingsLib::ErrorCodes::IniRawValueConversionStatus conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
@@ -899,7 +916,6 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	}
 
 	char c = '\0';							// Temporary character
-	std::string lBoolValTest = "";			// Local string to test boolean values
 
 	//
 	// Number test controls:
@@ -916,11 +932,15 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 
 	int boolStatus = 0;					// Boolean status control. 0 - Not found a value. 1 - False value. 2 - True value.
 	bool boolSearchFail = false;		// Stop the boolean search
+	bool boolFalseSearchFail = false;
+	bool boolTrueSearchFail = false;
+	std::string falseStr = SETTINGS_INI_DATA_TYPE_BOOL_FALSE;
+	std::string trueStr = SETTINGS_INI_DATA_TYPE_BOOL_TRUE;
 
-	// Prepare the union data:
-	SettingsLib::Types::ConfigDataUnion luValue;
-	uValue = new SettingsLib::Types::ConfigDataUnion;
-	*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
+	if (!valueStore->cleanData())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+	}
 
 	// Raw string value data analysis:
 	for (size_t i = 0; i < rawValue->size(); i++)
@@ -967,7 +987,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 				isInteger = false;
 			}
 
-			// Detect any invalid char:
+			// Detect any invalid char for number detection:
 			switch (c)
 			{
 				case '0':
@@ -1007,44 +1027,60 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 		// Test for boolean value:
 		if (!boolSearchFail && !isBoolean)
 		{
-			if (!lBoolValTest.empty())
+			// Test if is not a empty space after the possible string value start:
+			if (foundNonSpaceChar)
 			{
-				if (std::strlen(SETTINGS_INI_DATA_TYPE_BOOL_FALSE) > lBoolValTest.size() || std::strlen(SETTINGS_INI_DATA_TYPE_BOOL_TRUE) > lBoolValTest.size())
+				char tmpC = std::tolower(c);
+
+				// Test the false string value. For each char that obey the falseStr sequence, remove the first char position. If the sequence is broken, is not possible be a false value:
+				if (!falseStr.empty() && !boolFalseSearchFail)
 				{
-					boolSearchFail = true;	// The size of possible length in lBoolValTest is higher that the boolean string values
+					if (tmpC == falseStr[0])
+					{
+						falseStr.erase(falseStr.begin());
+
+						if (falseStr.empty())
+						{
+							isBoolean = true;
+							boolStatus = 1;
+						}
+					}
+					else
+					{
+						boolFalseSearchFail = true;
+					}
 				}
 
-				std::string tmp = lBoolValTest;
-
-				// Convert into lowercase:
-				std::transform(tmp.begin(), tmp.end(), tmp.begin(), [](unsigned char lCh){return std::tolower(lCh);});
-
-				if (std::strcmp(tmp.c_str(), SETTINGS_INI_DATA_TYPE_BOOL_FALSE) == 0)
+				// Test the true string value. Use the same logic in falseStr test sequence to verify the true value:
+				if (!trueStr.empty() && !boolTrueSearchFail)
 				{
-					boolStatus = 1;
-					isBoolean = true;
-					isString = false;
-					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_BOOLEAN;
-				}
+					if (tmpC == trueStr[0])
+					{
+						trueStr.erase(trueStr.begin());
 
-				if (std::strcmp(tmp.c_str(), SETTINGS_INI_DATA_TYPE_BOOL_TRUE) == 0)
-				{
-					boolStatus = 2;
-					isBoolean = true;
-					isString = false;
-					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_BOOLEAN;
+						if (trueStr.empty())
+						{
+							isBoolean = true;
+							boolStatus = 2;
+						}
+					}
+					else
+					{
+						boolTrueSearchFail = true;
+					}
 				}
+			}
+
+			if (boolFalseSearchFail && boolTrueSearchFail)
+			{
+				boolSearchFail = true;
+				isBoolean = false;
 			}
 		}
 
 		// Start the analysis:
 		if (foundNonSpaceChar)
 		{
-			if (!boolSearchFail && c != SETTINGS_INI_SPACE_CHAR)
-			{
-				lBoolValTest += c;		// When the first character was found, start adding in local value to test for boolean value
-			}
-
 			// If the first non space char is a string mark, assume a possible literal string:
 			if (c == SETTINGS_INI_DATA_TYPE_STRING && i == firstNonSpaceCharPos && !foundLiteralStrOpenMark)
 			{
@@ -1067,37 +1103,46 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 		}
 	}
 	
-	// Determinate if is a literal string or not:
-	if (foundLiteralStrOpenMark && literalCloseQuotePos > literalOpenQuotePos)
+	// Determinate if is a literal string or a normal string:
+	if (foundLiteralStrOpenMark && isString && !isBoolean)
 	{
-		isString = true;
-		conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
-
-		luValue.s = new std::string;
-
-		if (trimSpaces)
+		// Apply the value for literal string if pass the test otherwise, treat as a normal string:
+		if (literalCloseQuotePos > literalOpenQuotePos)
 		{
-			if (firstNonSpaceCharPos < literalOpenQuotePos)
+			if (trimSpaces)
 			{
-				literalOpenQuotePos = firstNonSpaceCharPos;
+				if (firstNonSpaceCharPos < literalOpenQuotePos)
+				{
+					literalOpenQuotePos = firstNonSpaceCharPos;
+				}
+
+				if (lastNonSpaceCharPos > literalCloseQuotePos)
+				{
+					literalCloseQuotePos = lastNonSpaceCharPos;
+				}
 			}
 
-			if (lastNonSpaceCharPos > literalCloseQuotePos)
+			setDataStatus = valueStore->setData(rawValue->substr(literalOpenQuotePos, (literalCloseQuotePos - literalOpenQuotePos + 1)));
+
+			if (setDataStatus == 0)
 			{
-				literalCloseQuotePos = lastNonSpaceCharPos;
+				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
+			}
+			else
+			{
+				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 			}
 		}
-
-		*luValue.s = rawValue->substr(literalOpenQuotePos, (literalCloseQuotePos - literalOpenQuotePos + 1));
+		else
+		{
+			foundLiteralStrOpenMark = false;	// Make it ready to be treated as a normal string
+		}
 	}
 
 	// If any specific test failed but, a non-space char was found, treat as a string:
-	if (!foundLiteralStrOpenMark && !isString && !isBoolean && !isNumber && foundNonSpaceChar)
+	if (!foundLiteralStrOpenMark && isString && !isBoolean && !isNumber && foundNonSpaceChar)
 	{
-		isString = true;
-		conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
-
-		luValue.s = new std::string;
+		//isString = true;
 
 		if (trimSpaces)
 		{
@@ -1105,21 +1150,30 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 			{
 				lastDataPos = lastNonSpaceCharPos;
 
-				*luValue.s = rawValue->substr(firstNonSpaceCharPos, (lastNonSpaceCharPos - firstNonSpaceCharPos + 1));
+				setDataStatus = valueStore->setData(rawValue->substr(firstNonSpaceCharPos, (lastNonSpaceCharPos - firstNonSpaceCharPos + 1)));
 			}
 			else
 			{
-				*luValue.s = rawValue->substr(firstNonSpaceCharPos, rawValue->size());
+				setDataStatus = valueStore->setData(rawValue->substr(firstNonSpaceCharPos, rawValue->size()));
 			}
 		}
 		else
 		{
-			*luValue.s = *rawValue;
+			setDataStatus = valueStore->setData(rawValue);
+		}
+
+		if (setDataStatus == 0)
+		{
+			conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
+		}
+		else
+		{
+			conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 		}
 	}
 
 	// If any specific test failed:
-	if (!foundLiteralStrOpenMark && !isString && !isBoolean && !isNumber && !foundNonSpaceChar)
+	if (!foundLiteralStrOpenMark && !isString && !isBoolean && isNumber && !foundNonSpaceChar)
 	{
 		isEmpty = true;
 		conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
@@ -1130,11 +1184,20 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	{
 		if (boolStatus == 1)
 		{
-			luValue.b = false;
+			setDataStatus = valueStore->setData(false);
 		}
 		else
 		{
-			luValue.b = true;
+			setDataStatus = valueStore->setData(true);
+		}
+
+		if (setDataStatus == 0)
+		{
+			conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_BOOLEAN;
+		}
+		else
+		{
+			conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 		}
 	}
 
@@ -1144,67 +1207,70 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 		// Try to convert the integer number:
 		if (isInteger)
 		{
-			// Try to convert a negative number when a negative signal was found:
-			if (isNegativeValue)
+			bool isULL = false;
+			bool isLL = false;
+
+			long long cValue = 0ll;
+			unsigned long long cValue2 = 0ull;
+
+			// Test if the number is realy a negative number:
+			try
 			{
-				try
+				cValue = std::stoll(*rawValue);
+
+				isLL = true;
+
+				if (cValue < 0 && !isNegativeValue)
 				{
-					// Converted value:
-					long long cValue = 0;
+					isNegativeValue = true;
+				}
+			}
+			catch(const std::exception&)
+			{
+				// Do nothing.
+			}
 
-					cValue = std::stoll(*rawValue);
+			// Test if the number is realy a negative number:
+			try
+			{
+				cValue2 = std::stoull(*rawValue);
+				isULL = true;
+			}
+			catch(const std::exception&)
+			{
+				// Do nothing.
+			}
 
-					luValue.ll = cValue;
-
+			// The long long range is valid or a negative value was found:
+			if (isLL && isULL || isNegativeValue)
+			{
+				setDataStatus = valueStore->setData(cValue);
+				
+				if (setDataStatus == 0)
+				{
 					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER;
 				}
-				catch(const std::exception&)
+				else
 				{
 					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 				}
 			}
-			else
+			else if (isULL && !isLL && !isNegativeValue)	// The long long range is not valid and a negative value wasn't found
 			{
-				try
+				setDataStatus = valueStore->setData(cValue2);
+
+				if (setDataStatus == 0)
 				{
-					// Converted value:
-					unsigned long long cValue = 0;
-
-					cValue = std::stoull(*rawValue);
-
-					// Verify if the value can be part of the long long data type:
-					if (cValue < LLONG_MAX && cValue > LLONG_MIN)
-					{
-						try
-						{
-							// Converted value
-							long long cValue2 = 0;
-
-							cValue2 = std::stoll(*rawValue);
-
-							luValue.ll = cValue2;
-							*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
-
-							conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER;
-						}
-						catch(const std::exception&)
-						{
-							luValue.ull = cValue;
-							*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER;
-
-							conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER;
-						}
-					}
-
-					luValue.ull = cValue;
-					*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER;
-
 					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER;
 				}
-				catch(const std::exception&)
+				else
 				{
 					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
 				}
+			}
+			else	// Fail to apply the value, treat as a string:
+			{
+				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNKNOWN_ERROR;
 			}
 		}
 
@@ -1218,35 +1284,24 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 
 				cValue = std::stod(*rawValue);
 
-				luValue.d = cValue;
-				*type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT;
+				setDataStatus = valueStore->setData(cValue);
 
-				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT;
+				if (setDataStatus == 0)
+				{
+					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT;
+				}
+				else
+				{
+					conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+				}
+
 			}
 			catch(const std::exception&)
 			{
-				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+				conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNKNOWN_ERROR;
 			}
 		}
 	}
 
-	int r = SettingsLib::Tools::initializeData<SettingsLib::Types::ConfigDataUnion>(uValue, luValue);
-
-	if (r < 0)
-	{
-		conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INIT_DATA_ERROR;
-	}
-
-	//if (luValue != nullptr)
-	//{
-	//	SettingsLib::Types::ConfigDataUnion** tmpValuep = nullptr;
-	//	tmpValuep = &luValue;
-	//	uValue = *tmpValuep;
-	//	luValue = nullptr;
-	//	tmpValuep = nullptr;
-	//}
-
 	return conversionStatus;
-
-    //return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNKNOWN_ERROR;
 }

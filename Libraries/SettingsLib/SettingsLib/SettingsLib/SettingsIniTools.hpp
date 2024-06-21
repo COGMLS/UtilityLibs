@@ -26,6 +26,7 @@
 #include "SettingsLibErrorCodes.hpp"
 #include "SettingsIniErrorCodes.hpp"
 #include "SettingsIniConfigData.hpp"
+#include "SettingsLibDataTypes.hpp"
 
 namespace SettingsLib
 {
@@ -64,22 +65,20 @@ namespace SettingsLib
 			/**
 			 * @brief Function stricted to only convert raw string values into numbers.
 			 * @param rawValue A raw value data extracted from INI file line
-			 * @param type Identify the type of value is inside the ConfigDataUnion
-			 * @param uValue Holds the converted value. This pointer should be a nullptr!
+			 * @param valueStore A initialized pointer to a ConfigDataStore object
 			 * @return Return a IniRawValueConversionStatus value from convertion
 			 * @note This function is available for custom methods. The convertValue function already analyze the value type
 			 */
-			SETTINGS_LIB_API int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataUnion* uValue);
+			SETTINGS_LIB_API int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore);
 
 			/**
 			 * @brief Convert a raw value string extracted from INI configuration line into a number (unsigned integer/integer/decimal), boolean, or a literal string
 			 * @param rawValue A raw value data extracted from INI file line
-			 * @param type Identify the type of value is inside the ConfigDataUnion
-			 * @param uValue Holds the converted value. This pointer should be a nullptr!
+			 * @param valueStore A initialized pointer to a ConfigDataStore object
 			 * @param trimSpaces Cut the empty spaces in the beging of the string end in the end, only if the value is a string data. Otherwise, will be ignored.
 			 * @return Return a IniRawValueConversionStatus value from convertion
 			 */
-			SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataUnion* uValue, bool trimSpaces);
+			SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore, bool trimSpaces);
 
 			//SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataContainerType* containerType, std::vector<SettingsLib::Types::ConfigDataUnion>* vData, bool trimSpaces);
 		}
