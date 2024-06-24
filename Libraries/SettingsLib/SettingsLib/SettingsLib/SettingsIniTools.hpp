@@ -81,6 +81,10 @@ namespace SettingsLib
 			SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore, bool trimSpaces);
 
 			//SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataType* type, SettingsLib::Types::ConfigDataContainerType* containerType, std::vector<SettingsLib::Types::ConfigDataUnion>* vData, bool trimSpaces);
+
+			SETTINGS_LIB_API int createConfigIniData (std::string* iniFileLine, SettingsLib::Types::ConfigIniData* configIniObj, bool trimSpaces);
+
+			SETTINGS_LIB_API int createIniConfigTree ();
 		}
 	}
 }
