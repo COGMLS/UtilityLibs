@@ -650,6 +650,11 @@ int SettingsLib::Types::ConfigDataStore::getData(std::string *data)
 	{
 		try
 		{
+			if (this->data.s == nullptr)
+			{
+				return -3;
+			}
+
 			*data = *this->data.s;
 			return 1;
 		}
@@ -680,6 +685,11 @@ int SettingsLib::Types::ConfigDataStore::getData(std::wstring *data)
 	{
 		try
 		{
+			if (this->data.w == nullptr)
+			{
+				return -3;
+			}
+
 			*data = *this->data.w;
 			return 1;
 		}

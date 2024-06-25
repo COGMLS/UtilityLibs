@@ -227,6 +227,7 @@ namespace SettingsLib
 				/**
 				 * @brief Get the data value
 				 * @param data Variable to store a copy of the data
+				 * @return -3: If the string data is missing.
 				 * @return -2: If a exception occur. This could be happen when a nullptr was send.
 				 * @return -1: When the data type was marked as "FAIL". The data stored was lost.
 				 * @return 0: When the ConfigDataStore object is marked as "EMPTY".
@@ -238,6 +239,7 @@ namespace SettingsLib
 				/**
 				 * @brief Get the data value
 				 * @param data Variable to store a copy of the data
+				 * @return -3: If the string data is missing.
 				 * @return -2: If a exception occur. This could be happen when a nullptr was send.
 				 * @return -1: When the data type was marked as "FAIL". The data stored was lost.
 				 * @return 0: When the ConfigDataStore object is marked as "EMPTY".
