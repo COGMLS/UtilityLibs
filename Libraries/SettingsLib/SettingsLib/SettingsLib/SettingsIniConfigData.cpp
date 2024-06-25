@@ -65,6 +65,11 @@ int SettingsLib::Types::ConfigIniData::resetConfigIniData()
 
 int SettingsLib::Types::ConfigIniData::cleanData()
 {
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+	}
+
 	if (this->hasData())
 	{
 		if (this->isContainer())
@@ -171,6 +176,11 @@ bool SettingsLib::Types::ConfigIniData::hasSection()
 
 int SettingsLib::Types::ConfigIniData::removeSection()
 {
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+	}
+
 	if (this->hasSection())
 	{
 		try
@@ -602,6 +612,11 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR;
 	}
 
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+	}
+
 	if (!this->hasData())
 	{
 		try
@@ -674,6 +689,11 @@ bool SettingsLib::Types::ConfigIniData::hasComment()
 
 int SettingsLib::Types::ConfigIniData::cleanComment()
 {
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+	}
+
 	if (this->hasComment())
 	{
 		try
@@ -696,6 +716,11 @@ int SettingsLib::Types::ConfigIniData::getComment(std::string *comment)
 	if (comment == nullptr)
 	{
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR;
+	}
+
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
 	if (this->isWideData())
@@ -728,6 +753,11 @@ int SettingsLib::Types::ConfigIniData::getComment(std::wstring *comment)
     if (comment == nullptr)
 	{
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR;
+	}
+
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
 	if (!this->isWideData())
@@ -770,6 +800,11 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string *comment)
 	if (comment == nullptr)
 	{
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR;
+	}
+
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
 	if (this->isWideData())
@@ -822,6 +857,11 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring *comment)
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR;
 	}
 
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+	}
+
 	if (!this->isWideData())
 	{
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA;
@@ -837,7 +877,6 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring *comment)
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
-		
 	}
 
 	try
