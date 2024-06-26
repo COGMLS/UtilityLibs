@@ -96,7 +96,7 @@ int SettingsLib::Tools::initializeDataUnion (SettingsLib::Types::ConfigDataUnion
 				{
 					pData->ull = 0;
 				}
-				case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER:
+				case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
 				{
 					pData->ll = 0;
 				}
