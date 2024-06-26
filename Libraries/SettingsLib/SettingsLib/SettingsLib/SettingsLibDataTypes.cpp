@@ -88,7 +88,7 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(long long data)
 	try
 	{
 		this->data.ll = data;
-		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
+		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER;
 	}
 	catch(const std::exception&)
 	{
@@ -268,7 +268,7 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 			// Set the data:
 
 			this->data.ll = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER;
 		}
 	}
 	catch(const std::exception&)
@@ -556,7 +556,7 @@ int SettingsLib::Types::ConfigDataStore::getData(long long *data)
 		return 0;
 	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER)
+    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
 	{
 		try
 		{
@@ -652,6 +652,7 @@ int SettingsLib::Types::ConfigDataStore::getData(std::string *data)
 		{
 			if (this->data.s == nullptr)
 			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 				return -3;
 			}
 
@@ -687,6 +688,7 @@ int SettingsLib::Types::ConfigDataStore::getData(std::wstring *data)
 		{
 			if (this->data.w == nullptr)
 			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 				return -3;
 			}
 
@@ -815,7 +817,7 @@ int SettingsLib::Types::ConfigDataStore::setData(long long data)
 			// Set the data:
 
 			this->data.ll = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER;
 
 			return 0;
 		}
@@ -860,7 +862,7 @@ int SettingsLib::Types::ConfigDataStore::setData(long long *data)
 			// Set the data:
 
 			this->data.ll = *data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTERGER;
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER;
 
 			return 0;
 		}
