@@ -169,3 +169,101 @@ std::string translateIniRawValueConversionStatus(SettingsLib::ErrorCodes::IniRaw
 
 	return msg;
 }
+
+std::string convertConfigIniData2Str(SettingsLib::Types::ConfigIniData *data)
+{
+    std::string key;
+	std::string section;
+	std::string value;
+	std::string comment;
+
+	SettingsLib::Types::ConfigDataStore dataS;
+	std::string line = "";
+	data->getKey(&key);
+
+	line = "Key: " + key;
+
+	line += " | Value: ";
+
+	if (data->hasData())
+	{
+		data->getData(&dataS);
+
+		auto code = dataS.getDataType();
+
+		std::string dataStr = "";
+
+		switch (code)
+		{
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER:
+			{
+				unsigned long long ull = 0;
+				dataS.getData(&ull);
+				line += std::to_string(ull);
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
+			{
+				long long ll = 0;
+				dataS.getData(&ll);
+				line += std::to_string(ll);
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT:
+			{
+				double d = 0.0;
+				dataS.getData(&d);
+				line += std::to_string(d);
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN:
+			{
+				bool b = false;
+				dataS.getData(&b);
+
+				if (b)
+				{
+					line +=  "true";
+				}
+				else
+				{
+					line +=  "false";
+				}
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING:
+			{
+				int vS = dataS.getData(&value);
+				line += value;
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		line +=  "NONE";
+	}
+
+	line +=  " | Comment: ";
+
+	if (data->hasComment())
+	{
+		data->getComment(&comment);
+		line +=  comment;
+	}
+	else
+	{
+		line +=  "NONE";
+	}
+
+	section.clear();
+	key.clear();
+	value.clear();
+	comment.clear();
+
+	return line;
+}

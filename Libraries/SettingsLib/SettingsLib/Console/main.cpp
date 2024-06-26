@@ -4,6 +4,8 @@
 
 #include "SettingsIniTools.hpp"
 #include "SettingsLibDataTypes.hpp"
+#include "SettingsIniConfigData.hpp"
+#include "SettingsIniConfig.hpp"
 
 #include "test.hpp"
 #include "debug.hpp"
@@ -52,33 +54,14 @@ int main (int argc, const char* argv[], const char* argp[])
 	};
 
 	std::string line = "";
-	std::string section = "";
-	std::string key = "";
-	std::string value = "";
-	std::string comment = "";
+	SettingsLib::Types::ConfigIni configIni("settings.ini");
 
 	for (int l = 0; l < lines.size(); l++)
 	{
 		line = lines[l];
-		
-		int r = testToolsExtractIniData(l, &line, &section, &key, &value, &comment);
-
-		SettingsLib::Types::ConfigDataStore* objStore = nullptr;
-		objStore = new SettingsLib::Types::ConfigDataStore;
-
-		int r2 = testToolsConvertValue(&value, objStore);
-
+		std::cout << "[" << l << "]::" << line << std::endl;
+		configIni.readLine(line);
 		line.clear();
-		section.clear();
-		key.clear();
-		value.clear();
-		comment.clear();
-
-		if (objStore != nullptr)
-		{
-			delete objStore;
-			objStore = nullptr;
-		}
 	}
 
 	#endif // !TEST_TOOLS
