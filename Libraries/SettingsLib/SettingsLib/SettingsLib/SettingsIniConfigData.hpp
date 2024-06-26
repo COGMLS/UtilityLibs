@@ -74,7 +74,16 @@ namespace SettingsLib
 				 */
 				ConfigIniData (std::wstring key);
 
+				ConfigIniData (const ConfigIniData& other);
+
+				ConfigIniData (ConfigIniData&& other) noexcept;
+
 				~ConfigIniData();
+
+				// Operators:
+
+				SettingsLib::Types::ConfigIniData& operator= (const SettingsLib::Types::ConfigIniData& other);
+				SettingsLib::Types::ConfigIniData& operator= (SettingsLib::Types::ConfigIniData&& other) noexcept;
 
 				// Control methods:
 
@@ -288,6 +297,18 @@ namespace SettingsLib
 				/**
 				 * @brief Get access to the data.
 				 * @param data ConfigDataStore pointer
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION when fails to allocate the new data.
+				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO if a container is inside the object.
+				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
+				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL when fail to associate the new data.
+				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE no data available inside the object.
+				 */
+				int setData (SettingsLib::Types::ConfigDataStore data);
+
+				/**
+				 * @brief Get access to the data.
+				 * @param data ConfigDataStore pointer
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
 				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION when fails to allocate the new data.
@@ -383,7 +404,6 @@ namespace SettingsLib
 				/**
 				 * @brief Get the comment inside the object
 				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if a nullptr was send on comment parameter.
 				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
@@ -397,7 +417,6 @@ namespace SettingsLib
 				/**
 				 * @brief Get the comment inside the object
 				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if a nullptr was send on comment parameter.
 				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
@@ -442,14 +461,15 @@ namespace SettingsLib
 				// Section data:
 				
 				bool useWideData;					// Control the wide strings
+				bool isSectionConfigurated;
 				ConfigDataStore sectionName;
 
 				// Section data collection:
 
 				// Section can only hold string or wstring!
 
-				std::map<std::string, ConfigIniData>* section = nullptr;
-				std::map<std::wstring, ConfigIniData>* wSection = nullptr;
+				std::map<std::string, ConfigIniData>* keyMap = nullptr;
+				std::map<std::wstring, ConfigIniData>* wKeyMap = nullptr;
 
 				// Comments for the section:
 
@@ -460,10 +480,16 @@ namespace SettingsLib
 				ConfigIniSectionData (std::string section);
 				ConfigIniSectionData (std::wstring section);
 
+				ConfigIniSectionData (const ConfigIniSectionData& other);
+				ConfigIniSectionData (ConfigIniSectionData&& other) noexcept;
+
 				~ConfigIniSectionData();
 
-				std::string getSection();
-				std::wstring getSectionW();
+				SettingsLib::Types::ConfigIniSectionData& operator= (const SettingsLib::Types::ConfigIniSectionData& other);
+				SettingsLib::Types::ConfigIniSectionData& operator= (SettingsLib::Types::ConfigIniSectionData&& other) noexcept;
+
+				int getIniData(std::string key, SettingsLib::Types::ConfigIniData* iniData);
+				int getIniData(std::wstring key, SettingsLib::Types::ConfigIniData* iniData);
 
 				bool isWideData();
 
@@ -474,6 +500,5 @@ namespace SettingsLib
 		};
 	}
 }
-
 
 #endif //! SETTINGS_INI_CONFIG_DATA_HPP
