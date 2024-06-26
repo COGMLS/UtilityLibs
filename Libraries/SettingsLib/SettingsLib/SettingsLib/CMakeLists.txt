@@ -71,6 +71,7 @@ if (WIN32)
 					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
 					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
 					# Ini files:
+					"SettingsIniConfig.hpp" "SettingsIniConfig.cpp"
 					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
 					"SettingsIniDefinitions.hpp"
 					"SettingsIniErrorCodes.hpp"
