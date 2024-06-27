@@ -9,7 +9,27 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(const ConfigDataStore &othe
 {
 	try
 	{
-		if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+		if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
+		{
+			this->data.ull = other.data.ull;
+			this->type = other.type;
+		}
+		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
+		{
+			this->data.ll = other.data.ll;
+			this->type = other.type;
+		}
+		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
+		{
+			this->data.d = other.data.d;
+			this->type = other.type;
+		}
+		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
+		{
+			this->data.b = other.data.b;
+			this->type = other.type;
+		}
+		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 		{
 			this->data.s = new std::string;
 			*this->data.s = *other.data.s;
@@ -21,10 +41,8 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(const ConfigDataStore &othe
 		}
 		else
 		{
-			this->data = other.data;
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 		}
-
-		this->type = other.type;
 	}
 	catch(const std::exception&)
 	{
@@ -427,46 +445,55 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 		return *this;
 	}
 
+	bool opSuccess = false;
+
 	try
 	{
-		if (this->type == other.type)
+		if (this->type != other.type)
 		{
-			if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+			opSuccess = this->cleanData();
+		}
+
+		if (opSuccess)
+		{
+			if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
 			{
+				this->data.ull = other.data.ull;
+				this->type = other.type;
+			}
+			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
+			{
+				this->data.ll = other.data.ll;
+				this->type = other.type;
+			}
+			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
+			{
+				this->data.d = other.data.d;
+				this->type = other.type;
+			}
+			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
+			{
+				this->data.b = other.data.b;
+				this->type = other.type;
+			}
+			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+			{
+				this->data.s = new std::string;
 				*this->data.s = *other.data.s;
 			}
 			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 			{
+				this->data.w = new std::wstring;
 				*this->data.w = *other.data.w;
 			}
 			else
 			{
-				this->data = other.data;
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 			}
-
-			this->type = other.type;
 		}
 		else
 		{
-			if (this->cleanStringData())
-			{
-				if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
-				{
-					this->data.s = new std::string;
-					*this->data.s = *other.data.s;
-				}
-				else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
-				{
-					this->data.w = new std::wstring;
-					*this->data.w = *other.data.w;
-				}
-				else
-				{
-					this->data = other.data;
-				}
-
-				this->type = other.type;
-			}
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 		}
 	}
 	catch(const std::exception&)
@@ -490,10 +517,7 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 
 		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
-			if (!this->cleanStringData())
-			{
-				cleanDataOK = false;
-			}
+			cleanDataOK = !this->cleanStringData();
 		}
 
 		if (cleanDataOK)

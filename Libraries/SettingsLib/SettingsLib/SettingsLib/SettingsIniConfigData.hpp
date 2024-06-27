@@ -488,12 +488,12 @@ namespace SettingsLib
 				SettingsLib::Types::ConfigIniSectionData& operator= (const SettingsLib::Types::ConfigIniSectionData& other);
 				SettingsLib::Types::ConfigIniSectionData& operator= (SettingsLib::Types::ConfigIniSectionData&& other) noexcept;
 
-				int getIniData(std::string key, SettingsLib::Types::ConfigIniData* iniData);
-				int getIniData(std::wstring key, SettingsLib::Types::ConfigIniData* iniData);
+				int getIniData (std::string key, SettingsLib::Types::ConfigIniData* iniData);
+				int getIniData (std::wstring key, SettingsLib::Types::ConfigIniData* iniData);
 
 				bool isWideData();
 
-				int addData (ConfigIniData data);
+				int addData (SettingsLib::Types::ConfigIniData& data);
 
 				int remData (std::string key);
 				int remData (std::wstring key);
