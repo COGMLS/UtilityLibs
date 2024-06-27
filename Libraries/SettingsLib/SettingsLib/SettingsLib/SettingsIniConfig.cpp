@@ -21,7 +21,7 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 	std::string rawValue;
 	std::string comment;
 
-	SettingsLib::ErrorCodes::IniLineCheckStatus lineStatus = static_cast<SettingsLib::ErrorCodes::IniLineCheckStatus>( SettingsLib::Tools::Ini::extractIniDataLine(&line, &section, &key, &rawValue, &comment));
+	SettingsLib::ErrorCodes::IniLineCheckStatus lineStatus = static_cast<SettingsLib::ErrorCodes::IniLineCheckStatus>(SettingsLib::Tools::Ini::extractIniDataLine(&line, &section, &key, &rawValue, &comment));
 
 	switch (lineStatus)
 	{
@@ -30,6 +30,12 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 		case SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_KEY_WITH_VALUE:
 		case SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_KEY_WITH_VALUE_AND_COMMENTS:
 		{
+			/** For ini data with normal values:
+			 * ------------------------------------------------------
+			 * Add a ini data with normal/traditional values used in
+			 * configuration files.
+			 */
+
 			SettingsLib::Types::ConfigIniData iniData(key);
 
 			if (!rawValue.empty())
@@ -67,6 +73,15 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 		case SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_KEY_WITH_CONTAINER_VALUE:
 		case SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_KEY_WITH_CONTAINER_VALUE_AND_COMMENTS:
 		{
+			/** For ini data with container values:
+			 * ------------------------------------------------------
+			 * Add a ini data that has a container, using a proper tool
+			 * to filter the values and treat then correctly.
+			 * ------------------------------------------------------
+			 * Note: In this moment, the containers will be treated as
+			 * a normal string value.
+			 */
+
 			SettingsLib::Types::ConfigIniData iniData(key);
 
 			if (!rawValue.empty())
@@ -89,14 +104,14 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 
 			if (!foundSection || isEmpty)
 			{
-				this->sectionMap->insert({this->lastSectionSearch, SettingsLib::Types::ConfigIniSectionData(this->lastSectionSearch)});
+				SettingsLib::Types::ConfigIniSectionData sectionBuff(this->lastSectionSearch);
+				this->sectionMap->insert({this->lastSectionSearch, sectionBuff});
 				foundSection = true;
 			}
 
 			if (foundSection)
 			{
-				SettingsLib::Types::ConfigIniSectionData* pSection = &this->sectionMap->at(this->lastSectionSearch);
-				pSection->addData(iniData);
+				this->sectionMap->at(this->lastSectionSearch).addData(iniData);
 			}
 			break;
 		}

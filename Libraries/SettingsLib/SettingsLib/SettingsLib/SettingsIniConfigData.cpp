@@ -55,47 +55,79 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(const ConfigIniData &other)
 			this->data = new SettingsLib::Types::ConfigDataStore;
 		}
 
+		bool successSetData = false;
 		SettingsLib::Types::ConfigDataType type = other.data->getDataType();
 
 		if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
 		{
 			unsigned long long buff = 0;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
 		{
 			long long buff = 0;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
 		{
 			double buff = 0.0;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 		{
 			std::string buff;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
 		{
 			bool buff = false;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
 			std::wstring buff;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetData = true;
+				}
+			}
 		}
 		else
 		{
 			*this->data = *other.data;
+			successSetData = true;
 		}
 	}
 
@@ -125,23 +157,35 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(const ConfigIniData &other)
 			this->comment = new SettingsLib::Types::ConfigDataStore;
 		}
 
+		bool successSetComment = false;
 		SettingsLib::Types::ConfigDataType type = other.comment->getDataType();
 
 		if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 		{
 			std::string buff;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetComment = true;
+				}
+			}
 		}
 		else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
 			std::wstring buff;
-			other.data->getData(&buff);
-			this->data->setData(buff);
+			if (other.data->getData(&buff) == 1)
+			{
+				if (this->data->setData(buff) == 0)
+				{
+					successSetComment = true;
+				}
+			}
 		}
 		else
 		{
 			*this->comment = *other.comment;
+			successSetComment = true;
 		}
 	}
 }
@@ -156,6 +200,7 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(ConfigIniData &&other) noexcept
 	if (this->section != nullptr)
 	{
 		delete this->section;
+		this->section = nullptr;
 	}
 
 	if (other.section != nullptr)
@@ -775,8 +820,7 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 				std::string buff;
 				if (this->data->getData(&buff) == 1)
 				{
-					data->setData(buff);
-					success = true;
+					success = data->setData(buff) == 0;
 				}
 			}
 			else if (this->data->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
@@ -784,8 +828,7 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 				std::wstring buff;
 				if (this->data->getData(&buff) == 1)
 				{
-					data->setData(buff);
-					success = true;
+					success = data->setData(buff) == 0;
 				}
 			}
 			else
@@ -845,45 +888,75 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 			if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
 			{
 				unsigned long long buff = 0;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
 			{
 				long long buff = 0;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
 			{
 				double buff = 0.0;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 			{
 				std::string buff;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
 			{
 				bool buff = false;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 			{
 				std::wstring buff;
-				data.getData(&buff);
-				this->data->setData(buff);
+				if (data.getData(&buff) == 1)
+				{
+					if (this->data->setData(buff) == 0)
+					{
+						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+					}
+				}
 			}
 			else
 			{
 				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SET_DATA_FAIL;
 			}
 
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SET_DATA_FAIL;
 		}
 		catch(const std::exception&)
 		{
@@ -1185,16 +1258,13 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 	try
 	{
 		bool hasCommemntMark = comment.starts_with(SETTINGS_INI_COMMENT_MARK) || comment.starts_with(SETTINGS_INI_COMMENT_MARK2);
-		std::string tmpComment;
 
 		if (!hasCommemntMark)
 		{
-			tmpComment += SETTINGS_INI_COMMENT_MARK2;
+			comment = SETTINGS_INI_COMMENT_MARK2 + comment;
 		}
 
-		tmpComment += comment;
-
-		if (this->comment->setData(tmpComment) == 0)
+		if (this->comment->setData(comment) == 0)
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
@@ -1305,17 +1375,15 @@ SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(const ConfigIniSe
 	this->isSectionConfigurated = other.isSectionConfigurated;
 	this->useWideData = other.useWideData;
 
+	this->sectionName = other.sectionName;
+
 	if (this->useWideData)
 	{
-		this->wKeyMap = new std::map<std::wstring, SettingsLib::Types::ConfigIniData>;
-		//this->wKeyMap->insert(other.wKeyMap->begin(), other.wKeyMap->end());
-		*this->wKeyMap = *other.wKeyMap;
+		this->wKeyMap = new std::map<std::wstring, SettingsLib::Types::ConfigIniData>(*other.wKeyMap);
 	}
 	else
 	{
 		this->keyMap = new std::map<std::string, SettingsLib::Types::ConfigIniData>(*other.keyMap);
-		//this->keyMap->insert(other.keyMap->begin(), other.keyMap->end());
-		//*this->keyMap = *other.keyMap;
 	}
 }
 
@@ -1324,15 +1392,15 @@ SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(ConfigIniSectionD
 	this->isSectionConfigurated = other.isSectionConfigurated;
 	this->useWideData = other.useWideData;
 
+	this->sectionName = other.sectionName;
+
 	if (this->useWideData)
 	{
-		this->wKeyMap = new std::map<std::wstring, SettingsLib::Types::ConfigIniData>;
-		this->wKeyMap = std::move(other.wKeyMap);
+		this->wKeyMap = new std::map<std::wstring, SettingsLib::Types::ConfigIniData>(*std::move(other.wKeyMap));
 	}
 	else
 	{
 		this->keyMap = new std::map<std::string, SettingsLib::Types::ConfigIniData>(*std::move(other.keyMap));
-		//this->keyMap = std::move(other.keyMap);
 	}
 }
 
@@ -1356,16 +1424,16 @@ SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionDa
     this->isSectionConfigurated = other.isSectionConfigurated;
 	this->useWideData = other.useWideData;
 
+	this->sectionName = other.sectionName;
+
 	if (this->useWideData)
 	{
 		this->wKeyMap = new std::map<std::wstring, SettingsLib::Types::ConfigIniData>;
-		//this->wKeyMap->insert(other.wKeyMap->begin(), other.wKeyMap->end());
 		*this->wKeyMap = *other.wKeyMap;
 	}
 	else
 	{
 		this->keyMap = new std::map<std::string, SettingsLib::Types::ConfigIniData>;
-		//this->keyMap->insert(other.keyMap->begin(), other.keyMap->end());
 		*this->keyMap = *other.keyMap;
 	}
 
@@ -1376,6 +1444,8 @@ SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionDa
 {
     this->isSectionConfigurated = other.isSectionConfigurated;
 	this->useWideData = other.useWideData;
+
+	this->sectionName = other.sectionName;
 
 	if (this->useWideData)
 	{
@@ -1423,8 +1493,13 @@ bool SettingsLib::Types::ConfigIniSectionData::isWideData()
     return this->useWideData;
 }
 
-int SettingsLib::Types::ConfigIniSectionData::addData(ConfigIniData data)
+int SettingsLib::Types::ConfigIniSectionData::addData(SettingsLib::Types::ConfigIniData& data)
 {
+	if (&data == nullptr)
+	{
+		return -3;
+	}
+
 	if (this->isSectionConfigurated)
 	{
 		if (data.isWideData())
@@ -1439,16 +1514,28 @@ int SettingsLib::Types::ConfigIniSectionData::addData(ConfigIniData data)
 
 			if (status == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
 			{
-				if (this->wKeyMap->contains(key))
+				bool iswKeyMapNull = this->wKeyMap == nullptr;
+
+				try
 				{
-					auto p = &this->wKeyMap->at(key);
-					p = &data;
-					return 1;
+					bool isEmpty = this->wKeyMap->empty();
+					bool foundKey = this->wKeyMap->contains(key);
+
+					if (!foundKey || isEmpty)
+					{
+						this->wKeyMap->insert({key, data});
+						return 1;
+					}
+					else
+					{
+						auto p = &this->wKeyMap->at(key);
+						p = &data;
+						return 2;
+					}
 				}
-				else
+				catch(const std::exception&)
 				{
-					this->wKeyMap->insert({key, data});
-					return 2;
+					return -1;
 				}
 			}
 
@@ -1468,11 +1555,11 @@ int SettingsLib::Types::ConfigIniSectionData::addData(ConfigIniData data)
 			{
 				bool isKeyMapNull = this->keyMap == nullptr;
 
-				bool isEmpty = this->keyMap->empty();
-				bool foundKey = this->keyMap->contains(key);
-
 				try
 				{
+					bool isEmpty = this->keyMap->empty();
+					bool foundKey = this->keyMap->contains(key);
+					
 					if (!foundKey || isEmpty)
 					{
 						this->keyMap->insert({key, data});
