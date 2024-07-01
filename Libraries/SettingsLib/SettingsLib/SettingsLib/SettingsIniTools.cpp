@@ -1149,17 +1149,19 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 			if (lastDataPos > lastNonSpaceCharPos)
 			{
 				lastDataPos = lastNonSpaceCharPos;
-
-				setDataStatus = valueStore->setData(rawValue->substr(firstNonSpaceCharPos, (lastNonSpaceCharPos - firstNonSpaceCharPos + 1)));
+				std::string buff = rawValue->substr(firstNonSpaceCharPos, (lastNonSpaceCharPos - firstNonSpaceCharPos + 1));
+				setDataStatus = valueStore->setData(buff);
 			}
 			else
 			{
-				setDataStatus = valueStore->setData(rawValue->substr(firstNonSpaceCharPos, rawValue->size()));
+				std::string buff = rawValue->substr(firstNonSpaceCharPos, rawValue->size());
+				setDataStatus = valueStore->setData(buff);
 			}
 		}
 		else
 		{
-			setDataStatus = valueStore->setData(rawValue);
+			std::string buff = *rawValue;
+			setDataStatus = valueStore->setData(buff);
 		}
 
 		if (setDataStatus == 0)
