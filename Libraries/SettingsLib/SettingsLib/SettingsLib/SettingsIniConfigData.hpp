@@ -468,32 +468,35 @@ namespace SettingsLib
 
 				// Section can only hold string or wstring!
 
-				std::map<std::string, ConfigIniData>* keyMap = nullptr;
-				std::map<std::wstring, ConfigIniData>* wKeyMap = nullptr;
+				std::map<std::string, SettingsLib::Types::ConfigIniData*> keyMap;
+				std::map<std::wstring, SettingsLib::Types::ConfigIniData*> wKeyMap;
 
 				// Comments for the section:
 
-				ConfigDataStore* comment = nullptr;
+				ConfigDataStore comment;
 
 			public:
 				ConfigIniSectionData();
 				ConfigIniSectionData (std::string section);
 				ConfigIniSectionData (std::wstring section);
 
-				ConfigIniSectionData (const ConfigIniSectionData& other);
-				ConfigIniSectionData (ConfigIniSectionData&& other) noexcept;
+				ConfigIniSectionData (const SettingsLib::Types::ConfigIniSectionData& other);
+				ConfigIniSectionData (SettingsLib::Types::ConfigIniSectionData&& other) noexcept;
 
 				~ConfigIniSectionData();
 
 				SettingsLib::Types::ConfigIniSectionData& operator= (const SettingsLib::Types::ConfigIniSectionData& other);
 				SettingsLib::Types::ConfigIniSectionData& operator= (SettingsLib::Types::ConfigIniSectionData&& other) noexcept;
 
+				std::string getSectionName();
+				std::wstring getSectionNameW();
+
 				int getIniData (std::string key, SettingsLib::Types::ConfigIniData* iniData);
 				int getIniData (std::wstring key, SettingsLib::Types::ConfigIniData* iniData);
 
 				bool isWideData();
 
-				int addData (SettingsLib::Types::ConfigIniData& data);
+				int addData (SettingsLib::Types::ConfigIniData* data);
 
 				int remData (std::string key);
 				int remData (std::wstring key);
