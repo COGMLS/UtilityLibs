@@ -11,7 +11,6 @@ SettingsLib::Types::ConfigIni::ConfigIni(std::string configName)
 	this->isObjConfigurated = true;
 	this->useWideData = false;
 	this->configName.setData(configName);
-	this->sectionMap = new std::map<std::string, SettingsLib::Types::ConfigIniSectionData>;
 }
 
 void SettingsLib::Types::ConfigIni::readLine(std::string line)
@@ -53,20 +52,24 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 			bool isEmpty = false;
 			bool foundSection = false;
 
-			isEmpty = this->sectionMap->empty();
-			foundSection = this->sectionMap->contains(this->lastSectionSearch);
+			isEmpty = this->sectionMap.empty();
+			foundSection = this->sectionMap.contains(this->lastSectionSearch);
 
 			if (!foundSection || isEmpty)
 			{
-				SettingsLib::Types::ConfigIniSectionData sectionBuff(this->lastSectionSearch);
-				this->sectionMap->insert({this->lastSectionSearch, sectionBuff});
+				SettingsLib::Types::ConfigIniSectionData* sectionBuff = new SettingsLib::Types::ConfigIniSectionData(this->lastSectionSearch);
+				this->sectionMap.insert({this->lastSectionSearch, sectionBuff});
 				foundSection = true;
 			}
 
 			if (foundSection)
 			{
-				this->sectionMap->at(this->lastSectionSearch).addData(iniData);
+				this->sectionMap.at(this->lastSectionSearch)->addData(&iniData);
 			}
+
+			std::string keyName2;
+			iniData.getKey(&keyName2);
+			std::cout << "iniData: " << keyName2 << " added." << std::endl;
 
 			break;
 		}
@@ -99,19 +102,19 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 			bool isEmpty = false;
 			bool foundSection = false;
 
-			isEmpty = this->sectionMap->empty();
-			foundSection = this->sectionMap->contains(this->lastSectionSearch);
+			isEmpty = this->sectionMap.empty();
+			foundSection = this->sectionMap.contains(this->lastSectionSearch);
 
 			if (!foundSection || isEmpty)
 			{
-				SettingsLib::Types::ConfigIniSectionData sectionBuff(this->lastSectionSearch);
-				this->sectionMap->insert({this->lastSectionSearch, sectionBuff});
+				SettingsLib::Types::ConfigIniSectionData* sectionBuff = new SettingsLib::Types::ConfigIniSectionData(this->lastSectionSearch);
+				this->sectionMap.insert({this->lastSectionSearch, sectionBuff});
 				foundSection = true;
 			}
 
 			if (foundSection)
 			{
-				this->sectionMap->at(this->lastSectionSearch).addData(iniData);
+				this->sectionMap.at(this->lastSectionSearch)->addData(&iniData);
 			}
 			break;
 		}

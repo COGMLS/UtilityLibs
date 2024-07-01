@@ -21,6 +21,7 @@
 
 #include <map>
 #include <string>
+#include <iostream>
 
 namespace SettingsLib
 {
@@ -36,8 +37,8 @@ namespace SettingsLib
 
 				std::string lastSectionSearch;
 
-				std::map<std::string, SettingsLib::Types::ConfigIniSectionData>* sectionMap = nullptr;
-				std::map<std::wstring, SettingsLib::Types::ConfigIniSectionData>* wSectionMap = nullptr;
+				std::map<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionMap;
+				std::map<std::wstring, SettingsLib::Types::ConfigIniSectionData*> wSectionMap;
 
 			public:
 				ConfigIni();
