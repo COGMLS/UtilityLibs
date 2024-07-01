@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <memory>
 
 namespace SettingsLib
 {
@@ -45,6 +46,7 @@ namespace SettingsLib
 		/// @brief Configuration Data Type control
 		enum ConfigDataType : int
 		{
+			SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING = -1,
 			SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL,
 			SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY,
 			SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER,
@@ -62,14 +64,57 @@ namespace SettingsLib
 			long long ll;
 			double d;
 			bool b;
-			std::string* s;
-			std::wstring* w;
+			//std::string* s;
+			//std::wstring* w;
+		};
+
+		/// @brief Configuration String Data store
+		class SETTINGS_LIB_API ConfigStrData
+		{
+			private:
+
+				//
+				// Configuration String Data:
+				//
+
+				std::string* s = nullptr;
+				std::wstring* w = nullptr;
+
+			public:
+
+				ConfigStrData();
+				ConfigStrData (std::string str);
+				ConfigStrData (std::wstring str);
+
+				ConfigStrData (const SettingsLib::Types::ConfigStrData& other);
+
+				ConfigStrData (SettingsLib::Types::ConfigStrData&& other) noexcept;
+
+				~ConfigStrData();
+
+				SettingsLib::Types::ConfigStrData& operator= (std::string str);
+				SettingsLib::Types::ConfigStrData& operator= (std::wstring str);
+				SettingsLib::Types::ConfigStrData& operator= (const SettingsLib::Types::ConfigStrData& other);
+				SettingsLib::Types::ConfigStrData& operator= (SettingsLib::Types::ConfigStrData&& other) noexcept;
+				
+				friend bool operator== (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
+				friend bool operator!= (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
+
+				SettingsLib::Types::ConfigDataType getDataType();
+
+				std::string getStr();
+				std::wstring getStrW();
+
+				bool setStr(std::string str);
+				bool setStr(std::wstring str);
+
+				bool cleanData();
 		};
 
 		/// @brief Configuration Data Store to hold the data type and union data with all data set and get controls
 		class SETTINGS_LIB_API ConfigDataStore
 		{
-			protected:
+			private:
 				
 				//
 				// Configuration Data Store variables:
@@ -79,12 +124,15 @@ namespace SettingsLib
 				SettingsLib::Types::ConfigDataType type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
 
 				SettingsLib::Types::ConfigDataUnion data;
+				SettingsLib::Types::ConfigStrData* strData = nullptr;
 				
 				/**
 				 * @brief String data cleaner. If a string or wstring was set in the data store, the method will remove it. Otherwise will do nothing.
 				 * @return Retrun TRUE in successful operations.
 				 */
 				bool cleanStringData();
+
+				bool allocStringData();
 
 			public:
 
@@ -97,13 +145,13 @@ namespace SettingsLib
 				 * @brief Copy constructor
 				 * @param other Other ConfigDataStore object
 				 */
-				ConfigDataStore (const ConfigDataStore& other);
+				ConfigDataStore (const SettingsLib::Types::ConfigDataStore& other);
 
 				/**
 				 * @brief Move constructor
 				 * @param other Other ConfigDataStore object
 				 */
-				ConfigDataStore (ConfigDataStore&& other) noexcept;
+				ConfigDataStore (SettingsLib::Types::ConfigDataStore&& other) noexcept;
 
 				/**
 				 * @brief Create a ConfigDataStore object that will hold a unsigned long long.
@@ -144,7 +192,7 @@ namespace SettingsLib
 				~ConfigDataStore();
 
 				/// @brief Get the current data type the data store is holding
-				SettingsLib::Types::ConfigDataType getDataType();
+				SettingsLib::Types::ConfigDataType getDataType() const;
 
 				/**
 				 * @brief Clean the data store
@@ -176,8 +224,8 @@ namespace SettingsLib
 
 				// Copy and Move operators:
 
-				SettingsLib::Types::ConfigDataStore& operator= (const ConfigDataStore& other);
-				SettingsLib::Types::ConfigDataStore& operator= (ConfigDataStore&& other) noexcept;
+				SettingsLib::Types::ConfigDataStore& operator= (const SettingsLib::Types::ConfigDataStore& other);
+				SettingsLib::Types::ConfigDataStore& operator= (SettingsLib::Types::ConfigDataStore&& other) noexcept;
 				
 				
 				/**
@@ -268,10 +316,10 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (unsigned short* data);
-				int setData (unsigned int* data);
-				int setData (unsigned long* data);
-				int setData (unsigned long long* data);
+				//int setData (unsigned short* data);
+				//int setData (unsigned int* data);
+				//int setData (unsigned long* data);
+				//int setData (unsigned long long* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -293,10 +341,10 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (short* data);
-				int setData (int* data);
-				int setData (long* data);
-				int setData (long long* data);
+				//int setData (short* data);
+				//int setData (int* data);
+				//int setData (long* data);
+				//int setData (long long* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -316,8 +364,8 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (float* data);
-				int setData (double* data);
+				//int setData (float* data);
+				//int setData (double* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -336,7 +384,7 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (bool* data);
+				//int setData (bool* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -395,7 +443,7 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (std::string* data);
+				//int setData (std::string* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -414,7 +462,7 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 * @return 3: The value is a nullptr.
 				 */
-				int setData (std::wstring* data);
+				//int setData (std::wstring* data);
 		};
 	}
 }

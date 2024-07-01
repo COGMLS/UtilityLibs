@@ -3,10 +3,15 @@
 SettingsLib::Types::ConfigDataStore::ConfigDataStore()
 {
 	this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
+	this->data.ull = 0ull;
+	this->strData = nullptr;
 }
 
-SettingsLib::Types::ConfigDataStore::ConfigDataStore(const ConfigDataStore &other)
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(const SettingsLib::Types::ConfigDataStore &other)
 {
+	this->data.ull = 0ull;
+	this->strData = nullptr;
+
 	try
 	{
 		if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
@@ -31,13 +36,19 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(const ConfigDataStore &othe
 		}
 		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 		{
-			this->data.s = new std::string;
-			*this->data.s = *other.data.s;
+			if (this->allocStringData())
+			{
+				this->strData->setStr(other.strData->getStr());
+				this->type = other.type;
+			}
 		}
 		else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
-			this->data.w = new std::wstring;
-			*this->data.w = *other.data.w;
+			if (this->allocStringData())
+			{
+				this->strData->setStr(other.strData->getStrW());
+				this->type = other.type;
+			}
 		}
 		else
 		{
@@ -50,12 +61,17 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(const ConfigDataStore &othe
 	}
 }
 
-SettingsLib::Types::ConfigDataStore::ConfigDataStore(ConfigDataStore &&other) noexcept
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(SettingsLib::Types::ConfigDataStore &&other) noexcept
 {
 	try
 	{
 		this->data = std::move(other.data);
-		this->type = other.type;
+		this->type = std::move(other.type);
+
+		if (other.strData != nullptr)
+		{
+			this->strData = std::move(other.strData);
+		}
 	}
 	catch(const std::exception&)
 	{
@@ -67,16 +83,15 @@ bool SettingsLib::Types::ConfigDataStore::cleanStringData()
 {
 	try
 	{
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+		if (this->strData != nullptr)
 		{
-			delete this->data.s;
-			this->data.s = nullptr;
-		}
+			delete this->strData;
+			this->strData = nullptr;
 
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
-		{
-			delete this->data.w;
-			this->data.w = nullptr;
+			if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
+			}
 		}
 
 		return true;
@@ -84,6 +99,23 @@ bool SettingsLib::Types::ConfigDataStore::cleanStringData()
 	catch(const std::exception&)
 	{
 		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+		return false;
+	}
+}
+
+bool SettingsLib::Types::ConfigDataStore::allocStringData()
+{
+	try
+	{
+		if (this->strData == nullptr)
+		{
+			this->strData = new SettingsLib::Types::ConfigStrData;
+		}
+
+		return true;
+	}
+	catch(const std::exception&)
+	{
 		return false;
 	}
 }
@@ -144,9 +176,21 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(std::string data)
 {
 	try
 	{
-		this->data.s = new std::string;
-		*this->data.s = data;
-		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+		if (this->allocStringData())
+		{
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+			}
+			else
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+			}
+		}
+		else
+		{
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+		}
 	}
 	catch(const std::exception&)
 	{
@@ -158,9 +202,21 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(std::wstring data)
 {
 	try
 	{
-		this->data.w = new std::wstring;
-		*this->data.w = data;
-		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+		if (this->allocStringData())
+		{
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+			}
+			else
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+			}
+		}
+		else
+		{
+			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+		}
 	}
 	catch(const std::exception&)
 	{
@@ -170,24 +226,27 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(std::wstring data)
 
 SettingsLib::Types::ConfigDataStore::~ConfigDataStore()
 {
-	if (this->type != SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	if (this->strData != nullptr)
 	{
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
-		{
-			delete this->data.s;
-			this->data.s = nullptr;
-		}
-
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
-		{
-			delete this->data.w;
-			this->data.w = nullptr;
-		}
+		delete this->strData;
 	}
 }
 
-SettingsLib::Types::ConfigDataType SettingsLib::Types::ConfigDataStore::getDataType()
+SettingsLib::Types::ConfigDataType SettingsLib::Types::ConfigDataStore::getDataType() const
 {
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+	{
+		if (this->strData != nullptr)
+		{
+			SettingsLib::Types::ConfigDataType strType = this->strData->getDataType();
+			if (strType != SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY && strType != SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING)
+			{
+				return this->type;
+			}
+		}
+		return SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING;
+	}
+
 	return this->type;
 }
 
@@ -195,7 +254,7 @@ bool SettingsLib::Types::ConfigDataStore::cleanData()
 {
 	try
 	{
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+		if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
 			if (this->cleanStringData())
 			{
@@ -390,15 +449,29 @@ SettingsLib::Types::ConfigDataStore &SettingsLib::Types::ConfigDataStore::operat
 		{
 			if (this->cleanStringData())
 			{
-				this->data.s = new std::string;
-				*this->data.s = data;
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(data))
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+					}
+					else
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+					}
+				}
 			}
 		}
 		else
 		{
-			*this->data.s = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+			}
+			else
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+			}
 		}
 	}
 	catch(const std::exception&)
@@ -419,15 +492,30 @@ SettingsLib::Types::ConfigDataStore &SettingsLib::Types::ConfigDataStore::operat
 		{
 			if (this->cleanStringData())
 			{
-				this->data.w = new std::wstring;
-				*this->data.w = data;
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+				//*this->data.w = data;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(data))
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+					}
+					else
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+					}
+				}
 			}
 		}
 		else
 		{
-			*this->data.w = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+			}
+			else
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+			}
 		}
 	}
 	catch(const std::exception&)
@@ -438,7 +526,7 @@ SettingsLib::Types::ConfigDataStore &SettingsLib::Types::ConfigDataStore::operat
     return *this;
 }
 
-SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operator= (const ConfigDataStore &other)
+SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operator= (const SettingsLib::Types::ConfigDataStore &other)
 {
     if (this == &other)
 	{
@@ -478,13 +566,39 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 			}
 			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 			{
-				this->data.s = new std::string;
-				*this->data.s = *other.data.s;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(other.strData->getStr()))
+					{
+						this->type = other.type;
+					}
+					else
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+					}
+				}
+				else
+				{
+					this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+				}
 			}
 			else if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 			{
-				this->data.w = new std::wstring;
-				*this->data.w = *other.data.w;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(other.strData->getStrW()))
+					{
+						this->type = other.type;
+					}
+					else
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+					}
+				}
+				else
+				{
+					this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+				}
 			}
 			else
 			{
@@ -504,7 +618,7 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 	return *this;
 }
 
-SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operator= (ConfigDataStore &&other) noexcept
+SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operator= (SettingsLib::Types::ConfigDataStore &&other) noexcept
 {
     if (this == &other)
 	{
@@ -513,15 +627,26 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 
 	try
 	{
-		bool cleanDataOK = true;
+		bool cleanDataOK = false;
 
-		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+		if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 		{
-			cleanDataOK = !this->cleanStringData();
+			cleanDataOK = this->cleanStringData();
 		}
 
 		if (cleanDataOK)
 		{
+			if (other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || other.type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+			{
+				if (other.strData != nullptr)
+				{
+					this->strData = std::move(other.strData);
+				}
+				else
+				{
+					this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING;
+				}
+			}
 			this->data = std::move(other.data);
 			this->type = other.type;
 		}
@@ -540,17 +665,17 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 
 int SettingsLib::Types::ConfigDataStore::getData (unsigned long long *data)
 {
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
 	{
 		try
 		{
@@ -570,17 +695,17 @@ int SettingsLib::Types::ConfigDataStore::getData (unsigned long long *data)
 
 int SettingsLib::Types::ConfigDataStore::getData(long long *data)
 {
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
 	{
 		try
 		{
@@ -600,17 +725,17 @@ int SettingsLib::Types::ConfigDataStore::getData(long long *data)
 
 int SettingsLib::Types::ConfigDataStore::getData(double *data)
 {
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
 	{
 		try
 		{
@@ -630,17 +755,17 @@ int SettingsLib::Types::ConfigDataStore::getData(double *data)
 
 int SettingsLib::Types::ConfigDataStore::getData(bool *data)
 {
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
 	{
 		try
 		{
@@ -660,27 +785,32 @@ int SettingsLib::Types::ConfigDataStore::getData(bool *data)
 
 int SettingsLib::Types::ConfigDataStore::getData(std::string *data)
 {
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	if (data == nullptr)
+	{
+		return -4;
+	}
+
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
+
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING)
+	{
+		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING;
+		return -3;
+	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 	{
 		try
 		{
-			if (this->data.s == nullptr)
-			{
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
-				return -3;
-			}
-
-			*data = *this->data.s;
+			*data = this->strData->getStr();
 			return 1;
 		}
 		catch(const std::exception&)
@@ -696,27 +826,32 @@ int SettingsLib::Types::ConfigDataStore::getData(std::string *data)
 
 int SettingsLib::Types::ConfigDataStore::getData(std::wstring *data)
 {
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	if (data == nullptr)
+	{
+		return -4;
+	}
+
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
 	{
 		return -1;
 	}
 
-	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
 	{
 		return 0;
 	}
+
+	if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING)
+	{
+		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING;
+		return -3;
+	}
 	
-    if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+    if (this->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
 	{
 		try
 		{
-			if (this->data.w == nullptr)
-			{
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
-				return -3;
-			}
-
-			*data = *this->data.w;
+			*data = this->strData->getStrW();
 			return 1;
 		}
 		catch(const std::exception&)
@@ -770,6 +905,7 @@ int SettingsLib::Types::ConfigDataStore::setData(unsigned long long data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(unsigned short *data)
 {
 	return this->setData(*data);
@@ -814,20 +950,21 @@ int SettingsLib::Types::ConfigDataStore::setData(unsigned long long *data)
 		return 2;
 	}
 }
+*/
 
 int SettingsLib::Types::ConfigDataStore::setData(short data)
 {
-    return this->setData(static_cast<unsigned long long>(data));
+    return this->setData(static_cast<long long>(data));
 }
 
 int SettingsLib::Types::ConfigDataStore::setData(int data)
 {
-    return this->setData(static_cast<unsigned long long>(data));
+    return this->setData(static_cast<long long>(data));
 }
 
 int SettingsLib::Types::ConfigDataStore::setData(long data)
 {
-    return this->setData(static_cast<unsigned long long>(data));
+    return this->setData(static_cast<long long>(data));
 }
 
 int SettingsLib::Types::ConfigDataStore::setData(long long data)
@@ -855,6 +992,7 @@ int SettingsLib::Types::ConfigDataStore::setData(long long data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(short *data)
 {
     return this->setData(*data);
@@ -899,6 +1037,7 @@ int SettingsLib::Types::ConfigDataStore::setData(long long *data)
 		return 2;
 	}
 }
+*/
 
 int SettingsLib::Types::ConfigDataStore::setData(float data)
 {
@@ -930,6 +1069,7 @@ int SettingsLib::Types::ConfigDataStore::setData(double data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(float *data)
 {
     return this->setData(*data);
@@ -964,6 +1104,7 @@ int SettingsLib::Types::ConfigDataStore::setData(double *data)
 		return 2;
 	}
 }
+*/
 
 int SettingsLib::Types::ConfigDataStore::setData(bool data)
 {
@@ -990,6 +1131,7 @@ int SettingsLib::Types::ConfigDataStore::setData(bool data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(bool* data)
 {
     if (data == nullptr)
@@ -1019,6 +1161,7 @@ int SettingsLib::Types::ConfigDataStore::setData(bool* data)
 		return 2;
 	}
 }
+*/
 
 int SettingsLib::Types::ConfigDataStore::setData(char data)
 {
@@ -1068,22 +1211,28 @@ int SettingsLib::Types::ConfigDataStore::setData(std::string data)
 		{
 			if (this->cleanStringData())
 			{
-				this->data.s = new std::string;
-				*this->data.s = data;
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
-
-				return 0;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(data))
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+						return 0;
+					}
+				}
 			}
 
 			return 1;
 		}
 		else
 		{
-			*this->data.s = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
-
-			return 0;
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+				return 0;
+			}
 		}
+
+		return 1;
 	}
 	catch(const std::exception&)
 	{
@@ -1092,6 +1241,7 @@ int SettingsLib::Types::ConfigDataStore::setData(std::string data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(std::string *data)
 {
     if (data == nullptr)
@@ -1130,6 +1280,7 @@ int SettingsLib::Types::ConfigDataStore::setData(std::string *data)
 		return 2;
 	}
 }
+*/
 
 int SettingsLib::Types::ConfigDataStore::setData(std::wstring data)
 {
@@ -1141,22 +1292,28 @@ int SettingsLib::Types::ConfigDataStore::setData(std::wstring data)
 		{
 			if (this->cleanStringData())
 			{
-				this->data.w = new std::wstring;
-				*this->data.w = data;
-				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
-
-				return 0;
+				if (this->allocStringData())
+				{
+					if (this->strData->setStr(data))
+					{
+						this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+						return 0;
+					}
+				}
 			}
 
 			return 1;
 		}
 		else
 		{
-			*this->data.w = data;
-			this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
-
-			return 0;
+			if (this->strData->setStr(data))
+			{
+				this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+				return 0;
+			}
 		}
+
+		return 1;
 	}
 	catch(const std::exception&)
 	{
@@ -1165,6 +1322,7 @@ int SettingsLib::Types::ConfigDataStore::setData(std::wstring data)
 	}
 }
 
+/*
 int SettingsLib::Types::ConfigDataStore::setData(std::wstring* data)
 {
     if (data == nullptr)
@@ -1201,5 +1359,319 @@ int SettingsLib::Types::ConfigDataStore::setData(std::wstring* data)
 	{
 		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 		return 2;
+	}
+}
+*/
+
+SettingsLib::Types::ConfigStrData::ConfigStrData()
+{
+	this->s = nullptr;
+	this->w = nullptr;
+}
+
+SettingsLib::Types::ConfigStrData::ConfigStrData(std::string str)
+{
+	this->s = new std::string;
+	this->w = nullptr;
+
+	*this->s = str;
+}
+
+SettingsLib::Types::ConfigStrData::ConfigStrData(std::wstring str)
+{
+	this->s = nullptr;
+	this->w = new std::wstring;
+
+	*this->w = str;
+}
+
+SettingsLib::Types::ConfigStrData::ConfigStrData(const SettingsLib::Types::ConfigStrData &other)
+{
+	if (other.s != nullptr)
+	{
+		this->s = new std::string;
+		*this->s = *other.s;
+	}
+
+	if (other.w != nullptr)
+	{
+		this->w = new std::wstring;
+		*this->w = *other.w;
+	}
+}
+
+SettingsLib::Types::ConfigStrData::ConfigStrData(SettingsLib::Types::ConfigStrData &&other) noexcept
+{
+	if (other.s != nullptr)
+	{
+		this->s = std::move(other.s);
+	}
+
+	if (other.w != nullptr)
+	{
+		this->w = std::move(other.w);
+	}
+}
+
+SettingsLib::Types::ConfigStrData::~ConfigStrData()
+{
+	if (this->s != nullptr)
+	{
+		delete this->s;
+	}
+
+	if (this->w != nullptr)
+	{
+		delete this->w;
+	}
+}
+
+SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(std::string str)
+{
+	if (this->w != nullptr)
+	{
+		delete this->w;
+		this->w = nullptr;
+	}
+
+	if (this->s == nullptr)
+	{
+		this->s = new std::string;
+	}
+
+	*this->s = str;
+
+    return *this;
+}
+
+SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(std::wstring str)
+{
+    if (this->s != nullptr)
+	{
+		delete this->s;
+		this->s = nullptr;
+	}
+
+	if (this->w == nullptr)
+	{
+		this->w = new std::wstring;
+	}
+
+	*this->w = str;
+
+    return *this;
+}
+
+SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(const SettingsLib::Types::ConfigStrData &other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	if (this->s != nullptr && other.s != nullptr)
+	{
+		*this->s = *other.s;
+	}
+
+	if (this->w != nullptr && other.w != nullptr)
+	{
+		*this->w = *other.w;
+	}
+
+	if (this->s != nullptr && other.w != nullptr)
+	{
+		if (this->cleanData())
+		{
+			this->w = new std::wstring;
+			*this->w = *other.w;
+		}
+	}
+
+	if (this->w != nullptr && other.s != nullptr)
+	{
+		if (this->cleanData())
+		{
+			this->s = new std::string;
+			*this->s = *other.s;
+		}
+	}
+
+	return *this;
+}
+
+SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(SettingsLib::Types::ConfigStrData &&other) noexcept
+{
+    if (this == &other)
+	{
+		return *this;
+	}
+
+	if (this->cleanData())
+	{
+		if (other.s != nullptr)
+		{
+			this->s = std::move(other.s);
+		}
+
+		if (other.w != nullptr)
+		{
+			this->w = std::move(other.w);
+		}
+	}
+
+	/*
+	if (this->s != nullptr && other.s != nullptr)
+	{
+		delete this->s;
+		this->s = std::move(other.s);
+	}
+
+	if (this->w != nullptr && other.w != nullptr)
+	{
+		delete this->w;
+		this->w = std::move(other.w);
+	}
+
+	if (this->s != nullptr && other.w != nullptr)
+	{
+		if (this->cleanData())
+		{
+			this->w = std::move(other.w);
+		}
+	}
+
+	if (this->w != nullptr && other.s != nullptr)
+	{
+		if (this->cleanData())
+		{
+			this->s = std::move(other.s);
+		}
+	}
+	*/
+
+	return *this;
+}
+
+bool SettingsLib::Types::operator==(const SettingsLib::Types::ConfigStrData &lhs, const SettingsLib::Types::ConfigStrData &rhs)
+{
+	if (&lhs == &rhs)
+	{
+		return true;
+	}
+
+	if (lhs.s != nullptr && rhs.s != nullptr)
+	{
+		if (lhs.s == rhs.s)
+		{
+			return true;
+		}
+	}
+
+	if (lhs.w != nullptr && rhs.w != nullptr)
+	{
+		if (lhs.w == rhs.w)
+		{
+			return true;
+		}
+	}
+
+    return false;
+}
+
+bool SettingsLib::Types::operator!=(const SettingsLib::Types::ConfigStrData &lhs, const SettingsLib::Types::ConfigStrData &rhs)
+{
+    return !(lhs == rhs);
+}
+
+SettingsLib::Types::ConfigDataType SettingsLib::Types::ConfigStrData::getDataType()
+{
+	if (this->s != nullptr && this->w == nullptr)
+	{
+		return SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING;
+	}
+	else if (this->s == nullptr && this->w != nullptr)
+	{
+		return SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING;
+	}
+	else if (this->s != nullptr && this->w != nullptr)
+	{
+		return SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
+	}
+	else
+	{
+		return SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
+	}
+}
+
+std::string SettingsLib::Types::ConfigStrData::getStr()
+{
+	std::string buff;
+
+	if (this->s != nullptr)
+	{
+		buff = *this->s;
+	}
+
+	return buff;
+}
+
+std::wstring SettingsLib::Types::ConfigStrData::getStrW()
+{
+	std::wstring buff;
+
+    if (this->w != nullptr)
+	{
+		buff = *this->w;
+	}
+
+	return buff;
+}
+
+bool SettingsLib::Types::ConfigStrData::setStr(std::string str)
+{
+	if (this->cleanData())
+	{
+		this->s = new std::string;
+		*this->s = str;
+		return true;
+	}
+
+	return false;
+}
+
+bool SettingsLib::Types::ConfigStrData::setStr(std::wstring str)
+{
+	if (this->cleanData())
+	{
+		this->w = new std::wstring;
+		*this->w = str;
+		return true;
+	}
+
+	return false;
+}
+
+bool SettingsLib::Types::ConfigStrData::cleanData()
+{
+	try
+	{
+		if (this->s != nullptr)
+		{
+			delete this->s;
+			this->s = nullptr;
+		}
+
+		if (this->w != nullptr)
+		{
+			delete this->w;
+			this->w = nullptr;
+		}
+
+		return true;
+	}
+	catch(const std::exception&)
+	{
+    	return false;
 	}
 }
