@@ -73,6 +73,7 @@ if (WIN32)
 					# Ini files:
 					"SettingsIniConfig.hpp" "SettingsIniConfig.cpp"
 					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
+					"SettingsIniDataStruct.hpp" "SettingsIniDataStruct.cpp"
 					"SettingsIniDefinitions.hpp"
 					"SettingsIniErrorCodes.hpp"
 					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
@@ -90,7 +91,9 @@ else()
 					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
 					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
 					# Ini files:
+					"SettingsIniConfig.hpp" "SettingsIniConfig.cpp"
 					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
+					"SettingsIniDataStruct.hpp" "SettingsIniDataStruct.cpp"
 					"SettingsIniDefinitions.hpp"
 					"SettingsIniErrorCodes.hpp"
 					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
