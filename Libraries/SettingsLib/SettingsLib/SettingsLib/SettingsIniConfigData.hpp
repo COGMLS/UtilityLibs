@@ -17,11 +17,15 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "SettingsLibDataTypes.hpp"
 #include "SettingsLibTools.hpp"
 #include "SettingsIniErrorCodes.hpp"
 #include "SettingsIniDefinitions.hpp"
+
+#define USE_INIDATA_POINTERS
+//#define USE_SECTION_POINTERS
 
 namespace SettingsLib
 {
@@ -35,25 +39,39 @@ namespace SettingsLib
 
 				bool objWasConfig;			// Control if the object already was configurated or not.
 				bool usingWideData;			// Determinate if the object is configurated to use wide strings or not.
+				short dataStoreType;		// Determinate if will be not configurated (0) or only one data (1) or a container (2).
 
 				// Data Section:
 				// Data Section only will hold string or wstring data no other data type is allowed here!
 
-				SettingsLib::Types::ConfigDataStore* section = nullptr;
+				#ifdef USE_INIDATA_POINTERS
+				std::unique_ptr<SettingsLib::Types::ConfigStrData> section;
+				#else
+				SettingsLib::Types::ConfigDataStore section;
+				#endif // !USE_INIDATA_POINTERS
 				
 				// Data key:
 				// Data Key only will hold string or wstring data no other data type is allowed here!
 				
-				SettingsLib::Types::ConfigDataStore key;
+				SettingsLib::Types::ConfigStrData key;
 
 				// Data store:
 
-				SettingsLib::Types::ConfigDataStore* data = nullptr;
-				std::vector<SettingsLib::Types::ConfigDataStore>* vdata = nullptr;
+				#ifdef USE_INIDATA_POINTERS
+				std::unique_ptr<SettingsLib::Types::ConfigDataStore> data;
+				std::unique_ptr<std::vector<SettingsLib::Types::ConfigDataStore>> vdata;
+				#else
+				SettingsLib::Types::ConfigDataStore data;
+				std::vector<SettingsLib::Types::ConfigDataStore> vdata;
+				#endif // !USE_INIDATA_POINTERS
 
 				// Comment store:
 
-				SettingsLib::Types::ConfigDataStore* comment = nullptr;
+				#ifdef USE_INIDATA_POINTERS
+				std::unique_ptr<SettingsLib::Types::ConfigStrData> comment;
+				#else
+				SettingsLib::Types::ConfigDataStore comment;
+				#endif // !USE_INIDATA_POINTERS
 
 			public:
 
@@ -185,7 +203,7 @@ namespace SettingsLib
 				 * @return CONFIG_INI_STATUS_NO_DATA_TO_SET is an empty string was send.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if an exception occur in data allocation.
 				 */
-				int setSection (std::string* section);
+				int setSection (std::string section);
 
 				/**
 				 * @brief Set a section associated with this object.
@@ -198,7 +216,7 @@ namespace SettingsLib
 				 * @return CONFIG_INI_STATUS_NO_DATA_TO_SET is an empty string was send.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if an exception occur in data allocation.
 				 */
-				int setSection (std::wstring* section);
+				int setSection (std::wstring section);
 
 				// Key methods:
 
@@ -249,30 +267,6 @@ namespace SettingsLib
 				 * @note This is a function wrapper that call the method setKey(std::wstring* key)
 				 */
 				int setKey (std::wstring key);
-
-				/**
-				 * @brief Set a new name for object's key or configurate for the first time if a empty object was created or reset.
-				 * @param key Variable to send the key's name
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE if the key is an empty string.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA if the object is configurated to wide string.
-				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
-				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if fail to get the key value.
-				 * @note If the object is not configurated, this method, will configurate it and define the wide string type as false.
-				 */
-				int setKey (std::string* key);
-
-				/**
-				 * @brief Set a new name for object's key or configurate for the first time if a empty object was created or reset.
-				 * @param key Variable to send the key's name
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE if the key is an empty string.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA if the object is configurated to string.
-				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
-				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if fail to get the key value.
-				 * @note If the object is not configurated, this method, will configurate it and define the wide string type as false.
-				 */
-				int setKey (std::wstring* key);
 
 				// Data methods:
 
@@ -348,7 +342,7 @@ namespace SettingsLib
 				 * @return CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE if no container is available.
 				 * @note If overwrite was defined as FALSE and a position that is out of range, the data will be inserted in the end of the container and return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if was successful.
 				 */
-				int insertData (SettingsLib::Types::ConfigDataStore* data, size_t pos, bool overwrite);
+				int insertData (SettingsLib::Types::ConfigDataStore data, size_t pos, bool overwrite);
 				
 				/**
 				 * @brief Check if the object holds a container
@@ -426,32 +420,6 @@ namespace SettingsLib
 				 * @note This method is a wrapper that calls setComment(std::wstring*).
 				 */
 				int setComment (std::wstring comment);
-
-				/**
-				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if a nullptr was send on comment parameter.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
-				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
-				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
-				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if an exception occur.
-				 * @note If the comment doesn't start with a COMMENT_MARK, the function will add automatically.
-				 */
-				int setComment (std::string* comment);
-
-				/**
-				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if a nullptr was send on comment parameter.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
-				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
-				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
-				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if an exception occur.
-				 * @note If the comment doesn't start with a COMMENT_MARK, the function will add automatically.
-				 */
-				int setComment (std::wstring* comment);
 		};
 
 		/// @brief Section Configuration Data for INI files
@@ -468,8 +436,13 @@ namespace SettingsLib
 
 				// Section can only hold string or wstring!
 
+				#ifdef USE_SECTION_POINTERS
 				std::map<std::string, SettingsLib::Types::ConfigIniData*> keyMap;
 				std::map<std::wstring, SettingsLib::Types::ConfigIniData*> wKeyMap;
+				#else
+				std::map<std::string, SettingsLib::Types::ConfigIniData> keyMap;
+				std::map<std::wstring, SettingsLib::Types::ConfigIniData> wKeyMap;
+				#endif // !USE_SECTION_POINTERS
 
 				// Comments for the section:
 
@@ -496,7 +469,7 @@ namespace SettingsLib
 
 				bool isWideData();
 
-				int addData (SettingsLib::Types::ConfigIniData* data);
+				int addData (SettingsLib::Types::ConfigIniData& data);
 
 				int remData (std::string key);
 				int remData (std::wstring key);
