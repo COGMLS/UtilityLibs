@@ -64,8 +64,6 @@ namespace SettingsLib
 			long long ll;
 			double d;
 			bool b;
-			//std::string* s;
-			//std::wstring* w;
 		};
 
 		/// @brief Configuration String Data store
@@ -77,8 +75,9 @@ namespace SettingsLib
 				// Configuration String Data:
 				//
 
-				std::string* s = nullptr;
-				std::wstring* w = nullptr;
+				SettingsLib::Types::ConfigDataType type;
+				std::unique_ptr<std::string> s;
+				std::unique_ptr<std::wstring> w;
 
 			public:
 
@@ -124,7 +123,7 @@ namespace SettingsLib
 				SettingsLib::Types::ConfigDataType type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;
 
 				SettingsLib::Types::ConfigDataUnion data;
-				SettingsLib::Types::ConfigStrData* strData = nullptr;
+				std::unique_ptr<SettingsLib::Types::ConfigStrData> strData;
 				
 				/**
 				 * @brief String data cleaner. If a string or wstring was set in the data store, the method will remove it. Otherwise will do nothing.
@@ -314,37 +313,11 @@ namespace SettingsLib
 				 * @return 0: The data was successfully copied into data store.
 				 * @return 1: Fail to clean the previous data (clean string data value fail).
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (unsigned short* data);
-				//int setData (unsigned int* data);
-				//int setData (unsigned long* data);
-				//int setData (unsigned long long* data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 */
 				int setData (short data);
 				int setData (int data);
 				int setData (long data);
 				int setData (long long data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (short* data);
-				//int setData (int* data);
-				//int setData (long* data);
-				//int setData (long long* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -362,29 +335,8 @@ namespace SettingsLib
 				 * @return 0: The data was successfully copied into data store.
 				 * @return 1: Fail to clean the previous data (clean string data value fail).
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (float* data);
-				//int setData (double* data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 */
 				int setData (bool data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (bool* data);
 
 				/**
 				 * @brief Set the data into the Data Store
@@ -441,28 +393,8 @@ namespace SettingsLib
 				 * @return 0: The data was successfully copied into data store.
 				 * @return 1: Fail to clean the previous data (clean string data value fail).
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (std::string* data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 */
 				int setData (std::wstring data);
-
-				/**
-				 * @brief Set the data into the Data Store
-				 * @param data Variable to send a copy of the data
-				 * @return 0: The data was successfully copied into data store.
-				 * @return 1: Fail to clean the previous data (clean string data value fail).
-				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
-				 * @return 3: The value is a nullptr.
-				 */
-				//int setData (std::wstring* data);
 		};
 	}
 }
