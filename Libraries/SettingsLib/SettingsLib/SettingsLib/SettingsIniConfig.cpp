@@ -64,12 +64,9 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 
 			if (foundSection)
 			{
-				this->sectionMap.at(this->lastSectionSearch)->addData(&iniData);
+				SettingsLib::Types::ConfigIniData iniTest1(iniData);
+				this->sectionMap.at(this->lastSectionSearch)->addData(iniData);
 			}
-
-			std::string keyName2;
-			iniData.getKey(&keyName2);
-			std::cout << "iniData: " << keyName2 << " added." << std::endl;
 
 			break;
 		}
@@ -91,7 +88,7 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 			{
 				SettingsLib::Types::ConfigDataStore dataStore;
 				SettingsLib::Tools::Ini::convertValue(&rawValue, &dataStore, false);
-				iniData.setData(dataStore);
+				iniData.setData(&dataStore);
 			}
 
 			if (!comment.empty())
@@ -114,7 +111,7 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 
 			if (foundSection)
 			{
-				this->sectionMap.at(this->lastSectionSearch)->addData(&iniData);
+				this->sectionMap.at(this->lastSectionSearch)->addData(iniData);
 			}
 			break;
 		}
