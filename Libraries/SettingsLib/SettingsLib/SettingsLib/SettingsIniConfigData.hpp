@@ -24,8 +24,6 @@
 #include "SettingsIniErrorCodes.hpp"
 #include "SettingsIniDefinitions.hpp"
 
-//#define USE_SECTION_POINTERS
-
 namespace SettingsLib
 {
 	namespace Types
@@ -422,13 +420,8 @@ namespace SettingsLib
 
 				// Section can only hold string or wstring!
 
-				#ifdef USE_SECTION_POINTERS
-				std::map<std::string, SettingsLib::Types::ConfigIniData*> keyMap;
-				std::map<std::wstring, SettingsLib::Types::ConfigIniData*> wKeyMap;
-				#else
 				std::map<std::string, SettingsLib::Types::ConfigIniData> keyMap;
 				std::map<std::wstring, SettingsLib::Types::ConfigIniData> wKeyMap;
-				#endif // !USE_SECTION_POINTERS
 
 				// Comments for the section:
 

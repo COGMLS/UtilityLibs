@@ -1205,11 +1205,7 @@ int SettingsLib::Types::ConfigIniSectionData::getIniData(std::string key, Settin
 
 		if (this->keyMap.contains(key))
 		{
-			#ifdef USE_SECTION_POINTERS
-			SettingsLib::Types::ConfigIniData* data = this->keyMap.at(key);
-			#else
 			SettingsLib::Types::ConfigIniData* data = &this->keyMap.at(key);
-			#endif // !USE_SECTION_POINTERS
 			*iniData = *data;
 			return 1;
 		}
@@ -1248,21 +1244,13 @@ int SettingsLib::Types::ConfigIniSectionData::addData(SettingsLib::Types::Config
 
 					if (!foundKey || isEmpty)
 					{
-						#ifdef USE_SECTION_POINTERS
 						this->wKeyMap.insert({key, data});
-						#else
-						this->wKeyMap.insert({key, data});
-						#endif // !USE_SECTION_POINTERS
 						return 1;
 					}
 					else
 					{
 						auto p = &this->wKeyMap.at(key);
-						#ifdef USE_SECTION_POINTERS
-						**p = *data;
-						#else
 						*p = data;
-						#endif // !USE_SECTION_POINTERS
 						return 2;
 					}
 				}
@@ -1294,21 +1282,13 @@ int SettingsLib::Types::ConfigIniSectionData::addData(SettingsLib::Types::Config
 					
 					if (!foundKey || isEmpty)
 					{
-						#ifdef USE_SECTION_POINTERS
 						this->keyMap.insert({key, data});
-						#else
-						this->keyMap.insert({key, data});
-						#endif // !USE_SECTION_POINTERS
 						return 1;
 					}
 					else
 					{
 						auto p = &this->keyMap.at(key);
-						#ifdef USE_SECTION_POINTERS
-						**p = *data;
-						#else
 						*p = data;
-						#endif // !USE_SECTION_POINTERS
 						return 2;
 					}
 				}
