@@ -30,7 +30,6 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(const ConfigIniData &other)
 
 	this->key = other.key;
 	
-	#ifdef USE_INIDATA_POINTERS
 	if (other.section != nullptr)
 	{
 		this->section.reset(new SettingsLib::Types::ConfigStrData(*other.section));
@@ -50,12 +49,6 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(const ConfigIniData &other)
 	{
 		this->comment.reset(new SettingsLib::Types::ConfigStrData(*other.comment));
 	}
-	#else
-	this->data = other.data;
-	this->vdata = other.vdata;
-	this->section = other.section;
-	this->comment = other.comment;
-	#endif // !USE_INIDATA_POINTERS
 }
 
 SettingsLib::Types::ConfigIniData::ConfigIniData(ConfigIniData &&other) noexcept
@@ -66,7 +59,6 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(ConfigIniData &&other) noexcept
 
 	this->key = std::move(other.key);
 
-	#ifdef USE_INIDATA_POINTERS
 	if (other.section != nullptr)
 	{
 		this->section = std::move(other.section);
@@ -86,19 +78,11 @@ SettingsLib::Types::ConfigIniData::ConfigIniData(ConfigIniData &&other) noexcept
 	{
 		this->comment = std::move(other.comment);
 	}
-	#else
-	this->data = std::move(other.data);
-	this->vdata = std::move(other.vdata);
-	this->section = std::move(other.section);
-	this->comment = std::move(other.comment);
-	#endif // !USE_INIDATA_POINTERS
 }
 
 SettingsLib::Types::ConfigIniData::~ConfigIniData()
 {
-	#ifdef USE_INIDATA_POINTERS
 
-	#endif // !USE_INIDATA_POINTERS
 }
 
 SettingsLib::Types::ConfigIniData &SettingsLib::Types::ConfigIniData::operator=(const SettingsLib::Types::ConfigIniData &other)
@@ -110,7 +94,6 @@ SettingsLib::Types::ConfigIniData &SettingsLib::Types::ConfigIniData::operator=(
 	this->usingWideData = other.usingWideData;
 	this->dataStoreType = other.dataStoreType;
 
-	#ifdef USE_INIDATA_POINTERS
 	if (this->data.get() != nullptr)
 	{
 		this->data.reset(new SettingsLib::Types::ConfigDataStore(*other.data));
@@ -130,13 +113,6 @@ SettingsLib::Types::ConfigIniData &SettingsLib::Types::ConfigIniData::operator=(
 	{
 		this->comment.reset(new SettingsLib::Types::ConfigStrData(*other.comment));
 	}
-	#else
-	this->key = other.key;
-	this->data = other.data;
-	this->vdata = other.vdata;
-	this->section = other.section;
-	this->comment = other.comment;
-	#endif // !USE_INIDATA_POINTERS
 
 	return *this;
 }
@@ -150,7 +126,6 @@ SettingsLib::Types::ConfigIniData &SettingsLib::Types::ConfigIniData::operator=(
 	this->usingWideData = std::move(other.usingWideData);
 	this->dataStoreType = std::move(other.dataStoreType);
 
-	#ifdef USE_INIDATA_POINTERS
 	if (other.section != nullptr)
 	{
 		this->section = std::move(other.section);
@@ -170,13 +145,6 @@ SettingsLib::Types::ConfigIniData &SettingsLib::Types::ConfigIniData::operator=(
 	{
 		this->comment = std::move(other.comment);
 	}
-	#else
-	this->key = std::move(other.key);
-	this->data = std::move(other.data);
-	this->vdata = std::move(other.vdata);
-	this->section = std::move(other.section);
-	this->comment = std::move(other.comment);
-	#endif // !USE_INIDATA_POINTERS
 
 	return *this;
 }
@@ -215,11 +183,7 @@ int SettingsLib::Types::ConfigIniData::cleanData()
 		{
 			try
 			{
-				#ifdef USE_INIDATA_POINTERS
 				this->vdata.reset(nullptr);
-				#else
-				this->vdata.clear();
-				#endif // !USE_INIDATA_POINTERS
 				this->dataStoreType = 0;
 			}
 			catch(const std::exception&)
@@ -231,11 +195,7 @@ int SettingsLib::Types::ConfigIniData::cleanData()
 		{
 			try
 			{
-				#ifdef USE_INIDATA_POINTERS
 				this->data.reset(nullptr);
-				#else
-				this->data.cleanData();
-				#endif // !USE_INIDATA_POINTERS
 				this->dataStoreType = 0;
 			}
 			catch(const std::exception&)
@@ -269,11 +229,7 @@ int SettingsLib::Types::ConfigIniData::getType(ConfigDataType *type)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO;
 		}
 
-		#ifdef USE_INIDATA_POINTERS
 		*type = this->data->getDataType();
-		#else
-		*type = this->data.getDataType();
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 	}
@@ -297,25 +253,14 @@ int SettingsLib::Types::ConfigIniData::getType(ConfigDataType *type, size_t pos)
 	{
 		if (this->isContainer())
 		{
-			#ifdef USE_INIDATA_POINTERS
 			if (pos >= this->vdata->size())
 			{
 				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CONTAINER_OUT_OF_RANGE;
 			}
-			#else
-			if (pos >= this->vdata.size())
-			{
-				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CONTAINER_OUT_OF_RANGE;
-			}
-			#endif // !USE_INIDATA_POINTERS
 
 			try
 			{
-				#ifdef USE_INIDATA_POINTERS
 				SettingsLib::Types::ConfigDataType lType = this->vdata->at(pos).getDataType();
-				#else
-				SettingsLib::Types::ConfigDataType lType = this->vdata.at(pos).getDataType();
-				#endif // !USE_INIDATA_POINTERS
 				*type = lType;
 				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 			}
@@ -333,13 +278,7 @@ int SettingsLib::Types::ConfigIniData::getType(ConfigDataType *type, size_t pos)
 
 bool SettingsLib::Types::ConfigIniData::hasSection()
 {
-	#ifdef USE_INIDATA_POINTERS
     return this->section.get() != nullptr;
-	#else
-	std::string buff;
-	this->section.getData(&buff);
-	return !buff.empty();
-	#endif // !USE_INIDATA_POINTERS
 }
 
 int SettingsLib::Types::ConfigIniData::removeSection()
@@ -351,7 +290,6 @@ int SettingsLib::Types::ConfigIniData::removeSection()
 
 	if (this->hasSection())
 	{
-		#ifdef USE_INIDATA_POINTERS
 		try
 		{
 			this->section.reset(nullptr);
@@ -360,12 +298,6 @@ int SettingsLib::Types::ConfigIniData::removeSection()
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CLEAN_DATA_FAIL_UNKNOWN_ERROR;
 		}
-		#else
-		if (!this->section.cleanData())
-		{
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CLEAN_DATA_FAIL_UNKNOWN_ERROR;
-		}
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 	}
@@ -392,13 +324,8 @@ int SettingsLib::Types::ConfigIniData::getSection(std::string *section)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_STRING_DATA;
 		}
 
-		#ifdef USE_INIDATA_POINTERS
 		*section = this->section->getStr();
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#else
-		*section = this->section.getStr();
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#endif // !USE_INIDATA_POINTERS
 	}
 
 	return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE;
@@ -423,13 +350,8 @@ int SettingsLib::Types::ConfigIniData::getSection(std::wstring *section)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA;
 		}
 
-		#ifdef USE_INIDATA_POINTERS
 		*section = this->section->getStrW();
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#else
-		*section = this->section.getStrW();
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#endif // !USE_INIDATA_POINTERS
 	}
 
 	return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE;
@@ -447,7 +369,6 @@ int SettingsLib::Types::ConfigIniData::setSection(std::string section)
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_STRING_DATA;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasSection())
 	{
 		try
@@ -459,21 +380,13 @@ int SettingsLib::Types::ConfigIniData::setSection(std::string section)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	if (this->hasSection())
 	{
-		#ifdef USE_INIDATA_POINTERS
 		if (this->section->setStr(section))
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
-		#else
-		if (this->section.setStr(section))
-		{
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		}
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SET_DATA_FAIL;
 	}
@@ -493,7 +406,6 @@ int SettingsLib::Types::ConfigIniData::setSection(std::wstring section)
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasSection())
 	{
 		try
@@ -505,21 +417,13 @@ int SettingsLib::Types::ConfigIniData::setSection(std::wstring section)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	if (this->hasSection())
 	{
-		#ifdef USE_INIDATA_POINTERS
 		if (this->section->setStr(section))
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
-		#else
-		if (this->section.setStr(section))
-		{
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		}
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SET_DATA_FAIL;
 	}
@@ -633,16 +537,7 @@ int SettingsLib::Types::ConfigIniData::setKey(std::wstring key)
 
 bool SettingsLib::Types::ConfigIniData::hasData()
 {
-	#ifdef USE_INIDATA_POINTERS
 	return this->data.get() != nullptr || this->vdata.get() != nullptr;
-	#else
-	if (this->dataStoreType == 0)
-	{
-		return false;
-	}
-	
-	return true;
-	#endif // !USE_INIDATA_POINTERS
 }
 
 int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataStore *data)
@@ -668,7 +563,6 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 		{
 			bool success = false;
 
-			#ifdef USE_INIDATA_POINTERS
 			if (this->data->getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
 			{
 				std::string buff;
@@ -690,29 +584,6 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 				*data = this->data.get();
 				success = true;
 			}
-			#else
-			if (this->data.getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
-			{
-				std::string buff;
-				if (this->data.getData(&buff) == 1)
-				{
-					success = data->setData(buff) == 0;
-				}
-			}
-			else if (this->data.getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
-			{
-				std::wstring buff;
-				if (this->data.getData(&buff) == 1)
-				{
-					success = data->setData(buff) == 0;
-				}
-			}
-			else
-			{
-				*data = this->data;
-				success = true;
-			}
-			#endif // !USE_INIDATA_POINTERS
 
 			if (success)
 			{
@@ -739,7 +610,6 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasData())
 	{
 		try
@@ -751,7 +621,6 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 			return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	if (!this->hasData())
 	{
@@ -774,17 +643,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				unsigned long long buff = 0;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
@@ -792,17 +654,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				long long buff = 0;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
@@ -810,17 +665,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				double buff = 0.0;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
@@ -828,17 +676,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				std::string buff;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
@@ -846,17 +687,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				bool buff = false;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
@@ -864,17 +698,10 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 				std::wstring buff;
 				if (data.getData(&buff) == 1)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					if (this->data->setData(buff) == 0)
 					{
 						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 					}
-					#else
-					if (this->data.setData(buff) == 0)
-					{
-						return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-					}
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else
@@ -905,7 +732,6 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasData())
 	{
 		try
@@ -917,7 +743,6 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 			return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	if (this->hasData())
 	{
@@ -928,11 +753,7 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 
 		try
 		{
-			#ifdef USE_INIDATA_POINTERS
 			*this->data = *data;
-			#else
-			this->data = *data;
-			#endif // !USE_INIDATA_POINTERS
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
 		catch(const std::exception&)
@@ -965,21 +786,12 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 
 		try
 		{
-			#ifdef USE_INIDATA_POINTERS
 			if (this->vdata->size() > pos)
 			{
 				SettingsLib::Types::ConfigDataStore tmpData = this->vdata->at(pos);
 				*data = tmpData;
 				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 			}
-			#else
-			if (this->vdata.size() > pos)
-			{
-				SettingsLib::Types::ConfigDataStore tmpData = this->vdata.at(pos);
-				*data = tmpData;
-				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-			}
-			#endif // !USE_INIDATA_POINTERS
 
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CONTAINER_OUT_OF_RANGE;
 		}
@@ -999,7 +811,6 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasData())
 	{
 		try
@@ -1011,7 +822,6 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	if (!this->hasData())
 	{
@@ -1026,31 +836,18 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 			{
 				if (overwrite)
 				{
-					#ifdef USE_INIDATA_POINTERS
 					SettingsLib::Types::ConfigDataStore* tmpData = &this->vdata->at(pos);
-					#else
-					SettingsLib::Types::ConfigDataStore* tmpData = &this->vdata.at(pos);
-					#endif // !USE_INIDATA_POINTERS
 					*tmpData = data;
 				}
 				else
 				{
-					#ifdef USE_INIDATA_POINTERS
 					auto posRef = this->vdata->begin();
 					this->vdata->insert(posRef, pos, data);
-					#else
-					auto posRef = this->vdata.begin();
-					this->vdata.insert(posRef, pos, *data);
-					#endif // !USE_INIDATA_POINTERS
 				}
 			}
 			else
 			{
-				#ifdef USE_INIDATA_POINTERS
 				this->vdata->push_back(data);
-				#else
-				this->vdata.push_back(*data);
-				#endif // !USE_INIDATA_POINTERS
 			}
 		}
 		catch(const std::exception&)
@@ -1068,14 +865,7 @@ bool SettingsLib::Types::ConfigIniData::isContainer()
 {
 	if (this->hasData())
 	{
-		#ifdef USE_INIDATA_POINTERS
     	return this->vdata.get() != nullptr;
-		#else
-		if (this->dataStoreType == 2)
-		{
-			return true;
-		}
-		#endif // !USE_INIDATA_POINTERS
 	}
 
 	return false;
@@ -1085,11 +875,7 @@ size_t SettingsLib::Types::ConfigIniData::getConainerSize()
 {
 	if (this->isContainer())
 	{
-		#ifdef USE_INIDATA_POINTERS
 		return this->vdata->size();
-		#else
-		return this->vdata.size();
-		#endif // !USE_INIDATA_POINTERS
 	}
 
 	return 0;
@@ -1097,29 +883,7 @@ size_t SettingsLib::Types::ConfigIniData::getConainerSize()
 
 bool SettingsLib::Types::ConfigIniData::hasComment()
 {
-	#ifdef USE_INIDATA_POINTERS
     return this->comment.get() != nullptr;
-	#else
-	if (this->comment.getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
-	{
-		std::string buff;
-		if (this->comment.getData(&buff) == 1)
-		{
-			return !buff.empty();
-		}
-	}
-	
-	if (this->comment.getDataType() == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
-	{
-		std::wstring buff;
-		if (this->comment.getData(&buff) == 1)
-		{
-			return !buff.empty();
-		}
-	}
-
-	return false;
-	#endif // !USE_INIDATA_POINTERS
 }
 
 int SettingsLib::Types::ConfigIniData::cleanComment()
@@ -1133,15 +897,8 @@ int SettingsLib::Types::ConfigIniData::cleanComment()
 	{
 		try
 		{
-			#ifdef USE_INIDATA_POINTERS
 			this->comment.reset(nullptr);
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-			#else
-			if (this->comment.cleanData())
-			{
-				return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-			}
-			#endif // !USE_INIDATA_POINTERS
 		}
 		catch(const std::exception&)
 		{
@@ -1176,13 +933,8 @@ int SettingsLib::Types::ConfigIniData::getComment(std::string *comment)
 
 	try
 	{
-		#ifdef USE_INIDATA_POINTERS
 		*comment = this->comment->getStr();
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#else
-		*comment = this->comment.getStr();
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#endif // !USE_INIDATA_POINTERS
 	}
 	catch(const std::exception&)
 	{
@@ -1214,13 +966,8 @@ int SettingsLib::Types::ConfigIniData::getComment(std::wstring *comment)
 
 	try
 	{
-		#ifdef USE_INIDATA_POINTERS
 		*comment = this->comment->getStrW();
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#else
-		*comment = this->comment.getStrW();
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		#endif // !USE_INIDATA_POINTERS
 	}
 	catch(const std::exception&)
 	{
@@ -1240,7 +987,6 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_STRING_DATA;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasComment())
 	{
 		try
@@ -1252,7 +998,6 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	try
 	{
@@ -1263,17 +1008,10 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 			comment = SETTINGS_INI_COMMENT_MARK2 + comment;
 		}
 
-		#ifdef USE_INIDATA_POINTERS
 		if (this->comment->setStr(comment))
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
-		#else
-		if (this->comment.setStr(comment))
-		{
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		}
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SET_DATA_FAIL;
 	}
@@ -1295,7 +1033,6 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA;
 	}
 
-	#ifdef USE_INIDATA_POINTERS
 	if (!this->hasComment())
 	{
 		try
@@ -1307,7 +1044,6 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION;
 		}
 	}
-	#endif // !USE_INIDATA_POINTERS
 
 	try
 	{
@@ -1321,17 +1057,10 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 
 		tmpComment += comment;
 
-		#ifdef USE_INIDATA_POINTERS
 		if (this->comment->setStr(tmpComment))
 		{
 			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
 		}
-		#else
-		if (this->comment.setStr(tmpComment))
-		{
-			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
-		}
-		#endif // !USE_INIDATA_POINTERS
 
 		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SET_DATA_FAIL;
 	}

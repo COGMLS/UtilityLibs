@@ -24,7 +24,6 @@
 #include "SettingsIniErrorCodes.hpp"
 #include "SettingsIniDefinitions.hpp"
 
-#define USE_INIDATA_POINTERS
 //#define USE_SECTION_POINTERS
 
 namespace SettingsLib
@@ -44,11 +43,7 @@ namespace SettingsLib
 				// Data Section:
 				// Data Section only will hold string or wstring data no other data type is allowed here!
 
-				#ifdef USE_INIDATA_POINTERS
 				std::unique_ptr<SettingsLib::Types::ConfigStrData> section;
-				#else
-				SettingsLib::Types::ConfigDataStore section;
-				#endif // !USE_INIDATA_POINTERS
 				
 				// Data key:
 				// Data Key only will hold string or wstring data no other data type is allowed here!
@@ -57,21 +52,12 @@ namespace SettingsLib
 
 				// Data store:
 
-				#ifdef USE_INIDATA_POINTERS
 				std::unique_ptr<SettingsLib::Types::ConfigDataStore> data;
 				std::unique_ptr<std::vector<SettingsLib::Types::ConfigDataStore>> vdata;
-				#else
-				SettingsLib::Types::ConfigDataStore data;
-				std::vector<SettingsLib::Types::ConfigDataStore> vdata;
-				#endif // !USE_INIDATA_POINTERS
 
 				// Comment store:
 
-				#ifdef USE_INIDATA_POINTERS
 				std::unique_ptr<SettingsLib::Types::ConfigStrData> comment;
-				#else
-				SettingsLib::Types::ConfigDataStore comment;
-				#endif // !USE_INIDATA_POINTERS
 
 			public:
 
