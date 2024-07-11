@@ -39,17 +39,17 @@ int SettingsLib::Tools::Ini::extractIniDataLine(std::string* line, std::string* 
 	bool chkForKey = false;						// Determinate the key checking stage
 	bool chkForValue = false;					// Determinate the value checking stage
 	bool chkForContainer = false;				// Determinate the container checking stage.
-	bool chkForComment = false;					// Determinate the inline comment stage, commented line is controled by isCommentedLine
+	bool chkForComment = false;					// Determinate the inline comment stage, commented line is controlled by isCommentedLine
 
-	// Configutation line status:
+	// Configuration line status:
 
 	bool isEmptyLine = false;					// No other char was found or only empty spaces
 	bool isEmptyComment = false;				// Determinate if is an empty comment (with only SETTINGS_INI_COMMENT_MARK or SETTINGS_INI_COMMENT_MARK2). This case should ignore the comment.
 	bool isCommentedLine = false;				// First char was SETTINGS_INI_COMMENT_MARK or SETTINGS_INI_COMMENT_MARK2
 	bool isSection = false;						// Founded a section data, can contain comments
 	bool isContainerValueType = false;			// The first and last chars for data are SETTINGS_INI_CONTAINER_OPEN_MARK and SETTINGS_INI_CONTAINER_CLOSE_MARK.
-	bool lineContainsComment = false;			// The line contains commensts after other possible data (section, key and/or value)
-	bool hasKey = false;						// The line contain a key. False for inexistant or invalid key (without SETTINGS_INI_DATA_MARK). True for a valid key (includes the SETTINGS_INI_DATA_MARK check).
+	bool lineContainsComment = false;			// The line contains comments after other possible data (section, key and/or value)
+	bool hasKey = false;						// The line contain a key. False for inexistent or invalid key (without SETTINGS_INI_DATA_MARK). True for a valid key (includes the SETTINGS_INI_DATA_MARK check).
 	bool hasDataSetMark = false;				// The SETTINGS_INI_DATA_MARK to define the start of the data value
 	
 	int valueStatus = false;					// The line contain a key-value pair, including the SETTINGS_INI_DATA_MARK to define the start of the data value. 0 - Value doesn't exist. 1 - Empty value. 2 - Exist a extractable value.
@@ -119,7 +119,7 @@ int SettingsLib::Tools::Ini::extractIniDataLine(std::string* line, std::string* 
 			//
 
 			// The first character verification needs to be the for comments
-			// If a comment was found and is not the first char, consider an inlne comment for section or key-pair value
+			// If a comment was found and is not the first char, consider an inline comment for section or key-pair value
 			if (c == SETTINGS_INI_COMMENT_MARK || c == SETTINGS_INI_COMMENT_MARK2 && !lineContainsComment)
 			{
 				lineContainsComment = true;
@@ -157,7 +157,7 @@ int SettingsLib::Tools::Ini::extractIniDataLine(std::string* line, std::string* 
 			// Section algorithm analysis stage:
 			//
 			
-			// If the SETTINGS_INI_OPEN_SECTION was found, verify for section's existance conditions and if the line still has characters for the section's name:
+			// If the SETTINGS_INI_OPEN_SECTION was found, verify for section's existence conditions and if the line still has characters for the section's name:
 			if (c == SETTINGS_INI_OPEN_SECTION && !chkForSection && !chkForKey && !chkForValue && !lineContainsComment)
 			{
 				foundSectionOpenMark = true;
@@ -692,7 +692,7 @@ int SettingsLib::Tools::Ini::convertNumber (std::string* rawValue, SettingsLib::
 	bool isNegativeValue = false;		// Possible negative value
 	bool isFpNumber = false;			// Float point value
 	bool isInteger = true;				// Assume true unless a decimal or exponent was found. NOTE: The Standard C++ string conversion functions does not convert correctly the integers with exponents.
-	bool hasInvalidChar4Num = false;	// Any character diferent than numbers, dot and exponen and negative or positive. Spaces are ignored.
+	bool hasInvalidChar4Num = false;	// Any character different than numbers, dot and exponent and negative or positive. Spaces are ignored.
 
 	bool foundNonSpaceChar = false;
 
@@ -777,7 +777,7 @@ int SettingsLib::Tools::Ini::convertNumber (std::string* rawValue, SettingsLib::
 		long long cValue = 0ll;
 		unsigned long long cValue2 = 0ull;
 
-		// Test if the number is realy a negative number:
+		// Test if the number is really a negative number:
 		try
 		{
 			cValue = std::stoll(*rawValue);
@@ -794,7 +794,7 @@ int SettingsLib::Tools::Ini::convertNumber (std::string* rawValue, SettingsLib::
 			// Do nothing.
 		}
 
-		// Test if the number is realy a negative number:
+		// Test if the number is really a negative number:
 		try
 		{
 			cValue2 = std::stoull(*rawValue);
@@ -880,7 +880,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INIT_DATA_ERROR;
 	}
 
-	// Is the rawValue is empty, return a VALUE_EMPTY:
+	// If the rawValue is empty, return a VALUE_EMPTY:
 	if (rawValue->empty())
 	{
 		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
@@ -891,7 +891,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	//
 
 	bool isEmpty = false;					// Empty line
-	bool isString = false;					// Determinate if is a string type. A literal string is determinated when the first non-space character is a quote. Otherwise, will consider all data as string when foundLiteralStrOpenMark is false.
+	bool isString = false;					// Determinate if is a string type. A literal string is determined when the first non-space character is a quote. Otherwise, will consider all data as string when foundLiteralStrOpenMark is false.
 	bool isBoolean = false;					// Determinate if is a boolean type
 	bool isNumber = true;					// Determinate if is a number (integer / decimal)
 
@@ -900,11 +900,11 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	// Test conversion result:
 	SettingsLib::ErrorCodes::IniRawValueConversionStatus conversionStatus = SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
 
-	bool foundNonSpaceChar = false;			// Help to identify when the current character is not part of string or only non-usefull spaces
+	bool foundNonSpaceChar = false;			// Help to identify when the current character is not part of string or only non-useful spaces
 	bool isCurrentCharSpace = false;		// Determinate if the current char is space
 	bool foundLiteralStrOpenMark = false;	// Determinate if the open quotes for literal string was found. If the close marks was found the open and close positions will be used to determinate the literal string (with quotes).
 
-	size_t firstNonSpaceCharPos = 0;		// Determinate the firts non space char position to help in trim the spaces before the data and identify the type
+	size_t firstNonSpaceCharPos = 0;		// Determinate the first non space char position to help in trim the spaces before the data and identify the type
 	size_t lastNonSpaceCharPos = 0;			// Determinate the last non space char position to help in trim the spaces
 	size_t literalOpenQuotePos = 0;			// Help to determinate if is a literal string
 	size_t literalCloseQuotePos = 0;		// Help to determinate if is a literal string
@@ -924,7 +924,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	bool isNegativeValue = false;		// Possible negative value
 	bool isFpNumber = false;			// Float point value
 	bool isInteger = true;				// Assume true unless a decimal or exponent was found. NOTE: The Standard C++ string conversion functions does not convert correctly the integers with exponents.
-	bool hasInvalidChar4Num = false;	// Any character diferent than numbers, dot and exponen and negative or positive. Spaces are ignored.
+	bool hasInvalidChar4Num = false;	// Any character different than numbers, dot and exponent and negative or positive. Spaces are ignored.
 
 	//
 	// Boolean test controls:
@@ -1215,7 +1215,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 			long long cValue = 0ll;
 			unsigned long long cValue2 = 0ull;
 
-			// Test if the number is realy a negative number:
+			// Test if the number is really a negative number:
 			try
 			{
 				cValue = std::stoll(*rawValue);
@@ -1232,7 +1232,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 				// Do nothing.
 			}
 
-			// Test if the number is realy a negative number:
+			// Test if the number is really a negative number:
 			try
 			{
 				cValue2 = std::stoull(*rawValue);
@@ -1306,4 +1306,239 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	}
 
 	return conversionStatus;
+}
+
+SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
+{
+	// Verify if the pointers are nullptr:
+
+    if (rawValue == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	if (vData == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// If the rawValue is empty, return VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
+	}
+
+	//
+	// Container controls:
+	// 
+
+	bool foundContainerStartMark = false;
+	bool foundContainerEndMark = false;
+
+	size_t nEntries = 1;					// Determinate how many entries will be generated into the container. NOTE: Each entry is separated by comma character, if no comma is detected, assume one entry
+	size_t containerStartPos = 0;
+	size_t containerEndPos = 0;
+	
+	// Hold the result from last entry check:
+	SettingsLib::ErrorCodes::IniLineCheckStatus lastCheckStatus = SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_EMPTY_LINE;
+
+	if (rawValue->size() > 0)
+	{
+		containerEndPos = rawValue->size() - 1;
+	}
+
+	char c = '\0';							// Temporary character
+
+	// Detect the possible entries and literal strings:
+	for (size_t i = 0; i < rawValue->size(); i++)
+	{
+		c = rawValue->at(i);
+
+		if (c == SETTINGS_INI_CONTAINER_OPEN_MARK && !foundContainerStartMark)
+		{
+			foundContainerStartMark = true;
+			containerStartPos = i;
+		}
+
+		if (c == SETTINGS_INI_CONTAINER_CLOSE_MARK && !foundContainerEndMark)
+		{
+			foundContainerEndMark = true;
+			containerEndPos = i;
+		}
+	}
+
+	// If is not a container:
+	if (!foundContainerStartMark || !foundContainerEndMark)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+	}
+
+	//
+	// Extraction controls:
+	//
+
+	bool foundLiteralStrOpenMark = false;
+	bool foundLiteralStrCloseMark = false;
+
+	size_t literalStrOpenMarkPos = 0;
+	size_t literalStrCloseMarkPos = 0;
+
+	size_t startDataPos = containerStartPos + 1;
+	size_t endDataPos = containerEndPos;
+	
+	std::string buffer;
+	std::vector<std::string> rawEntries;	// Separated entries without treatment
+
+	for (size_t i = containerStartPos + 1; i <= containerEndPos; i++)
+	{
+		c = rawValue->at(i);
+
+		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR)
+		{
+			nEntries++;
+
+			// Take the substring data:
+			if (foundLiteralStrCloseMark)
+			{
+				buffer = rawValue->substr(literalStrOpenMarkPos, (literalStrCloseMarkPos - literalStrCloseMarkPos) + 1);
+			}
+			else
+			{
+				buffer = rawValue->substr(startDataPos, (endDataPos - startDataPos) + 1);
+			}
+
+			// Insert the data:
+			rawEntries.push_back(buffer);
+			buffer.clear();
+
+			// Reset the control variables:
+			foundLiteralStrOpenMark = false;
+			foundLiteralStrCloseMark = false;
+			literalStrOpenMarkPos = 0;
+			literalStrCloseMarkPos = 0;
+			
+			// Check for possible new data position:
+			if (i <= containerEndPos)
+			{
+				startDataPos = i + 1;
+			}
+		}
+		else
+		{
+			if (!foundLiteralStrOpenMark)
+			{
+				endDataPos = i;
+			}
+		}
+
+		// Check for close string marks only when an open mark was found:
+		if (c == SETTINGS_INI_DATA_TYPE_STRING && foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
+		{
+			foundLiteralStrCloseMark = true;
+			literalStrCloseMarkPos = i;
+		}
+
+		// Check for open string marks:
+		if (c == SETTINGS_INI_DATA_TYPE_STRING && !foundLiteralStrOpenMark && !foundContainerEndMark)
+		{
+			foundLiteralStrOpenMark = true;
+			literalStrOpenMarkPos = i;
+		}
+	}
+
+	return 0;
+}
+
+SETTINGS_LIB_API int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newStr, bool trimBegin, bool trimEnd)
+{
+	// Verify if the pointers are nullptr:
+
+    if (rawValue == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	if (newStr == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// If the rawValue is empty, return VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
+	}
+
+	// Make sure the newStr will only holds data from rawValue:
+	newStr->clear();
+
+	//
+	// Trim variable controls:
+	//
+
+	std::string buffer;
+
+	size_t firstNonSpaceChar = 0;
+	size_t lastNonSpaceChar = 0;
+	size_t lastDataPos = 0;
+
+	bool isCurrentCharSpace = false;
+	bool foundNonSpaceChar = false;
+
+	if (rawValue->size() > 0)
+	{
+		lastDataPos = rawValue->size() - 1;
+	}
+
+	char c = '\0';
+
+	// Start the raw string analysis:
+	for (size_t i = 0; i < rawValue->size(); i++)
+	{
+		isCurrentCharSpace = false;
+
+		c = rawValue->at(i);
+
+		if (c == SETTINGS_INI_SPACE_CHAR)
+		{
+			isCurrentCharSpace = true;
+		}
+		else
+		{
+			if (!foundNonSpaceChar)
+			{
+				foundNonSpaceChar = true;
+				firstNonSpaceChar = i;
+			}
+		}
+
+		if (!isCurrentCharSpace)
+		{
+			lastNonSpaceChar = i;
+		}
+	}
+
+	if (lastNonSpaceChar < lastDataPos)
+	{
+		lastDataPos = lastNonSpaceChar;
+	}
+
+	if (trimBegin && trimEnd)
+	{
+		buffer = rawValue->substr(firstNonSpaceChar, (lastDataPos - firstNonSpaceChar) + 1);
+	}
+
+	if (trimBegin && !trimEnd)
+	{
+		buffer = rawValue->substr(firstNonSpaceChar, (rawValue->size() - firstNonSpaceChar));
+	}
+
+	if (!trimBegin && trimEnd)
+	{
+		buffer = rawValue->substr(0, (lastDataPos - firstNonSpaceChar) + 1);
+	}
+
+	*newStr = buffer;
+
+    return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
 }
