@@ -127,7 +127,7 @@ namespace SettingsLib
 				
 				/**
 				 * @brief String data cleaner. If a string or wstring was set in the data store, the method will remove it. Otherwise will do nothing.
-				 * @return Retrun TRUE in successful operations.
+				 * @return Return TRUE in successful operations.
 				 */
 				bool cleanStringData();
 
@@ -195,7 +195,7 @@ namespace SettingsLib
 
 				/**
 				 * @brief Clean the data store
-				 * @return Return TRUE if the data was cleanned with sucess and marked as "EMPTY".
+				 * @return Return TRUE if the data was cleaned with success and marked as "EMPTY".
 				 */
 				bool cleanData();
 

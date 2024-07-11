@@ -91,7 +91,7 @@ namespace SettingsLib
 
 			/**
 			 * @brief Get the configuration lines stored in memory
-			 * @param vMemStore Pointer to receave the access to the vector
+			 * @param vMemStore Pointer to receive the access to the vector
 			 * @return Return the value from Tools::storeFstream2Memory function
 			 */
 			int getConfigLines (std::vector<std::string>* vMemStore);
@@ -99,9 +99,9 @@ namespace SettingsLib
 			/**
 			 * @brief Get a configuration line stored in memory
 			 * @param nLine Line number that is compatible with the vector's index.
-			 * @param line Pointer to receave the access to the string line
+			 * @param line Pointer to receive the access to the string line
 			 * @return Return the value from Tools::storeFstream2Memory function
-			 * @note If nLine receave a number bigger than the vector size, the function will return 5.
+			 * @note If nLine receive a number bigger than the vector size, the function will return 5.
 			 */
 			int getConfigLine (unsigned long long nLine, std::string* line);
 

@@ -174,7 +174,7 @@ int SettingsLib::Types::ConfigIniData::cleanData()
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasData())
@@ -219,7 +219,7 @@ int SettingsLib::Types::ConfigIniData::getType(ConfigDataType *type)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasData())
@@ -246,7 +246,7 @@ int SettingsLib::Types::ConfigIniData::getType(ConfigDataType *type, size_t pos)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasData())
@@ -285,7 +285,7 @@ int SettingsLib::Types::ConfigIniData::removeSection()
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasSection())
@@ -314,7 +314,7 @@ int SettingsLib::Types::ConfigIniData::getSection(std::string *section)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasSection())
@@ -340,7 +340,7 @@ int SettingsLib::Types::ConfigIniData::getSection(std::wstring *section)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasSection())
@@ -361,7 +361,7 @@ int SettingsLib::Types::ConfigIniData::setSection(std::string section)
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->isWideData())
@@ -398,7 +398,7 @@ int SettingsLib::Types::ConfigIniData::setSection(std::wstring section)
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->isWideData())
@@ -440,7 +440,7 @@ int SettingsLib::Types::ConfigIniData::getKey(std::string *key)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->isWideData())
@@ -461,7 +461,7 @@ int SettingsLib::Types::ConfigIniData::getKey(std::wstring *key)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->isWideData())
@@ -549,7 +549,7 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasData())
@@ -607,7 +607,7 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->hasData())
@@ -729,7 +729,7 @@ int SettingsLib::Types::ConfigIniData::setData(SettingsLib::Types::ConfigDataSto
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->hasData())
@@ -774,7 +774,7 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasData())
@@ -808,7 +808,7 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->hasData())
@@ -832,7 +832,7 @@ int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigData
 	{
 		try
 		{
-			if (this->getConainerSize() > pos)
+			if (this->getContainerSize() > pos)
 			{
 				if (overwrite)
 				{
@@ -871,7 +871,7 @@ bool SettingsLib::Types::ConfigIniData::isContainer()
 	return false;
 }
 
-size_t SettingsLib::Types::ConfigIniData::getConainerSize()
+size_t SettingsLib::Types::ConfigIniData::getContainerSize()
 {
 	if (this->isContainer())
 	{
@@ -890,7 +890,7 @@ int SettingsLib::Types::ConfigIniData::cleanComment()
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->hasComment())
@@ -918,7 +918,7 @@ int SettingsLib::Types::ConfigIniData::getComment(std::string *comment)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->isWideData())
@@ -951,7 +951,7 @@ int SettingsLib::Types::ConfigIniData::getComment(std::wstring *comment)
 
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->isWideData())
@@ -979,7 +979,7 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (this->isWideData())
@@ -1001,9 +1001,9 @@ int SettingsLib::Types::ConfigIniData::setComment(std::string comment)
 
 	try
 	{
-		bool hasCommemntMark = comment.starts_with(SETTINGS_INI_COMMENT_MARK) || comment.starts_with(SETTINGS_INI_COMMENT_MARK2);
+		bool hasCommentMark = comment.starts_with(SETTINGS_INI_COMMENT_MARK) || comment.starts_with(SETTINGS_INI_COMMENT_MARK2);
 
-		if (!hasCommemntMark)
+		if (!hasCommentMark)
 		{
 			comment = SETTINGS_INI_COMMENT_MARK2 + comment;
 		}
@@ -1025,7 +1025,7 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 {
 	if (!this->objWasConfig)
 	{
-		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED;
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
 	}
 
 	if (!this->isWideData())
@@ -1047,10 +1047,10 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 
 	try
 	{
-		bool hasCommemntMark = comment.starts_with(SETTINGS_INI_COMMENT_MARK) || comment.starts_with(SETTINGS_INI_COMMENT_MARK2);
+		bool hasCommentMark = comment.starts_with(SETTINGS_INI_COMMENT_MARK) || comment.starts_with(SETTINGS_INI_COMMENT_MARK2);
 		std::wstring tmpComment;
 
-		if (!hasCommemntMark)
+		if (!hasCommentMark)
 		{
 			tmpComment += SETTINGS_INI_COMMENT_MARK2_W;
 		}
@@ -1072,27 +1072,27 @@ int SettingsLib::Types::ConfigIniData::setComment(std::wstring comment)
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData()
 {
-	this->isSectionConfigurated = false;
+	this->isSectionConfigured = false;
 	this->useWideData = false;
 }
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(std::string section)
 {
-	this->isSectionConfigurated = true;
+	this->isSectionConfigured = true;
 	this->useWideData = false;
 	this->sectionName.setData(section);
 }
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(std::wstring section)
 {
-	this->isSectionConfigurated = true;
+	this->isSectionConfigured = true;
 	this->useWideData = true;
 	this->sectionName.setData(section);
 }
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(const ConfigIniSectionData &other)
 {
-	this->isSectionConfigurated = other.isSectionConfigurated;
+	this->isSectionConfigured = other.isSectionConfigured;
 	this->useWideData = other.useWideData;
 
 	this->sectionName = other.sectionName;
@@ -1111,7 +1111,7 @@ SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(const ConfigIniSe
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(ConfigIniSectionData &&other) noexcept
 {
-	this->isSectionConfigurated = other.isSectionConfigurated;
+	this->isSectionConfigured = other.isSectionConfigured;
 	this->useWideData = other.useWideData;
 
 	this->sectionName = other.sectionName;
@@ -1135,7 +1135,7 @@ SettingsLib::Types::ConfigIniSectionData::~ConfigIniSectionData()
 
 SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionData::operator=(const SettingsLib::Types::ConfigIniSectionData &other)
 {
-    this->isSectionConfigurated = other.isSectionConfigurated;
+    this->isSectionConfigured = other.isSectionConfigured;
 	this->useWideData = other.useWideData;
 
 	this->sectionName = other.sectionName;
@@ -1156,7 +1156,7 @@ SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionDa
 
 SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionData::operator=(SettingsLib::Types::ConfigIniSectionData &&other) noexcept
 {
-    this->isSectionConfigurated = other.isSectionConfigurated;
+    this->isSectionConfigured = other.isSectionConfigured;
 	this->useWideData = other.useWideData;
 
 	this->sectionName = other.sectionName;
@@ -1196,7 +1196,7 @@ int SettingsLib::Types::ConfigIniSectionData::getIniData(std::string key, Settin
 		return -3;
 	}
 
-    if (this->isSectionConfigurated)
+    if (this->isSectionConfigured)
 	{
 		if (this->useWideData)
 		{
@@ -1223,7 +1223,7 @@ bool SettingsLib::Types::ConfigIniSectionData::isWideData()
 
 int SettingsLib::Types::ConfigIniSectionData::addData(SettingsLib::Types::ConfigIniData &data)
 {
-	if (this->isSectionConfigurated)
+	if (this->isSectionConfigured)
 	{
 		if (data.isWideData())
 		{

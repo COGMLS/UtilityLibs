@@ -58,11 +58,11 @@ namespace SettingsLib
 
 		enum ConfigIniStatus : int
 		{
-			CONFIG_INI_STATUS_SUCCESSFUL_OPERATION,							// Successfull operation.
-			CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA,					// Error when apply a wide string in a ConfigIni class that is configurated to string.
-			CONFIG_INI_STATUS_ERROR_SET_STRING_DATA,						// Error when apply a string in a ConfigIni class that is configurated to wstring.
-			CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA,					// Error when try to get a wide string in a ConfigIni class that is configurated to string.
-			CONFIG_INI_STATUS_ERROR_GET_STRING_DATA,						// Error when try to get a string in a ConfigIni class that is configurated wstring.
+			CONFIG_INI_STATUS_SUCCESSFUL_OPERATION,							// Successful operation.
+			CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA,					// Error when apply a wide string in a ConfigIni class that is configured to string.
+			CONFIG_INI_STATUS_ERROR_SET_STRING_DATA,						// Error when apply a string in a ConfigIni class that is configured to wstring.
+			CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA,					// Error when try to get a wide string in a ConfigIni class that is configured to string.
+			CONFIG_INI_STATUS_ERROR_GET_STRING_DATA,						// Error when try to get a string in a ConfigIni class that is configured wstring.
 			CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR,						// Error when a nullptr is send to set a new data.
 			CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR,						// Error when a nullptr is send to get a data.
 			CONFIG_INI_STATUS_ERROR_GET_EMPTY_DATA,							// The data inside the class is empty or a nullptr.
@@ -78,7 +78,7 @@ namespace SettingsLib
 			CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE,						// When a method for a container is called, but no container is available.
 			CONFIG_INI_STATUS_RESET_OBJECT_FAIL,							// Fail in reset the object data.
 			CONFIG_INI_STATUS_NO_DATA_TO_SET,								// No data is available to set or an empty data was send.
-			CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED,					// The object data is not marked as configurated and ready to be used.
+			CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED,					// The object data is not marked as configured and ready to be used.
 			CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION				// An exception occured when a data was allocated.
 		};
 	}

@@ -46,7 +46,7 @@ SettingsLib::ConfigFileStream::ConfigFileStream(std::filesystem::path cfgFilePat
 				{
 					if (this->keepCfgStore)
 					{
-						// Store Fstream to Vector Memmory:
+						// Store Fstream to Vector Memory:
 						int sFs2Vmem = SettingsLib::Tools::storeFstream2Memory(this->cfgFileStream, this->cfgStore, 0, true, true);
 
 						if (sFs2Vmem == 0)

@@ -30,7 +30,7 @@ namespace SettingsLib
 		class SETTINGS_LIB_API ConfigIni
 		{
 			protected:
-				bool isObjConfigurated;
+				bool isObjConfigured;
 				bool useWideData;
 
 				SettingsLib::Types::ConfigDataStore configName;

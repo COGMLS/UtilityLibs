@@ -16,7 +16,7 @@ int SettingsLib::Tools::storeFstream2Memory (std::fstream* fs, std::vector<std::
 
 		if (fs->is_open())
 		{
-			unsigned long long nLinesReaded = 0ull;
+			unsigned long long nLinesRead = 0ull;
 
 			if (resetPosBeforeOp)
 			{
@@ -30,7 +30,7 @@ int SettingsLib::Tools::storeFstream2Memory (std::fstream* fs, std::vector<std::
 			{
 				if (readLines != 0)
 				{
-					if (nLinesReaded == readLines)
+					if (nLinesRead == readLines)
 					{
 						break;
 					}
@@ -39,7 +39,7 @@ int SettingsLib::Tools::storeFstream2Memory (std::fstream* fs, std::vector<std::
 				vMemStore->push_back(line);
 				line.clear();
 
-				nLinesReaded++;
+				nLinesRead++;
 			}
 
 			if (seekBeginPostOp)

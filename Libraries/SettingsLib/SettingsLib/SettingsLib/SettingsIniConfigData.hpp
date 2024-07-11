@@ -34,9 +34,9 @@ namespace SettingsLib
 			private:
 				// Data type control:
 
-				bool objWasConfig;			// Control if the object already was configurated or not.
-				bool usingWideData;			// Determinate if the object is configurated to use wide strings or not.
-				short dataStoreType;		// Determinate if will be not configurated (0) or only one data (1) or a container (2).
+				bool objWasConfig;			// Control if the object already was configured or not.
+				bool usingWideData;			// Determinate if the object is configured to use wide strings or not.
+				short dataStoreType;		// Determinate if will be not configured (0) or only one data (1) or a container (2).
 
 				// Data Section:
 				// Data Section only will hold string or wstring data no other data type is allowed here!
@@ -90,12 +90,12 @@ namespace SettingsLib
 				// Control methods:
 
 				/**
-				 * @brief Verify if the configuration ini data is configurated to hold wide strings. This configuraiton is defined on object's creation by the key type used, or when a key is defined for the first time on the object.
+				 * @brief Verify if the configuration ini data is configured to hold wide strings. This configuration is defined on object's creation by the key type used, or when a key is defined for the first time on the object.
 				 */
 				bool isWideData();
 
 				/**
-				 * @brief Reset completly the object data and it's configuration
+				 * @brief Reset completely the object data and it's configuration
 				 * @return If the operation was successful, will return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If fail, will return CONFIG_INI_STATUS_RESET_OBJECT_FAIL.
 				 */
@@ -103,28 +103,28 @@ namespace SettingsLib
 
 				/**
 				 * @brief Delete the data inside the object
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return If the operation was successful, will return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return CONFIG_INI_STATUS_CLEAN_DATA_VECTOR_FAIL_UNKNOWN_ERROR on container clean fail.
 				 * @return CONFIG_INI_STATUS_CLEAN_DATA_FAIL_UNKNOWN_ERROR on single data clean fail.
-				 * @return If the data already was cleanned or doesn't exist, will return CONFIG_INI_STATUS_CLEAN_DATA_ALREADY_EMPTY.
+				 * @return If the data already was cleaned or doesn't exist, will return CONFIG_INI_STATUS_CLEAN_DATA_ALREADY_EMPTY.
 				 */
 				int cleanData();
 
 				/**
 				 * @brief Get the data type the object is holding.
-				 * @param type Variable to receave the type.
+				 * @param type Variable to receive the type.
 				 * @return If the operation was successful return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If the data was not set, return CONFIG_INI_STATUS_NO_DATA_AVAILABLE.
 				 * @return If the object holds a container, return CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO.
 				 * @return If the type parameter is nullptr, return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 */
 				int getType(SettingsLib::Types::ConfigDataType* type);
 
 				/**
 				 * @brief Get the data type the object is holding on specify container's position.
-				 * @param type Variable to receave the type.
+				 * @param type Variable to receive the type.
 				 * @param pos Container data position to analyze.
 				 * @return If the operation was successful return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If the data was not set, return CONFIG_INI_STATUS_NO_DATA_AVAILABLE.
@@ -132,7 +132,7 @@ namespace SettingsLib
 				 * @return If the type parameter is nullptr, return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR.
 				 * @return If the pos parameter is out of range, return CONFIG_INI_STATUS_CONTAINER_OUT_OF_RANGE.
 				 * @return If an exception occur, return CONFIG_INI_STATUS_CLEAN_DATA_VECTOR_FAIL_UNKNOWN_ERROR.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 */
 				int getType(SettingsLib::Types::ConfigDataType* type, size_t pos);
 
@@ -145,7 +145,7 @@ namespace SettingsLib
 
 				/**
 				 * @brief Remove the section information from the object.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return If the operation was successful, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If no section is available, CONFIG_INI_STATUS_NO_DATA_AVAILABLE.
 				 * @return If an exception occur, CONFIG_INI_STATUS_CLEAN_DATA_FAIL_UNKNOWN_ERROR.
@@ -154,35 +154,35 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the section's name
-				 * @param section Variable to receave the section's name
+				 * @param section Variable to receive the section's name
 				 * @return If the operation was successful, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If the section doesn't exist, return CONFIG_INI_STATUS_NO_DATA_AVAILABLE.
-				 * @return If the object if configurated to wstring, return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA.
+				 * @return If the object if configured to wstring, return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA.
 				 * @return If the section parameter if a nullptr, CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR.
 				 * @return If get the section fail, CONFIG_INI_STATUS_GET_DATA_FAIL.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 */
 				int getSection (std::string* section);
 
 				/**
 				 * @brief Get the section's name
-				 * @param section Variable to receave the section's name
+				 * @param section Variable to receive the section's name
 				 * @return If the operation was successful, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return If the section doesn't exist, return CONFIG_INI_STATUS_NO_DATA_AVAILABLE.
-				 * @return If the object if configurated to wstring, return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA.
+				 * @return If the object if configured to wstring, return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA.
 				 * @return If the section parameter if a nullptr, CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR.
 				 * @return If get the section fail, CONFIG_INI_STATUS_GET_DATA_FAIL.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 */
 				int getSection (std::wstring* section);
 
 				/**
 				 * @brief Set a section associated with this object.
 				 * @param section Variable with the section's name
-				 * @return If the operation was successfull, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
+				 * @return If the operation was successful, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if the section parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA if the object is configurated to wide string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA if the object is configured to wide string.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL when set the data was failed.
 				 * @return CONFIG_INI_STATUS_NO_DATA_TO_SET is an empty string was send.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if an exception occur in data allocation.
@@ -192,10 +192,10 @@ namespace SettingsLib
 				/**
 				 * @brief Set a section associated with this object.
 				 * @param section Variable with the section's name
-				 * @return If the operation was successfull, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
+				 * @return If the operation was successful, return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if the section parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA if the object is not configurated to wide string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA if the object is not configured to wide string.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL when set the data was failed.
 				 * @return CONFIG_INI_STATUS_NO_DATA_TO_SET is an empty string was send.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if an exception occur in data allocation.
@@ -206,10 +206,10 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the key's name
-				 * @param key Variable to receave the key's name
+				 * @param key Variable to receive the key's name
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA if the object is configurated to wide string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA if the object is configured to wide string.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
 				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL if fail to get the key value.
 				 */
@@ -217,37 +217,37 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the key's name
-				 * @param key Variable to receave the key's name
+				 * @param key Variable to receive the key's name
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA if the object is configurated to string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA if the object is configured to string.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
 				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL if fail to get the key value.
 				 */
 				int getKey (std::wstring* key);
 
 				/**
-				 * @brief Set a new name for object's key or configurate for the first time if a empty object was created or reset.
+				 * @brief Set a new name for object's key or configure for the first time if a empty object was created or reset.
 				 * @param key Variable to send the key's name
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
 				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE if the key is an empty string.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA if the object is configurated to wide string.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA if the object is configured to wide string.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if fail to get the key value.
-				 * @note If the object is not configurated, this method, will configurate it and define the wide string type as false.
+				 * @note If the object is not configured, this method, will configure it and define the wide string type as false.
 				 * @note This is a function wrapper that call the method setKey(std::string* key)
 				 */
 				int setKey (std::string key);
 
 				/**
-				 * @brief Set a new name for object's key or configurate for the first time if a empty object was created or reset.
+				 * @brief Set a new name for object's key or configure for the first time if a empty object was created or reset.
 				 * @param key Variable to send the key's name
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
 				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE if the key is an empty string.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA if the object is configurated to string.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_WIDE_STRING_DATA if the object is configured to string.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION on successful operations.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if fail to get the key value.
-				 * @note If the object is not configurated, this method, will configurate it and define the wide string type as false.
+				 * @note If the object is not configured, this method, will configure it and define the wide string type as false.
 				 * @note This is a function wrapper that call the method setKey(std::wstring* key)
 				 */
 				int setKey (std::wstring key);
@@ -264,7 +264,7 @@ namespace SettingsLib
 				 * @brief Get access to the data.
 				 * @param data ConfigDataStore pointer
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO if a container is inside the object.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
 				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL when fail to associate the data to data parameter.
@@ -275,7 +275,7 @@ namespace SettingsLib
 				/**
 				 * @brief Get access to the data.
 				 * @param data ConfigDataStore pointer
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION when fails to allocate the new data.
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO if a container is inside the object.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
@@ -288,7 +288,7 @@ namespace SettingsLib
 				 * @brief Get access to the data.
 				 * @param data ConfigDataStore pointer
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION when fails to allocate the new data.
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_MISSING_CONTAINER_INFO if a container is inside the object.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
@@ -304,7 +304,7 @@ namespace SettingsLib
 				 * @param data ConfigDataStore pointer
 				 * @param pos Container's data position
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if key parameter is a nullptr.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE if a container is not available inside the object.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
 				 * @return CONFIG_INI_STATUS_CONTAINER_OUT_OF_RANGE if the position is out of range.
@@ -319,10 +319,10 @@ namespace SettingsLib
 				 * @param pos Container's data position
 				 * @param overwrite Overwrite the data on given position. Otherwise will reallocate the other container's data to insert the new one.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR when a nullptr for data parameter was send.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to create the container.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if fail to set the data into the vector.
-				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the operation was successfull.
+				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the operation was successful.
 				 * @return CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE if no container is available.
 				 * @note If overwrite was defined as FALSE and a position that is out of range, the data will be inserted in the end of the container and return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if was successful.
 				 */
@@ -337,18 +337,18 @@ namespace SettingsLib
 				 * @brief Verify the container size.
 				 * @return Return the container size if exist. Otherwise, will return 0.
 				 */
-				size_t getConainerSize();
+				size_t getContainerSize();
 
 				// Comment methods:
 
 				/**
-				 * @brief Check if the object conatain a comment.
+				 * @brief Check if the object contain a comment.
 				 */
 				bool hasComment();
 
 				/**
 				 * @brief Remove the comment
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment was removed.
 				 * @return CONFIG_INI_STATUS_CLEAN_DATA_FAIL_UNKNOWN_ERROR if an exception occur.
 				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE if no comment exist.
@@ -357,10 +357,10 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
+				 * @param comment Variable to receive the comment.
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if a nullptr was send on comment parameter.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA the object is configurated to use wide string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_GET_STRING_DATA the object is configured to use wide string.
 				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE no comment is available.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
 				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL if an exception occur.
@@ -369,10 +369,10 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
+				 * @param comment Variable to receive the comment.
 				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if a nullptr was send on comment parameter.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA the object is configurated to use wide string.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_GET_WIDE_STRING_DATA the object is configured to use wide string.
 				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE no comment is available.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
 				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL if an exception occur.
@@ -381,9 +381,9 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
+				 * @param comment Variable to receive the comment.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configured to use wide string.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if an exception occur.
@@ -394,9 +394,9 @@ namespace SettingsLib
 
 				/**
 				 * @brief Get the comment inside the object
-				 * @param comment Variable to receave the comment.
-				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURATED if the object was not configurated. This can happen when a empty object is created or was reset and a key was not defined.
-				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configurated to use wide string.
+				 * @param comment Variable to receive the comment.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_ERROR_SET_STRING_DATA the object is configured to use wide string.
 				 * @return CONFIG_INI_STATUS_CREATE_INTERNAL_DATA_EXCEPTION if fail to allocate.
 				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION if the comment data was copied into comment parameter pointer.
 				 * @return CONFIG_INI_STATUS_SET_DATA_FAIL if an exception occur.
@@ -413,7 +413,7 @@ namespace SettingsLib
 				// Section data:
 				
 				bool useWideData;					// Control the wide strings
-				bool isSectionConfigurated;
+				bool isSectionConfigured;
 				ConfigDataStore sectionName;
 
 				// Section data collection:

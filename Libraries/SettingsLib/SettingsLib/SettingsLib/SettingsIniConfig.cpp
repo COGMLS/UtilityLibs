@@ -2,13 +2,13 @@
 
 SettingsLib::Types::ConfigIni::ConfigIni()
 {
-	this->isObjConfigurated = false;
+	this->isObjConfigured = false;
 	this->useWideData = false;
 }
 
 SettingsLib::Types::ConfigIni::ConfigIni(std::string configName)
 {
-	this->isObjConfigurated = true;
+	this->isObjConfigured = true;
 	this->useWideData = false;
 	this->configName.setData(configName);
 }
@@ -89,6 +89,9 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 				SettingsLib::Types::ConfigDataStore dataStore;
 				SettingsLib::Tools::Ini::convertValue(&rawValue, &dataStore, false);
 				iniData.setData(&dataStore);
+
+				std::vector<SettingsLib::Types::ConfigDataStore> vData;
+				SettingsLib::Tools::Ini::convertValue(&rawValue, &vData, false);
 			}
 
 			if (!comment.empty())

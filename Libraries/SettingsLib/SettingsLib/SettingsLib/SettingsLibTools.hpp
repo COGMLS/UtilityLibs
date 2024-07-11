@@ -39,7 +39,7 @@ namespace SettingsLib
 		 * @return 1 if the file stream is not open.
 		 * @return 2 if fs is a nullptr.
 		 * @return 3 if the VMemStore is a nullptr.
-		 * @return 4 if an unkwnown error occur.
+		 * @return 4 if an unknown error occur.
 		 */
 		int storeFstream2Memory (std::fstream* fs, std::vector<std::string>* vMemStore, unsigned long long readLines, bool resetPosBeforeOp, bool seekBeginPostOp);
 	}
