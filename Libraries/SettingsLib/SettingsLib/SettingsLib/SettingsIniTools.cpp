@@ -1350,8 +1350,9 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 	char c = '\0';							// Temporary character
 
 	// Detect the possible entries and literal strings:
-	for (size_t i = 0; i < rawValue->size(); i++)
+	for (size_t i = 0, j = rawValue->size() - 1; i < rawValue->size() && j >= 0; i++, j--)
 	{
+		char c2 = rawValue->at(j);
 		c = rawValue->at(i);
 
 		if (c == SETTINGS_INI_CONTAINER_OPEN_MARK && !foundContainerStartMark)
@@ -1360,10 +1361,10 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 			containerStartPos = i;
 		}
 
-		if (c == SETTINGS_INI_CONTAINER_CLOSE_MARK && !foundContainerEndMark)
+		if (c2 == SETTINGS_INI_CONTAINER_CLOSE_MARK && !foundContainerEndMark)
 		{
 			foundContainerEndMark = true;
-			containerEndPos = i;
+			containerEndPos = j;
 		}
 	}
 
@@ -1377,6 +1378,7 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 	// Extraction controls:
 	//
 
+	bool insertData = false;
 	bool foundLiteralStrOpenMark = false;
 	bool foundLiteralStrCloseMark = false;
 
@@ -1393,14 +1395,35 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 	{
 		c = rawValue->at(i);
 
-		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR)
+		// Check for data insertion conditions:
+		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR || c == SETTINGS_INI_CONTAINER_CLOSE_MARK)
 		{
-			nEntries++;
+			// In case a literal string was found:
+			if (foundLiteralStrOpenMark && foundLiteralStrCloseMark)
+			{
+				insertData = true;
+			}
 
+			// In case a quote open mark was found and not closed, verify if the current position is the last inside the container:
+			if (foundLiteralStrOpenMark && !foundLiteralStrCloseMark && i == containerEndPos)
+			{
+				insertData = true;
+			}
+
+			// In case a non literal string will be inserted:
+			if (!foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
+			{
+				insertData = true;
+			}
+		}
+
+		// Insert the data:
+		if (insertData)
+		{
 			// Take the substring data:
 			if (foundLiteralStrCloseMark)
 			{
-				buffer = rawValue->substr(literalStrOpenMarkPos, (literalStrCloseMarkPos - literalStrCloseMarkPos) + 1);
+				buffer = rawValue->substr(literalStrOpenMarkPos, (literalStrCloseMarkPos - literalStrOpenMarkPos) + 1);
 			}
 			else
 			{
@@ -1410,13 +1433,18 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 			// Insert the data:
 			rawEntries.push_back(buffer);
 			buffer.clear();
+			nEntries++;
+			insertData = false;
 
 			// Reset the control variables:
 			foundLiteralStrOpenMark = false;
 			foundLiteralStrCloseMark = false;
 			literalStrOpenMarkPos = 0;
 			literalStrCloseMarkPos = 0;
-			
+		}
+
+		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR)
+		{
 			// Check for possible new data position:
 			if (i <= containerEndPos)
 			{
@@ -1425,7 +1453,7 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 		}
 		else
 		{
-			if (!foundLiteralStrOpenMark)
+			if (!foundLiteralStrCloseMark)
 			{
 				endDataPos = i;
 			}
@@ -1439,7 +1467,7 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 		}
 
 		// Check for open string marks:
-		if (c == SETTINGS_INI_DATA_TYPE_STRING && !foundLiteralStrOpenMark && !foundContainerEndMark)
+		if (c == SETTINGS_INI_DATA_TYPE_STRING && !foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
 		{
 			foundLiteralStrOpenMark = true;
 			literalStrOpenMarkPos = i;
