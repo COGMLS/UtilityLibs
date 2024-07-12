@@ -50,7 +50,9 @@ int main (int argc, const char* argv[], const char* argp[])
 		"test90=\"Hello World 3\" # Comment",
 		"container1={1,2,3} #comment",
 		"container2= {3,4,5}",
-		"container3 = {7,8,9}"
+		"container3 = {7,8,9}",
+		"container4 = {\"hi\", 15}",
+		"container5 = {hello\" world, hi}"
 	};
 
 	std::string line = "";
