@@ -52,7 +52,8 @@ int main (int argc, const char* argv[], const char* argp[])
 		"container2= {3,4,5}",
 		"container3 = {7,8,9}",
 		"container4 = {\"hi\", 15}",
-		"container5 = {hello\" world, hi}"
+		"container5 = {hello\" world, hi}",
+		"container6 = {hi, Hello \" World!}"
 	};
 
 	std::string line = "";
