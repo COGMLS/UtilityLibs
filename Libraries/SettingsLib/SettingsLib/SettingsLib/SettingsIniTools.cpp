@@ -1446,7 +1446,7 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR)
 		{
 			// Check for possible new data position:
-			if (i <= containerEndPos)
+			if (i <= containerEndPos && !foundLiteralStrOpenMark)
 			{
 				startDataPos = i + 1;
 			}
