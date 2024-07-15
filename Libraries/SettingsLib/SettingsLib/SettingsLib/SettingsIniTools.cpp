@@ -1308,7 +1308,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	return conversionStatus;
 }
 
-SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
+SETTINGS_LIB_API long long SettingsLib::Tools::Ini::convertValue2Container(std::string *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
 {
 	// Verify if the pointers are nullptr:
 
@@ -1335,7 +1335,7 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 	bool foundContainerStartMark = false;
 	bool foundContainerEndMark = false;
 
-	size_t nEntries = 1;					// Determinate how many entries will be generated into the container. NOTE: Each entry is separated by comma character, if no comma is detected, assume one entry
+	long long nEntries = 0;					// Count how many entries was generated on algorithm.
 	size_t containerStartPos = 0;
 	size_t containerEndPos = 0;
 	
@@ -1474,7 +1474,51 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::convertValue(std::string *rawValue
 		}
 	}
 
-	return 0;
+	long long nFails = 0;
+
+	if (!rawEntries.empty())
+	{
+		for (size_t i = 0; i < rawEntries.size(); i++)
+		{
+			SettingsLib::Types::ConfigDataStore tmpStore;
+			int convertStatus = SettingsLib::Tools::Ini::convertValue(&rawEntries[i], &tmpStore, trimSpaces);
+			SettingsLib::ErrorCodes::IniRawValueConversionStatus convertStatusCode = static_cast<SettingsLib::ErrorCodes::IniRawValueConversionStatus>(convertStatus);
+
+			switch (convertStatusCode)
+			{
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_BOOLEAN:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_WSTRING:
+				{
+					vData->push_back(tmpStore);
+					break;
+				}
+				default:
+				{
+					nFails++;
+					break;
+				}
+			}
+		}
+	}
+
+	if (nFails == 0)
+	{
+		return nEntries;
+	}
+	else
+	{
+		if (nEntries > nFails)
+		{
+			return -1;
+		}
+
+		return -2;
+	}
 }
 
 SETTINGS_LIB_API int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newStr, bool trimBegin, bool trimEnd)

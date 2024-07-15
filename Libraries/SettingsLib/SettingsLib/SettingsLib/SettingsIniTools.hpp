@@ -85,9 +85,11 @@ namespace SettingsLib
 			 * @param rawValue A raw value data extracted from INI file line
 			 * @param vData A pointer/address to an initialized object Container Data.
 			 * @param trimSpaces Cut the empty spaces in the begin of the string and in the end, only if the value is a string data. Otherwise, will be ignored.
-			 * @return Return a IniRawValueConversionStatus value from conversion
+			 * @return Return a positive value when no error was found, corresponding with the number of entries was generated inside the vData.
+			 * @return Return -1 if not all values was converted correctly.
+			 * @return Return -2 if all values failed in conversion task.
 			 */
-			SETTINGS_LIB_API int convertValue (std::string* rawValue, std::vector<SettingsLib::Types::ConfigDataStore>* vData, bool trimSpaces);
+			SETTINGS_LIB_API long long convertValue2Container (std::string* rawValue, std::vector<SettingsLib::Types::ConfigDataStore>* vData, bool trimSpaces);
 
 			/**
 			 * @brief Remove the spaces from the string before the begin and the end.
