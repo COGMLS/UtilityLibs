@@ -91,7 +91,7 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 				iniData.setData(&dataStore);
 
 				std::vector<SettingsLib::Types::ConfigDataStore> vData;
-				SettingsLib::Tools::Ini::convertValue(&rawValue, &vData, false);
+				SettingsLib::Tools::Ini::convertValue2Container(&rawValue, &vData, false);
 			}
 
 			if (!comment.empty())

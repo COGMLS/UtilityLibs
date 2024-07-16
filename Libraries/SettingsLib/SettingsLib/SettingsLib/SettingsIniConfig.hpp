@@ -21,7 +21,6 @@
 
 #include <map>
 #include <string>
-#include <iostream>
 
 namespace SettingsLib
 {
