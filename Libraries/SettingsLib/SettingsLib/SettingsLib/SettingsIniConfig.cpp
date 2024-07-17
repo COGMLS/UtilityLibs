@@ -86,12 +86,20 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 
 			if (!rawValue.empty())
 			{
-				SettingsLib::Types::ConfigDataStore dataStore;
-				SettingsLib::Tools::Ini::convertValue(&rawValue, &dataStore, false);
-				iniData.setData(&dataStore);
+				//SettingsLib::Types::ConfigDataStore dataStore;
+				//SettingsLib::Tools::Ini::convertValue(&rawValue, &dataStore, false);
+				//iniData.setData(&dataStore);
 
 				std::vector<SettingsLib::Types::ConfigDataStore> vData;
 				SettingsLib::Tools::Ini::convertValue2Container(&rawValue, &vData, false);
+
+				if (!vData.empty())
+				{
+					for (size_t i = 0; i < vData.size(); i++)
+					{
+						iniData.insertData(vData[i], i, false);
+					}
+				}
 			}
 
 			if (!comment.empty())
