@@ -314,8 +314,8 @@ namespace SettingsLib
 				int getData (SettingsLib::Types::ConfigDataStore* data, size_t pos);
 
 				/**
-				 * @brief Get access to the data inside the container.
-				 * @param data ConfigDataStore pointer
+				 * @brief Insert a new data into the container.
+				 * @param data ConfigDataStore data
 				 * @param pos Container's data position
 				 * @param overwrite Overwrite the data on given position. Otherwise will reallocate the other container's data to insert the new one.
 				 * @return CONFIG_INI_STATUS_ERROR_SET_DATA_NULLPTR when a nullptr for data parameter was send.
