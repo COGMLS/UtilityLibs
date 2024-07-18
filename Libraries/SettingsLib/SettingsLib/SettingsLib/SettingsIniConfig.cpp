@@ -64,7 +64,6 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 
 			if (foundSection)
 			{
-				SettingsLib::Types::ConfigIniData iniTest1(iniData);
 				this->sectionMap.at(this->lastSectionSearch)->addData(iniData);
 			}
 

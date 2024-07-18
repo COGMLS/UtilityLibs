@@ -19,6 +19,9 @@
 #include "SettingsIniTools.hpp"
 #include "SettingsIniConfigData.hpp"
 
+#include "SettingsLibConfig.hpp"
+#include "SettingsLibConfigFileStream.hpp"
+
 #include <map>
 #include <string>
 
@@ -28,13 +31,34 @@ namespace SettingsLib
 	{
 		class SETTINGS_LIB_API ConfigIni
 		{
-			protected:
+			private:
+
+				//
+				// Object controls:
+				//
+
 				bool isObjConfigured;
 				bool useWideData;
+				bool isModified;
+
+				//
+				// Configuration Ini Info:
+				//
 
 				SettingsLib::Types::ConfigDataStore configName;
 
+				//
+				// Configuration File Stream:
+				//
+
+				SettingsLib::Types::ConfigFileStream cfgFileStream;
+
+				//
+				// Ini Data:
+				//
+
 				std::string lastSectionSearch;
+				std::wstring lastSectionSearchW;
 
 				std::map<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionMap;
 				std::map<std::wstring, SettingsLib::Types::ConfigIniSectionData*> wSectionMap;
