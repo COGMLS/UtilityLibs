@@ -19,8 +19,8 @@
 #include "SettingsIniTools.hpp"
 #include "SettingsIniConfigData.hpp"
 
-#include "SettingsLibConfig.hpp"
-#include "SettingsLibConfigFileStream.hpp"
+//#include "SettingsLibConfig.hpp"
+//#include "SettingsLibConfigFileStream.hpp"
 
 #include <map>
 #include <string>
@@ -51,7 +51,7 @@ namespace SettingsLib
 				// Configuration File Stream:
 				//
 
-				SettingsLib::Types::ConfigFileStream cfgFileStream;
+				//SettingsLib::Types::ConfigFileStream cfgFileStream;
 
 				//
 				// Ini Data:
