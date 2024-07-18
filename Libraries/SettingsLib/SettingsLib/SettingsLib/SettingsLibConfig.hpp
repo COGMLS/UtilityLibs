@@ -16,9 +16,12 @@
 
 #include <filesystem>
 #include <fstream>
+#include <memory>
 #include <string>
 #include <vector>
 #include <stdexcept>
+
+#include "SettingsLibConfigFileStream.hpp"
 
 namespace SettingsLib
 {
@@ -39,6 +42,8 @@ namespace SettingsLib
 			bool isWideData;
 			bool isConfigOk;
 		public:
+			Config ();
+			Config (std::filesystem::path configFilePath, std::ios_base::openmode openmode, bool useWideData, bool preserveReadDataInMemory);
 	};
 }
 
