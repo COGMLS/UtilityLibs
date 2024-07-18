@@ -444,7 +444,7 @@ int SettingsLib::Types::ConfigFileStream::freeCfgStore()
     return -1;
 }
 
-int SettingsLib::Types::ConfigFileStream::refreshCfgStore()
+void SettingsLib::Types::ConfigFileStream::refreshCfgStore()
 {
 	// Verify if the config stream is accessible and save it into store:
 	if (this->isConfigStreamOpen())

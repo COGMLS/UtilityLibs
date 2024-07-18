@@ -197,11 +197,8 @@ namespace SettingsLib
 
 				/**
 				 * @brief Refresh the configuration lines store in memory
-				 * @return Return the value from Tools::storeFstream2Memory function
-				 * @note If memory was free, it will reallocate to store again.
-				 * @note If keepCfgStore is not set, will return 5.
 				 */
-				int refreshCfgStore();
+				void refreshCfgStore();
 
 				/**
 				 * @brief Refresh the configuration lines store in memory
