@@ -32,7 +32,7 @@ namespace SettingsLib
 		 * @brief Store the file stream into the memory using a vector, allowing manipulate the line without change the file
 		 * @param fs File stream object. The file need be already opened.
 		 * @param vMemStore Vector to store in memory.
-		 * @param readLines Number of lines to store. If zero is passed, all line from current position will be stored. If a number bigger of lines was passed, the function will send all lines to the vMemStore.
+		 * @param readLines Number of lines to store. If zero is passed, all lines from current position will be stored. If a number bigger of lines was passed, the function will send all lines to the vMemStore.
 		 * @param resetPosBeforeOp Reset the position before starting the operation. Otherwise, will not take the full file content.
 		 * @param seekBeginPostOp Back to the start position.
 		 * @return 0 for a successful operation.
