@@ -44,6 +44,21 @@ namespace SettingsLib
 		int storeFstream2Memory (std::fstream* fs, std::vector<std::string>* vMemStore, unsigned long long readLines, bool resetPosBeforeOp, bool seekBeginPostOp);
 
 		/**
+		 * @brief Store the file stream into the memory using a vector, allowing manipulate the line without change the file
+		 * @param fs File stream object. The file need be already opened.
+		 * @param vMemStore Vector to store in memory.
+		 * @param readLines Number of lines to store. If zero is passed, all lines from current position will be stored. If a number bigger of lines was passed, the function will send all lines to the vMemStore.
+		 * @param resetPosBeforeOp Reset the position before starting the operation. Otherwise, will not take the full file content.
+		 * @param seekBeginPostOp Back to the start position.
+		 * @return 0 for a successful operation.
+		 * @return 1 if the file stream is not open.
+		 * @return 2 if fs is a nullptr.
+		 * @return 3 if the VMemStore is a nullptr.
+		 * @return 4 if an unknown error occur.
+		 */
+		int storeFstream2Memory (std::wfstream* fs, std::vector<std::wstring>* vMemStore, unsigned long long readLines, bool resetPosBeforeOp, bool seekBeginPostOp);
+
+		/**
 		 * @brief Store the vector memory into the file stream
 		 * @param fs File stream object. The file need be already opened.
 		 * @param vMemStore Vector with line stored in memory.
@@ -55,7 +70,21 @@ namespace SettingsLib
 		 * @return 3 if the vMemStore is a nullptr.
 		 * @return 4 if an unknown error occur.
 		 */
-		int storeMemory2FStream (std::fstream* fs, std::vector<std::string>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp);
+		int storeMemory2Fstream (std::fstream* fs, std::vector<std::string>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp);
+
+		/**
+		 * @brief Store the vector memory into the file stream
+		 * @param fs File stream object. The file need be already opened.
+		 * @param vMemStore Vector with line stored in memory.
+		 * @param resetPosBeforeOp Reset the position before starting the operation. Otherwise, will not take the full file content.
+		 * @param seekBeginPostOp Back to the start position.
+		 * @return 0 for a successful operation.
+		 * @return 1 if the file stream is not open.
+		 * @return 2 if fs is a nullptr.
+		 * @return 3 if the vMemStore is a nullptr.
+		 * @return 4 if an unknown error occur.
+		 */
+		int storeMemory2Fstream (std::wfstream* fs, std::vector<std::wstring>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp);
 	}
 }
 
