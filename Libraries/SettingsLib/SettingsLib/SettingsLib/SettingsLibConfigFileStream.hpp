@@ -14,6 +14,7 @@
 	#pragma warning (disable : 4273)
 #endif // !WIN32
 
+#include <climits>
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -63,6 +64,9 @@ namespace SettingsLib
 				bool isNewFile;						// Define if the file was created in the same moment of the object's creation
 				bool isCfgFileOk;					// Determinate if the configuration file is ok
 				bool keepCfgStore;					// Determinate if the Vector Memory Store is enabled
+				bool errorReportEnabled;			// Define if the error report is enabled
+
+				short errorListMaxReports;			// Maximum reports to store in errorList
 
 				// Exception history:
 				std::unique_ptr<std::vector<std::exception>> errorsList;
@@ -93,9 +97,20 @@ namespace SettingsLib
 				 */
 				bool vMemStoreExist();
 
-			public:
+				/**
+				 * @brief Save a error report into the Error List, if enabled.
+				 * @param e Exception report
+				 */
+				void saveErrorReport (std::exception e);
+
 				/// @brief This constructor is only for inheritance.
 				ConfigFileStream();
+
+			public:
+
+				//
+				// Constructors and Destructor:
+				//
 
 				/**
 				 * @brief Create an object to control the configuration file stream and it's lines
@@ -114,6 +129,10 @@ namespace SettingsLib
 				 * @brief Destroy the configuration file stream.
 				 */
 				~ConfigFileStream();
+
+				//
+				// File Stream Controls:
+				//
 
 				/**
 				 * @brief Close the file stream.
@@ -135,6 +154,24 @@ namespace SettingsLib
 				bool isConfigStreamOpen();
 
 				/**
+				 * @brief Access the configuration file stream.
+				 * @param cfgFileStream  
+				 * @warning The configuration stream object can't control how the file stream is used outside. Careful when using this method!
+				 */
+				void getConfigStream (std::fstream* cfgFileStream);
+
+				/**
+				 * @brief Access the configuration file stream.
+				 * @param wCfgFileStream  
+				 * @warning The configuration stream object can't control how the file stream is used outside. Careful when using this method!
+				 */
+				void getConfigStream (std::wfstream* wCfgFileStream);
+
+				//
+				// Configuration Line Insertion, Deletion and Change methods:
+				//
+
+				/**
 				 * @brief Get the configuration lines stored in memory
 				 * @param vMemStore Pointer to receive the access to the vector
 				 * @return -3 if an exception occur.
@@ -144,6 +181,8 @@ namespace SettingsLib
 				 * @return 1 if the operation was successful.
 				 */
 				int getConfigLines (std::vector<std::string>* vMemStore);
+
+				int getConfigLines (std::vector<std::wstring>* vMemStore);
 
 				/**
 				 * @brief Get a configuration line stored in memory or read directly from the file stream.
@@ -178,13 +217,6 @@ namespace SettingsLib
 				int getConfigLine (size_t nLine, std::wstring* line, bool useCfgStore);
 
 				/**
-				 * @brief Access the configuration file stream.
-				 * @param cfgFileStream  
-				 * @warning The configuration stream object can't control how the file stream is used outside. Careful when using this method!
-				 */
-				void getConfigStream (std::fstream* cfgFileStream);
-
-				/**
 				 * @brief Set the configuration lines to store in memory and be able to save into the file
 				 * @param new_vMemStore Vector with configuration lines
 				 * @param overrideVector Override the Vector Memory if true. Otherwise will add into the end of the Vector Memory.
@@ -194,6 +226,8 @@ namespace SettingsLib
 				 * @return 3 if an exception occur.
 				 */
 				int setConfigLines (std::vector<std::string>* new_vMemStore, bool overrideVector);
+
+				int setConfigLines (std::vector<std::wstring>* new_vMemStore, bool overrideVector);
 
 				/**
 				 * @brief Set a configuration line in memory. It's possible to change it or add the line.
@@ -208,6 +242,8 @@ namespace SettingsLib
 				 */
 				int setConfigLine (size_t lineN, std::string line, bool overwrite);
 
+				int setConfigLine (size_t lineN, std::wstring line, bool overwrite);
+
 				/**
 				 * @brief Set a configuration line in file stream.
 				 * @param line String representing the configuration line
@@ -216,10 +252,43 @@ namespace SettingsLib
 				 * @param useRefLine Define to use reference line or line number if false
 				 * @return 
 				 * @note If lineN is bigger than file, the line will be put in the end of the file.
+				 * @note This method uses a temporary vector, but doesn't use Vector Memory Store.
 				 */
 				int setConfigLine (std::string line, std::string refLine, size_t lineN, bool useRefLine);
 
-				int insertConfigLine (std::string line);
+				int setConfigLine (std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine);
+
+				/**
+				 * @brief Insert a new line in the file
+				 * @param line Line that will be inserted
+				 * @param insertOnBegin Insert the line on begin of the file if true
+				 * @param resetPos Reset the file stream to the begin of the file
+				 * @return 0 if the operation was successful.
+				 * @return 1 if the file is not open.
+				 * @return 2 if the object is configured to wstring.
+				 * @return 3 if fail to load the file.
+				 * @return 4 if fail to save the file.
+				 * @note This method is better to be use only for a few lines insertions to avoid excessive use of I/O. To reduce the I/O use, enable the Vector Memory Store and update the vector lines.
+				 */
+				int insertConfigLine (std::string line, bool insertOnBegin, bool resetPos);
+
+				/**
+				 * @brief Insert a new line in the file
+				 * @param line Line that will be inserted
+				 * @param insertOnBegin Insert the line on begin of the file if true
+				 * @param resetPos Reset the file stream to the begin of the file
+				 * @return 0 if the operation was successful.
+				 * @return 1 if the file is not open.
+				 * @return 2 if the object is configured to string.
+				 * @return 3 if fail to load the file.
+				 * @return 4 if fail to save the file.
+				 * @note This method is better to be use only for a few lines insertions to avoid excessive use of I/O. To reduce the I/O use, enable the Vector Memory Store and update the vector lines.
+				 */
+				int insertConfigLine (std::wstring line, bool insertOnBegin, bool resetPos);
+
+				//
+				// Vector Memory Store Controls:
+				//
 
 				/**
 				 * @brief Get the size of the vector that is stored in memory with the configuration lines.
@@ -254,6 +323,8 @@ namespace SettingsLib
 				 */
 				int refreshCfgStore(std::vector<std::string>* externCfgStore);
 
+				int refreshCfgStore(std::vector<std::wstring>* externCfgStore);
+
 				/**
 				 * @brief Get the status of configuration memory store
 				 */
@@ -266,11 +337,27 @@ namespace SettingsLib
 				 */
 				void setKeepCfgStore (bool keepCfgStore);
 
+				//
+				// General Object Controls:
+				//
+
 				/**
 				 * @brief Check if the configuration file stream accept changes.
 				 * @note If the file was created during the object creation and readonly was defined, the property will be disabled to allow write access to file stream. 
 				 */
 				bool isReadonlyMode();
+
+				void setReadonly(bool readonly);
+
+				/**
+				 * @brief Save the Vector Memory into the file
+				 * @return 
+				 */
+				int saveStoreOnFile();
+
+				//
+				// Error List Controls:
+				//
 
 				/**
 				 * @brief Access the error list. If no error or status was created, an empty vector will return.
@@ -279,10 +366,15 @@ namespace SettingsLib
 				std::vector<std::exception> getErrorList();
 
 				/**
-				 * @brief Save the Vector Memory into the file
-				 * @return 
+				 * @brief Clean the error reports
 				 */
-				int saveStoreOnFile();
+				void cleanErrors();
+
+				/**
+				 * @brief Set the error reports that will be saved in memory. Using zero, will disabled the error report.
+				 * @param maxErrorReports Define the maximum number of reports in memory.
+				 */
+				void setErrorReport (unsigned short maxErrorReports);
 		};
 	}
 }

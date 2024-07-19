@@ -9,18 +9,18 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 			try
 			{
 				// Store WFstream to Vector Memory:
-				//int sWFs2Vmem = SettingsLib::Tools::storeFstream2Memory(this->wCfgFileStream.get(), this->wCfgStore.get(), 0, true, true);
+				int sWFs2Vmem = SettingsLib::Tools::storeFstream2Memory(this->wCfgFileStream.get(), this->wCfgStore.get(), 0, true, true);
 
-				//if (sWFs2Vmem != 0)
-				//{
-				//	this->errorsList->push_back(std::exception(std::string("Fail to read into the memory the wCfgFileStream. Return " + std::to_string(sWFs2Vmem)).c_str()));
-				//}
+				if (sWFs2Vmem != 0)
+				{
+					this->saveErrorReport(std::exception(std::string("Fail to read into the memory the wCfgFileStream. Return " + std::to_string(sWFs2Vmem)).c_str()));
+				}
 
 				return 1;
 			}
 			catch(const std::exception& e)
 			{
-				this->errorsList->push_back(e);
+				this->saveErrorReport(e);
 				return -1;
 			}
 		}
@@ -33,14 +33,14 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 
 				if (sFs2Vmem != 0)
 				{
-					this->errorsList->push_back(std::exception(std::string("Fail to read into the memory the cfgFileStream. Return " + std::to_string(sFs2Vmem)).c_str()));
+					this->saveErrorReport(std::exception(std::string("Fail to read into the memory the cfgFileStream. Return " + std::to_string(sFs2Vmem)).c_str()));
 				}
 
 				return 1;
 			}
 			catch(const std::exception& e)
 			{
-				this->errorsList->push_back(e);
+				this->saveErrorReport(e);
 				return -1;
 			}
 		}
@@ -88,6 +88,24 @@ bool SettingsLib::Types::ConfigFileStream::vMemStoreExist()
 	}
 }
 
+void SettingsLib::Types::ConfigFileStream::saveErrorReport(std::exception e)
+{
+	if (this->errorReportEnabled)
+	{
+		if (this->errorsList == nullptr)
+		{
+			this->errorsList.reset(new std::vector<std::exception>);
+		}
+
+		if (this->errorsList->size() == this->errorListMaxReports)
+		{
+			this->errorsList->erase(this->errorsList->begin());
+		}
+
+		this->errorsList->push_back(e);
+	}
+}
+
 SettingsLib::Types::ConfigFileStream::ConfigFileStream()
 {
 }
@@ -100,7 +118,8 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 	this->keepCfgStore = keepCfgStore;
 
 	this->isNewFile = false;
-	this->errorsList.reset(new std::vector<std::exception>);
+	
+	this->setErrorReport(CONFIG_FILE_STREAM_MAXIMUM_ERRORS);
 
 	if (!std::filesystem::exists(this->cfgFilePath))
 	{
@@ -123,7 +142,7 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 	else
 	{
 		this->isCfgFileOk = false;
-		this->errorsList->push_back(std::exception("cfgFilePath does not lead to a configuration file!"));
+		this->saveErrorReport(std::exception("cfgFilePath does not lead to a configuration file!"));
 	}
 }
 
@@ -200,7 +219,7 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 		}
 		catch(const std::exception& e)
 		{
-			this->errorsList->push_back(e);
+			this->saveErrorReport(e);
 		}
 	}
 	else
@@ -222,14 +241,14 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 		}
 		catch(const std::exception& e)
 		{
-			this->errorsList->push_back(e);
+			this->saveErrorReport(e);
 		}
 	}
 
 	// Report is the opening file fail:
 	if (!successfullyOpened)
 	{
-		this->errorsList->push_back(std::exception("Fail to open the configuration file!"));
+		this->saveErrorReport(std::exception("Fail to open the configuration file!"));
 	}
 
     return successfullyOpened;
@@ -245,6 +264,16 @@ bool SettingsLib::Types::ConfigFileStream::isConfigStreamOpen()
 	{
 		return this->cfgFileStream->is_open();
 	}
+}
+
+void SettingsLib::Types::ConfigFileStream::getConfigStream(std::fstream *cfgFileStream)
+{
+	cfgFileStream = this->cfgFileStream.get();
+}
+
+void SettingsLib::Types::ConfigFileStream::getConfigStream(std::wfstream *wCfgFileStream)
+{
+	wCfgFileStream = this->wCfgFileStream.get();
 }
 
 int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::string> *vMemStore)
@@ -266,7 +295,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::string
 				}
 				catch(const std::exception& e)
 				{
-					this->errorsList->push_back(e);
+					this->saveErrorReport(e);
 					return -3;
 				}
 			}
@@ -434,11 +463,6 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::wstri
 	}
 }
 
-void SettingsLib::Types::ConfigFileStream::getConfigStream(std::fstream *cfgFileStream)
-{
-	cfgFileStream = this->cfgFileStream.get();
-}
-
 int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::string> *new_vMemStore, bool overrideVector)
 {
 	if (this->isWideData)
@@ -517,6 +541,150 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::strin
 		{
 			return 3;
 		}
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigFileStream::setConfigLine(std::string line, std::string refLine, size_t lineN, bool useRefLine)
+{
+	if (!this->isConfigStreamOpen())
+	{
+		return 4;
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigFileStream::insertConfigLine(std::string line, bool insertOnBegin, bool resetPos)
+{
+	if (!this->isConfigStreamOpen())
+	{
+		return 1;
+	}
+
+	if (this->isWideData)
+	{
+		return 2;
+	}
+
+	std::streampos oldP = this->cfgFileStream->tellp();
+	std::streampos oldG = this->cfgFileStream->tellg();
+
+	if (insertOnBegin)
+	{
+		this->cfgFileStream->seekg(std::fstream::beg);
+		this->cfgFileStream->seekp(std::fstream::beg);
+	}
+	else
+	{
+		this->cfgFileStream->seekg(std::fstream::end);
+		this->cfgFileStream->seekp(std::fstream::end);
+	}
+
+	std::vector<std::string> tmpVec;
+
+	int loadStatus = SettingsLib::Tools::storeFstream2Memory(this->cfgFileStream.get(), &tmpVec, 0, true, true);
+	int saveStatus = -1;
+
+	if (loadStatus == 0)
+	{
+		if (insertOnBegin)
+		{
+			tmpVec.insert(tmpVec.begin(), line);
+		}
+		else
+		{
+			tmpVec.push_back(line);
+		}
+
+		saveStatus = SettingsLib::Tools::storeMemory2Fstream(this->cfgFileStream.get(), &tmpVec, true, true);
+	}
+
+	if (resetPos)
+	{
+		this->cfgFileStream->seekg(std::fstream::beg);
+		this->cfgFileStream->seekp(std::fstream::beg);
+	}
+
+	if (loadStatus == 4 || saveStatus == 4)
+	{
+		this->cfgFileStream->seekg(oldG);
+		this->cfgFileStream->seekp(oldP);
+
+		if (loadStatus == 4)
+		{
+			return 3;
+		}
+
+		return 4;
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigFileStream::insertConfigLine(std::wstring line, bool insertOnBegin, bool resetPos)
+{
+    if (!this->isConfigStreamOpen())
+	{
+		return 1;
+	}
+
+	if (!this->isWideData)
+	{
+		return 2;
+	}
+	
+	std::streampos oldP = this->wCfgFileStream->tellp();
+	std::streampos oldG = this->wCfgFileStream->tellg();
+
+	if (insertOnBegin)
+	{
+		this->wCfgFileStream->seekg(std::wfstream::beg);
+		this->wCfgFileStream->seekp(std::wfstream::beg);
+	}
+	else
+	{
+		this->wCfgFileStream->seekg(std::wfstream::end);
+		this->wCfgFileStream->seekp(std::wfstream::end);
+	}
+
+	std::vector<std::wstring> tmpVec;
+
+	int loadStatus = SettingsLib::Tools::storeFstream2Memory(this->wCfgFileStream.get(), &tmpVec, 0, true, true);
+	int saveStatus = -1;
+
+	if (loadStatus == 0)
+	{
+		if (insertOnBegin)
+		{
+			tmpVec.insert(tmpVec.begin(), line);
+		}
+		else
+		{
+			tmpVec.push_back(line);
+		}
+
+		saveStatus = SettingsLib::Tools::storeMemory2Fstream(this->wCfgFileStream.get(), &tmpVec, true, true);
+	}
+
+	if (resetPos)
+	{
+		this->wCfgFileStream->seekg(std::wfstream::beg);
+		this->wCfgFileStream->seekp(std::wfstream::beg);
+	}
+
+	if (loadStatus == 4 || saveStatus == 4)
+	{
+		this->wCfgFileStream->seekg(oldG);
+		this->wCfgFileStream->seekp(oldP);
+
+		if (loadStatus == 4)
+		{
+			return 3;
+		}
+
+		return 4;
 	}
 
     return 0;
@@ -638,6 +806,16 @@ bool SettingsLib::Types::ConfigFileStream::isReadonlyMode()
     return this->isReadonly;
 }
 
+void SettingsLib::Types::ConfigFileStream::setReadonly(bool readonly)
+{
+	this->isReadonly = readonly;
+}
+
+int SettingsLib::Types::ConfigFileStream::saveStoreOnFile()
+{
+    return 0;
+}
+
 std::vector<std::exception> SettingsLib::Types::ConfigFileStream::getErrorList()
 {
 	if (this->errorsList != nullptr)
@@ -646,4 +824,33 @@ std::vector<std::exception> SettingsLib::Types::ConfigFileStream::getErrorList()
 	}
 
     return std::vector<std::exception>();
+}
+
+void SettingsLib::Types::ConfigFileStream::cleanErrors()
+{
+	if (this->errorsList != nullptr)
+	{
+		this->errorsList->clear();
+	}
+}
+
+void SettingsLib::Types::ConfigFileStream::setErrorReport(unsigned short maxErrorReports)
+{
+	if (maxErrorReports == 0)
+	{
+		this->errorReportEnabled = false;
+		this->errorListMaxReports = 0;
+		this->errorsList.reset(nullptr);
+	}
+	else
+	{
+		if (maxErrorReports >= SHRT_MAX)
+		{
+			maxErrorReports = CONFIG_FILE_STREAM_MAXIMUM_ERRORS;
+		}
+
+		this->errorReportEnabled = true;
+		this->errorListMaxReports = maxErrorReports;
+		this->errorsList.reset(new std::vector<std::exception>);
+	}
 }
