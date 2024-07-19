@@ -49,6 +49,45 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 	return 0;
 }
 
+int SettingsLib::Types::ConfigFileStream::makeVMemStore()
+{
+	if (this->keepCfgStore)
+	{
+		if (this->isWideData)
+		{
+			if (this->wCfgStore == nullptr)
+			{
+				this->wCfgStore.reset(new std::vector<std::wstring>);
+				return 0;
+			}
+		}
+		else
+		{
+			if (this->cfgStore == nullptr)
+			{
+				this->cfgStore.reset(new std::vector<std::string>);
+				return 0;
+			}
+		}
+
+		return 1;
+	}
+
+    return -1;
+}
+
+bool SettingsLib::Types::ConfigFileStream::vMemStoreExist()
+{
+    if (this->isWideData)
+	{
+		return this->wCfgStore != nullptr;
+	}
+	else
+	{
+		return this->cfgStore != nullptr;
+	}
+}
+
 SettingsLib::Types::ConfigFileStream::ConfigFileStream()
 {
 }
@@ -101,16 +140,6 @@ SettingsLib::Types::ConfigFileStream::~ConfigFileStream()
 	if (this->wCfgFileStream != nullptr)
 	{
 		this->wCfgFileStream.reset(nullptr);
-	}
-
-	if (this->cfgStore != nullptr)
-	{
-		this->cfgStore.reset(nullptr);
-	}
-
-	if (this->wCfgStore != nullptr)
-	{
-		this->wCfgStore.reset(nullptr);
 	}
 
 	if (this->errorsList != nullptr)
@@ -220,10 +249,6 @@ bool SettingsLib::Types::ConfigFileStream::isConfigStreamOpen()
 
 int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::string> *vMemStore)
 {
-	if (vMemStore == nullptr)
-	{
-		return -2;
-	}
 	if (this->keepCfgStore)
 	{
 		if (this->isWideData)
@@ -232,17 +257,21 @@ int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::string
 		}
 		else
 		{
-			try
+			if (this->vMemStoreExist())
 			{
-				*vMemStore = *this->cfgStore.get();
-				return 1;
-			}
-			catch(const std::exception& e)
-			{
-				this->errorsList->push_back(e);
-				return -3;
+				try
+				{
+					*vMemStore = *this->cfgStore.get();
+					return 1;
+				}
+				catch(const std::exception& e)
+				{
+					this->errorsList->push_back(e);
+					return -3;
+				}
 			}
 			
+			return -2;
 		}
 	}
 
@@ -274,21 +303,26 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::strin
 		}
 		else
 		{
-			if (this->cfgStore->size() > nLine)
+			if (this->vMemStoreExist())
 			{
-				return 4;
+				if (this->cfgStore->size() > nLine)
+				{
+					return 4;
+				}
+
+				try
+				{
+					// Get the config store data:
+					*line = this->cfgStore->at(nLine);
+					return 0;
+				}
+				catch(const std::exception& e)
+				{
+					return 3;
+				}
 			}
 
-			try
-			{
-				// Get the config store data:
-				*line = this->cfgStore->at(nLine);
-				return 0;
-			}
-			catch(const std::exception& e)
-			{
-				return 3;
-			}
+			return 7;
 		}
 	}
 	else
@@ -343,21 +377,26 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::wstri
 	{
 		if (this->isWideData)
 		{
-			if (this->wCfgStore->size() > nLine)
+			if (this->vMemStoreExist())
 			{
-				return 4;
-			}
+				if (this->wCfgStore->size() > nLine)
+				{
+					return 4;
+				}
 
-			try
-			{
-				// Get the config store data:
-				*line = this->wCfgStore->at(nLine);
-				return 0;
+				try
+				{
+					// Get the config store data:
+					*line = this->wCfgStore->at(nLine);
+					return 0;
+				}
+				catch(const std::exception& e)
+				{
+					return 3;
+				}
 			}
-			catch(const std::exception& e)
-			{
-				return 3;
-			}
+			
+			return 7;
 		}
 		else
 		{
@@ -400,9 +439,92 @@ void SettingsLib::Types::ConfigFileStream::getConfigStream(std::fstream *cfgFile
 	cfgFileStream = this->cfgFileStream.get();
 }
 
+int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::string> *new_vMemStore, bool overrideVector)
+{
+	if (this->isWideData)
+	{
+		return 1;
+	}
+	else
+	{
+		if (!this->vMemStoreExist())
+		{
+			if (this->makeVMemStore() == -1)
+			{
+				return 2;
+			}
+		}
+
+		try
+		{
+			if (overrideVector)
+			{
+				*this->cfgStore = *new_vMemStore;
+			}
+			else
+			{
+				for (size_t i = 0; i < new_vMemStore->size(); i++)
+				{
+					this->cfgStore->push_back(new_vMemStore->at(i));
+				}
+			}
+		}
+		catch(const std::exception&)
+		{
+			return 3;
+		}
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::string line, bool overwrite)
+{
+    if (this->isWideData)
+	{
+		return 1;
+	}
+	else
+	{
+		if (!this->vMemStoreExist())
+		{
+			if (this->makeVMemStore() == -1)
+			{
+				return 2;
+			}
+		}
+
+		try
+		{
+			if (lineN >= this->cfgStore->size())
+			{
+				this->cfgStore->push_back(line);
+			}
+			else
+			{
+				if (overwrite)
+				{
+					std::string* vLine = &this->cfgStore->at(lineN);
+					*vLine = line;
+				}
+				else
+				{
+					this->cfgStore->insert(this->cfgStore->begin() + lineN, line);
+				}
+			}
+		}
+		catch(const std::exception&)
+		{
+			return 3;
+		}
+	}
+
+    return 0;
+}
+
 size_t SettingsLib::Types::ConfigFileStream::getvMemStoreSize()
 {
-	if (this->cfgStore != nullptr || this->wCfgStore != nullptr)
+	if (this->vMemStoreExist())
 	{
 		if (this->isWideData)
 		{
@@ -444,13 +566,49 @@ int SettingsLib::Types::ConfigFileStream::freeCfgStore()
     return -1;
 }
 
-void SettingsLib::Types::ConfigFileStream::refreshCfgStore()
+int SettingsLib::Types::ConfigFileStream::refreshCfgStore()
 {
 	// Verify if the config stream is accessible and save it into store:
 	if (this->isConfigStreamOpen())
 	{
-		this->save2Store();
+		if (!this->vMemStoreExist())
+		{
+			if (this->makeVMemStore() == -1)
+			{
+				return 2;
+			}
+		}
+
+		if (this->save2Store() == -1)
+		{
+			return 3;
+		}
+
+		return 0;
 	}
+
+	return 1;
+}
+
+int SettingsLib::Types::ConfigFileStream::refreshCfgStore(std::vector<std::string> *externCfgStore)
+{
+	if (this->isConfigStreamOpen())
+	{
+		if (this->freeCfgStore() == -1)
+		{
+			return 2;
+		}
+
+		if (this->makeVMemStore() >= 0)
+		{
+			*this->cfgStore = *externCfgStore;
+			return 0;
+		}
+
+		return 3;
+	}
+
+	return 1;
 }
 
 bool SettingsLib::Types::ConfigFileStream::getKeepCfgStore()
@@ -469,14 +627,7 @@ void SettingsLib::Types::ConfigFileStream::setKeepCfgStore(bool keepCfgStore)
 	// If the vector store is disabled, create the data:
 	if (!this->keepCfgStore && keepCfgStore)
 	{
-		if (this->isWideData)
-		{
-			this->wCfgStore.reset(new std::vector<std::wstring>);
-		}
-		else
-		{
-			this->cfgStore.reset(new std::vector<std::string>);
-		}
+		this->makeVMemStore();
 	}
 
 	this->keepCfgStore = keepCfgStore;
