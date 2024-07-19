@@ -58,3 +58,52 @@ int SettingsLib::Tools::storeFstream2Memory (std::fstream* fs, std::vector<std::
 		return 4;
 	}
 }
+
+int SettingsLib::Tools::storeMemory2FStream(std::fstream *fs, std::vector<std::string> *vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp)
+{
+    if (fs == nullptr)
+	{
+		return 2;
+	}
+
+	if (vMemStore == nullptr)
+	{
+		return 3;
+	}
+
+	try
+	{
+		// Check if the file is open:
+		if (fs->is_open())
+		{
+			// Reset position before operation:
+			if (resetPosBeforeOp)
+			{
+				fs->seekg(std::fstream::beg);
+				fs->seekp(std::fstream::beg);
+			}
+
+			// Insert each line inside the vMemStore into fstream:
+			for (size_t i = 0; i < vMemStore->size(); i++)
+			{
+				std::string l = vMemStore->at(i);
+				*fs << l;
+			}
+
+			// Reset position after operation:
+			if (seekBeginPostOp)
+			{
+				fs->seekg(std::fstream::beg);
+				fs->seekp(std::fstream::beg);
+			}
+
+			return 0;
+		}
+
+		return 1;
+	}
+	catch(const std::exception&)
+	{
+		return 4;
+	}
+}
