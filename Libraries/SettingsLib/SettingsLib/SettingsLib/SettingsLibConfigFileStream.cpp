@@ -811,7 +811,7 @@ void SettingsLib::Types::ConfigFileStream::setReadonly(bool readonly)
 	this->isReadonly = readonly;
 }
 
-int SettingsLib::Types::ConfigFileStream::saveStoreOnFile()
+int SettingsLib::Types::ConfigFileStream::saveStoreOnFile(unsigned short saveType)
 {
     return 0;
 }

@@ -351,9 +351,11 @@ namespace SettingsLib
 
 				/**
 				 * @brief Save the Vector Memory into the file
+				 * @param saveType Determinate the method to save the Vector Memory Store into the file. Check the notes for more details.
 				 * @return 
+				 * @note The save types available are: 0 - override the file lines (default operation). 1 - Put the vector's data on begin of the file. 2 - Put the vector's data on the end of the file.
 				 */
-				int saveStoreOnFile();
+				int saveStoreOnFile(unsigned short saveType = 0);
 
 				//
 				// Error List Controls:
