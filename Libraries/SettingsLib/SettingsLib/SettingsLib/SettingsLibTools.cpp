@@ -118,7 +118,7 @@ int SettingsLib::Tools::storeFstream2Memory(std::wfstream *fs, std::vector<std::
 	}
 }
 
-int SettingsLib::Tools::storeMemory2Fstream(std::fstream *fs, std::vector<std::string> *vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp)
+int SettingsLib::Tools::storeMemory2Fstream(std::fstream *fs, std::vector<std::string> *vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp, bool newLineByVecEntry, bool lastLineEmpty)
 {
     if (fs == nullptr)
 	{
@@ -146,7 +146,22 @@ int SettingsLib::Tools::storeMemory2Fstream(std::fstream *fs, std::vector<std::s
 			for (size_t i = 0; i < vMemStore->size(); i++)
 			{
 				std::string l = vMemStore->at(i);
-				*fs << l;
+
+				if (newLineByVecEntry)
+				{
+					if (i + 1 == vMemStore->size() && !lastLineEmpty)
+					{
+						*fs << l;
+					}
+					else
+					{
+						*fs << l << std::endl;
+					}
+				}
+				else
+				{
+					*fs << l;
+				}
 			}
 
 			// Reset position after operation:
@@ -167,7 +182,7 @@ int SettingsLib::Tools::storeMemory2Fstream(std::fstream *fs, std::vector<std::s
 	}
 }
 
-int SettingsLib::Tools::storeMemory2Fstream(std::wfstream *fs, std::vector<std::wstring> *vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp)
+int SettingsLib::Tools::storeMemory2Fstream(std::wfstream *fs, std::vector<std::wstring> *vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp, bool newLineByVecEntry, bool lastLineEmpty)
 {
     if (fs == nullptr)
 	{
@@ -195,7 +210,22 @@ int SettingsLib::Tools::storeMemory2Fstream(std::wfstream *fs, std::vector<std::
 			for (size_t i = 0; i < vMemStore->size(); i++)
 			{
 				std::wstring l = vMemStore->at(i);
-				*fs << l;
+				
+				if (newLineByVecEntry)
+				{
+					if (i + 1 == vMemStore->size() && !lastLineEmpty)
+					{
+						*fs << l;
+					}
+					else
+					{
+						*fs << l << std::endl;
+					}
+				}
+				else
+				{
+					*fs << l;
+				}
 			}
 
 			// Reset position after operation:

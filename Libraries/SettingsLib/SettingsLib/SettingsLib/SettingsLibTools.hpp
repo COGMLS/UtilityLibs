@@ -64,13 +64,15 @@ namespace SettingsLib
 		 * @param vMemStore Vector with line stored in memory.
 		 * @param resetPosBeforeOp Reset the position before starting the operation. Otherwise, will not take the full file content.
 		 * @param seekBeginPostOp Back to the start position.
+		 * @param newLineByVecEntry Insert a new line in the file to each vector entry.
+		 * @param lastLineEmpty If the new line insertion is active, define if a empty line will be added in the end of the file.
 		 * @return 0 for a successful operation.
 		 * @return 1 if the file stream is not open.
 		 * @return 2 if fs is a nullptr.
 		 * @return 3 if the vMemStore is a nullptr.
 		 * @return 4 if an unknown error occur.
 		 */
-		int storeMemory2Fstream (std::fstream* fs, std::vector<std::string>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp);
+		int storeMemory2Fstream (std::fstream* fs, std::vector<std::string>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp, bool newLineByVecEntry, bool lastLineEmpty);
 
 		/**
 		 * @brief Store the vector memory into the file stream
@@ -78,13 +80,15 @@ namespace SettingsLib
 		 * @param vMemStore Vector with line stored in memory.
 		 * @param resetPosBeforeOp Reset the position before starting the operation. Otherwise, will not take the full file content.
 		 * @param seekBeginPostOp Back to the start position.
+		 * @param newLineByVecEntry Insert a new line in the file to each vector entry.
+		 * @param lastLineEmpty If the new line insertion is active, define if a empty line will be added in the end of the file.
 		 * @return 0 for a successful operation.
 		 * @return 1 if the file stream is not open.
 		 * @return 2 if fs is a nullptr.
 		 * @return 3 if the vMemStore is a nullptr.
 		 * @return 4 if an unknown error occur.
 		 */
-		int storeMemory2Fstream (std::wfstream* fs, std::vector<std::wstring>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp);
+		int storeMemory2Fstream (std::wfstream* fs, std::vector<std::wstring>* vMemStore, bool resetPosBeforeOp, bool seekBeginPostOp, bool newLineByVecEntry, bool lastLineEmpty);
 	}
 }
 
