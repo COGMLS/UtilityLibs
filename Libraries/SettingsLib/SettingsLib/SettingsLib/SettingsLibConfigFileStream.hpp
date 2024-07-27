@@ -182,6 +182,15 @@ namespace SettingsLib
 				 */
 				int getConfigLines (std::vector<std::string>* vMemStore);
 
+				/**
+				 * @brief Get the configuration lines stored in memory
+				 * @param vMemStore Pointer to receive the access to the vector
+				 * @return -3 if an exception occur.
+				 * @return -2 if the Vector Memory is not ready in memory.
+				 * @return -1 if object is configured to work with string.
+				 * @return 0 if the Vector Memory is disabled.
+				 * @return 1 if the operation was successful.
+				 */
 				int getConfigLines (std::vector<std::wstring>* vMemStore);
 
 				/**
@@ -227,6 +236,15 @@ namespace SettingsLib
 				 */
 				int setConfigLines (std::vector<std::string>* new_vMemStore, bool overrideVector);
 
+				/**
+				 * @brief Set the configuration lines to store in memory and be able to save into the file
+				 * @param new_vMemStore Vector with configuration lines
+				 * @param overrideVector Override the Vector Memory if true. Otherwise will add into the end of the Vector Memory.
+				 * @return 0 if the operation was successful.
+				 * @return 1 when the object is configured to use string.
+				 * @return 2 if the Vector Memory is disabled.
+				 * @return 3 if an exception occur.
+				 */
 				int setConfigLines (std::vector<std::wstring>* new_vMemStore, bool overrideVector);
 
 				/**
@@ -242,6 +260,17 @@ namespace SettingsLib
 				 */
 				int setConfigLine (size_t lineN, std::string line, bool overwrite);
 
+				/**
+				 * @brief Set a configuration line in memory. It's possible to change it or add the line.
+				 * @param lineN Line number
+				 * @param line String representing the configuration line
+				 * @param overwrite If true will change the actual line. Otherwise, will add a new line in lineN position, moving the rest of the content.
+				 * @return 0 if the operation was successful.
+				 * @return 1 when the object is configured to use string.
+				 * @return 2 if the Vector Memory Store is disabled.
+				 * @return 3 if an exception occur.
+				 * @note If lineN is bigger than vMemStore, the line will be inserted in the end.
+				 */
 				int setConfigLine (size_t lineN, std::wstring line, bool overwrite);
 
 				/**
@@ -320,9 +349,21 @@ namespace SettingsLib
 				 * @return 1 if the file stream is not open.
 				 * @return 2 if the Vector Memory Store is disabled.
 				 * @return 3 fail to save into the memory the file lines.
+				 * @return 4 if the file stream is configured to use wide strings.
+				 * @return 5 in case the readonly mode is active.
 				 */
 				int refreshCfgStore(std::vector<std::string>* externCfgStore);
 
+				/**
+				 * @brief Refresh the configuration lines store in memory with a external data
+				 * @param externCfgStore External configuration line store.
+				 * @return 0 in successful operation.
+				 * @return 1 if the file stream is not open.
+				 * @return 2 if the Vector Memory Store is disabled.
+				 * @return 3 fail to save into the memory the file lines.
+				 * @return 4 if the file stream is configured to use wide strings.
+				 * @return 5 in case the readonly mode is active.
+				 */
 				int refreshCfgStore(std::vector<std::wstring>* externCfgStore);
 
 				/**
@@ -347,6 +388,10 @@ namespace SettingsLib
 				 */
 				bool isReadonlyMode();
 
+				/**
+				 * @brief Define the readonly mode to protect the object to accept modifications on file stream.
+				 * @param readonly True define enable the readonly mode.
+				 */
 				void setReadonly(bool readonly);
 
 				/**
