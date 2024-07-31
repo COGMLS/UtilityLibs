@@ -1175,18 +1175,54 @@ SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionDa
 	return *this;
 }
 
-std::string SettingsLib::Types::ConfigIniSectionData::getSectionName()
+int SettingsLib::Types::ConfigIniSectionData::getSectionName(std::string* sectionName)
 {
-	std::string name;
-	this->sectionName.getData(&name);
-	return name;
+	if (sectionName == nullptr)
+	{
+		return -3;
+	}
+
+	if (this->isSectionConfigured)
+	{
+		if (this->useWideData)
+		{
+			return -2;
+		}
+
+		if (this->sectionName.getData(sectionName) == 1)
+		{
+			return 1;
+		}
+
+		return 0;
+	}
+
+	return -1;
 }
 
-std::wstring SettingsLib::Types::ConfigIniSectionData::getSectionNameW()
+int SettingsLib::Types::ConfigIniSectionData::getSectionName(std::wstring* sectionName)
 {
-    std::wstring nameW;
-	this->sectionName.getData(&nameW);
-	return nameW;
+	if (sectionName == nullptr)
+	{
+		return -3;
+	}
+
+	if (this->isSectionConfigured)
+	{
+		if (!this->useWideData)
+		{
+			return -2;
+		}
+
+		if (this->sectionName.getData(sectionName) == 1)
+		{
+			return 1;
+		}
+
+		return 0;
+	}
+
+	return -1;
 }
 
 int SettingsLib::Types::ConfigIniSectionData::getIniData(std::string key, SettingsLib::Types::ConfigIniData *iniData)
@@ -1214,6 +1250,81 @@ int SettingsLib::Types::ConfigIniSectionData::getIniData(std::string key, Settin
 	}
 
 	return -1;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::getIniData(std::wstring key, SettingsLib::Types::ConfigIniData *iniData)
+{
+	if (iniData == nullptr)
+	{
+		return -3;
+	}
+
+    if (this->isSectionConfigured)
+	{
+		if (!this->useWideData)
+		{
+			return -2;
+		}
+
+		if (this->wKeyMap.contains(key))
+		{
+			SettingsLib::Types::ConfigIniData* data = &this->wKeyMap.at(key);
+			*iniData = *data;
+			return 1;
+		}
+
+		return 0;
+	}
+
+	return -1;
+}
+
+SettingsLib::Types::ConfigIniData *SettingsLib::Types::ConfigIniSectionData::getIniEntryRef(std::string key)
+{
+	if (this->isSectionConfigured && !this->useWideData && !this->keyMap.empty())
+	{
+		if (this->keyMap.contains(key))
+		{
+			return &this->keyMap.at(key);
+		}
+	}
+
+    return nullptr;
+}
+
+SettingsLib::Types::ConfigIniData *SettingsLib::Types::ConfigIniSectionData::getIniEntryRef(std::wstring key)
+{
+    if (this->isSectionConfigured && this->useWideData && !this->wKeyMap.empty())
+	{
+		if (this->wKeyMap.contains(key))
+		{
+			return &this->wKeyMap.at(key);
+		}
+	}
+
+    return nullptr;
+}
+
+size_t SettingsLib::Types::ConfigIniSectionData::getIniDatabaseSize()
+{
+	if (this->isSectionConfigured)
+	{
+		return 0;
+	}
+
+	if (this->useWideData)
+	{
+		return this->wKeyMap.size();
+	}
+	else
+	{
+		return this->keyMap.size();
+	}
+}
+
+bool SettingsLib::Types::ConfigIniSectionData::isConfigured()
+{
+    return this->isSectionConfigured;
 }
 
 bool SettingsLib::Types::ConfigIniSectionData::isWideData()
@@ -1302,15 +1413,121 @@ int SettingsLib::Types::ConfigIniSectionData::addData(SettingsLib::Types::Config
 		}
 	}
 
-	return -1;
+	return -3;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::contains(std::string key)
+{
+	if (!this->isSectionConfigured)
+	{
+		return -3;
+	}
+
+	if (this->useWideData)
+	{
+		return -2;
+	}
+
+	if (this->keyMap.empty())
+	{
+		return -1;
+	}
+
+	if (this->keyMap.contains(key))
+	{
+		return 1;
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::contains(std::wstring key)
+{
+	if (!this->isSectionConfigured)
+	{
+		return -3;
+	}
+
+	if (!this->useWideData)
+	{
+		return -2;
+	}
+
+	if (this->wKeyMap.empty())
+	{
+		return -1;
+	}
+
+	if (this->wKeyMap.contains(key))
+	{
+		return 1;
+	}
+
+    return 0;
 }
 
 int SettingsLib::Types::ConfigIniSectionData::remData(std::string key)
 {
-    return 0;
+	if (!this->isSectionConfigured)
+	{
+		return -3;
+	}
+
+	if (this->useWideData)
+	{
+		return -2;
+	}
+
+	if (this->keyMap.empty())
+	{
+		return 0;
+	}
+
+	if (this->keyMap.contains(key))
+	{
+		try
+		{
+			this->keyMap.erase(key);
+			return 1;
+		}
+		catch(const std::exception&)
+		{
+			return -1;
+		}
+	}
+
+    return 2;
 }
 
 int SettingsLib::Types::ConfigIniSectionData::remData(std::wstring key)
 {
-    return 0;
+    if (!this->isSectionConfigured)
+	{
+		return -3;
+	}
+
+	if (!this->useWideData)
+	{
+		return -2;
+	}
+
+	if (this->wKeyMap.empty())
+	{
+		return 0;
+	}
+
+	if (this->wKeyMap.contains(key))
+	{
+		try
+		{
+			this->wKeyMap.erase(key);
+			return 1;
+		}
+		catch(const std::exception&)
+		{
+			return -1;
+		}
+	}
+
+    return 2;
 }

@@ -428,8 +428,21 @@ namespace SettingsLib
 				ConfigDataStore comment;
 
 			public:
+				/**
+				 * @brief Create an empty object. This object can't be use as configuration section data.
+				 */
 				ConfigIniSectionData();
+
+				/**
+				 * @brief Create a section data
+				 * @param section Section's name
+				 */
 				ConfigIniSectionData (std::string section);
+
+				/**
+				 * @brief Create a section with wide string support
+				 * @param section Section's name
+				 */
 				ConfigIniSectionData (std::wstring section);
 
 				ConfigIniSectionData (const SettingsLib::Types::ConfigIniSectionData& other);
@@ -440,17 +453,139 @@ namespace SettingsLib
 				SettingsLib::Types::ConfigIniSectionData& operator= (const SettingsLib::Types::ConfigIniSectionData& other);
 				SettingsLib::Types::ConfigIniSectionData& operator= (SettingsLib::Types::ConfigIniSectionData&& other) noexcept;
 
-				std::string getSectionName();
-				std::wstring getSectionNameW();
+				/**
+				 * @brief Get the section's name
+				 * @param sectionName Pointer to string to hold the section's name
+				 * @return -3 if the sectionName is a nullptr.
+				 * @return -2 if the object if configured to use wstring.
+				 * @return -1 if the object is not configured.
+				 * @return 0 if the sectionName wasn't copied into the pointer data.
+				 * @return 1 if the data was successfully copied into the pointer.
+				 */
+				int getSectionName (std::string* sectionName);
 
+				/**
+				 * @brief Get the section's name
+				 * @param sectionName Pointer to string to hold the section's name
+				 * @return -3 if the sectionName is a nullptr.
+				 * @return -2 if the object if configured to use string.
+				 * @return -1 if the object is not configured.
+				 * @return 0 if the sectionName wasn't copied into the pointer data.
+				 * @return 1 if the data was successfully copied into the pointer.
+				 */
+				int getSectionName (std::wstring* sectionName);
+
+				/**
+				 * @brief Get the INI data from Section's database.
+				 * @param key Key name
+				 * @param iniData Pointer that will holds the reference to database or a copy of the data.
+				 * @return -2 if the object is configured to use wstring.
+				 * @return -1 if the object is not configured.
+				 * @return 0 if the key doesn't exist.
+				 * @return 1 if the data was copied into the pointer or the reference address was send.
+				 */
 				int getIniData (std::string key, SettingsLib::Types::ConfigIniData* iniData);
+
+				/**
+				 * @brief Get the INI data from Section's database.
+				 * @param key Key name
+				 * @param iniData Pointer that will holds the reference to database or a copy of the data.
+				 * @return -2 if the object is configured to use wstring.
+				 * @return -1 if the object is not configured.
+				 * @return 0 if the key doesn't exist.
+				 * @return 1 if the data was copied into the pointer or the reference address was send.
+				 */
 				int getIniData (std::wstring key, SettingsLib::Types::ConfigIniData* iniData);
 
+				/**
+				 * @brief Get the ConfigIniData reference from the database.
+				 * @param key key name. 
+				 * @return Return a reference value if the key exist. Otherwise if the object if not configured, using wstring or the database is empty, the return will be nullptr.
+				 * @note Careful when manipulating the data. Only call to destroy the iniData from the section class methods. If the pointer reference if not necessary anymore, set it as nullptr.
+				 */
+				SettingsLib::Types::ConfigIniData* getIniEntryRef (std::string key);
+
+				/**
+				 * @brief Get the ConfigIniData reference from the database.
+				 * @param key key name. 
+				 * @return Return a reference value if the key exist. Otherwise if the object if not configured, using wstring or the database is empty, the return will be nullptr.
+				 * @note Careful when manipulating the data. Only call to destroy the iniData from the section class methods. If the pointer reference if not necessary anymore, set it as nullptr.
+				 */
+				SettingsLib::Types::ConfigIniData* getIniEntryRef (std::wstring key);
+
+				/**
+				 * @brief Get the INI database size. This method verify the type of configuration use (string/wstring) and select the correct database to extract the information.
+				 * @return Return the size of the database used in section.
+				 * @note If the object is not configured the return will be zero.
+				 */
+				size_t getIniDatabaseSize();
+
+				/**
+				 * @brief Check if the object is configured
+				 */
+				bool isConfigured();
+
+				/**
+				 * @brief Check if the object is configured to use wstring
+				 */
 				bool isWideData();
 
+				/**
+				 * @brief Add a new configuration ini data into the section's database
+				 * @param data Configuration ini data the will be part of the section.
+				 * @return -3 if the section object is not configured.
+				 * @return -2 if the section is configured to use string/wstring and the new data doesn't correspond with the same configuration.
+				 * @return -1 if an exception was found.
+				 * @return 0 if fail to get the key information from the new ConfigIniData.
+				 * @return 1 if the configuration was added as a new entry into the database.
+				 * @return 2 if the configuration was found in database and was updated with the new data.
+				 */
 				int addData (SettingsLib::Types::ConfigIniData& data);
 
+				/**
+				 * @brief Verify if the section contains a key
+				 * @param key Key name
+				 * @return -3 if the object is not configured.
+				 * @return -2 if the object is defined to use wstring.
+				 * @return -1 if the database is empty.
+				 * @return 0 if the entry wasn't found in the database.
+				 * @return 1 if the entry was found in the database.
+				 */
+				int contains (std::string key);
+
+				/**
+				 * @brief Verify if the section contains a key
+				 * @param key Key name
+				 * @return -3 if the object is not configured.
+				 * @return -2 if the object is defined to use string.
+				 * @return -1 if the database is empty.
+				 * @return 0 if the entry wasn't found in the database.
+				 * @return 1 if the entry was found in the database.
+				 */
+				int contains (std::wstring key);
+
+				/**
+				 * @brief Remove an INI configuration data entry from section data
+				 * @param key Key name
+				 * @return -3 if the object is not configured.
+				 * @return -2 if the object is defined to use wstring.
+				 * @return -1 if an exception occur.
+				 * @return 0 if the database is empty.
+				 * @return 1 if the entry was found and removed from database.
+				 * @return 2 if the key wasn't found in the database.
+				 */
 				int remData (std::string key);
+
+				/**
+				 * @brief Remove an INI configuration data entry from section data
+				 * @param key Key name
+				 * @return -3 if the object is not configured.
+				 * @return -2 if the object is defined to use string.
+				 * @return -1 if an exception occur.
+				 * @return 0 if the database is empty.
+				 * @return 1 if the entry was found and removed from database.
+				 * @return 2 if the key wasn't found in the database.
+				 */
 				int remData (std::wstring key);
 		};
 	}
