@@ -1308,7 +1308,7 @@ int SettingsLib::Tools::Ini::convertValue(std::string* rawValue, SettingsLib::Ty
 	return conversionStatus;
 }
 
-SETTINGS_LIB_API long long SettingsLib::Tools::Ini::convertValue2Container(std::string *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
+long long SettingsLib::Tools::Ini::convertValue2Container(std::string *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
 {
 	// Verify if the pointers are nullptr:
 
@@ -1521,7 +1521,7 @@ SETTINGS_LIB_API long long SettingsLib::Tools::Ini::convertValue2Container(std::
 	}
 }
 
-SETTINGS_LIB_API int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newStr, bool trimBegin, bool trimEnd)
+int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newStr, bool trimBegin, bool trimEnd)
 {
 	// Verify if the pointers are nullptr:
 
@@ -1613,4 +1613,416 @@ SETTINGS_LIB_API int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, 
 	*newStr = buffer;
 
     return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
+}
+
+int SettingsLib::Tools::Ini::convertDataStore2Str(SettingsLib::Types::ConfigDataStore *data, std::string *strValue)
+{
+    if (data == nullptr)
+	{
+		return -1;
+	}
+
+	if (strValue == nullptr)
+	{
+		return -2;
+	}
+
+	SettingsLib::Types::ConfigDataType type = data->getDataType();
+
+	switch (type)
+	{
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING:
+		{
+			return -4;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL:
+		{
+			return -3;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY:
+		{
+			*strValue = "";
+			return 0;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER:
+		{
+			unsigned long long ull = 0;
+			if (data->getData(&ull) == 1)
+			{
+				*strValue = std::to_string(ull);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
+		{
+			long long ll = 0;
+			if (data->getData(&ll) == 1)
+			{
+				*strValue = std::to_string(ll);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT:
+		{
+			double d = 0.0;
+			if (data->getData(&d) == 1)
+			{
+				*strValue = std::to_string(d);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING:
+		{
+			std::string s;
+			if (data->getData(&s) == 1)
+			{
+				*strValue = s;
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING:
+		{
+			return -5;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN:
+		{
+			bool b = false;
+			if (data->getData(&b) == 1)
+			{
+				if (b)
+				{
+					*strValue = SETTINGS_INI_DATA_TYPE_BOOL_TRUE;
+				}
+				else
+				{
+					*strValue = SETTINGS_INI_DATA_TYPE_BOOL_FALSE;
+				}
+
+				return 0;
+			}
+
+			return 1;
+		}
+		default:
+		{
+			return -6;	// Unknown value was send to test the type
+		}
+	}
+}
+
+int SettingsLib::Tools::Ini::convertDataStore2Str(SettingsLib::Types::ConfigDataStore *data, std::wstring *strValue)
+{
+    if (data == nullptr)
+	{
+		return -1;
+	}
+
+	if (strValue == nullptr)
+	{
+		return -2;
+	}
+
+	SettingsLib::Types::ConfigDataType type = data->getDataType();
+
+	switch (type)
+	{
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING:
+		{
+			return -4;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL:
+		{
+			return -3;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY:
+		{
+			*strValue = L"";
+			return 0;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER:
+		{
+			unsigned long long ull = 0;
+			if (data->getData(&ull) == 1)
+			{
+				*strValue = std::to_wstring(ull);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
+		{
+			long long ll = 0;
+			if (data->getData(&ll) == 1)
+			{
+				*strValue = std::to_wstring(ll);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT:
+		{
+			double d = 0.0;
+			if (data->getData(&d) == 1)
+			{
+				*strValue = std::to_wstring(d);
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING:
+		{
+			return -5;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING:
+		{
+			std::wstring w;
+			if (data->getData(&w) == 1)
+			{
+				*strValue = w;
+				return 0;
+			}
+			
+			return 1;
+		}
+		case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN:
+		{
+			bool b = false;
+			if (data->getData(&b) == 1)
+			{
+				if (b)
+				{
+					*strValue = SETTINGS_INI_DATA_TYPE_BOOL_TRUE_W;
+				}
+				else
+				{
+					*strValue = SETTINGS_INI_DATA_TYPE_BOOL_FALSE_W;
+				}
+
+				return 0;
+			}
+
+			return 1;
+		}
+		default:
+		{
+			return -6;	// Unknown value was send to test the type
+		}
+	}
+}
+
+int SettingsLib::Tools::Ini::convertObj2CfgLine(SettingsLib::Types::ConfigIniData *iniData, std::string *line)
+{
+	if (iniData == nullptr)
+	{
+		return -1;
+	}
+
+	if (line == nullptr)
+	{
+		return -2;
+	}
+
+	if (iniData->isWideData())
+	{
+		return 1;
+	}
+
+	std::string localLine;
+
+	std::string key;
+	std::string data;
+	std::string comment;
+
+	SettingsLib::ErrorCodes::ConfigIniStatus keyStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getKey(&key));
+	SettingsLib::ErrorCodes::ConfigIniStatus commentStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getComment(&comment));
+	std::vector<std::string> vStrData;
+
+	if (iniData->isContainer())
+	{
+		size_t vDataMaxSize = iniData->getContainerSize();
+
+		for (size_t i = 0; i < vDataMaxSize; i++)
+		{
+			std::string tmpValLine;
+			SettingsLib::Types::ConfigDataStore data;
+
+			if (iniData->getData(&data, i) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				if (SettingsLib::Tools::Ini::convertDataStore2Str(&data, &tmpValLine) == 0)
+				{
+					vStrData.push_back(tmpValLine);
+				}
+			}
+		}
+	}
+	else
+	{
+		SettingsLib::Types::ConfigDataStore data;
+		SettingsLib::ErrorCodes::ConfigIniStatus dataStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getData(&data));
+		std::string tmpValLine;
+
+		if (SettingsLib::Tools::Ini::convertDataStore2Str(&data, &tmpValLine) == 0)
+		{
+			vStrData.push_back(tmpValLine);
+		}
+	}
+
+	if (iniData->isContainer())
+	{
+		data += SETTINGS_INI_CONTAINER_OPEN_MARK;
+	}
+
+	for (size_t i = 0; i < vStrData.size(); i++)
+	{
+		if (i + 1 == vStrData.size())
+		{
+			data += vStrData.at(i);
+		}
+		else
+		{
+			data += vStrData.at(i);
+			data += SETTINGS_INI_CONTAINER_VALUE_SEPARATOR;
+		}
+	}
+
+	if (iniData->isContainer())
+	{
+		data += SETTINGS_INI_CONTAINER_CLOSE_MARK;
+	}
+
+	if (keyStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+	{
+		localLine += key;
+		localLine += SETTINGS_INI_DATA_MARK;
+	}
+
+	if (!vStrData.empty())
+	{
+		localLine += data;
+	}
+
+	if (!comment.empty())
+	{
+		localLine += SETTINGS_INI_SPACE_CHAR;
+		localLine += SETTINGS_INI_COMMENT_MARK2;
+		localLine += comment;
+	}
+
+	*line = localLine;
+
+    return 0;
+}
+
+int SettingsLib::Tools::Ini::convertObj2CfgLine(SettingsLib::Types::ConfigIniData *iniData, std::wstring *line)
+{
+	if (iniData == nullptr)
+	{
+		return -1;
+	}
+
+	if (line == nullptr)
+	{
+		return -2;
+	}
+
+	if (!iniData->isWideData())
+	{
+		return 1;
+	}
+
+	std::wstring localLine;
+
+	std::wstring key;
+	std::wstring data;
+	std::wstring comment;
+
+	SettingsLib::ErrorCodes::ConfigIniStatus keyStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getKey(&key));
+	SettingsLib::ErrorCodes::ConfigIniStatus commentStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getComment(&comment));
+	std::vector<std::wstring> vStrData;
+
+	if (iniData->isContainer())
+	{
+		size_t vDataMaxSize = iniData->getContainerSize();
+
+		for (size_t i = 0; i < vDataMaxSize; i++)
+		{
+			std::wstring tmpValLine;
+			SettingsLib::Types::ConfigDataStore data;
+
+			if (iniData->getData(&data, i) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				if (SettingsLib::Tools::Ini::convertDataStore2Str(&data, &tmpValLine) == 0)
+				{
+					vStrData.push_back(tmpValLine);
+				}
+			}
+		}
+	}
+	else
+	{
+		SettingsLib::Types::ConfigDataStore data;
+		SettingsLib::ErrorCodes::ConfigIniStatus dataStatus = static_cast<SettingsLib::ErrorCodes::ConfigIniStatus>(iniData->getData(&data));
+		std::wstring tmpValLine;
+
+		if (SettingsLib::Tools::Ini::convertDataStore2Str(&data, &tmpValLine) == 0)
+		{
+			vStrData.push_back(tmpValLine);
+		}
+	}
+
+	if (iniData->isContainer())
+	{
+		data += SETTINGS_INI_CONTAINER_OPEN_MARK_W;
+	}
+
+	for (size_t i = 0; i < vStrData.size(); i++)
+	{
+		if (i + 1 == vStrData.size())
+		{
+			data += vStrData.at(i);
+		}
+		else
+		{
+			data += vStrData.at(i);
+			data += SETTINGS_INI_CONTAINER_VALUE_SEPARATOR_W;
+		}
+	}
+
+	if (iniData->isContainer())
+	{
+		data += SETTINGS_INI_CONTAINER_CLOSE_MARK_W;
+	}
+
+	if (keyStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+	{
+		localLine += key;
+		localLine += SETTINGS_INI_DATA_MARK_W;
+	}
+
+	if (!vStrData.empty())
+	{
+		localLine += data;
+	}
+
+	if (!comment.empty())
+	{
+		localLine += SETTINGS_INI_SPACE_CHAR_W;
+		localLine += SETTINGS_INI_COMMENT_MARK2_W;
+		localLine += comment;
+	}
+
+	*line = localLine;
+
+    return 0;
 }
