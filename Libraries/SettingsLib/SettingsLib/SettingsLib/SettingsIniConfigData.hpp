@@ -314,6 +314,18 @@ namespace SettingsLib
 				int getData (SettingsLib::Types::ConfigDataStore* data, size_t pos);
 
 				/**
+				 * @brief Get access to the all data inside the container.
+				 * @param data ConfigDataStore pointer
+				 * @return CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR if key parameter is a nullptr.
+				 * @return CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED if the object was not configured. This can happen when a empty object is created or was reset and a key was not defined.
+				 * @return CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE if a container is not available inside the object.
+				 * @return CONFIG_INI_STATUS_SUCCESSFUL_OPERATION in a successful operation.
+				 * @return CONFIG_INI_STATUS_GET_DATA_FAIL when fail to associate the data to data parameter.
+				 * @return CONFIG_INI_STATUS_NO_DATA_AVAILABLE no data available inside the object.
+				 */
+				int getContainer (std::vector<SettingsLib::Types::ConfigDataStore>* vData);
+
+				/**
 				 * @brief Insert a new data into the container.
 				 * @param data ConfigDataStore data
 				 * @param pos Container's data position

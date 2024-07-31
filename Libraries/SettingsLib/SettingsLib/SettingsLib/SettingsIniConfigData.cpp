@@ -804,6 +804,39 @@ int SettingsLib::Types::ConfigIniData::getData(SettingsLib::Types::ConfigDataSto
 	return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE;
 }
 
+int SettingsLib::Types::ConfigIniData::getContainer(std::vector<SettingsLib::Types::ConfigDataStore> *vData)
+{
+	if (vData == nullptr)
+	{
+		return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_ERROR_GET_DATA_NULLPTR;
+	}
+
+	if (!this->objWasConfig)
+	{
+		return SettingsLib::ErrorCodes::CONFIG_INI_STATUS_OBJECT_DATA_NOT_CONFIGURED;
+	}
+
+	if (this->hasData())
+	{
+		if (!this->isContainer())
+		{
+			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_CONTAINER_AVAILABLE;
+		}
+
+		try
+		{
+			*vData = *this->vdata.get();
+			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION;
+		}
+		catch(const std::exception&)
+		{
+			return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_GET_DATA_FAIL;
+		}
+	}
+
+	return SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE;
+}
+
 int SettingsLib::Types::ConfigIniData::insertData(SettingsLib::Types::ConfigDataStore data, size_t pos, bool overwrite)
 {
 	if (!this->objWasConfig)
