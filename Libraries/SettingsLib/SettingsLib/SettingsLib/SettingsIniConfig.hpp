@@ -85,6 +85,12 @@ namespace SettingsLib
 				// Methods:
 				//
 
+				int setComment (std::string comment);
+				int setComment (std::wstring comment);
+
+				int getComment (std::string* comment);
+				int getComment (std::wstring* comment);
+
 				//
 				// Non managed methods by ConfigFileStream:
 				//
