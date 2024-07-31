@@ -426,7 +426,7 @@ namespace SettingsLib
 				
 				bool useWideData;					// Control the wide strings
 				bool isSectionConfigured;
-				ConfigDataStore sectionName;
+				SettingsLib::Types::ConfigDataStore sectionName;
 
 				// Section data collection:
 
@@ -437,7 +437,7 @@ namespace SettingsLib
 
 				// Comments for the section:
 
-				ConfigDataStore comment;
+				std::unique_ptr<SettingsLib::Types::ConfigDataStore> comment;
 
 			public:
 				/**
@@ -486,6 +486,64 @@ namespace SettingsLib
 				 * @return 1 if the data was successfully copied into the pointer.
 				 */
 				int getSectionName (std::wstring* sectionName);
+
+				/**
+				 * @brief Get the comments from section.
+				 * @param comment String that will hold the comment.
+				 * @return -6 if the internal data holds another type that is not a string.
+				 * @return -5 if the get comment operation failed.
+				 * @return -4 if the comment if wstring.
+				 * @return -3 if the internal data type was marked as CONFIG_DATA_FAIL.
+				 * @return -2 if the data was marked as CONFIG_DATA_MISSING.
+				 * @return -1 if the comment parameter is nullptr.
+				 * @return 0 if the operation was successful.
+				 * @return 1 if there is no data available in comment.
+				 */
+				int getComment (std::string* comment);
+
+				/**
+				 * @brief Get the comments from section.
+				 * @param comment String that will hold the comment.
+				 * @return -6 if the internal data holds another type that is not a string.
+				 * @return -5 if the get comment operation failed.
+				 * @return -4 if the comment if wstring.
+				 * @return -3 if the internal data type was marked as CONFIG_DATA_FAIL.
+				 * @return -2 if the data was marked as CONFIG_DATA_MISSING.
+				 * @return -1 if the comment parameter is nullptr.
+				 * @return 0 if the operation was successful.
+				 * @return 1 if there is no data available in comment.
+				 */
+				int getComment (std::wstring* comment);
+
+				/**
+				 * @brief Set the comments to the section.
+				 * @param comment String that holds the comment.
+				 * @return -1 if the object is configured to use wstring.
+				 * @return 0 if the operation was successful.
+				 * @return 1 if fail to set the data.
+				 * @return 2 if an exception was occur during the process. The internal data was marked as "FAIL". Use cleanComment method to reset the state.
+				 */
+				int setComment (std::string comment);
+
+				/**
+				 * @brief Set the comments to the section.
+				 * @param comment String that holds the comment.
+				 * @return -1 if the object is configured to use wstring.
+				 * @return 0 if the operation was successful.
+				 * @return 1 if fail to set the data.
+				 * @return 2 if an exception was occur during the process. The internal data was marked as "FAIL". Use cleanComment method to reset the state.
+				 */
+				int setComment (std::wstring comment);
+
+				/**
+				 * @brief Clean the comment.
+				 */
+				bool cleanComment();
+
+				/**
+				 * @brief Verify if the section contains a comment.
+				 */
+				bool hasComment();
 
 				/**
 				 * @brief Get the INI data from Section's database.

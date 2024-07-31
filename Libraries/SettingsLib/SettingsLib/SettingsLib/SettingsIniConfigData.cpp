@@ -1139,7 +1139,10 @@ SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(const ConfigIniSe
 		this->keyMap = other.keyMap;
 	}
 
-	this->comment = other.comment;
+	if (other.comment != nullptr)
+	{
+		this->comment.reset(new SettingsLib::Types::ConfigDataStore(*other.comment));
+	}
 }
 
 SettingsLib::Types::ConfigIniSectionData::ConfigIniSectionData(ConfigIniSectionData &&other) noexcept
@@ -1182,7 +1185,10 @@ SettingsLib::Types::ConfigIniSectionData &SettingsLib::Types::ConfigIniSectionDa
 		this->keyMap = other.keyMap;
 	}
 
-	this->comment = other.comment;
+	if (other.comment != nullptr)
+	{
+		this->comment.reset(new SettingsLib::Types::ConfigDataStore(*other.comment));
+	}
 
 	return *this;
 }
@@ -1256,6 +1262,139 @@ int SettingsLib::Types::ConfigIniSectionData::getSectionName(std::wstring* secti
 	}
 
 	return -1;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::getComment(std::string *comment)
+{
+    if (comment == nullptr)
+	{
+		return -1;
+	}
+
+	SettingsLib::Types::ConfigDataType type = static_cast<SettingsLib::Types::ConfigDataType>(this->comment->getDataType());
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING)
+	{
+		return -2;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	{
+		return -3;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	{
+		return 1;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+	{
+		if (this->useWideData)
+		{
+			return -4;
+		}
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+	{
+		int status = this->comment->getData(comment);
+
+		if (status == 1)
+		{
+			return 0;
+		}
+
+		return -5;
+	}
+
+	return -6;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::getComment(std::wstring *comment)
+{
+    if (comment == nullptr)
+	{
+		return -1;
+	}
+
+	SettingsLib::Types::ConfigDataType type = static_cast<SettingsLib::Types::ConfigDataType>(this->comment->getDataType());
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_MISSING)
+	{
+		return -2;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL)
+	{
+		return -3;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+	{
+		return 1;
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+	{
+		if (this->useWideData)
+		{
+			return -4;
+		}
+	}
+
+	if (type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+	{
+		int status = this->comment->getData(comment);
+
+		if (status == 1)
+		{
+			return 0;
+		}
+
+		return -5;
+	}
+
+	return -6;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::setComment(std::string comment)
+{
+	if (this->useWideData)
+	{
+		return -1;
+	}
+
+	int status = this->comment->setData(comment);
+
+	return status;
+}
+
+int SettingsLib::Types::ConfigIniSectionData::setComment(std::wstring comment)
+{
+	if (!this->useWideData)
+	{
+		return -1;
+	}
+
+	int status = this->comment->setData(comment);
+
+	return status;
+}
+
+bool SettingsLib::Types::ConfigIniSectionData::cleanComment()
+{
+	return this->comment->cleanData();
+}
+
+bool SettingsLib::Types::ConfigIniSectionData::hasComment()
+{
+    if (this->comment == nullptr)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 int SettingsLib::Types::ConfigIniSectionData::getIniData(std::string key, SettingsLib::Types::ConfigIniData *iniData)
