@@ -13,6 +13,21 @@ SettingsLib::Types::ConfigIni::ConfigIni(std::string configName)
 	this->configName.setData(configName);
 }
 
+SettingsLib::Types::ConfigIni::ConfigIni(std::wstring configName)
+{
+
+}
+
+SettingsLib::Types::ConfigIni::ConfigIni(std::filesystem::path configFile, bool readonly)
+{
+	
+}
+
+SettingsLib::Types::ConfigIni::~ConfigIni()
+{
+	
+}
+
 void SettingsLib::Types::ConfigIni::readLine(std::string line)
 {
 	std::string key;
