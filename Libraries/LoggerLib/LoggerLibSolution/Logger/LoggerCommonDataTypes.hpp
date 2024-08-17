@@ -27,7 +27,7 @@
 enum LOGGER_LIB_API LogDataType
 {
 	LOG_NULL_DATA_ENTRY,
-	LOG_INTERGER_ENTRY,
+	LOG_INTEGER_ENTRY,
 	LOG_FLOAT_ENTRY,
 	LOG_STRING_ENTRY,					// Deprecated value. Union string pointer was removed.
 	LOG_DATE_TIME_ENTRY,

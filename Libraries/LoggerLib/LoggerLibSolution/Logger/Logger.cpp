@@ -42,7 +42,7 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 				case '"':
 				case '<':
 				case '>':
-					this->setLogStatus(LoggerError::LOGGER_ERROR_BASE_FILE_NAME_HAS_UNUSPPORTED_CHAR);
+					this->setLogStatus(LoggerError::LOGGER_ERROR_BASE_FILE_NAME_HAS_UNSUPPORTED_CHAR);
 					baseFileNameOk = false;
 					break;
 				default:

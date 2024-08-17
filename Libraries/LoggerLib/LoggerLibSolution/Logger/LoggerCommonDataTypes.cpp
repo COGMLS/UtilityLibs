@@ -12,7 +12,7 @@ LogEntry::LogEntry(std::string title, std::string message, long long data)
 {
 	this->title = title;
 	this->message = message;
-	this->dataType = LogDataType::LOG_INTERGER_ENTRY;
+	this->dataType = LogDataType::LOG_INTEGER_ENTRY;
 	this->data.LOG_ENTRY_INT = data;
 }
 
@@ -59,7 +59,7 @@ LogEntry::LogEntry(const LogEntry& other)
 		{
 			break;
 		}
-		case LogDataType::LOG_INTERGER_ENTRY:
+		case LogDataType::LOG_INTEGER_ENTRY:
 		{
 			this->data.LOG_ENTRY_INT = other.data.LOG_ENTRY_INT;
 			break;
@@ -100,7 +100,7 @@ LogEntry::LogEntry(LogEntry&& other) noexcept
 		{
 			break;
 		}
-		case LogDataType::LOG_INTERGER_ENTRY:
+		case LogDataType::LOG_INTEGER_ENTRY:
 		{
 			this->data.LOG_ENTRY_INT = other.data.LOG_ENTRY_INT;
 			break;
@@ -167,7 +167,7 @@ bool LogEntry::operator==(const LogEntry& other) const
 			{
 				break;
 			}
-			case LogDataType::LOG_INTERGER_ENTRY:
+			case LogDataType::LOG_INTEGER_ENTRY:
 			{
 				if (this->data.LOG_ENTRY_INT != other.data.LOG_ENTRY_INT)
 				{
@@ -236,7 +236,7 @@ std::string LogEntry::getEntry()
 
 	switch (this->dataType)
 	{
-		case LogDataType::LOG_INTERGER_ENTRY:
+		case LogDataType::LOG_INTEGER_ENTRY:
 		{
 			entryLine += std::to_string(this->data.LOG_ENTRY_INT);
 			break;
@@ -286,7 +286,7 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 
 	switch (obj.dataType)
 	{
-		case LogDataType::LOG_INTERGER_ENTRY:
+		case LogDataType::LOG_INTEGER_ENTRY:
 		{
 			entryLine += std::to_string(obj.data.LOG_ENTRY_INT);
 			break;
