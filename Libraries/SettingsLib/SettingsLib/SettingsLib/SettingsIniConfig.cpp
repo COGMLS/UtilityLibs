@@ -152,3 +152,94 @@ void SettingsLib::Types::ConfigIni::readLine(std::string line)
 		}
 	}
 }
+
+SettingsLib::Types::ConfigFileStream *SettingsLib::Types::ConfigIni::getConfigFileStream()
+{
+	if (this->isUsingConfigFileStream())
+	{
+		return this->cfgFileStream.get();
+	}
+
+    return nullptr;
+}
+
+int SettingsLib::Types::ConfigIni::setConfigName(std::string newName)
+{
+	if (this->isWideData())
+	{
+		return -1;
+	}
+
+	// Check if the newName is also a path. Otherwise, use current path:
+
+	std::filesystem::path test = newName;
+	std::filesystem::path currentPath = std::filesystem::current_path();
+
+	///TODO: MAKE A PATH TEST TO DETECT IF THE NEW NAME HAS A PATH OR USE CURRENT PATH
+
+	// Backup the data:
+	std::filesystem::path originalPath = this->configFile;
+	std::string oldName;
+
+	int strNameStatus = this->configName.getData(&oldName);
+
+	if (strNameStatus < 0 && strNameStatus == 2)
+	{
+		return 1;	// Fail or it is another datatype
+	}
+
+	// If set the data was successful, check if the configuration path is used:
+	if (this->configName.setData(newName) == 0)
+	{
+		if (!this->configFile.empty())
+		{
+			std::filesystem::path newPath = this->configFile.parent_path() / std::filesystem::path(newName);
+
+			// Test if the new path already exits
+			if (std::filesystem::exists(newPath))
+			{
+				return 2;		// The path already exists
+			}
+
+			// Set the new name:
+			if (this->configName.setData(newName) != 0)
+			{
+				return 3;	// Fail to set a new configuration file
+			}
+
+			this->cfgFileStream->setKeepCfgStore(true);
+			
+			std::vector<std::string> tmpConfigLines;
+			
+			if (this->cfgFileStream->getConfigLines(&tmpConfigLines) != 1)
+			{
+				// Restore all modifications:
+				this->configName = oldName;
+				return 4;		// Fail to store the configuration lines
+			}
+			
+			this->cfgFileStream->closeConfigStream();
+			this->cfgFileStream.reset(nullptr);
+			
+			this->configFile = newPath;
+			this->cfgFileStream.reset(new SettingsLib::Types::ConfigFileStream(this->configFile, false, false, true));
+			
+			if (!this->cfgFileStream->isConfigStreamOpen())
+			{
+				if (!this->cfgFileStream->openConfigStream(true, false))
+				{
+					return 5;	// Fail to open the configuration stream
+				}
+			}
+
+			this->cfgFileStream->refreshCfgStore(&tmpConfigLines);
+			this->cfgFileStream->saveStoreOnFile();
+		}
+		else
+		{
+			// In case the configuration is empty, try to create the file or use a existing one depending on the path:
+		}
+	}
+
+    return 0;
+}

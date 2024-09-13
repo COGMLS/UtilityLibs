@@ -59,7 +59,7 @@ namespace SettingsLib
 				std::unique_ptr<SettingsLib::Types::ConfigFileStream> cfgFileStream;
 
 				//
-				// Ini Data:
+				// Ini Database:
 				//
 
 				std::string lastSectionSearch;
@@ -74,9 +74,31 @@ namespace SettingsLib
 				// Constructors and destructor:
 				//
 
+				/**
+				 * @brief Create an empty INI configuration object
+				 */
 				ConfigIni();
+
+
+				/**
+				 * @brief Create an INI configuration object with an specific name
+				 * @param configName Configuration name for INI object.
+				 */
 				ConfigIni (std::string configName);
+
+				/**
+				 * @brief Create an INI configuration object with an specific name with wide strings
+				 * @param configName Configuration name for INI object.
+				 */
 				ConfigIni (std::wstring configName);
+
+
+				/**
+				 * @brief Create an INI configuration object with an specific name
+				 * @param configFile Configuration file's path
+				 * @param readonly Define if the configuration file will be able to accept modifications
+				 * @note If the file doesn't exist, it will be created and if readonly was set as true, will be set to false.
+				 */
 				ConfigIni (std::filesystem::path configFile, bool readonly);
 
 				~ConfigIni();
@@ -85,44 +107,95 @@ namespace SettingsLib
 				// Methods:
 				//
 
-				int setComment (std::string comment);
-				int setComment (std::wstring comment);
-
-				int getComment (std::string* comment);
-				int getComment (std::wstring* comment);
-
 				//
 				// Non managed methods by ConfigFileStream:
 				//
 
+				/**
+				 * @brief Read an INI configuration line
+				 */
 				void readLine (std::string line);
+
+				/**
+				 * @brief Read an INI configuration line
+				 * @note If the object wasn't set to work with wide strings, the line won't be read.
+				 */
 				void readLine (std::wstring line);
 
 				//
 				// Managed methods by ConfigFileStream:
 				//
 
+				/**
+				 * @brief Get direct access to the configuration file stream
+				 * @return Return a ConfigurationFileStream pointer if the file is opened
+				 */
+				SettingsLib::Types::ConfigFileStream* getConfigFileStream();
+
 				//
 				// Configuration Database Methods:
 				//
 
-				int getSectionList (std::vector<std::string>& list);
-				int getSectionList (std::vector<std::wstring>& list);
+				/**
+				 * @brief Define the configuration name
+				 * @param newName New name for the object
+				 * @return 
+				 */
+				int setConfigName (std::string newName);
+				int setConfigName (std::wstring newName);
 
-				int getSection (std::string sectionName, SettingsLib::Types::ConfigIniSectionData* section, bool sendCopy = true);
-				int getSection (std::wstring sectionName, SettingsLib::Types::ConfigIniSectionData* section, bool sendCopy = true);
+				/**
+				 * @brief Get the name defined to the object
+				 * @param configName String to hold the configuration name
+				 * @return 
+				 */
+				int getConfigName (std::string* configName);
+				int getConfigName (std::wstring* configName);
 
-				int getEntry (std::string sectionName, std::string entryName, SettingsLib::Types::ConfigIniData* entry, bool sendCopy = true);
-				int getEntry (std::wstring sectionName, std::wstring entryName, SettingsLib::Types::ConfigIniData* entry, bool sendCopy = true);
+				/**
+				 * @brief Get object status to work with wide strings
+				 */
+				bool isWideData();
 
-				int setSection (std::string sectionName);
-				int setSection (std::wstring sectionName);
+				bool isFileConfig();
+
+				bool isUsingConfigFileStream();
+
+				int saveFile();
+
+				int loadFile(bool discardChanges);
 
 				//
 				// Configuration Database Management:
 				//
 
+				int getSectionList (std::vector<std::string>& list);
+				int getSectionList (std::vector<std::wstring>& list);
 
+				int getSection (std::string sectionName, SettingsLib::Types::ConfigIniSectionData* section);
+				int getSection (std::wstring sectionName, SettingsLib::Types::ConfigIniSectionData* section);
+
+				int getEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData* entry);
+				int getEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData* entry);
+
+				int setSection (SettingsLib::Types::ConfigIniSectionData section);
+				int setSection (SettingsLib::Types::ConfigIniSectionData* section);
+
+				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData entry);
+				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData* entry);
+				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData entry);
+				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData* entry);
+
+				int removeSection (std::string sectionName);
+				int removeSection (std::wstring sectionName);
+
+				int removeEntry (std::string sectionName, std::string keyName);
+				int removeEntry (std::wstring sectionName, std::wstring keyName);
+				
+				size_t popSection();
+				size_t popKeys();
+				size_t popSectionKeys (std::string sectionName);
+				size_t popSectionKeys (std::wstring sectionName);
 		};
 	}
 }
