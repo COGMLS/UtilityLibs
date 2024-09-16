@@ -2,7 +2,7 @@
 
 ## About Utility Libraries repository:
 
-This repository is destinated to store the development of important common utility libraries used in projects like settings, directory and file management, but also for other purposes that can be commonly used in projects.
+This repository is destined to store the development of important common utility libraries used in projects like settings, directory and file management, but also for other purposes that can be commonly used in projects.
 
 > **NOTE:** This repository contains libraries that may be part of other projects and was ported to here. For those libraries, the code was generalized to allow a better approach to other solutions.
 
@@ -12,7 +12,7 @@ This repository is destinated to store the development of important common utili
 
 | Name | Documentation | Version | Notes |
 | ---- | ------------- | ------- | ----- |
-| LoggerLib | [LoggerLibDoc.md](/Libraries/LoggerLib/LoggerLib.md) | 1.1.0-rc | |
+| LoggerLib | [LoggerLibDoc.md](/Libraries/LoggerLib/README.md) | 1.1.0-rc | LoggerLib v1 received a new release part of migration to CMake |
 | SettingsLib | [SettingsLibDoc.md](/Libraries/SettingsLib/SettingsLib.md) | 1.4.15-beta | |
 
 ## License
