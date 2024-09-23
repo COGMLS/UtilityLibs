@@ -92,14 +92,23 @@ namespace SettingsLib
 				 */
 				ConfigIni (std::wstring configName);
 
-
 				/**
 				 * @brief Create an INI configuration object with an specific name
 				 * @param configFile Configuration file's path
 				 * @param readonly Define if the configuration file will be able to accept modifications
 				 * @note If the file doesn't exist, it will be created and if readonly was set as true, will be set to false.
+				 * @note The object will be created using strings.
 				 */
 				ConfigIni (std::filesystem::path configFile, bool readonly);
+
+				/**
+				 * @brief Create an INI configuration object with an specific name
+				 * @param configFile Configuration file's path
+				 * @param readonly Define if the configuration file will be able to accept modifications
+				 * @param useWideString Define to use wide strings
+				 * @note If the file doesn't exist, it will be created and if readonly was set as true, will be set to false.
+				 */
+				ConfigIni (std::filesystem::path configFile, bool readonly, bool useWideString);
 
 				~ConfigIni();
 
@@ -157,12 +166,27 @@ namespace SettingsLib
 				 */
 				bool isWideData();
 
-				bool isFileConfig();
+				/**
+				 * @brief Check if the configuration file object is configured
+				 */
+				bool isConfigFileOk();
 
+				/**
+				 * @brief Check if is using the ConfigFileStream
+				 */
 				bool isUsingConfigFileStream();
 
+				/**
+				 * @brief Save the database in the memory into the configuration file
+				 * @return 
+				 */
 				int saveFile();
 
+				/**
+				 * @brief Load the database inside the file into the memory.
+				 * @param discardChanges If the database was marked as "modified" set it as true to discard the unsaved changes. If no changed was made, it won't take any effect.
+				 * @return 
+				 */
 				int loadFile(bool discardChanges);
 
 				//
