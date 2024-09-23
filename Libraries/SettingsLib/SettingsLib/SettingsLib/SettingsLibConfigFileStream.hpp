@@ -389,6 +389,11 @@ namespace SettingsLib
 				bool isReadonlyMode();
 
 				/**
+				 * @brief Verify if the configuration file stream object is ok.
+				 */
+				bool isConfigStreamOk();
+
+				/**
 				 * @brief Define the readonly mode to protect the object to accept modifications on file stream.
 				 * @param readonly True define enable the readonly mode.
 				 */

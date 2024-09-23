@@ -997,6 +997,11 @@ bool SettingsLib::Types::ConfigFileStream::isReadonlyMode()
     return this->isReadonly;
 }
 
+bool SettingsLib::Types::ConfigFileStream::isConfigStreamOk()
+{
+    return this->isCfgFileOk;
+}
+
 void SettingsLib::Types::ConfigFileStream::setReadonly(bool readonly)
 {
 	this->isReadonly = readonly;
