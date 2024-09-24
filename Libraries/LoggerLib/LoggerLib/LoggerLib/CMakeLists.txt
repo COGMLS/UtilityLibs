@@ -57,11 +57,12 @@ if (WIN32)
 	add_library(
 					LoggerLib
 					SHARED
-					"dllmain.hpp" "dllmain.cpp"
+					"dllmain.cpp"
 					"pch.h" "pch.cpp"
 					"Logger.hpp" "Logger.cpp"
 					"LoggerCommonDataTypes.hpp" "LoggerCommonDataTypes.cpp"
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
+					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibDef.hpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
@@ -72,6 +73,7 @@ else()
 					"Logger.hpp" "Logger.cpp"
 					"LoggerCommonDataTypes.hpp" "LoggerCommonDataTypes.cpp"
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
+					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibDef.hpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
