@@ -35,7 +35,7 @@ add_compile_definitions(UNICODE)
 add_compile_definitions(_UNICODE)
 
 # Defined the project:
-project(LoggerLib VERSION 3.0.0 DESCRIPTION "Logger Library.")
+project(LoggerLib VERSION 3.1.0 DESCRIPTION "Logger Library.")
 
 ###########################################################
 #
