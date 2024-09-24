@@ -12,13 +12,16 @@
 #include "LoggerDateTime.hpp"
 
 #define LOGGER_LOG_FILE_TYPE								".log"
+#define LOGGER_LOG_FILE_TYPE_W								L".log"
 
 #ifdef _WIN32
 	#define LOGGER_CONFIG_LINE_END							'\r\n'
+	#define LOGGER_CONFIG_LINE_END_W						L'\r\n'
 	#define LOGGER_DIRECTORY_PATH_SEPARATOR					"\\"
 	#define LOGGER_DIRECTORY_PATH_SEPARATOR_W				L"\\"
 #else
 	#define LOGGER_CONFIG_LINE_END							'\n'
+	#define LOGGER_CONFIG_LINE_END_W						L'\r\n'
 	#define LOGGER_DIRECTORY_PATH_SEPARATOR					"/"
 	#define LOGGER_DIRECTORY_PATH_SEPARATOR_W				L"/"
 #endif
@@ -111,6 +114,76 @@ class LOGGER_LIB_API LogEntry
 		std::string getEntry();
 
 		friend std::ostream& operator<<(std::ostream& os, const LogEntry& obj);
+};
+
+/// @brief Log entry data
+class LOGGER_LIB_API LogEntryW
+{
+	private:
+		std::wstring title;			// Log title
+		std::wstring message;		// Log message
+		LogEntryData data;			// Log data
+		LogDataType dataType;		// Log data type id
+		std::wstring strData;		// Log additional string data
+	public:
+		/// @brief Create a log entry
+		/// @param title Log entry title
+		/// @param message Log entry message
+		LogEntryW(std::wstring title, std::wstring message);
+
+		/// @brief Create a log entry with additional data
+		/// @param title Log entry title
+		/// @param message Log entry message
+		/// @param data Log entry data
+		LogEntryW(std::wstring title, std::wstring message, long long data);
+
+		/// @brief Create a log entry with additional data
+		/// @param title Log entry title
+		/// @param message Log entry message
+		/// @param data Log entry data
+		LogEntryW(std::wstring title, std::wstring message, double data);
+
+		/// @brief Create a log entry with additional data
+		/// @param title Log entry title
+		/// @param message Log entry message
+		/// @param data Log entry data
+		LogEntryW(std::wstring title, std::wstring message, std::wstring data);
+		
+		/// @brief Create a log entry with additional data
+		/// @param title Log entry title
+		/// @param message Log entry message
+		/// @param data Log entry data
+		/// @param useHighPrecisionTime Use milliseconds to date time log entry
+		LogEntryW(std::wstring title, std::wstring message, LoggerLocalDateTime data, bool useHighPrecisionTime = false);
+
+		/// @brief Copy a log entry to another
+		/// @param other Other log entry data reference
+		LogEntryW(const LogEntryW& other);
+
+		/// @brief Move a log entry to another
+		/// @param other Other log entry data that will receive the reference data
+		LogEntryW(LogEntryW&& other) noexcept;
+
+		/// @brief Copy assignment
+		/// @param other Other log entry reference data
+		LogEntryW& operator=(const LogEntryW& other);
+
+		/// @brief Move assignment
+		/// @param other Other log entry reference data
+		LogEntryW& operator=(LogEntryW&& other) noexcept;
+
+		/// @brief Equality operator
+		/// @param other Other log entry reference data
+		/// @return True if is the same memory reference for all data, otherwise will be a False value
+		bool operator==(const LogEntryW& other) const;
+
+		~LogEntryW();
+
+		/// @brief Export the log entry as a string
+		/// @return 
+		std::wstring getEntry();
+
+		friend std::wostream& operator<<(std::wostream& os, const LogEntryW& obj);
 };
 
 #endif // !LOGGER_COMMON_DATATYPES_HPP

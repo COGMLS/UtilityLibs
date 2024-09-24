@@ -37,4 +37,11 @@ LoggerLocalDateTime LOGGER_LIB_API getLoggerDateTime();
 /// @return Converted date and time information
 std::string LOGGER_LIB_API convertDateTime2LogStrEntry(LoggerLocalDateTime& dt, bool exportsToFileSystem = false, bool useHighPrecisionTime = false);
 
+/// @brief Convert the custom local date and time struct to string for log entries, using ISO 8601 format
+/// @param dt Date and time information that will be converted to ISO 8601
+/// @param exportsToFileSystem Convert the date and time format not using signal ':'
+/// @param useHighPrecision Use milliseconds in the time conversion
+/// @return Converted date and time information
+std::wstring LOGGER_LIB_API convertDateTime2LogStrEntryW(LoggerLocalDateTime& dt, bool exportsToFileSystem = false, bool useHighPrecisionTime = false);
+
 #endif // !LOGGER_DATE_TIME_HPP

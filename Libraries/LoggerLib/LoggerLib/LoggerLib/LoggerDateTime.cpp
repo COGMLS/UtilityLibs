@@ -124,3 +124,91 @@ std::string convertDateTime2LogStrEntry(LoggerLocalDateTime& dt, bool exportsToF
 
 	return logDateTimeEntry;
 }
+
+std::wstring convertDateTime2LogStrEntryW(LoggerLocalDateTime& dt, bool exportsToFileSystem, bool useHighPrecisionTime)
+{
+	std::wstring logDateTimeEntry;
+
+	logDateTimeEntry = std::to_wstring((int)dt.calendar.year()) + L"-";
+
+	if ((unsigned int)dt.calendar.month() < 10)
+	{
+		logDateTimeEntry += L'0';
+	}
+
+	logDateTimeEntry += std::to_wstring((unsigned int)dt.calendar.month()) + L"-";
+
+	if ((unsigned int)dt.calendar.day() < 10)
+	{
+		logDateTimeEntry += L'0';
+	}
+
+	logDateTimeEntry += std::to_wstring((unsigned int)dt.calendar.day()) + L"T";
+
+
+	if (dt.hours.count() < 10)
+	{
+		logDateTimeEntry += L'0';
+	}
+
+	logDateTimeEntry += std::to_wstring(dt.hours.count());
+
+	if (exportsToFileSystem)
+	{
+		logDateTimeEntry += L"-";
+	}
+	else
+	{
+		logDateTimeEntry += L":";
+	}
+
+	if (dt.minutes.count() < 10)
+	{
+		logDateTimeEntry += L'0';
+	}
+
+	logDateTimeEntry += std::to_wstring(dt.minutes.count());
+
+	if (exportsToFileSystem)
+	{
+		logDateTimeEntry += L"-";
+	}
+	else
+	{
+		logDateTimeEntry += L":";
+	}
+
+	if (dt.seconds.count() < 10)
+	{
+		logDateTimeEntry += L'0';
+	}
+
+	logDateTimeEntry += std::to_wstring(dt.seconds.count());
+
+	if (useHighPrecisionTime)
+	{
+		if (exportsToFileSystem)
+		{
+			logDateTimeEntry += L"-";
+		}
+		else
+		{
+			logDateTimeEntry += L":";
+		}
+
+		long long mSeconds = dt.mSeconds.count();
+
+		if (mSeconds < 10)
+		{
+			logDateTimeEntry += L"00";
+		}
+		else if (mSeconds < 100)
+		{
+			logDateTimeEntry += L"0";
+		}
+		
+		logDateTimeEntry += std::to_wstring(mSeconds);
+	}
+
+	return logDateTimeEntry;
+}
