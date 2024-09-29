@@ -32,8 +32,10 @@
 #include <cctype>
 #include <string>
 #include <cstring>
+#include <vector>
 
 #include "BuildTypes.hpp"
+#include "VersionStruct.hpp"
 
 namespace VersionLib
 {
@@ -77,6 +79,14 @@ namespace VersionLib
 	 * @return Return a enumeration of BuildType
 	 */
 	VERSION_LIB_API BuildType str2BuildType (std::string value);
+
+	/**
+	 * @brief Convert a string using Semantic Versioning
+	 * @param version String with version information
+	 * @return Return a VersionStruct with version data
+	 * @warning THIS FUNCTION IS UNDER DEVELOPMENT AND CONTAIN BUGS DURING THE CONVERSION PROCESS.
+	 */
+	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);
 }
 
 #endif // !VERSION_TOOLS_HPP

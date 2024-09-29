@@ -168,3 +168,160 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	
 	return BuildType::RELEASE;
 }
+
+VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
+{
+	VersionLib::VersionStruct v;
+
+	/** tokens - positions used:
+	 * 0: Major version
+	 * 1: Minor version
+	 * 2; Patch version
+	 * 3: Build type
+	 * 4: Build Type Number
+	 * 5: Build Number
+	 */
+	std::vector<std::string> tokens;
+
+	version = VersionLib::tolower_str(version);
+
+	const char delimiters[] = ".- ";
+	char* cVersion = const_cast<char*>(version.c_str());
+	char* token = std::strtok(cVersion, delimiters);
+
+	size_t rcPos = version.find("release candidate");
+
+	if (rcPos > 0 && rcPos < version.size())
+	{
+		std::string tmp = version.replace(rcPos, std::strlen("release candidate"), "release_candidate");
+		version = tmp;
+	}
+
+	while (token)
+	{
+		tokens.push_back(token);
+		token = std::strtok(nullptr, delimiters);
+	}
+
+	bool foundMajorVer = false;
+	bool foundMinorVer = false;
+	bool foundPatchVer = false;
+	bool foundTypeVer = false;
+	bool foundTypeNum = false;
+	bool foundBuild = false;
+	bool foundBuildName = false;
+
+	unsigned int major = 0;
+	unsigned int minor = 0;
+	unsigned int patch = 0;
+	std::string type = "";
+	VersionLib::BuildType typeEnum;
+	unsigned int type_num = 0;
+	unsigned long long build = 0;
+
+	for (size_t i = 0; i < tokens.size(); i++)
+	{
+		if (tokens[i].starts_with(' '))
+		{
+			tokens[i] = tokens[i].erase(0, 1);
+		}
+
+		if (tokens[i].ends_with(' '))
+		{
+			tokens[i] = tokens[i].erase(tokens[i].size() - 1, 1);
+		}
+
+		if (!foundBuild && (foundBuildName || foundTypeNum))
+		{
+			try
+			{
+				build = std::stoull(tokens[i]);
+				foundBuild = true;
+			}
+			catch(const std::exception&)
+			{
+				
+			}
+		}
+
+		if (!foundBuildName && tokens[i] == "build")
+		{
+			foundBuildName = true;
+		}
+
+		if ((foundPatchVer || foundTypeVer) && !foundTypeNum && (!foundBuild || !foundBuildName))
+		{
+			try
+			{
+				type_num = std::stoull(tokens[i]);
+				foundTypeNum = true;
+			}
+			catch(const std::exception&)
+			{
+				
+			}
+		}
+
+		if (!foundTypeVer)
+		{
+			if (
+					tokens[i] == "alpha" || tokens[i] == "a" || 
+					tokens[i] == "beta" || tokens[i] == "b" || 
+					tokens[i] == "release_candidate" || tokens[i] == "rc"
+				)
+			{
+				typeEnum = VersionLib::str2BuildType(tokens[i]);
+				type = tokens[i];
+				foundTypeVer = true;
+			}
+		}
+
+		if (foundMajorVer && foundMinorVer && !foundPatchVer)
+		{
+			try
+			{
+				patch = std::stoul(tokens[i].c_str());
+				foundPatchVer = true;
+			}
+			catch(const std::exception&)
+			{
+				
+			}
+		}
+
+		if (foundMajorVer && !foundMinorVer)
+		{
+			try
+			{
+				minor = std::stoul(tokens[i].c_str());
+				foundMinorVer = true;
+			}
+			catch(const std::exception&)
+			{
+				
+			}
+		}
+
+		if (!foundMajorVer)
+		{
+			try
+			{
+				major = std::stoul(tokens[i].c_str());
+				foundMajorVer = true;
+			}
+			catch(const std::exception&)
+			{
+
+			}
+		}
+	}
+
+	v.major = major;
+	v.minor = minor;
+	v.patch = patch;
+	v.build_type = typeEnum;
+	v.build_type_number = type_num;
+	v.build = build;
+
+	return v;
+}
