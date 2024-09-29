@@ -1,9 +1,16 @@
 #include "VersionClass.hpp"
 
-//VersionLib::VersionData::VersionData(std::string versionStr)
-//{
-//	
-//}
+VersionLib::VersionData::VersionData(std::string versionStr)
+{
+	VersionLib::VersionStruct v = VersionLib::toVersionStruct(versionStr);
+
+	this->major = v.major;
+	this->minor = v.minor;
+	this->patch = v.patch;
+	this->build_type = v.build_type;
+	this->build_type_number = v.build_type_number;
+	this->build = v.build;
+}
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch)
 {
@@ -111,12 +118,17 @@ unsigned long long VersionLib::VersionData::getBuild()
 
 const char *VersionLib::VersionData::getBuildTypeCstr(bool useShortStr)
 {
-    return this->getBuildType(useShortStr).c_str();
+    return this->getBuildTypeStr(useShortStr).c_str();
 }
 
-std::string VersionLib::VersionData::getBuildType(bool useShortStr)
+std::string VersionLib::VersionData::getBuildTypeStr(bool useShortStr)
 {
     return VersionLib::buildType2Str(this->build_type, useShortStr);
+}
+
+VersionLib::BuildType VersionLib::VersionData::getBuildType()
+{
+	return this->build_type;
 }
 
 unsigned int VersionLib::VersionData::getBuildTypeNumber()
@@ -129,7 +141,7 @@ const char *VersionLib::VersionData::getBuildTypeCompleteCstr()
     return this->getBuildTypeComplete().c_str();
 }
 
-std::string VersionLib::VersionData::getBuildTypeComplete()
+std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr)
 {
     std::string tmp;
 
@@ -138,12 +150,32 @@ std::string VersionLib::VersionData::getBuildTypeComplete()
 		return tmp;
 	}
 
-	tmp = this->build_type;
+	tmp = this->getBuildTypeStr(useShortStr);
 
 	if (this->build_type_number > 0)
 	{
 		tmp += "." + std::to_string(this->build_type_number);
 	}
+
+	return tmp;
+}
+
+std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBuildWord)
+{
+	std::string tmp;
+
+	tmp += std::to_string(this->major) + ".";
+	tmp += std::to_string(this->minor) + ".";
+	tmp += std::to_string(this->patch) + "-";
+	tmp += this->getBuildTypeComplete(useShortStr);
+	tmp += " ";
+
+	if (!hideBuildWord)
+	{
+		tmp += "build ";
+	}
+
+	tmp += std::to_string(this->build);
 
 	return tmp;
 }

@@ -53,14 +53,91 @@ namespace VersionLib
 			// Constructors:
 			//
 
-			//VersionData (std::string versionStr);
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param versionStr String with version information
+			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct method and is under development.
+			 */
+			VersionData (std::string versionStr);
+
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type (alpha, beta, rc).
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type (alpha, beta, rc).
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type enumerator
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type (alpha, beta, rc).
+			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type, unsigned int build_type_number);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type (alpha, beta, rc).
+			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_type_number);
+			
+			/**
+			 * @brief Create an VersionData object that can represent an software version data
+			 * @param major Major version
+			 * @param minor Minor version
+			 * @param patch Patch version
+			 * @param build Build of the version
+			 * @param build_type Build type enumerator
+			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number);
 			
 			//
@@ -97,28 +174,40 @@ namespace VersionLib
 			 * @brief Get the build type (alpha, beta, etc) with C string style
 			 * @param useShortStr Use the short string version
 			 */
-			const char* getBuildTypeCstr(bool useShortStr);
+			const char* getBuildTypeCstr(bool useShortStr = true);
 
 			/**
 			 * @brief Get the build type (alpha, beta, etc).
 			 * @param useShortStr Use the short string version
 			 */
-			std::string getBuildType(bool useShortStr);
+			std::string getBuildTypeStr(bool useShortStr = true);
 
 			/**
-			 * @brief Get the build type number (used like alpha2, rc3).
+			 * @brief Get the build type (alpha, beta, etc).
+			 */
+			VersionLib::BuildType getBuildType();
+
+			/**
+			 * @brief Get the build type number (used like alpha.2, rc.3).
 			 */
 			unsigned int getBuildTypeNumber();
 
 			/**
-			 * @brief Get the complete the build type data (like alpha2, beta3) with C string style
+			 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style
 			 */
 			const char* getBuildTypeCompleteCstr();
 
 			/**
-			 * @brief Get the complete the build type data (like alpha2, beta3).
+			 * @brief Get the complete the build type data (like alpha.2, beta.3).
+			 * @param useShortStr Use the short string version
 			 */
-			std::string getBuildTypeComplete();
+			std::string getBuildTypeComplete(bool useShortStr = true);
+
+			/**
+			 * @brief Get the version data as a string
+			 * @param useShortStr Use the short string version in build type
+			 */
+			std::string getVersionStr(bool useShortStr = true, bool hideBuildWord = false);
 
 			//
 			// Operators:
