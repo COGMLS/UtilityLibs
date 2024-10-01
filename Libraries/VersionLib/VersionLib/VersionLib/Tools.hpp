@@ -85,8 +85,18 @@ namespace VersionLib
 	 * @param version String with version information
 	 * @return Return a VersionStruct with version data
 	 * @warning THIS FUNCTION IS UNDER DEVELOPMENT AND CONTAIN BUGS DURING THE CONVERSION PROCESS.
+	 * @deprecated This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);
+
+	/**
+	 * @brief Convert a string using Semantic Versioning
+	 * @param version String with version information
+	 * @return Return a VersionStruct with version data
+	 * @warning This function is compatible with Semantic Versioning, but is also permissive to other values conversions. Check the Conversion Notes.
+	 * @note Conversion Notes: The conversion formats accept by this method are (x: Major, y: Minor, z: Patch, t: Build Type, n: Build Type Number, "build": Word used to determinate the build field. b: Build number.): Semantic Versioning format: x.y.z, x.y.z-t, x.y.z-t.n, x.y-t, x.y-t.n. Other formats: x.y-t build b, x.y-t b, x.y-t.n build b, x.y.z-t.n build b, x.y.z-t.n b
+	 */
+	VERSION_LIB_API VersionStruct toVersionStruct2 (std::string version);
 }
 
 #endif // !VERSION_TOOLS_HPP

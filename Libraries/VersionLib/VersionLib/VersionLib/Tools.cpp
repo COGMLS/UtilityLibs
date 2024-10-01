@@ -45,7 +45,7 @@ unsigned int VersionLib::extractBuildTypeNumber(const char* buildType)
 			foundBuildType = true;
 		}
 
-		if (std::strcmp(token, "release candidate") == 0 || std::strcmp(token, "rc") == 0)
+		if (std::strcmp(token, "release candidate") == 0 || std::strcmp(token, "release_candidate") == 0 || std::strcmp(token, "rc") == 0)
 		{
 			foundBuildType = true;
 		}
@@ -90,7 +90,7 @@ unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
 			foundBuildType = true;
 		}
 
-		if (std::strcmp(token, "release candidate") == 0 || std::strcmp(token, "rc") == 0)
+		if (std::strcmp(token, "release candidate") == 0 || std::strcmp(token, "release_candidate") == 0 || std::strcmp(token, "rc") == 0)
 		{
 			foundBuildType = true;
 		}
@@ -156,7 +156,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 		return BuildType::BETA;
 	}
 
-	if (value == "release candidate" || value == "rc")
+	if (value == "release candidate" || value == "release_candidate" || value == "rc")
 	{
 		return BuildType::RELEASE_CANDIDATE;
 	}
@@ -169,6 +169,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	return BuildType::RELEASE;
 }
 
+[[deprecated("This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion.")]]
 VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 {
 	VersionLib::VersionStruct v;
@@ -321,6 +322,297 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 	v.patch = patch;
 	v.build_type = typeEnum;
 	v.build_type_number = type_num;
+	v.build = build;
+
+	return v;
+}
+
+VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
+{
+	/// TODO: Add the Microsoft's iostream guard
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	std::cout << "Version to convert: " << version << std::endl;
+	#endif // !Check for IOSTREAM and DEBUG
+
+	VersionLib::VersionStruct v;
+
+	version = VersionLib::tolower_str(version);
+
+	size_t verStrSize = version.size();
+	size_t buildTypePos = version.find("release candidate");
+
+	if (buildTypePos > 0 && buildTypePos < verStrSize)
+	{
+		version.replace(buildTypePos, std::strlen("release_candidate"), "release_candidate");
+	}
+
+	//
+	// Variable controls:
+	//
+
+	unsigned int major = 0;
+	unsigned int minor = 0;
+	unsigned int patch = 0;
+	#ifdef DEBUG
+	short build_type = 0;
+	#endif // !DEBUG
+	std::string build_type_str;
+	unsigned int build_type_number = 0;
+	unsigned long long build = 0;
+
+	bool foundMajorVer = false;				// Found major version number
+	bool foundMinorVer = false;				// Found minor version number
+	bool foundPatchVer = false;				// Found patch version number
+	bool foundBuildTypeVer = false;			// Found build type version (alpha, beta, etc)
+	bool foundBuildTypeNum = false;			// Found the build type number
+	bool foundBuildStr = false;				// Found the build word
+	bool foundBuild = false;				// Found the build number
+
+	short lastFieldProcessed = -1;			// 0.1.2-3.4 "5" 6
+	//short lastTokenFound = 0;				// 0: None 1: Dot 2: dash 3: space 4: Index limit
+
+	bool foundValidChar = false;			// Identified valid characters
+	bool accValHasNumbers = false;			// Accumulator Value has number
+	bool useAccVal = false;					// Determinate to try to convert
+	char t = '\0';
+	std::string tmp;						// Temporary variable accumulator
+
+	/** Version string analysis:
+	 * --------------------------------------------
+	 * First, try to find the Major version. The dot
+	 * is the mark that defines if is the end of the
+	 * version field.
+	 * 
+	 * For each field X.Y.Z uses the same behavior for
+	 * Major version. If the char '-' was found, try
+	 * to detect if has the information about the
+	 * build type (alpha, beta, rc). If detected the
+	 * build type, try to find the build type number,
+	 * used to identify alpha.2 beta.3, etc.
+	 * 
+	 * 
+	*/
+
+	for (size_t i = 0; i < verStrSize; i++)
+	{
+		// Get the current char:
+		t = version[i];
+
+		// Jump any space char:
+		if (t != ' ' && !foundValidChar)
+		{
+			foundValidChar = true;
+		}
+
+		if (foundValidChar)
+		{
+			// Cumulate the number to try to convert:
+			if (t >= '0' && t <= '9')
+			{
+				tmp += t;
+				accValHasNumbers = true;
+			}
+
+			// Cumulate the chars, to try to detect "build", "alpha", "beta", "release_candidate", "a", "b" or "rc" words:
+			if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z' || t == '_')
+			{
+				tmp += t;
+			}
+
+			// If detect the dot or the dash or the space (used for words separation). In case is the last char, make sure it will be analyzed:
+			if (t == '.' || t == ' ' || t == '-' || i + 1 == verStrSize)
+			{
+				// Check if the build number is available, using the accValHasNumber and if the word "build" does not founded and found the space separator:
+				if (accValHasNumbers && !foundBuildStr && t == ' ' && !foundMajorVer)
+				{
+					// There are two possible checks for this situation: the numeric accumulated value is the build number or not
+					// To make sure the accumulated number is the build number, the build type version and it's number most appear or both not. Otherwise, it will fall in a false condition, confused by the build type number as the build number.
+					if ((!foundBuildTypeVer && !foundBuildTypeNum) || (foundBuildTypeVer && foundBuildTypeNum))
+					{
+						lastFieldProcessed = 5;			// Force to go direct to convert build number
+					}
+
+					// To avoid the possibility to fall in the possible false condition, the next characters after the space separator, should be an numeric value to be a build number
+					if (foundBuildTypeVer && !foundBuildTypeNum && lastFieldProcessed == 3)
+					{
+						if (i + 1 < verStrSize)
+						{
+							if (!(version[i + 1] >= '0' && version[i + 1] <= '9') && !(version[i + 1] != 'b' || version[i + 1] != 'B'))
+							{
+								lastFieldProcessed = 5; // Force to go direct to convert build number
+							}
+						}
+					}
+				}
+
+				//if (
+				//		(foundBuildTypeVer && !foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ') || 
+				//		(!foundBuildTypeVer && !foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ') || 
+				//		(foundBuildTypeVer && foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ')
+				//	)
+				//{
+				//	lastFieldProcessed = 5;
+				//}
+
+				// Set to use the accumulated value into the conversion instructions:
+				useAccVal = true;
+			}
+		}
+
+		// Try to detect the value:
+		if (useAccVal)
+		{
+			if (accValHasNumbers)
+			{
+				// Clean the accValHasNumbers status:
+				accValHasNumbers = false;
+
+				// Try to detect the build version:
+				//(foundMajorVer && foundMinorVer && foundPatchVer && ((foundBuildTypeVer && !foundBuildTypeNum && !foundBuild) || (foundBuildTypeVer && foundBuildTypeNum && !foundBuild) || (!foundBuildTypeVer && !foundBuildTypeNum && !foundBuild)))
+				if ((!foundBuildStr && lastFieldProcessed == 5) || (!foundBuildStr && foundBuildTypeNum && lastFieldProcessed == 4) || (foundBuildStr && lastFieldProcessed == 5))
+				{
+					try
+					{
+						build = std::stoul(tmp);
+						foundBuild = true;
+						lastFieldProcessed = 6;
+					}
+					catch(const std::exception&)
+					{
+
+					}
+				}
+				
+				// Try to detect the build type number version:
+				if (foundBuildTypeVer && !foundBuildTypeNum && (lastFieldProcessed == 3))
+				{
+					try
+					{
+						build_type_number = std::stoul(tmp);
+						foundBuildTypeNum = true;
+						lastFieldProcessed = 4;
+					}
+					catch(const std::exception&)
+					{
+
+					}
+				}
+
+				// Try to detect the patch version:
+				if (foundMajorVer && foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
+				{
+					try
+					{
+						patch = std::stoul(tmp);
+						foundPatchVer = true;
+						lastFieldProcessed = 2;
+					}
+					catch(const std::exception&)
+					{
+
+					}
+				}
+
+				// Try to detect the minor version:
+				if (foundMajorVer && !foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
+				{
+					try
+					{
+						minor = std::stoul(tmp);
+						foundMinorVer = true;
+						lastFieldProcessed = 1;
+					}
+					catch(const std::exception&)
+					{
+
+					}
+				}
+
+				// Try to detect the major version:
+				if (!foundMajorVer && !foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
+				{
+					try
+					{
+						major = std::stoul(tmp);
+						foundMajorVer = true;
+						lastFieldProcessed = 0;
+					}
+					catch(const std::exception&)
+					{
+
+					}
+				}
+			}
+			else
+			{
+				//
+				// Try to detect a valid word:
+				//
+
+				if (tmp == "build")
+				{
+					foundBuildStr = true;
+					lastFieldProcessed = 5;
+				}
+
+				if (tmp == "alpha" || tmp == "a")
+				{
+					#ifdef DEBUG
+					build_type = 1;
+					#endif // !DEBUG
+					build_type_str = tmp;
+					foundBuildTypeVer = true;
+					lastFieldProcessed = 3;
+				}
+
+				if (tmp == "beta" || tmp == "b")
+				{
+					#ifdef DEBUG
+					build_type = 2;
+					#endif // !DEBUG
+					build_type_str = tmp;
+					foundBuildTypeVer = true;
+					lastFieldProcessed = 3;
+				}
+
+				if (tmp == "release_candidate" || tmp == "rc")
+				{
+					#ifdef DEBUG
+					build_type = 3;
+					#endif // !DEBUG
+					build_type_str = tmp;
+					foundBuildTypeVer = true;
+					lastFieldProcessed = 3;
+				}
+
+				if (tmp == "release" || tmp == "r")
+				{
+					#ifdef DEBUG
+					build_type = 4;
+					#endif // !DEBUG
+					build_type_str = tmp;
+					foundBuildTypeVer = true;
+					lastFieldProcessed = 3;
+				}
+			}
+
+			// Clear the useAccVal status for the next value analysis:
+			useAccVal = false;
+
+			// Clear the accumulated value to reuse the variable:
+			tmp.clear();
+		}
+	}
+
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_type_number << " build " << build << std::endl << std::endl;
+	#endif // !Check for IOSTREAM and DEBUG
+
+	v.major = major;
+	v.minor = minor;
+	v.patch = patch;
+	v.build_type = VersionLib::str2BuildType(build_type_str);
+	v.build_type_number = build_type_number;
 	v.build = build;
 
 	return v;
