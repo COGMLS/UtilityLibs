@@ -12,6 +12,16 @@ The Version Library contains a main header, `VersionLib.hpp`. This header provid
 
 The `VersionLib.hpp` header contain a global object version available to test and check the current Version Library version with your application or library. This global object is constant and can not be modified.
 
+## Future implementations:
+
+- Full support for extern C linkage
+- Support to identify version files by it's name
+- Support to detect Windows Metadata version information
+- Support for convert `VersionStruct` to `VersionData` and vice-versa.
+- Full support for C-Style functions to better support for extern C linkage
+- Include the global internal Version Library data.
+- Add and update all documentation for the Version Library
+
 ## Version Library History:
 
 <dl>
