@@ -51,4 +51,5 @@
         "editor.suggest.preview": true,
         "files.encoding": "utf8"
     },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 }
