@@ -13,5 +13,5 @@ cmake_minimum_required(VERSION 3.28)
 ###########################################################
 
 #add_subdirectory("SettingsLib")
-add_subdirectory("LoggerLib")
-#add_subdirectory("VersionLib")
+#add_subdirectory("LoggerLib")
+add_subdirectory("VersionLib")
