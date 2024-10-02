@@ -6,6 +6,23 @@ The VersionLib contains all necessary methods and data type needed to work, allo
 
 **IMPORTANT:** *This library is under development and the methods may not work as expected. It's important to be aware about possible modifications that may break or be compatible with previous feature during the development time.*
 
+## Using the Version Library:
+
+The Version Library contains a main header, `VersionLib.hpp`. This header provide all features to be able to work with versioning for any library or application that is using this library to provide versioning support. To use it, version data information, there is the `VersionStruct`, a C-Style data struct for extern C linkage calling and for internal Version Library use. The most recommended version data is the `VersionData` class for C++ context. Both version structure data information holds the same values: `major`, `minor`, `patch`, `build_type`, `build_type_number` and `build` variables. The `VersionData` class contain constructors to allow to create the version object and use the internal operators to compare with other object version.
+
+The `VersionLib.hpp` header contain a global object version available to test and check the current Version Library version with your application or library. This global object is constant and can not be modified.
+
+## Version Library History:
+
+<dl>
+    <dt><strong>0.8.0-alpha</strong></dt>
+    <dd>Added <code>toVersionStruct2</code> with full Semantic Versioning support and a permissive conversion.</dd>
+    <dd><strong><font color="red">[BUG]</font></strong> <code>tolower_str</code> and <code>tolower_Cstr</code> contains a bug that make miss the characters that already in lowercase.</dd>
+    <dd><strong>[FIX]</strong> `VersionData` operators for greater, greater than, less and less than fail to check correctly the complete version number.<dd>
+</dl>
+
+*Older versions was not tracked*
+
 # License
 
 MIT License
