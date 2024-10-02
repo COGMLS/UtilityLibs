@@ -33,4 +33,9 @@
 #include "VersionClass.hpp"
 #include "VersionStruct.hpp"
 
+namespace VersionLib
+{
+	extern const VersionData internalVersionData(0, 8, 0, 15, VersionLib::BuildType::ALPHA, 0);
+}
+
 #endif // !VERSION_HPP

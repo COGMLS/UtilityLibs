@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef VERSION_HPP
-#define VERSION_HPP
+#ifndef VERSION_CLASS_HPP
+#define VERSION_CLASS_HPP
 
 #ifdef WIN32
 	#ifdef VERSION_LIB_EXPORTS
@@ -56,7 +56,7 @@ namespace VersionLib
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
 			 * @param versionStr String with version information
-			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct method and is under development.
+			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct2 method and is under development.
 			 */
 			VersionData (std::string versionStr);
 
@@ -229,4 +229,4 @@ namespace VersionLib
 	};
 }
 
-#endif // !VERSION_HPP
+#endif // !VERSION_CLASS_HPP

@@ -43,6 +43,7 @@ namespace VersionLib
 	 * @brief Transform the string to lowercase
 	 * @param value String value to be transformed into lowercase
 	 * @return Return a C-Style string in lowercase
+	 * @bug This method is missing the characters that already are in lowercase.
 	 */
 	VERSION_LIB_API const char* tolower_Cstr (const std::string& value);
 
@@ -50,6 +51,7 @@ namespace VersionLib
 	 * @brief Transform the string to lowercase
 	 * @param value String value to be transformed into lowercase
 	 * @return Return a string in lowercase
+	 * @bug This method is missing the characters that already are in lowercase.
 	 */
 	VERSION_LIB_API std::string tolower_str (const std::string& value);
 
@@ -84,7 +86,7 @@ namespace VersionLib
 	 * @brief Convert a string using Semantic Versioning
 	 * @param version String with version information
 	 * @return Return a VersionStruct with version data
-	 * @warning THIS FUNCTION IS UNDER DEVELOPMENT AND CONTAIN BUGS DURING THE CONVERSION PROCESS.
+	 * @warning THIS FUNCTION IS NOT RELIABLE FOR NON SEMANTIC VERSIONING CONVERSION
 	 * @deprecated This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);

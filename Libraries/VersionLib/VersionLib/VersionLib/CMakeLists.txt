@@ -37,7 +37,7 @@ add_compile_definitions(_UNICODE)
 # Defined the project:
 project(
 			VersionLib
-			VERSION 1.0.0
+			VERSION 0.8.0
 			DESCRIPTION "Version Library."
 		)
 

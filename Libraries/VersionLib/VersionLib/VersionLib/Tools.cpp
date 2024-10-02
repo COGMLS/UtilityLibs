@@ -169,7 +169,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	return BuildType::RELEASE;
 }
 
-[[deprecated("This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion.")]]
+[[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 {
 	VersionLib::VersionStruct v;
@@ -329,14 +329,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 {
-	/// TODO: Add the Microsoft's iostream guard
+	/// TODO: Add the Microsoft's iostream guard for Debug tests
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
 	VersionLib::VersionStruct v;
 
-	version = VersionLib::tolower_str(version);
+	// Disabled the method: The current method contains a bug that miss the lowercase characters
+	//version = VersionLib::tolower_str(version);
 
 	size_t verStrSize = version.size();
 	size_t buildTypePos = version.find("release candidate");

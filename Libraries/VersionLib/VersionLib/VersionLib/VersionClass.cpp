@@ -2,7 +2,7 @@
 
 VersionLib::VersionData::VersionData(std::string versionStr)
 {
-	VersionLib::VersionStruct v = VersionLib::toVersionStruct(versionStr);
+	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
 
 	this->major = v.major;
 	this->minor = v.minor;
@@ -230,17 +230,9 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 			{
 				if (this->build_type >= other.build_type)
 				{
-					if (this->build_type == BuildType::RELEASE && other.build_type != BuildType::RELEASE)
+					if (this->build_type_number > other.build_type_number)
 					{
 						return true;
-					}
-
-					if (this->build_type != BuildType::RELEASE && other.build_type != BuildType::RELEASE)
-					{
-						if (this->build_type_number > other.build_type_number)
-						{
-							return true;
-						}
 					}
 				}
 			}
@@ -260,22 +252,9 @@ bool VersionLib::VersionData::operator>=(const VersionData &other)
 			{
 				if (this->build_type >= other.build_type)
 				{
-					if (this->build_type == BuildType::RELEASE && other.build_type != BuildType::RELEASE)
+					if (this->build_type_number >= other.build_type_number)
 					{
 						return true;
-					}
-
-					if (this->build_type == BuildType::RELEASE && other.build_type == BuildType::RELEASE)
-					{
-						return true;
-					}
-
-					if (this->build_type != BuildType::RELEASE && other.build_type != BuildType::RELEASE)
-					{
-						if (this->build_type_number >= other.build_type_number)
-						{
-							return true;
-						}
 					}
 				}
 			}
@@ -295,17 +274,9 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 			{
 				if (other.build_type >= this->build_type)
 				{
-					if (other.build_type == BuildType::RELEASE && this->build_type != BuildType::RELEASE)
+					if (other.build_type_number > this->build_type_number)
 					{
 						return true;
-					}
-
-					if (other.build_type != BuildType::RELEASE && this->build_type != BuildType::RELEASE)
-					{
-						if (other.build_type_number > this->build_type_number)
-						{
-							return true;
-						}
 					}
 				}
 			}
@@ -325,22 +296,9 @@ bool VersionLib::VersionData::operator<=(const VersionData &other)
 			{
 				if (other.build_type >= this->build_type)
 				{
-					if (other.build_type == BuildType::RELEASE && this->build_type != BuildType::RELEASE)
+					if (other.build_type_number >= this->build_type_number)
 					{
 						return true;
-					}
-					
-					if (other.build_type == BuildType::RELEASE && this->build_type == BuildType::RELEASE)
-					{
-						return true;
-					}
-
-					if (other.build_type != BuildType::RELEASE && this->build_type != BuildType::RELEASE)
-					{
-						if (other.build_type_number > this->build_type_number)
-						{
-							return true;
-						}
 					}
 				}
 			}
