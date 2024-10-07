@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "LoggerDateTime.hpp"
 
 LoggerLocalDateTime getLoggerDateTime()

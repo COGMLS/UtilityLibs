@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "LoggerCommonDataTypes.hpp"
 
 LogEntry::LogEntry(std::string title, std::string message)

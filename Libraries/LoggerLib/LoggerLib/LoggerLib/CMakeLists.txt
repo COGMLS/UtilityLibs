@@ -35,7 +35,11 @@ add_compile_definitions(UNICODE)
 add_compile_definitions(_UNICODE)
 
 # Defined the project:
-project(LoggerLib VERSION 3.1.0 DESCRIPTION "Logger Library.")
+project(
+			LoggerLib
+			VERSION 3.1.1
+			DESCRIPTION "Logger Library."
+		)
 
 ###########################################################
 #
@@ -64,6 +68,8 @@ if (WIN32)
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibDef.hpp"
+					"LoggerLibVersion.hpp"
+					"LoggerLibVersionTools.hpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
 else()
@@ -75,6 +81,8 @@ else()
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibDef.hpp"
+					"LoggerLibVersion.hpp"
+					"LoggerLibVersionTools.hpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
 endif()
