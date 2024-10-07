@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Logger.hpp"
 
 Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
@@ -68,7 +67,11 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 		// Create the file and make it ready to be used for write:
 
 		std::fstream logFile;
+		#ifdef WIN32
 		logFile.open(logFilePath.string(), std::ios::out);
+		#else
+		logFile.open(logFilePath, std::ios_base::out);
+		#endif // !WIN32
 
 		//this->logFile.open(logFilePath.string(), std::ios::out);
 
@@ -243,11 +246,19 @@ bool Logger::writeLogFile(bool ateMode)
 
 			if (ateMode)
 			{
+				#ifdef WIN32
 				logFile.open(this->logFilePath.string(), std::ios::out | std::ios::in);
+				#else
+				logFile.open(this->logFilePath, std::ios_base::out | std::ios_base::in);
+				#endif // !WIN32
 			}
 			else
 			{
+				#ifdef WIN32
 				logFile.open(this->logFilePath.string(), std::ios::out);
+				#else
+				logFile.open(this->logFilePath, std::ios_base::out);
+				#endif // !WIN32
 			}
 
 			// Set the last position to write the log, if the maxLogEntries and autoSaveLogEntries are defined
@@ -435,7 +446,11 @@ LoggerW::LoggerW(std::filesystem::path logPath, std::wstring baseFileName)
 		// Create the file and make it ready to be used for write:
 
 		std::wfstream logFile;
+		#ifdef WIN32
 		logFile.open(logFilePath.wstring(), std::ios::out);
+		#else
+		logFile.open(logFilePath, std::ios_base::out);
+		#endif // !WIN32
 
 		//this->logFile.open(logFilePath.wstring(), std::ios::out);
 
@@ -610,11 +625,19 @@ bool LoggerW::writeLogFile(bool ateMode)
 
 			if (ateMode)
 			{
+				#ifdef WIN32
 				logFile.open(this->logFilePath.wstring(), std::ios::out | std::ios::in);
+				#else
+				logFile.open(this->logFilePath, std::ios_base::out | std::ios_base::in);
+				#endif // !WIN32
 			}
 			else
 			{
+				#ifdef WIN32
 				logFile.open(this->logFilePath.wstring(), std::ios::out);
+				#else
+				logFile.open(this->logFilePath, std::ios_base::out);
+				#endif // !WIN32
 			}
 
 			// Set the last position to write the log, if the maxLogEntries and autoSaveLogEntries are defined

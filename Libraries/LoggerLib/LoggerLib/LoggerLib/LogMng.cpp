@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "LogMng.hpp"
 
 std::vector<std::filesystem::path> getLogFileList(std::filesystem::path logDirPath)
