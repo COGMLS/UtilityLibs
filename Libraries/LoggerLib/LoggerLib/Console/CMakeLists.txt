@@ -43,7 +43,8 @@ project(LoggerLibTestConsole VERSION 0.0.1 DESCRIPTION "Console to test the Sett
 
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
-include_directories("${LoggerLibReposRoot}/LoggerLib")
+#include_directories("${LoggerLibReposRoot}/LoggerLib")
+target_include_directories(LoggerLib PUBLIC "${LoggerLibReposRoot}/LoggerLib")
 
 # Define the executable properties:
 add_executable(LoggerLibTestConsole "main.cpp")
