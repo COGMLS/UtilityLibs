@@ -35,7 +35,7 @@
 
 namespace VersionLib
 {
-	extern const VersionData internalVersionData(0, 8, 0, 15, VersionLib::BuildType::ALPHA, 0);
+	extern const VersionData internalVersionData(0, 8, 1, 18, VersionLib::BuildType::BETA, 0);
 }
 
 #endif // !VERSION_HPP

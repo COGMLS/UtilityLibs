@@ -42,7 +42,13 @@ int main()
 {
 	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
 	VersionLib::VersionData test (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
-	VersionLib::VersionData test2 ("1.2.0 build 700");
+	VersionLib::VersionData test2 ("1.2.1 build 700");
+	VersionLib::VersionData test3 ("1.6.1.3 build 6100");
+	VersionLib::VersionData test4 ("2.5.8.15");
+	VersionLib::VersionData test5 ("17.5.12-a");
+	VersionLib::VersionData test6 ("3.1.7-beta.6");
+	VersionLib::VersionData test7 ("7.1.3-rc.1 752");
+	VersionLib::VersionData test8 ("10.3.1-alpha.3 build 569");
 
 	VersionLib::VersionData* vTest = &test;
 
