@@ -35,6 +35,7 @@
 #include "LoggerLibVersion.hpp"
 
 #include <string>
+#include <cstring>
 
 namespace LoggerLib
 {
@@ -45,8 +46,9 @@ namespace LoggerLib
 	{
 		unsigned int major;
 		unsigned int minor;
+		unsigned int patch;
+		unsigned long long build;
 		unsigned int revision;
-		unsigned int build;
 		char* type;
 	};
 
@@ -56,12 +58,13 @@ namespace LoggerLib
 	 */
 	LOGGER_LIB_API inline LoggerLib::Version getLibVersion()
 	{
-		Version v;
+		LoggerLib::Version v;
 		v.major = LOGGER_LIB_MAJOR_VERSION;
 		v.minor = LOGGER_LIB_MINOR_VERSION;
-		v.revision = LOGGER_LIB_REVISION_NUMBER;
+		v.patch = LOGGER_LIB_PATCH_VERSION;
 		v.build = LOGGER_LIB_BUILD_NUMBER;
-		v.type = LOGGER_LIB_BUILD_TYPE;
+		v.revision = LOGGER_LIB_REVISION_NUMBER;
+		v.type = static_cast<char*>(LOGGER_LIB_BUILD_TYPE);
 		return v;
 	}
 
@@ -72,14 +75,19 @@ namespace LoggerLib
 	 * @param showType Show the build type.
 	 * @return Return a string version.
 	 */
-	LOGGER_LIB_API inline std::string getVersionStr (LoggerLib::Version& version, bool showBuild, bool showType)
+	LOGGER_LIB_API inline std::string getVersionStr (LoggerLib::Version version, bool showBuild, bool showType)
 	{
 		std::string s;
-		s = std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.revision);
+		s = std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.patch);
 
-		if (showType)
+		if (showType && !(std::strcmp(version.type, "release") == 0 || std::strcmp(version.type, "RELEASE") == 0))
 		{
 			s += "-" + std::string(version.type);
+		}
+
+		if (version.revision > 0)
+		{
+			s += "." + std::to_string(version.revision);
 		}
 
 		if (showBuild)
