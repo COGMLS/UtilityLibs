@@ -4,13 +4,15 @@ The VersionLib is a versioning library for other libraries and applications to m
 
 The VersionLib contains all necessary methods and data type needed to work, allowing to consume this library without dependencies. All VersionLib methods, data types and classes, are inside the namespace `VersionLib`.
 
-**IMPORTANT:** *This library is under development and the methods may not work as expected. It's important to be aware about possible modifications that may break or be compatible with previous feature during the development time.*
+**IMPORTANT:** *This library is under development and the methods may not work as expected. It's important to be aware about possible modifications that may break or be not compatible with previous feature during the development time.*
 
 ## Using the Version Library:
 
 The Version Library contains a main header, `VersionLib.hpp`. This header provide all features to be able to work with versioning for any library or application that is using this library to provide versioning support. To use it, version data information, there is the `VersionStruct`, a C-Style data struct for extern C linkage calling and for internal Version Library use. The most recommended version data is the `VersionData` class for C++ context. Both version structure data information holds the same values: `major`, `minor`, `patch`, `build_type`, `build_type_number` and `build` variables. The `VersionData` class contain constructors to allow to create the version object and use the internal operators to compare with other object version.
 
 The `VersionLib.hpp` header contain a global object version available to test and check the current Version Library version with your application or library. This global object is constant and can not be modified.
+
+> ⚠️ **Warning:** The actual development priority is to make sure the C++ functions can work properly. When the algorithms in C++ became stable and reliable, the C methods version will be the main development focus.
 
 ## Future implementations:
 
@@ -24,7 +26,16 @@ The `VersionLib.hpp` header contain a global object version available to test an
 
 ## Version Library History:
 
+<!-- Version Library History Table: -->
 <dl>
+    <!-- 0.8.1-beta (2024/10/08) -->
+    <dt><strong>0.8.1-beta</strong></dt>
+    <dd><strong>[FIX]</strong> <code>tolower_str</code> method, using a traditional algorithm to convert the string to lowercase.</dd>
+    <dd><strong><font color="orange">[WARNING]</font></strong> The method <code>tolower_Cstr</code> was not fixed.</dd>
+    <dd>Added checking for possible quotes and double quotes use in string BUILD_TYPE.</dd>
+    <dd>Added a check for situation when MAJOR.MINOR.PATCH.REVISION is available.</dd>
+    <dd><strong><font color="red">[BUG]</font></strong> When sending a version string on format <i>MAJOR.MINOR.PATCH.REVISION</i> to <code>VersionData</code>, the <code>build_type_number</code> or <i>revision</i> <strong>can not be detected</strong></dd>
+    <!-- 0.8.0-alpha (2024/10/01) -->
     <dt><strong>0.8.0-alpha</strong></dt>
     <dd>Added <code>toVersionStruct2</code> with full Semantic Versioning support and a permissive conversion.</dd>
     <dd><strong><font color="red">[BUG]</font></strong> <code>tolower_str</code> and <code>tolower_Cstr</code> contains a bug that make miss the characters that already in lowercase.</dd>
