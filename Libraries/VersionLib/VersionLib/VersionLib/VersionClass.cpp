@@ -92,6 +92,26 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build_type_number = build_type_number;
 }
 
+VersionLib::VersionData::VersionData(const VersionLib::VersionData &other)
+{
+	this->major = other.major;
+	this->minor = other.minor;
+	this->patch = other.patch;
+	this->build = other.build;
+	this->build_type = other.build_type;
+	this->build_type_number = other.build_type_number;
+}
+
+VersionLib::VersionData::VersionData(VersionLib::VersionData &&other) noexcept
+{
+	this->major = std::move(other.major);
+	this->minor = std::move(other.minor);
+	this->patch = std::move(other.patch);
+	this->build = std::move(other.build);
+	this->build_type = std::move(other.build_type);
+	this->build_type_number = std::move(other.build_type_number);
+}
+
 VersionLib::VersionData::~VersionData()
 {
 }
@@ -178,6 +198,40 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 	tmp += std::to_string(this->build);
 
 	return tmp;
+}
+
+VersionLib::VersionData &VersionLib::VersionData::operator=(const VersionLib::VersionData &other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	this->major = other.major;
+	this->minor = other.minor;
+	this->patch = other.patch;
+	this->build = other.build;
+	this->build_type = other.build_type;
+	this->build_type_number = other.build_type_number;
+
+	return *this;
+}
+
+VersionLib::VersionData &VersionLib::VersionData::operator=(VersionLib::VersionData &&other) noexcept
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	this->major = std::move(other.major);
+	this->minor = std::move(other.minor);
+	this->patch = std::move(other.patch);
+	this->build = std::move(other.build);
+	this->build_type = std::move(other.build_type);
+	this->build_type_number = std::move(other.build_type_number);
+
+	return *this;
 }
 
 bool VersionLib::VersionData::operator==(const VersionData &other)
