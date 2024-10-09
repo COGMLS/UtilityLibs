@@ -40,6 +40,7 @@ void testVersionData (VersionLib::VersionData& obj1, VersionLib::VersionData& ob
 
 int main()
 {
+	VersionLib::VersionData libVersion = VersionLib::internalVersionData();
 	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
 	VersionLib::VersionData test (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
 	VersionLib::VersionData test2 ("1.2.1 build 700");

@@ -28,6 +28,12 @@ The `VersionLib.hpp` header contain a global object version available to test an
 
 <!-- Version Library History Table: -->
 <dl>
+    <!-- 0.8.2-beta (2024/10/09) -->
+    <dt><strong>0.8.2-beta</strong></dt>
+    <dd>Added copy and move constructors.</dd>
+    <dd>Added copy and move operators.</dd>
+    <dd><i>On 0.8.2-beta.2: </i>Added <code>VersionLibVersionInfo.hpp</code> file to hold the preprocessor information about the Version Library version information.</dd>
+    <dd><i>On 0.8.2-beta.2: </i>Changed the name <code>internalVersionData</code> to a internal method to return the Version Library version information.</dd>
     <!-- 0.8.1-beta (2024/10/08) -->
     <dt><strong>0.8.1-beta</strong></dt>
     <dd><strong>[FIX]</strong> <code>tolower_str</code> method, using a traditional algorithm to convert the string to lowercase.</dd>
@@ -39,7 +45,7 @@ The `VersionLib.hpp` header contain a global object version available to test an
     <dt><strong>0.8.0-alpha</strong></dt>
     <dd>Added <code>toVersionStruct2</code> with full Semantic Versioning support and a permissive conversion.</dd>
     <dd><strong><font color="red">[BUG]</font></strong> <code>tolower_str</code> and <code>tolower_Cstr</code> contains a bug that make miss the characters that already in lowercase.</dd>
-    <dd><strong>[FIX]</strong> `VersionData` operators for greater, greater than, less and less than fail to check correctly the complete version number.<dd>
+    <dd><strong>[FIX]</strong> <code>VersionData</code> operators for greater, greater than, less and less than fail to check correctly the complete version number.<dd>
 </dl>
 
 *Older versions was not tracked*
