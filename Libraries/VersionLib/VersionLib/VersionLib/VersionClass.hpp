@@ -44,7 +44,7 @@ namespace VersionLib
 			unsigned int minor;					// Minor version number
 			unsigned int patch;					// Patch version number
 			unsigned long long build;			// Build number
-			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc
+			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 			unsigned int build_type_number;		// Build type number (alpha1, rc3)
 
 		public:

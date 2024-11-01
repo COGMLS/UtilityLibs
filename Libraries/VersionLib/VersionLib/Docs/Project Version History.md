@@ -1,5 +1,7 @@
 # Version Library: Version History:
 
+This document contain the complete change history to Version Library
+
 ## Version Library History:
 
 <!-- Version Library History Table: -->
@@ -10,6 +12,7 @@
     <dd>Added copy and move operators.</dd>
     <dd><i>On 0.8.2-beta.2: </i>Added <code>VersionLibVersionInfo.hpp</code> file to hold the preprocessor information about the Version Library version information.</dd>
     <dd><i>On 0.8.2-beta.2: </i>Changed the name <code>internalVersionData</code> to a internal method to return the Version Library version information.</dd>
+    <dd><strong><font color="red">[BUG]</font></strong> <code>VersionData</code> operators <i><strong>less</strong></i>, <i><strong>less than</strong></i>, <i><strong>greater</strong></i> and <i><strong>greater than</strong></i> are not working as expected.</dd>
     <!-- 0.8.1-beta (2024/10/08) -->
     <dt><strong>0.8.1-beta</strong></dt>
     <dd><strong>[FIX]</strong> <code>tolower_str</code> method, using a traditional algorithm to convert the string to lowercase.</dd>
