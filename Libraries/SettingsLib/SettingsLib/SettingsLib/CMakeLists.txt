@@ -48,7 +48,9 @@ project(SettingsLib VERSION 3.0.0 DESCRIPTION "Settings Library.")
 
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
-#include_directories("${SettingsLibraryRoot}/Extensions/Ini")
+include_directories("${SettingsLibraryRoot}")
+include_directories("${SettingsLibraryRoot}/Components/Exceptions")
+include_directories("${SettingsLibraryRoot}/Components/Configs/Ini")
 
 # Define to export the library methods if is Windows:
 if(WIN32)
@@ -70,30 +72,34 @@ if (WIN32)
 					"SettingsLibErrorCodes.hpp"
 					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
 					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
+					# Error and Exceptions:
+					"Components/Exceptions/SettingsLibException.hpp" "Components/Exceptions/SettingsLibException.cpp"
 					# Ini files:
-					"SettingsIniConfig.hpp" "SettingsIniConfig.cpp"
-					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
-					"SettingsIniDefinitions.hpp"
-					"SettingsIniErrorCodes.hpp"
-					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
+					"Components/Configs/Ini/SettingsIniConfig.hpp" "Components/Configs/Ini/SettingsIniConfig.cpp"
+					"Components/Configs/Ini/SettingsIniConfigData.hpp" "Components/Configs/Ini/SettingsIniConfigData.cpp"
+					"Components/Configs/Ini/SettingsIniDefinitions.hpp"
+					"Components/Configs/Ini/SettingsIniErrorCodes.hpp"
+					"Components/Configs/Ini/SettingsIniTools.hpp" "Components/Configs/Ini/SettingsIniTools.cpp"
 				)
 else()
 	add_library(
 					SettingsLib
 					SHARED
-					"SettingsLib.hpp" "SettingsLib.cpp"
-					"SettingsLibConfig.hpp" "SettingsLibConfig.hpp"
-					"SettingsLibConfigFileStream.hpp" "SettingsLibConfigFileStream.cpp"
+					"SettingsLib.hpp" 									"SettingsLib.cpp"
+					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
+					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
 					"SettingsLibDataTypes.hpp"
 					"SettingsLibDefinitions.hpp"
 					"SettingsLibErrorCodes.hpp"
-					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
-					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
+					"SettingsLibTools.hpp" 								"SettingsLibTools.cpp"
+					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
+					# Error and Exceptions:
+					"Components/Exceptions/SettingsLibException.hpp" 	"Components/Exceptions/SettingsLibException.cpp"
 					# Ini files:
-					"SettingsIniConfig.hpp" "SettingsIniConfig.cpp"
-					"SettingsIniConfigData.hpp" "SettingsIniConfigData.cpp"
-					"SettingsIniDefinitions.hpp"
-					"SettingsIniErrorCodes.hpp"
-					"SettingsIniTools.hpp" "SettingsIniTools.cpp"
+					"Components/Configs/Ini/SettingsIniConfig.hpp" 		"Components/Configs/Ini/SettingsIniConfig.cpp"
+					"Components/Configs/Ini/SettingsIniConfigData.hpp" 	"Components/Configs/Ini/SettingsIniConfigData.cpp"
+					"Components/Configs/Ini/SettingsIniDefinitions.hpp"
+					"Components/Configs/Ini/SettingsIniErrorCodes.hpp"
+					"Components/Configs/Ini/SettingsIniTools.hpp" 		"Components/Configs/Ini/SettingsIniTools.cpp"
 				)
 endif()
