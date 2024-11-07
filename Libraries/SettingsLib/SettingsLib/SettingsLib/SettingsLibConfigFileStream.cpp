@@ -13,7 +13,7 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 
 				if (sWFs2Vmem != 0)
 				{
-					this->saveErrorReport(std::exception(std::string("Fail to read into the memory the wCfgFileStream. Return " + std::to_string(sWFs2Vmem)).c_str()));
+					this->saveErrorReport(SettingsLib::Types::GeneralException(std::string("Fail to read into the memory the wCfgFileStream. Return " + std::to_string(sWFs2Vmem)).c_str()));
 				}
 
 				return 1;
@@ -33,7 +33,7 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 
 				if (sFs2Vmem != 0)
 				{
-					this->saveErrorReport(std::exception(std::string("Fail to read into the memory the cfgFileStream. Return " + std::to_string(sFs2Vmem)).c_str()));
+					this->saveErrorReport(SettingsLib::Types::GeneralException(std::string("Fail to read into the memory the cfgFileStream. Return " + std::to_string(sFs2Vmem)).c_str()));
 				}
 
 				return 1;
@@ -134,14 +134,22 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 		if (this->isWideData)
 		{
 			this->wCfgFileStream.reset(new std::wfstream);
+			#ifdef _MSC_VER
 			this->wCfgFileStream->open(this->cfgFilePath.wstring(), this->cfgFileMode);
+			#else
+			this->wCfgFileStream->open(this->cfgFilePath, this->cfgFileMode);
+			#endif // _MSC_VER
 			this->wCfgFileStream->close();
 			this->wCfgFileStream.reset(nullptr);
 		}
 		else
 		{
 			this->cfgFileStream.reset(new std::fstream);
+			#ifdef _MSC_VER
 			this->cfgFileStream->open(this->cfgFilePath.string(), this->cfgFileMode);
+			#else
+			this->cfgFileStream->open(this->cfgFilePath, this->cfgFileMode);
+			#endif // _MSC_VER
 			this->cfgFileStream->close();
 			this->cfgFileStream.reset(nullptr);
 		}
@@ -149,7 +157,7 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 		if (!std::filesystem::exists(this->cfgFilePath))
 		{
 			this->isCfgFileOk = false;
-			this->saveErrorReport(std::exception("Fail to create the configuration file!"));
+			this->saveErrorReport(SettingsLib::Types::GeneralException("Fail to create the configuration file!"));
 		}
 
 		this->isReadonly = false;	// Ignore the readonly mode for new files.
@@ -172,13 +180,13 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 		}
 		else
 		{
-			this->saveErrorReport(std::exception("The configuration file was marked as FAIL"));
+			this->saveErrorReport(SettingsLib::Types::GeneralException("The configuration file was marked as FAIL"));
 		}
 	}
 	else
 	{
 		this->isCfgFileOk = false;
-		this->saveErrorReport(std::exception("cfgFilePath does not lead to a configuration file!"));
+		this->saveErrorReport(SettingsLib::Types::GeneralException("cfgFilePath does not lead to a configuration file!"));
 	}
 }
 
@@ -245,7 +253,11 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 
 		try
 		{
+			#ifdef _MSC_VER
 			this->wCfgFileStream->open(this->cfgFilePath.wstring(), this->cfgFileMode);
+			#else
+			this->wCfgFileStream->open(this->cfgFilePath, this->cfgFileMode);
+			#endif // _MSC_VER
 			successfullyOpened = this->wCfgFileStream->is_open();
 
 			if (successfullyOpened)
@@ -267,7 +279,11 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 
 		try
 		{
+			#ifdef _MSC_VER
 			this->cfgFileStream->open(this->cfgFilePath.string(), this->cfgFileMode);
+			#else
+			this->cfgFileStream->open(this->cfgFilePath, this->cfgFileMode);
+			#endif // _MSC_VER
 			successfullyOpened = this->cfgFileStream->is_open();
 
 			if (successfullyOpened)
@@ -284,7 +300,7 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 	// Report is the opening file fail:
 	if (!successfullyOpened)
 	{
-		this->saveErrorReport(std::exception("Fail to open the configuration file!"));
+		this->saveErrorReport(SettingsLib::Types::GeneralException("Fail to open the configuration file!"));
 	}
 
     return successfullyOpened;
