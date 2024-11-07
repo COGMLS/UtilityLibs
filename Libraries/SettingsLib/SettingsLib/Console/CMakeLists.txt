@@ -44,6 +44,8 @@ project(SettingsLibTestConsole VERSION 0.0.1 DESCRIPTION "Console to test the Se
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
 include_directories("${SettingsLibReposRoot}/SettingsLib")
+include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Exception")
+include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Configs/Ini")
 
 # Define the executable properties:
 add_executable(SettingsLibTestConsole "main.cpp" "test.hpp" "test.cpp" "debug.hpp" "debug.cpp")
