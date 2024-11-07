@@ -42,9 +42,10 @@ namespace SettingsLib
 		{
 			unsigned int major;
 			unsigned int minor;
-			unsigned int revision;
+			unsigned int patch;
 			char buildType[8];
 			unsigned int build;
+			unsigned int revision;
 		};
 
 		/// @brief Configuration Data for Container Type

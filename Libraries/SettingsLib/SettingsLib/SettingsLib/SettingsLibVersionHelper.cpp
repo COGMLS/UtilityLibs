@@ -2,7 +2,7 @@
 
 std::string getSettingsLibVersion()
 {
-	return std::string(std::to_string(SETTINGS_LIBRARY_MAJOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_MINOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_REVISION_VERSION) + "-" + SETTINGS_LIBRARY_BUILD_TYPE);
+	return std::string(std::to_string(SETTINGS_LIBRARY_MAJOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_MINOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_PATCH_VERSION) + "-" + SETTINGS_LIBRARY_BUILD_TYPE + "." + std::to_string(SETTINGS_LIBRARY_REVISION_VERSION));
 }
 
 std::string getSettingsLibBuild()
@@ -12,7 +12,7 @@ std::string getSettingsLibBuild()
 
 std::wstring getSettingsLibVersionW()
 {
-	return std::wstring(std::to_wstring(SETTINGS_LIBRARY_MAJOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_MINOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_REVISION_VERSION) + L"-" + SETTINGS_LIBRARY_BUILD_TYPE_W);
+	return std::wstring(std::to_wstring(SETTINGS_LIBRARY_MAJOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_MINOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_PATCH_VERSION) + L"-" + SETTINGS_LIBRARY_BUILD_TYPE_W + L"." + std::to_wstring(SETTINGS_LIBRARY_REVISION_VERSION));
 }
 
 std::wstring getSettingsLibBuildW()
@@ -22,5 +22,5 @@ std::wstring getSettingsLibBuildW()
 
 const SettingsLib::Types::SettingsLibVersion getSettingsLibVersionData()
 {
-	return SettingsLib::Types::SettingsLibVersion{ SETTINGS_LIBRARY_MAJOR_VERSION, SETTINGS_LIBRARY_MINOR_VERSION, SETTINGS_LIBRARY_REVISION_VERSION, SETTINGS_LIBRARY_BUILD_TYPE, SETTINGS_LIBRARY_BUILD_VERSION };
+	return SettingsLib::Types::SettingsLibVersion{ SETTINGS_LIBRARY_MAJOR_VERSION, SETTINGS_LIBRARY_MINOR_VERSION, SETTINGS_LIBRARY_PATCH_VERSION, SETTINGS_LIBRARY_BUILD_TYPE, SETTINGS_LIBRARY_BUILD_VERSION, SETTINGS_LIBRARY_REVISION_VERSION };
 }
