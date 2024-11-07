@@ -5,9 +5,7 @@
 
 #include <string>
 
-#include "SettingsLibDataTypes.hpp"
-#include "SettingsIniTools.hpp"
-#include "SettingsIniConfigData.hpp"
+#include "SettingsLib.hpp"
 
 std::string translateIniLineCheckStatus (SettingsLib::ErrorCodes::IniLineCheckStatus code);
 

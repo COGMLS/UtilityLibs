@@ -2,10 +2,7 @@
 #include <vector>
 #include <map>
 
-#include "SettingsIniTools.hpp"
-#include "SettingsLibDataTypes.hpp"
-#include "SettingsIniConfigData.hpp"
-#include "SettingsIniConfig.hpp"
+#include "SettingsLib.hpp"
 
 #include "test.hpp"
 #include "debug.hpp"
