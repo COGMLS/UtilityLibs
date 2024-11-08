@@ -1494,6 +1494,82 @@ size_t SettingsLib::Types::ConfigIniSectionData::getIniDatabaseSize()
 	}
 }
 
+int SettingsLib::Types::ConfigIniSectionData::getKeys(std::vector<std::string> *keys)
+{
+	if (keys == nullptr)
+	{
+		return 2;
+	}
+
+	if (!this->isConfigured())
+	{
+		return 3;
+	}
+
+	if (this->isWideData())
+	{
+		return 4;
+	}
+
+	std::vector<std::string> lKeys;
+	keys->clear();	// Make sure the vector is empty
+
+	if (this->keyMap.size() > 0)
+	{
+		for (const std::pair<std::string, SettingsLib::Types::ConfigIniData>& pair : this->keyMap)
+		{
+			lKeys.push_back(pair.first);
+		}
+	}
+
+	*keys = lKeys;
+
+	if (!keys->empty())
+	{
+		return 0;		// Copied to keys
+	}
+
+    return 1;			// Fail to copy the keys or is empty
+}
+
+int SettingsLib::Types::ConfigIniSectionData::getKeys(std::vector<std::wstring> *keys)
+{
+	if (keys == nullptr)
+	{
+		return 2;
+	}
+
+	if (!this->isConfigured())
+	{
+		return 3;
+	}
+
+	if (!this->isWideData())
+	{
+		return 4;
+	}
+
+	std::vector<std::wstring> lKeys;
+	keys->clear();	// Make sure the vector is empty
+
+	if (this->keyMap.size() > 0)
+	{
+		for (const std::pair<std::wstring, SettingsLib::Types::ConfigIniData>& pair : this->wKeyMap)
+		{
+			lKeys.push_back(pair.first);
+		}
+	}
+
+	*keys = lKeys;
+
+	if (!keys->empty())
+	{
+		return 0;		// Copied to keys
+	}
+
+    return 1;			// Fail to copy the keys or is empty
+}
+
 bool SettingsLib::Types::ConfigIniSectionData::isConfigured()
 {
     return this->isSectionConfigured;

@@ -605,6 +605,28 @@ namespace SettingsLib
 				size_t getIniDatabaseSize();
 
 				/**
+				 * @brief Get the keys available in this section
+				 * @param keys Pointer to a vector string
+				 * @return 0 if the operation was succeed
+				 * @return 1 if the section does not contain keys
+				 * @return 2 if a nullptr was send
+				 * @return 3 if the section was not configured
+				 * @return 4 if the section was configured to use wide string
+				 */
+				int getKeys (std::vector<std::string>* keys);
+
+				/**
+				 * @brief Get the keys available in this section
+				 * @param keys Pointer to a vector string
+				 * @return 0 if the operation was succeed
+				 * @return 1 if the section does not contain keys
+				 * @return 2 if a nullptr was send
+				 * @return 3 if the section was not configured
+				 * @return 4 if the section was configured to use string
+				 */
+				int getKeys (std::vector<std::wstring>* keys);
+
+				/**
 				 * @brief Check if the object is configured
 				 */
 				bool isConfigured();
