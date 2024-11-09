@@ -1112,6 +1112,120 @@ int SettingsLib::Types::ConfigDataStore::setData(std::wstring data)
 	}
 }
 
+int SettingsLib::Types::ConfigDataStore::getDataStr(std::string *data)
+{
+	if (data == nullptr)
+	{
+		return 3;
+	}
+
+	try
+	{
+		switch (this->type)
+		{
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER:
+			{
+				*data = std::to_string(this->data.ull);
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
+			{
+				*data = std::to_string(this->data.ll);
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT:
+			{
+				*data = std::to_string(this->data.d);
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING:
+			{
+				*data = this->strData->getStr();
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN:
+			{
+				if (this->data.b)
+				{
+					*data = "true";
+				}
+				else
+				{
+					*data = "false";
+				}
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING:
+			{
+				return 1;
+			}
+			default:
+			{
+				return 2;
+			}
+		}
+		return 0;
+	}
+	catch(const std::exception&)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigDataStore::getDataStr(std::wstring *data)
+{
+    if (data == nullptr)
+	{
+		return 3;
+	}
+
+	try
+	{
+		switch (this->type)
+		{
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER:
+			{
+				*data = std::to_wstring(this->data.ull);
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER:
+			{
+				*data = std::to_wstring(this->data.ll);
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT:
+			{
+				*data = std::to_wstring(this->data.d);
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING:
+			{
+				*data = this->strData->getStrW();
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN:
+			{
+				if (this->data.b)
+				{
+					*data = L"true";
+				}
+				else
+				{
+					*data = L"false";
+				}
+				break;
+			}
+			case SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING:
+			{
+				return 1;
+			}
+			default:
+			{
+				return 2;
+			}
+		}
+		return 0;
+	}
+	catch(const std::exception&)
+	{
+		return 4;
+	}
+}
+
 SettingsLib::Types::ConfigStrData::ConfigStrData()
 {
 	this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY;

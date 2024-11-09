@@ -410,6 +410,30 @@ namespace SettingsLib
 				 * @return 2: An exception occur. The data store type was marked as "FAIL" and the value was lost.
 				 */
 				int setData (std::wstring data);
+
+				// Utility methods:
+
+				/**
+				 * @brief Get the internal data as a string.
+				 * @param data Pointer to string to store the converted value
+				 * @return 0: The value was successful converted
+				 * @return 1: If the data is wide string
+				 * @return 2: Fail to convert the value
+				 * @return 3: A nullptr was send to store the data
+				 * @return 4: An exception was found
+				 */
+				int getDataStr (std::string* data);
+
+				/**
+				 * @brief Get the internal data as a wide string.
+				 * @param data Pointer to string to store the converted value
+				 * @return 0: The value was successful converted
+				 * @return 1: If the data is a string
+				 * @return 2: Fail to convert the value
+				 * @return 3: A nullptr was send to store the data
+				 * @return 4: An exception was found
+				 */
+				int getDataStr (std::wstring* data);
 		};
 	}
 }
