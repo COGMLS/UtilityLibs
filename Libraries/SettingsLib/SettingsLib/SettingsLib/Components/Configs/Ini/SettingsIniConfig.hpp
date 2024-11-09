@@ -203,12 +203,47 @@ namespace SettingsLib
 				 */
 				int loadFile(bool discardChanges);
 
+				/**
+				 * @brief Convert the INI database to a vector string with a similar INI file format, allowing to consult using standard C++ or using to write the content in another file.
+				 * @param exportValues Export the vector string with database values
+				 * @param exportComments Export the vector string with database comments
+				 * @return Return the vector string with similar format used in a INI file
+				 */
+				std::vector<std::string> getConfigMapStr (bool exportValues = true, bool exportComments = true);
+
+				/**
+				 * @brief Convert the INI database to a vector string with a similar INI file format, allowing to consult using standard C++ or using to write the content in another file.
+				 * @param exportValues Export the vector string with database values
+				 * @param exportComments Export the vector string with database comments
+				 * @return Return the vector string with similar format used in a INI file
+				 */
+				std::vector<std::wstring> getConfigMapWstr (bool exportValues = true, bool exportComments = true);
+
 				//
 				// Configuration Database Management:
 				//
 
-				int getSectionList (std::vector<std::string>& list);
-				int getSectionList (std::vector<std::wstring>& list);
+				/**
+				 * @brief Get the section list available in the INI database
+				 * @param list Pointer to a vector string to store the section list
+				 * @return 0: If the operation was successful
+				 * @return 1: If the pointer is nullptr
+				 * @return 2: If the object was not configured
+				 * @return 3: If the object is configured to use wide strings
+				 * @return 4: If an exception was found
+				 */
+				int getSectionList (std::vector<std::string>* list);
+
+				/**
+				 * @brief Get the section list available in the INI database
+				 * @param list Pointer to a vector string to store the section list
+				 * @return 0: If the operation was successful
+				 * @return 1: If the pointer is nullptr
+				 * @return 2: If the object was not configured
+				 * @return 3: If the object is configured to use wide strings
+				 * @return 4: If an exception was found
+				 */
+				int getSectionList (std::vector<std::wstring>* list);
 
 				int getSection (std::string sectionName, SettingsLib::Types::ConfigIniSectionData* section);
 				int getSection (std::wstring sectionName, SettingsLib::Types::ConfigIniSectionData* section);

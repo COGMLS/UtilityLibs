@@ -574,3 +574,249 @@ int SettingsLib::Types::ConfigIni::loadFile(bool discardChanges)
 {
     return 0;
 }
+
+std::vector<std::string> SettingsLib::Types::ConfigIni::getConfigMapStr(bool exportValues, bool exportComments)
+{
+    std::vector<std::string> mapStr;
+
+	if (this->isConfigFileOk() && !this->isWideData())
+	{
+		std::string actualSection = "";
+
+		for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+		{
+			actualSection = sectionPair.first;
+
+			std::vector<std::string> keys;
+
+			std::string line;
+			std::string section;
+			std::string key;
+			std::string valStr;
+			std::string comment;
+			
+			if (sectionPair.second->getSectionName(&section) == 1)
+			{
+				line = "[" + section + "]";
+
+				if (sectionPair.second->hasComment() && exportComments)
+				{
+					if (sectionPair.second->getComment(&comment) == 0)
+					{
+						line += " #" + comment;
+					}
+				}
+
+				mapStr.push_back(line);
+
+				// Clear for reuse
+				line.clear();
+				comment.clear();
+			}
+
+			if (sectionPair.second->getKeys(&keys) == 0)
+			{
+				for (size_t i = 0; i < keys.size(); i++)
+				{
+					key = keys[i];
+					SettingsLib::Types::ConfigIniData iniData;
+
+					if (sectionPair.second->getIniData(key, &iniData) == 1)
+					{
+						line = key + "=";
+						
+						if (iniData.hasData() && exportValues)
+						{
+							SettingsLib::Types::ConfigDataStore data;
+							
+							if (iniData.getData(&data) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+							{
+								if (data.getDataStr(&valStr) == 0)
+								{
+									line += valStr;
+								}
+							}
+						}
+
+						if (iniData.hasComment() && exportComments)
+						{
+							if (iniData.getComment(&comment) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+							{
+								line += " #" + comment;
+							}
+						}
+
+						mapStr.push_back(line);
+					}
+
+					// Clear all temporary variables to reuse:
+					line.clear();
+					key.clear();
+					valStr.clear();
+					comment.clear();
+				}
+			}
+		}
+	}
+
+	return mapStr;
+}
+
+std::vector<std::wstring> SettingsLib::Types::ConfigIni::getConfigMapWstr(bool exportValues, bool exportComments)
+{
+	std::vector<std::wstring> mapWstr;
+
+	if (this->isConfigFileOk() && this->isWideData())
+	{
+		std::wstring actualSection = L"";
+
+		for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->wSectionMap)
+		{
+			actualSection = sectionPair.first;
+
+			std::vector<std::wstring> keys;
+
+			std::wstring line;
+			std::wstring section;
+			std::wstring key;
+			std::wstring valStr;
+			std::wstring comment;
+			
+			if (sectionPair.second->getSectionName(&section) == 1)
+			{
+				line = L"[" + section + L"]";
+
+				if (sectionPair.second->hasComment() && exportComments)
+				{
+					if (sectionPair.second->getComment(&comment) == 0)
+					{
+						line += L" #" + comment;
+					}
+				}
+
+				mapWstr.push_back(line);
+
+				// Clear for reuse
+				line.clear();
+				comment.clear();
+			}
+
+			if (sectionPair.second->getKeys(&keys) == 0)
+			{
+				for (size_t i = 0; i < keys.size(); i++)
+				{
+					key = keys[i];
+					SettingsLib::Types::ConfigIniData iniData;
+
+					if (sectionPair.second->getIniData(key, &iniData) == 1)
+					{
+						line = key + L"=";
+						
+						if (iniData.hasData() && exportValues)
+						{
+							SettingsLib::Types::ConfigDataStore data;
+							
+							if (iniData.getData(&data) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+							{
+								if (data.getDataStr(&valStr) == 0)
+								{
+									line += valStr;
+								}
+							}
+						}
+
+						if (iniData.hasComment() && exportComments)
+						{
+							if (iniData.getComment(&comment) == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+							{
+								line += L" #" + comment;
+							}
+						}
+
+						mapWstr.push_back(line);
+					}
+
+					// Clear all temporary variables to reuse:
+					line.clear();
+					key.clear();
+					valStr.clear();
+					comment.clear();
+				}
+			}
+		}
+	}
+
+	return mapWstr;
+}
+
+int SettingsLib::Types::ConfigIni::getSectionList(std::vector<std::string> *list)
+{
+	if (list == nullptr)
+	{
+		return 1;
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (this->isWideData())
+	{
+		return 3;
+	}
+
+	std::vector<std::string> sectionList;
+
+	try
+	{
+		for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+		{
+			sectionList.push_back(sectionPair.first);
+		}
+
+		*list = sectionList;
+	}
+	catch(const std::exception&)
+	{
+		return 4;
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigIni::getSectionList(std::vector<std::wstring> *list)
+{
+	if (list == nullptr)
+	{
+		return 1;
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData())
+	{
+		return 3;
+	}
+
+	std::vector<std::wstring> sectionList;
+
+	try
+	{
+		for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->wSectionMap)
+		{
+			sectionList.push_back(sectionPair.first);
+		}
+
+		*list = sectionList;
+	}
+	catch(const std::exception&)
+	{
+		return 4;
+	}
+
+    return 0;
+}
