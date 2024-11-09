@@ -299,9 +299,9 @@ namespace SettingsLib
 				 * @note If lineN is bigger than file, the line will be put in the end of the file.
 				 * @note This method uses a temporary vector, but doesn't use Vector Memory Store.
 				 */
-				int setConfigLine (std::string line, std::string refLine, size_t lineN, bool useRefLine);
+				int setConfigLine (std::string line, std::string refLine, size_t lineN, bool useRefLine);	// NOT READY
 
-				int setConfigLine (std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine);
+				int setConfigLine (std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine);	// NOT READY
 
 				/**
 				 * @brief Insert a new line in the file
@@ -399,6 +399,11 @@ namespace SettingsLib
 				//
 
 				/**
+				 * @brief Check the file stream if is using wide strings
+				 */
+				bool isWideFileStream();
+
+				/**
 				 * @brief Check if the configuration file stream accept changes.
 				 * @note If the file was created during the object creation and readonly was defined, the property will be disabled to allow write access to file stream. 
 				 */
@@ -418,7 +423,11 @@ namespace SettingsLib
 				/**
 				 * @brief Save the Vector Memory into the file
 				 * @param saveType Determinate the method to save the Vector Memory Store into the file. Check the notes for more details.
-				 * @return 
+				 * @return -1: If saveType is greater than 2.
+				 * @return 0: If the operation was successful.
+				 * @return 1: If the Vector Memory Store does not exist.
+				 * @return 2: If the Configuration File Stream was set to readonly.
+				 * @return 3: If the ConfigurationFileStream is not open.
 				 * @note The save types available are: 0 - override the file lines (default operation). 1 - Put the vector's data on begin of the file. 2 - Put the vector's data on the end of the file.
 				 */
 				int saveStoreOnFile(unsigned short saveType = 0);

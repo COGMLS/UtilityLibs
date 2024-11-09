@@ -4,7 +4,7 @@ int SettingsLib::Types::ConfigFileStream::save2Store()
 {
 	if (this->keepCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			try
 			{
@@ -53,7 +53,7 @@ int SettingsLib::Types::ConfigFileStream::makeVMemStore()
 {
 	if (this->keepCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			if (this->wCfgStore == nullptr)
 			{
@@ -78,7 +78,7 @@ int SettingsLib::Types::ConfigFileStream::makeVMemStore()
 
 bool SettingsLib::Types::ConfigFileStream::vMemStoreExist()
 {
-    if (this->isWideData)
+    if (this->isWideFileStream())
 	{
 		return this->wCfgStore != nullptr;
 	}
@@ -131,7 +131,7 @@ SettingsLib::Types::ConfigFileStream::ConfigFileStream(std::filesystem::path cfg
 	{
 		this->cfgFileMode = std::ios_base::out;
 
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			this->wCfgFileStream.reset(new std::wfstream);
 			#ifdef _MSC_VER
@@ -213,7 +213,7 @@ SettingsLib::Types::ConfigFileStream::~ConfigFileStream()
 
 void SettingsLib::Types::ConfigFileStream::closeConfigStream()
 {
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		this->wCfgFileStream->close();
 	}
@@ -244,7 +244,7 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 
 	this->setKeepCfgStore(refreshCfgStore);
 
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		if (wCfgFileStream == nullptr)
 		{
@@ -308,7 +308,7 @@ bool SettingsLib::Types::ConfigFileStream::openConfigStream(bool refreshCfgStore
 
 bool SettingsLib::Types::ConfigFileStream::isConfigStreamOpen()
 {
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		return this->wCfgFileStream->is_open();
 	}
@@ -332,7 +332,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::string
 {
 	if (this->keepCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			return -1;
 		}
@@ -363,7 +363,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLines(std::vector<std::wstrin
 {
 	if (this->keepCfgStore)
 	{
-		if (!this->isWideData)
+		if (!this->isWideFileStream())
 		{
 			return -1;
 		}
@@ -409,7 +409,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::strin
 
 	if (useCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			return 5;
 		}
@@ -439,7 +439,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::strin
 	}
 	else
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			return 5;
 		}
@@ -487,7 +487,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::wstri
 
 	if (useCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			if (this->vMemStoreExist())
 			{
@@ -517,7 +517,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::wstri
 	}
 	else
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			// Set to the begin of the file:
 			this->wCfgFileStream->seekg(std::wfstream::beg);
@@ -548,7 +548,7 @@ int SettingsLib::Types::ConfigFileStream::getConfigLine(size_t nLine, std::wstri
 
 int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::string> *new_vMemStore, bool overrideVector)
 {
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		return 1;
 	}
@@ -587,7 +587,7 @@ int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::string
 
 int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::wstring> *new_vMemStore, bool overrideVector)
 {
-	if (!this->isWideData)
+	if (!this->isWideFileStream())
 	{
 		return 1;
 	}
@@ -626,7 +626,7 @@ int SettingsLib::Types::ConfigFileStream::setConfigLines(std::vector<std::wstrin
 
 int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::string line, bool overwrite)
 {
-    if (this->isWideData)
+    if (this->isWideFileStream())
 	{
 		return 1;
 	}
@@ -670,7 +670,7 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::strin
 
 int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::wstring line, bool overwrite)
 {
-    if (!this->isWideData)
+    if (!this->isWideFileStream())
 	{
 		return 1;
 	}
@@ -714,7 +714,22 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::wstri
 
 int SettingsLib::Types::ConfigFileStream::setConfigLine(std::string line, std::string refLine, size_t lineN, bool useRefLine)
 {
+	if (this->isWideFileStream())
+	{
+		return 1;
+	}
+
 	if (!this->isConfigStreamOpen())
+	{
+		return 4;
+	}
+
+    return 0;
+}
+
+int SettingsLib::Types::ConfigFileStream::setConfigLine(std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine)
+{
+    if (!this->isConfigStreamOpen())
 	{
 		return 4;
 	}
@@ -729,7 +744,7 @@ int SettingsLib::Types::ConfigFileStream::insertConfigLine(std::string line, boo
 		return 1;
 	}
 
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		return 2;
 	}
@@ -796,7 +811,7 @@ int SettingsLib::Types::ConfigFileStream::insertConfigLine(std::wstring line, bo
 		return 1;
 	}
 
-	if (!this->isWideData)
+	if (!this->isWideFileStream())
 	{
 		return 2;
 	}
@@ -860,7 +875,7 @@ size_t SettingsLib::Types::ConfigFileStream::getvMemStoreSize()
 {
 	if (this->vMemStoreExist())
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			return this->wCfgStore->size();
 		}
@@ -877,7 +892,7 @@ int SettingsLib::Types::ConfigFileStream::freeCfgStore()
 {
 	if (this->keepCfgStore)
 	{
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			if (this->wCfgStore != nullptr)
 			{
@@ -926,7 +941,7 @@ int SettingsLib::Types::ConfigFileStream::refreshCfgStore()
 
 int SettingsLib::Types::ConfigFileStream::refreshCfgStore(std::vector<std::string> *externCfgStore)
 {
-	if (this->isWideData)
+	if (this->isWideFileStream())
 	{
 		return 4;
 	}
@@ -957,7 +972,7 @@ int SettingsLib::Types::ConfigFileStream::refreshCfgStore(std::vector<std::strin
 
 int SettingsLib::Types::ConfigFileStream::refreshCfgStore(std::vector<std::wstring> *externCfgStore)
 {
-	if (!this->isWideData)
+	if (!this->isWideFileStream())
 	{
 		return 4;
 	}
@@ -1006,6 +1021,11 @@ void SettingsLib::Types::ConfigFileStream::setKeepCfgStore(bool keepCfgStore)
 	}
 
 	this->keepCfgStore = keepCfgStore;
+}
+
+bool SettingsLib::Types::ConfigFileStream::isWideFileStream()
+{
+	return this->isWideData;
 }
 
 bool SettingsLib::Types::ConfigFileStream::isReadonlyMode()
@@ -1059,7 +1079,7 @@ int SettingsLib::Types::ConfigFileStream::saveStoreOnFile(unsigned short saveTyp
 			this->cfgFileMode = std::ios_base::out | std::ios_base::trunc;
 			this->openConfigStream(false, false);
 
-			if (this->isWideData)
+			if (this->isWideFileStream())
 			{
 				status = SettingsLib::Tools::storeMemory2Fstream(this->wCfgFileStream.get(), this->wCfgStore.get(), true, true, true, false);
 			}
@@ -1074,7 +1094,7 @@ int SettingsLib::Types::ConfigFileStream::saveStoreOnFile(unsigned short saveTyp
 			this->cfgFileMode = std::ios_base::out | std::ios_base::app;
 			this->openConfigStream(false, false);
 
-			if (this->isWideData)
+			if (this->isWideFileStream())
 			{
 				status = SettingsLib::Tools::storeMemory2Fstream(this->wCfgFileStream.get(), this->wCfgStore.get(), false, false, true, false);
 			}
@@ -1089,7 +1109,7 @@ int SettingsLib::Types::ConfigFileStream::saveStoreOnFile(unsigned short saveTyp
 	{
 		// Prepare to store the current line inside the file into a local vector
 		// Prepare to reopen the file stream 
-		if (this->isWideData)
+		if (this->isWideFileStream())
 		{
 			std::vector<std::wstring> localFileLines;
 
