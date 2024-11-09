@@ -4,6 +4,8 @@
 
 The Settings Library is designed to facilitate developers to implement configuration file and configuration flags. The library create an database in the memory when a configuration file is opened and offer support to *add*, *remove*, *search*, *get* and *set* entries and values for the database.
 
+The library contain a high level class to manage the database created when a **INI configuration file** is opened with the `ConfigIni` class. It is also possible to make *save*, *load* and *export* operations on the database in `ConfigIni` class, that uses a special file stream class, `ConfigFileStream`. The `ConfigIni` class offers support to use `std::string` or `std::wstring` and the data values are store in the `ConfigDataStore` class allowing to hold **integer**, **unsigned integer**, **double**, **boolean**, **std::string** or **std::wstring** values. All the numeric values are 64-bit.
+
 > **NOTE:** **This project is under development and the datatype, classes, methods and algorithms may not work as expected or may not be complete implemented.**
 
 The **SettingsLib** is focus on cross-platform development and use the maximum of ISO C++ as possible. The library uses **C++20** and **other languages support plans was dropped**.
@@ -28,13 +30,28 @@ The deprecated library was never finished, but was used with a few personal proj
 
 ### Future implementations:
 
+* Complete implementation on declared methods.
+* Complete support for cross-platform
+* Alternative reading method for INI files. (Current implementation read the file by each line, leading to missing the values that uses multiple lines)
 * Support to JSON
 * Support to binary format
-* Complete support for cross-platform
 
 ### Version history:
 
 <dl>
+    <!-- 3.0.0-alpha.25 (2024/11/09) -->
+    <dt><strong>3.0.0-alpha.25</strong></dt>
+    <dd>Added method <code>getKeys</code> to <code>ConfigIniSectionData</code></dd>
+    <dd>Added auxiliary method to convert the data to string.</dd>
+    <dd>Added method <code>getConfigMapStr</code>.</dd>
+    <dd>Added method <code>getConfigMapWstr</code>.</dd>
+    <dd>Implemented method <code>getSectionList</code>.</dd>
+    <dd>Updated the <code>ConfigIni</code> class documentation.</dd>
+    <dd>Added <code>isWideFileStream</code> method.</dd>
+    <dd>Replaced use of <code>isWideData</code> variable to <code>isWideFileStream</code> method.</dd>
+    <dd>Marked the method <code>setConfigLine</code> as <b>NOT READY</b>.</dd>
+    <dd><b><font color="orange">[WARNING]</font></b> The regression detected on version <b><code>3.0.0-alpha.24</code></b> on Unix systems occur because not all methods was defined and the methods implemented was mainly with <code>std::string</code> and the compiler may get confused with the function overloading.</dd>
+    <dd><b><font color="red">[CAUTION]</font></b> <b>This version was not compiled in Unix systems. Because not all methods was implemented and the link with other applications may fail as happened with previous version.</b></dd>
     <!-- 3.0.0-alpha.24 (2024/11/07) -->
     <dt><strong>3.0.0-alpha.24</strong></dt>
     <dd><u>Added first cross-platform support</u></dd>
@@ -69,7 +86,7 @@ The deprecated library was never finished, but was used with a few personal proj
     <dd>Added <code>convertObj2CfgLine</code>.</dd>
 </dl>
 
-**NOTE:** Previous version history was not tracked
+**NOTE:** Previous versions history was not tracked
 
 ## License
 
