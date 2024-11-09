@@ -2,18 +2,19 @@
 
 ## About Utility Libraries repository:
 
-This repository is destined to store the development of important common utility libraries used in projects like settings, directory and file management, but also for other purposes that can be commonly used in projects.
+This repository is destined to store the development of important common utility libraries used in projects like settings log reports, versioning tools, directory and file management, but also for other purposes that can be commonly used in projects.
+
+The Utility Libraries is focus on development of cross-platform projects, but a few projects can may be an exception depending the platform support or capabilities.
 
 > **NOTE:** This repository contains libraries that may be part of other projects and was ported to here. For those libraries, the code was generalized to allow a better approach to other solutions.
 
-> **NOTE:** The repository uses some console solutions for testing. All consoles and files that has in the end of name, the sequence ` `*`_[Cc]onsole[Tt]est*`*` ` or ` `*`_[Tt]est*`*` ` will be ignored by git.
-
 ## Libraries Available:
 
-| Name | Documentation | Version | Notes |
-| ---- | ------------- | ------- | ----- |
-| LoggerLib | [LoggerLibDoc.md](/Libraries/LoggerLib/README.md) | 1.1.0-rc | LoggerLib v1 received a new release part of migration to CMake |
-| SettingsLib | [SettingsLibDoc.md](/Libraries/SettingsLib/SettingsLib.md) | 1.4.15-beta | |
+| Name | Documentation | Version | Cross-platform support | Development branch | Notes |
+| ---- | ------------- | ------- | ---------------------- | ------------------ | ----- |
+| LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 1.1.0-rc | Linux, Windows | `LoggerLibDev` | LoggerLib v1 received a new release part of migration to CMake |
+| SettingsLib | [README.md](/Libraries/SettingsLib/README.md) | 3.0.0-alpha | Linux, Windows | `SettingsLibDev` | This project is under development and was not merged into `master` |
+| VersionLib | [README.md](/Libraries/VersionLib/VersionLib/README.md) | 0.8.0-alpha | Linux, Windows | `VersionLibDev` |  |
 
 ## License
 
@@ -21,7 +22,7 @@ A copy is available in this [file](/LICENSE.txt)
 
 MIT License
 
-Copyright (c) 2022-2023 Matheus L. Silvati
+Copyright (c) 2022-2024 Matheus L. Silvati
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
