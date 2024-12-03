@@ -29,7 +29,7 @@ endif()
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${VersionLibFinalBinDir})
 
 # Define the DEBUG preprocessor definition:
-set(DebugVersionLibSolution True)
+set(DebugVersionLib True)
 
 project(
 			VersionLibProject
