@@ -35,6 +35,17 @@ project(
 
 ###########################################################
 #
+# Functions:
+#
+###########################################################
+
+# Make a test with specific arguments:
+function(mkArgTest test target arg)
+	add_test(NAME ${test} COMMAND ${target} ${arg})
+endfunction()
+
+###########################################################
+#
 # Sub projects:
 #
 ###########################################################
