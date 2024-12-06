@@ -44,7 +44,7 @@ namespace VersionLib
 			unsigned int minor;					// Minor version number
 			unsigned int patch;					// Patch version number
 			unsigned long long build;			// Build number
-			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc
+			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 			unsigned int build_type_number;		// Build type number (alpha1, rc3)
 
 		public:
@@ -140,6 +140,10 @@ namespace VersionLib
 			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number);
 			
+			VersionData (const VersionLib::VersionData& other);
+
+			VersionData (VersionLib::VersionData&& other) noexcept;
+
 			//
 			// Destructor:
 			//
@@ -212,6 +216,10 @@ namespace VersionLib
 			//
 			// Operators:
 			//
+
+			VersionLib::VersionData& operator= (const VersionLib::VersionData& other);
+
+			VersionLib::VersionData& operator= (VersionLib::VersionData&& other) noexcept;
 
 			bool operator==(const VersionData& other);
 			bool operator!=(const VersionData& other);

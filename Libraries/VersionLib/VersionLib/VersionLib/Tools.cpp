@@ -10,7 +10,21 @@ const char *VersionLib::tolower_Cstr(const std::string &value)
 std::string VersionLib::tolower_str(const std::string &value)
 {
 	std::string tmp;
-	std::transform(value.begin(), value.end(), tmp.begin(), [](unsigned char c){return std::tolower(c);});
+	char c = '\0';
+	//std::transform(value.begin(), value.end(), tmp.begin(), [](unsigned char c){return std::tolower(c);});
+	for (size_t i = 0; i < value.size(); i++)
+	{
+		c = value[i];
+
+		if (std::isupper(c))
+		{
+			tmp += std::tolower(c);
+		}
+		else
+		{
+			tmp += c;
+		}
+	}
 	return tmp;
 }
 
@@ -145,6 +159,16 @@ std::string VersionLib::buildType2Str(BuildType type, bool useShortStr)
 VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 {
 	value = VersionLib::tolower_str(value);
+
+	if (value.starts_with('"') || value.starts_with('\''))
+	{
+		value = value.erase(0, 1);
+	}
+
+	if (value.ends_with('"') || value.ends_with('\''))
+	{
+		value = value.erase(value.size() - 1, 1);
+	}
 
 	if (value == "alpha" || value == "a")
 	{
@@ -485,7 +509,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				}
 				
 				// Try to detect the build type number version:
-				if (foundBuildTypeVer && !foundBuildTypeNum && (lastFieldProcessed == 3))
+				if ((foundBuildTypeVer && !foundBuildTypeNum && (lastFieldProcessed == 3)) || (foundMajorVer && foundMinorVer && foundPatchVer && !foundBuildTypeNum && !foundBuildTypeVer && (lastFieldProcessed == 2 && std::isalpha(tmp[0]) != 0)))
 				{
 					try
 					{

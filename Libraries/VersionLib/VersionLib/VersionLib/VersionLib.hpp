@@ -32,10 +32,28 @@
 #include "Tools.hpp"
 #include "VersionClass.hpp"
 #include "VersionStruct.hpp"
+#include "VersionLibVersionInfo.hpp"
 
 namespace VersionLib
 {
-	extern const VersionData internalVersionData(0, 8, 0, 15, VersionLib::BuildType::ALPHA, 0);
+	/**
+	 * @brief Generate an VersionData object representing the Version Library version information object
+	 */
+	inline VersionData internalVersionData()
+	{
+		VersionLib::BuildType type = VersionLib::str2BuildType(VERSION_LIB_VERSION_INFO_BUILD_TYPE);
+
+		VersionLib::VersionData version(
+											VERSION_LIB_VERSION_INFO_MAJOR_VERSION,
+											VERSION_LIB_VERSION_INFO_MINOR_VERSION,
+											VERSION_LIB_VERSION_INFO_PATCH_VERSION,
+											VERSION_LIB_VERSION_INFO_BUILD_NUMBER,
+											type,
+											VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER
+										);
+
+		return version;
+	}
 }
 
 #endif // !VERSION_HPP

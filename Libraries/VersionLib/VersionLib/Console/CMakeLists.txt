@@ -27,6 +27,7 @@ endif()
 
 if(DebugVersionLib)
 	add_compile_definitions(DEBUG)
+	enable_testing()
 endif()
 
 add_compile_definitions(UNICODE)
@@ -53,6 +54,7 @@ include_directories("${VersionLibReposRoot}/VersionLib")
 add_executable(
 					VersionLibTestConsole
 					"main.cpp"
+					"formatTests.hpp" "formatTests.cpp"
 				)
 
 # Define manual library link:
@@ -71,4 +73,11 @@ if(UseManualTargetLinkLibs)
 	endif()
 else()
 	target_link_libraries(VersionLibTestConsole VersionLib)
+endif()
+
+# Enable tests if DEBUG is set:
+
+if (DEBUG)
+	mkArgTest(VersionLib_FormatsTest VersionLibTestConsole "-test-formats")
+	mkArgTest(VersionLib_OperatorTest VersionLibTestConsole "-test-operators")
 endif()

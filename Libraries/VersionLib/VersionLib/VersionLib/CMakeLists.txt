@@ -66,6 +66,7 @@ if (WIN32)
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
 					"VersionLib.hpp"
+					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp"
 				)
 else()
@@ -76,6 +77,7 @@ else()
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
 					"VersionLib.hpp"
+					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp"
 				)
 endif()
