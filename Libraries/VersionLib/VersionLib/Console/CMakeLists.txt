@@ -54,6 +54,7 @@ include_directories("${VersionLibReposRoot}/VersionLib")
 add_executable(
 					VersionLibTestConsole
 					"main.cpp"
+					"formatTests.hpp" "formatTests.cpp"
 				)
 
 # Define manual library link:
