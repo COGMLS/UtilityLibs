@@ -64,7 +64,8 @@ namespace LoggerLib
 		v.patch = LOGGER_LIB_PATCH_VERSION;
 		v.build = LOGGER_LIB_BUILD_NUMBER;
 		v.revision = LOGGER_LIB_REVISION_NUMBER;
-		v.type = static_cast<char*>(LOGGER_LIB_BUILD_TYPE);
+		//v.type = static_cast<char*>(LOGGER_LIB_BUILD_TYPE);
+		std::strcpy(v.type, LOGGER_LIB_BUILD_TYPE);
 		return v;
 	}
 
