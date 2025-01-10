@@ -14,6 +14,17 @@ The `VersionLib.hpp` header contain a global object version available to test an
 
 > ⚠️ **Warning:** The actual development priority is to make sure the C++ functions can work properly. When the algorithms in C++ became stable and reliable, the C methods version will be the main development focus.
 
+## About other documentation:
+
+This project contains other documentation files available in [Docs folder](./Docs/).
+
+| File | Documentation | Path |
+| ---- | ------------- | ---- |
+| Project Info | Information about the project, known bugs, future implementations, deprecated and removed features | [ProjectInfo.md](./Docs/Project%20Info.md)
+| Project Version History | Complete version history about this project. In the README.md file only contains part of the version changes | [ProjectVersionHistory.md](./Docs/Project%20Version%20History.md)
+
+> Other documentation files will be added in a future.
+
 ### Compatible string version formats:
 
 To use a string as the source of the versioning information, the string must follow a sequence of numbers and use the dots between **major**, **minor**, **patch** and **revision** (if applicable - only after build type). The type of your build can be **alpha** (**a** for short), **beta** (**b** for short), **release candidate** or **release_candidate** (**rc** for short) or **release** (**r** for short). The type is set by hyphen `-` character. If no type was used, will assume **release**. The build number can be set after all those information, it can be used the word `build` before the number, it helps to avoid the algorithm to make sure is the build number field.
@@ -86,6 +97,12 @@ To use a string as the source of the versioning information, the string must fol
     }
 </style>
 <dl>
+    <!-- 0.8.3-beta (2025/01/10) -->
+    <dt><version-data>0.8.3-beta</version-data></dt>
+    <dd>Added new parameter <code>showReleaseType</code> in <code>getBuildTypeComplete</code> and <code>getVersionStr</code> methods.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing parameters for <code>getBuildTypeCompleteCstr</code> method.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> version string format when was marked as <strong>RELEASE</strong>.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> operators <strong>less</strong> than and <strong>greater</strong> than.</dd>
     <!-- 0.8.2-beta (2024/10/09) -->
     <dt><version-data>0.8.2-beta</version-data></dt>
     <dd>Added copy and move constructors.</dd>
@@ -113,7 +130,7 @@ To use a string as the source of the versioning information, the string must fol
 
 MIT License
 
-Copyright (c) 2024 Matheus L. Silvati
+Copyright (c) 2024-2025 Matheus L. Silvati
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

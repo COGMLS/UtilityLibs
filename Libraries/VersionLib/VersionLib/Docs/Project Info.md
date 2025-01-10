@@ -19,7 +19,7 @@ This document contains the information about the future plans, known bugs, depre
 | 1 | ~~`tolower_str` contains a bug that make miss the characters that already in lowercase.~~ | Resolved |
 | 2 | `tolower_Cstr` contains a bug that make miss the characters that already in lowercase. | Not resolved |
 | 3 | When sending a version string on format *MAJOR.MINOR.PATCH.REVISION* to `VersionData`, the `build_type_number` or *revision* **can not be detected** | Not resolved |
-| 4 | Using `VersionData` operators *less*, *less than*, *greater* and *greater than* does not work as expected | Not resolved |
+| 4 | ~~Using `VersionData` operators *less*, *less than*, *greater* and *greater than* does not work as expected~~ | Resolved |
 
 ## Deprecated Features:
 
