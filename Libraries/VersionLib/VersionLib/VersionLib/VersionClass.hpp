@@ -198,20 +198,25 @@ namespace VersionLib
 
 			/**
 			 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style
+			 * @param useShortStr Use the short string version
+			 * @param showReleaseType Show the "release" or "r" build type
 			 */
-			const char* getBuildTypeCompleteCstr();
+			const char* getBuildTypeCompleteCstr(bool useShortStr = true, bool showReleaseType = false);
 
 			/**
 			 * @brief Get the complete the build type data (like alpha.2, beta.3).
 			 * @param useShortStr Use the short string version
+			 * @param showReleaseType Show the "release" or "r" build type
 			 */
-			std::string getBuildTypeComplete(bool useShortStr = true);
+			std::string getBuildTypeComplete(bool useShortStr = true, bool showReleaseType = false);
 
 			/**
 			 * @brief Get the version data as a string
 			 * @param useShortStr Use the short string version in build type
+			 * @param hideBuildWord Hide the word "build" from the version string
+			 * @param showReleaseType If true, the build type will be showed when is marked as RELEASE and the "release" or "r" world will be added
 			 */
-			std::string getVersionStr(bool useShortStr = true, bool hideBuildWord = false);
+			std::string getVersionStr(bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
 
 			//
 			// Operators:

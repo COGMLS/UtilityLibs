@@ -156,16 +156,16 @@ unsigned int VersionLib::VersionData::getBuildTypeNumber()
     return this->build_type_number;
 }
 
-const char *VersionLib::VersionData::getBuildTypeCompleteCstr()
+const char *VersionLib::VersionData::getBuildTypeCompleteCstr(bool useShortStr, bool showReleaseType)
 {
-    return this->getBuildTypeComplete().c_str();
+    return this->getBuildTypeComplete(useShortStr, showReleaseType).c_str();
 }
 
-std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr)
+std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr, bool showReleaseType)
 {
     std::string tmp;
 
-	if (this->build_type == BuildType::RELEASE)
+	if (this->build_type == BuildType::RELEASE && !showReleaseType)
 	{
 		return tmp;
 	}
@@ -180,14 +180,20 @@ std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr)
 	return tmp;
 }
 
-std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBuildWord)
+std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBuildWord, bool showReleaseType)
 {
 	std::string tmp;
 
 	tmp += std::to_string(this->major) + ".";
 	tmp += std::to_string(this->minor) + ".";
-	tmp += std::to_string(this->patch) + "-";
-	tmp += this->getBuildTypeComplete(useShortStr);
+	tmp += std::to_string(this->patch);
+	
+	if (this->build_type != BuildType::RELEASE || this->build_type == BuildType::RELEASE && showReleaseType)
+	{
+		tmp += "-";
+	}
+
+	tmp += this->getBuildTypeComplete(useShortStr, showReleaseType);
 	tmp += " ";
 
 	if (!hideBuildWord)
@@ -276,24 +282,12 @@ bool VersionLib::VersionData::operator!=(const VersionData &other)
 
 bool VersionLib::VersionData::operator>(const VersionData &other)
 {
-	if (this->major >= other.major)
-	{
-		if (this->minor >= other.minor)
-		{
-			if (this->patch >= other.patch)
-			{
-				if (this->build_type >= other.build_type)
-				{
-					if (this->build_type_number > other.build_type_number)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-    return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
+	if (this->major <= other.major && this->minor < other.minor) return false;
+	if (this->major < other.major) return false;
+	return true;
 }
 
 bool VersionLib::VersionData::operator>=(const VersionData &other)
@@ -320,24 +314,12 @@ bool VersionLib::VersionData::operator>=(const VersionData &other)
 
 bool VersionLib::VersionData::operator<(const VersionData &other)
 {
-    if (other.major >= this->major)
-	{
-		if (other.minor >= this->minor)
-		{
-			if (other.patch >= this->patch)
-			{
-				if (other.build_type >= this->build_type)
-				{
-					if (other.build_type_number > this->build_type_number)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-    return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
+	if(this->major >= other.major && this->minor > other.minor) return false;
+	if(this->major > other.major) return false;
+	return true;
 }
 
 bool VersionLib::VersionData::operator<=(const VersionData &other)
