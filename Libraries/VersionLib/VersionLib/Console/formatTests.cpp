@@ -36,38 +36,40 @@ std::string VersionFormatTest::getTest()
 std::string testVersionData (VersionLib::VersionData& obj1, VersionLib::VersionData& obj2)
 {
 	std::string output;
+	std::string ver1 = obj1.getVersionStr(true, false, true);
+	std::string ver2 = obj2.getVersionStr(true, false, true);
 
-	output += "Obj1 Info: " + obj1.getVersionStr() + "\n";
-	output += "Obj2 Info: " + obj2.getVersionStr() + "\n\n";
+	output += "VerObj1 Info: " + ver1 + "\n";
+	output += "VerObj2 Info: " + ver2 + "\n\n";
 
 	if (obj1 < obj2)
 	{
-		output += "obj1 < obj2\n";
+		output += ver1 + " < " + ver2 + "\n";
 	}
 
 	if (obj1 <= obj2)
 	{
-		output += "obj1 <= obj2\n";
+		output += ver1 + " <= " + ver2 + "\n";
 	}
 
 	if (obj1 > obj2)
 	{
-		output += "obj1 > obj2\n";
+		output += ver1 + " > " + ver2 + "\n";
 	}
 
 	if (obj1 >= obj2)
 	{
-		output += "obj1 >= obj2\n";
+		output += ver1 + " >= " + ver2 + "\n";
 	}
 
 	if (obj1 == obj2)
 	{
-		output += "obj1 == obj2\n";
+		output += ver1 + " == " + ver2 + "\n";
 	}
 
 	if (obj1 != obj2)
 	{
-		output += "obj1 != obj2\n";
+		output += ver1 + " != " + ver2 + "\n";
 	}
 
 	return output;
