@@ -26,6 +26,13 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.3-beta (2025/01/10) -->
+    <dt><version-data>0.8.3-beta</version-data></dt>
+    <dd>Added new parameter <code>showReleaseType</code> in <code>getBuildTypeComplete</code> and <code>getVersionStr</code> methods.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing parameters for <code>getBuildTypeCompleteCstr</code> method.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> version string format when was marked as <strong>RELEASE</strong>.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> operators <strong>less</strong> than and <strong>greater</strong> than.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Fixed missing "release" build type string return on <code>buildType2Str</code>.</dd>
     <!-- 0.8.2-beta (2024/10/09) -->
     <dt><version-data>0.8.2-beta</version-data></dt>
     <dd>Added copy and move constructors.</dd>

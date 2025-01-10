@@ -149,6 +149,15 @@ std::string VersionLib::buildType2Str(BuildType type, bool useShortStr)
 
 			return std::string("release candidate");
 		}
+		case BuildType::RELEASE:
+		{
+			if (useShortStr)
+			{
+				return std::string("r");
+			}
+
+			return std::string("release");
+		}
 		default:
 		{
 			return std::string();

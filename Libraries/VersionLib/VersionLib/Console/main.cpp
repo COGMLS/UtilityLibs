@@ -44,12 +44,16 @@ int main(int argc, const char* argv[])
 	
 	VersionLib::VersionData libVersion = VersionLib::internalVersionData();
 	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
-	VersionLib::VersionData test (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
+	VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
+	VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
+	VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
 
 	// Add the libVersion appVersion and first test version:
 	versions.push_back(libVersion);
 	versions.push_back(appVersion);
-	versions.push_back(test);
+	versions.push_back(test0);
+	versions.push_back(test1);
+	versions.push_back(test2);
 
 	// Add other versions formats for tests:
 	if (versionTest)
@@ -86,10 +90,13 @@ int main(int argc, const char* argv[])
 		}
 	}
 
-	//VersionLib::VersionData* vTest = nullptr;
-	//VersionLib::VersionData* vTest2 = nullptr;
-
-	//testVersionData(appVersion, *vTest);
+	if (testVersionOperators)
+	{
+		for (size_t i = 0; i < versions.size() - 1; i++)
+		{
+			std::cout << testVersionData(versions[i], versions[i + 1]) << std::endl;
+		}
+	}
 
 	return 0;
 }
