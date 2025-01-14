@@ -46,7 +46,7 @@ namespace VersionLib
 	};
 
 	bool hasBuildTypeNumber (const VersionStruct& version);
-	char* verStruct2Str (const VersionStruct& verion);
+	const char* verStruct2Str (const VersionStruct& verion);
 	int chkVerStruct (const VersionStruct& ver1, const VersionStruct& ver2);
 }
 
