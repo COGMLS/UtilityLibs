@@ -138,7 +138,15 @@ unsigned long long VersionLib::VersionData::getBuild()
 
 const char *VersionLib::VersionData::getBuildTypeCstr(bool useShortStr)
 {
-    return this->getBuildTypeStr(useShortStr).c_str();
+	std::string verStr = this->getBuildTypeStr(useShortStr);
+	size_t strLen = verStr.size();
+	char* tmp = new char[strLen];
+	#ifdef _MSC_VER
+	std::strcpy_s(tmp, strLen, verStr.c_str());
+	#else
+	std::strcpy(tmp, verStr.c_str());
+	#endif // !_MSC_VER
+	return const_cast<const char*>(tmp);
 }
 
 std::string VersionLib::VersionData::getBuildTypeStr(bool useShortStr)
@@ -158,7 +166,15 @@ unsigned int VersionLib::VersionData::getBuildTypeNumber()
 
 const char *VersionLib::VersionData::getBuildTypeCompleteCstr(bool useShortStr, bool showReleaseType)
 {
-    return this->getBuildTypeComplete(useShortStr, showReleaseType).c_str();
+	std::string verStr = this->getBuildTypeComplete(useShortStr, showReleaseType);
+	size_t strLen = verStr.size();
+	char* tmp = new char[strLen];
+	#ifdef _MSC_VER
+	std::strcpy_s(tmp, strLen, verStr.c_str());
+	#else
+	std::strcpy(tmp, verStr.c_str());
+	#endif // !_MSC_VER
+	return const_cast<const char*>(tmp);
 }
 
 std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr, bool showReleaseType)
@@ -204,6 +220,20 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 	tmp += std::to_string(this->build);
 
 	return tmp;
+}
+
+VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
+{
+	VersionLib::VersionStruct verData;
+
+	verData.major = this->major;
+	verData.minor = this->minor;
+	verData.patch = this->patch;
+	verData.build = this->build;
+	verData.build_type = this->build_type;
+	verData.build_type_number = this->build_type_number;
+
+	return verData;
 }
 
 VersionLib::VersionData &VersionLib::VersionData::operator=(const VersionLib::VersionData &other)
@@ -342,4 +372,34 @@ bool VersionLib::VersionData::operator<=(const VersionData &other)
 	}
 
     return false;
+}
+
+bool VersionLib::VersionData::operator==(const std::string &verStr)
+{
+    return *this == VersionLib::VersionData(verStr);
+}
+
+bool VersionLib::VersionData::operator!=(const std::string &verStr)
+{
+    return *this != VersionLib::VersionData(verStr);
+}
+
+bool VersionLib::VersionData::operator>(const std::string &verStr)
+{
+    return *this > VersionLib::VersionData(verStr);
+}
+
+bool VersionLib::VersionData::operator>=(const std::string &verStr)
+{
+    return *this >= VersionLib::VersionData(verStr);
+}
+
+bool VersionLib::VersionData::operator<(const std::string &verStr)
+{
+    return *this < VersionLib::VersionData(verStr);
+}
+
+bool VersionLib::VersionData::operator<=(const std::string &verStr)
+{
+    return *this <= VersionLib::VersionData(verStr);
 }

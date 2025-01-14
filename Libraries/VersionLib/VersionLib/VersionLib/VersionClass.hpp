@@ -57,6 +57,7 @@ namespace VersionLib
 			 * @brief Create an VersionData object that can represent an software version data
 			 * @param versionStr String with version information
 			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct2 method and is under development.
+			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
 			VersionData (std::string versionStr);
 
@@ -219,6 +220,15 @@ namespace VersionLib
 			std::string getVersionStr(bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
 
 			//
+			// Converter methods:
+			//
+
+			/**
+			 * @brief Convert the the VersionData object into a VersionStruct data
+			 */
+			VersionLib::VersionStruct toVersionStruct();
+
+			//
 			// Operators:
 			//
 
@@ -233,12 +243,12 @@ namespace VersionLib
 			bool operator<(const VersionData& other);
 			bool operator<=(const VersionData& other);
 
-			//bool operator==(const std::string& other);
-			//bool operator!=(const std::string& other);
-			//bool operator>(const std::string& other);
-			//bool operator>=(const std::string& other);
-			//bool operator<(const std::string& other);
-			//bool operator<=(const std::string& other);
+			bool operator==(const std::string& verStr);
+			bool operator!=(const std::string& verStr);
+			bool operator>(const std::string& verStr);
+			bool operator>=(const std::string& verStr);
+			bool operator<(const std::string& verStr);
+			bool operator<=(const std::string& verStr);
 	};
 }
 
