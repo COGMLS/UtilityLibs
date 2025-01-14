@@ -2,16 +2,29 @@
 
 const char *VersionLib::tolower_Cstr(const std::string &value)
 {
-	std::string tmp;
-	std::transform(value.begin(), value.end(), tmp.begin(), [](unsigned char c){return std::tolower(c);});
-	return tmp.c_str();
+	size_t strlen = value.size();
+	char* tmp = new char[strlen];
+	char c = '\0';
+	for (size_t i = 0; i < value.size(); i++)
+	{
+		c = value[i];
+
+		if (std::isupper(c))
+		{
+			tmp[i] = std::tolower(c);
+		}
+		else
+		{
+			tmp[i] = c;
+		}
+	}
+	return const_cast<const char*>(tmp);
 }
 
 std::string VersionLib::tolower_str(const std::string &value)
 {
 	std::string tmp;
 	char c = '\0';
-	//std::transform(value.begin(), value.end(), tmp.begin(), [](unsigned char c){return std::tolower(c);});
 	for (size_t i = 0; i < value.size(); i++)
 	{
 		c = value[i];
