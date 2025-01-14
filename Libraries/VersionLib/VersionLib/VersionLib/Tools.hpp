@@ -89,6 +89,7 @@ namespace VersionLib
 	 * @warning THIS FUNCTION IS NOT RELIABLE FOR NON SEMANTIC VERSIONING CONVERSION
 	 * @deprecated This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion
 	 */
+	[[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);
 
 	/**
