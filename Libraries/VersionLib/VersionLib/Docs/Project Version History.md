@@ -26,6 +26,13 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.3-beta.2 (2025/01/14) -->
+    <dt><version-data>0.8.3-beta.2</version-data></dt>
+    <dd>Updated <strong>Project Info.md</strong></dd>
+    <dd>Marked missing attribute <i>deprecated</i> on <code>toVersionStruct</code> declaration.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>tolower_Cstr</code> now converts the strings to C string style correctly</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing instructions in <code>getBuildTypeCompleteCstr</code> method in <code>VersionData</code> class. </dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing instructions in <code>getBuildTypeCstr</code> method in <code>VersionData</code> class</dd>
     <!-- 0.8.3-beta (2025/01/10) -->
     <dt><version-data>0.8.3-beta</version-data></dt>
     <dd>Added new parameter <code>showReleaseType</code> in <code>getBuildTypeComplete</code> and <code>getVersionStr</code> methods.</dd>
