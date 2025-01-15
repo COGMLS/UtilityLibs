@@ -45,6 +45,7 @@
 #include "LoggerCommonDataTypes.hpp"
 #include "LoggerDateTime.hpp"
 
+#define LOGGER_LIB_USE_BUBBLE_SORT
 #define LOGGER_LIB_MNG_MAXLOGFILES 30				// Default maximum log files to keep
 
 /// @brief Get the log file list from a directory

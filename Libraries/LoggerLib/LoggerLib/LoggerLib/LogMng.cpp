@@ -26,8 +26,6 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 		bool swap = false;
 		size_t i = 0;
 		size_t min_index = 0;
-		LogFileDateTime tmpLogDt;
-		std::filesystem::path tmpLog;
 		std::vector<LogFileDateTime> logDtArr;
 		std::vector<std::filesystem::path> logPaths;
 
@@ -45,6 +43,26 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 			i++;
 		}
 
+		#ifdef LOGGER_LIB_USE_BUBBLE_SORT
+		for (size_t i = 0; i < logFileList.size() - 1; i++)
+		{
+			swap = false;
+			for (size_t j = 0; j < logFileList.size() - i - 1; j++)
+			{
+				if ((newestFirst && logDtArr[j] < logDtArr[j + 1]) || (!newestFirst && logDtArr[j] > logDtArr[j + 1]))
+				{
+					std::swap<std::filesystem::path>(logPaths[j], logPaths[j + 1]);
+					std::swap<LogFileDateTime>(logDtArr[j], logDtArr[j + 1]);
+					swap = true;
+				}
+			}
+
+			if (!swap)
+			{
+				break;
+			}
+		}
+		#else
 		for (i = 0; i < logPaths.size() - 1; i++)
 		{
 			swap = false;
@@ -62,14 +80,11 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 			// Swap when found the last write time difference:
 			if (swap)
 			{
-				tmpLog = logPaths[i];
-				tmpLogDt = logDtArr[i];
-				logPaths[i] = logPaths[min_index];
-				logDtArr[i] = logDtArr[min_index];
-				logPaths[min_index] = tmpLog;
-				logDtArr[min_index] = tmpLogDt;
+				std::swap<std::filesystem::path>(logPaths[i], logPaths[min_index]);
+				std::swap<LogFileDateTime>(logDtArr[i], logDtArr[min_index]);
 			}
 		}
+		#endif // !LOGGER_LIB_USE_BUBBLE_SORT
 
 		logFileList = logPaths;
 	}
@@ -77,37 +92,53 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 
 void sortLogFileList2(std::vector<std::filesystem::path> &logFileList, bool newestFirst)
 {
-	/**
-	 * Try to mitigate the sorting fail with std::chrono::duration,
-	 * between current time_point and file_time_type time_point.
-	 * The difference should be a duration object, representing the
-	 * age of the file.
-	 */
-
 	if (!logFileList.empty())
 	{
 		bool swap = false;
 		size_t min_index = 0;
-		std::filesystem::path tmpLog;
 		std::filesystem::file_time_type refLogTime;
 		std::filesystem::file_time_type logTime;
 
 		std::chrono::nanoseconds refLogTime_ns;
 		std::chrono::nanoseconds logTime_ns;
 
-		std::chrono::time_point now = std::chrono::system_clock::now();
+		std::chrono::time_point now = std::chrono::utc_clock::now();
 
+		#ifdef LOGGER_LIB_USE_BUBBLE_SORT
+		for (size_t i = 0; i < logFileList.size() - 1; i++)
+		{
+			swap = false;
+
+			refLogTime = std::filesystem::last_write_time(logFileList[i]);
+
+			for (size_t j = 0; j < logFileList.size() - i - 1; j++)
+			{
+				logTime = std::filesystem::last_write_time(logFileList[j]);
+
+				if ((newestFirst && refLogTime > logTime) || (!newestFirst && refLogTime < logTime))
+				{
+					std::swap(logFileList[j], logFileList[j + 1]);
+					swap = true;
+				}
+			}
+
+			if (!swap)
+			{
+				break;
+			}
+		}
+		#else
 		for (size_t i = 0; i < logFileList.size() - 1; i++)
 		{
 			swap = false;
 			min_index = i;
 			refLogTime = std::filesystem::last_write_time(logFileList[i]);
-			refLogTime_ns = now - std::chrono::clock_cast<std::chrono::system_clock, std::chrono::file_clock>(refLogTime);
+			refLogTime_ns = now - std::chrono::clock_cast<std::chrono::utc_clock, std::chrono::file_clock>(refLogTime);
 
 			for (size_t j = i + 1; j < logFileList.size(); j++)
 			{
 				logTime = std::filesystem::last_write_time(logFileList[j]);
-				logTime_ns = now - std::chrono::clock_cast<std::chrono::system_clock, std::chrono::file_clock>(logTime);
+				logTime_ns = now - std::chrono::clock_cast<std::chrono::utc_clock, std::chrono::file_clock>(logTime);
 
 				/*
 				 * If the refLog is older than actual log obj and newer was set
@@ -125,11 +156,10 @@ void sortLogFileList2(std::vector<std::filesystem::path> &logFileList, bool newe
 			// Swap when found the last write time difference:
 			if (swap)
 			{
-				tmpLog = logFileList[i];
-				logFileList[i] = logFileList[min_index];
-				logFileList[min_index] = tmpLog;
+				std::swap(logFileList[i], logFileList[min_index]);
 			}
 		}
+		#endif // !LOGGER_LIB_USE_BUBBLE_SORT
 	}
 }
 
