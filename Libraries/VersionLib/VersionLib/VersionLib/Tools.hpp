@@ -89,6 +89,7 @@ namespace VersionLib
 	 * @warning THIS FUNCTION IS NOT RELIABLE FOR NON SEMANTIC VERSIONING CONVERSION
 	 * @deprecated This function is not recommended to use. Use toVersionStrut2, that allow to use a better semantic versioning conversion
 	 */
+	[[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);
 
 	/**
@@ -99,6 +100,36 @@ namespace VersionLib
 	 * @note Conversion Notes: The conversion formats accept by this method are (x: Major, y: Minor, z: Patch, t: Build Type, n: Build Type Number, "build": Word used to determinate the build field. b: Build number.): Semantic Versioning format: x.y.z, x.y.z-t, x.y.z-t.n, x.y-t, x.y-t.n. Other formats: x.y-t build b, x.y-t b, x.y-t.n build b, x.y.z-t.n build b, x.y.z-t.n b
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct2 (std::string version);
+
+	/**
+	 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style
+	 * @param version Version Struct data
+	 * @param useShortStr Use the short string version
+	 * @param showReleaseType Show the "release" or "r" build type
+	 * @return Return a constant C string style of the complete build type data
+	 * @warning This function is not defined!
+	 */
+	const char* verStruct2BuildTypeComplete (const VersionLib::VersionStruct& version, bool useShortStr = true, bool showReleaseType = false);
+
+	/**
+	 * @brief Get the version data as a string
+	 * @param version Version Struct data
+	 * @param useShortStr Use the short string version
+	 * @param hideBuildWord 
+	 * @param showReleaseType Show the "release" or "r" build type
+	 * @return Return a constant C string style of the version data in the struct
+	 * @warning This function is not defined!
+	 */
+	const char* verStruct2Str (const VersionLib::VersionStruct& version, bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
+
+	/**
+	 * @brief Check each given Version Struct to determinate which one of them is greater, less or equal
+	 * @param ver1 Version Struct data left reference
+	 * @param ver2 Version Struct data right reference
+	 * @return 
+	 * @warning This function is not defined!
+	 */
+	int chkVerStruct (const VersionLib::VersionStruct& ver1, const VersionLib::VersionStruct& ver2);
 }
 
 #endif // !VERSION_TOOLS_HPP

@@ -44,11 +44,6 @@ namespace VersionLib
 		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 		unsigned int build_type_number;		// Build type number (alpha1, rc3)
 	};
-
-	bool hasBuildTypeNumber (const VersionStruct& version);
-	char* verStruct2Str (const VersionStruct& verion);
-	int chkVerStruct (const VersionStruct& ver1, const VersionStruct& ver2);
 }
-
 
 #endif // !VERSION_STRUCT_HPP

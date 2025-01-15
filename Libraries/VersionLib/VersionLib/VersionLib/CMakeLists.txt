@@ -50,11 +50,8 @@ project(
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
 
-# Define to export the library methods if is Windows:
-if(WIN32)
-	# Add the export here
-	add_compile_definitions(VERSION_LIB_EXPORTS)
-endif()
+# Define to export the library methods:
+add_compile_definitions(VERSION_LIB_EXPORTS)
 
 # Define the library build properties:
 if (WIN32)
