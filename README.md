@@ -2,19 +2,22 @@
 
 ## About Utility Libraries repository:
 
-This repository is destined to store the development of important common utility libraries used in projects like settings log reports, versioning tools, directory and file management, but also for other purposes that can be commonly used in projects.
+This repository is destined to store the development of important common utility libraries used in projects like settings, log reports, versioning tools, directory and file management, but also to other purposes that can be commonly used in projects.
 
-The Utility Libraries is focus on development of cross-platform projects, but a few projects can may be an exception depending the platform support or capabilities.
+The **Utility Libraries** repository contains some libraries that was designed first to specific projects and than adapted to a more generic approach, allowing an easy way to be used in many projects. The repository contain libraries focus on C++ development, but some libraries can contain ported versions to other languages. Check the project documentation to see more details about. Each project contain a folder *Docs* that holds their own documentations.
 
-> **NOTE:** This repository contains libraries that may be part of other projects and was ported to here. For those libraries, the code was generalized to allow a better approach to other solutions.
+> The repository is focus on development of cross-platform projects, but a few projects can may be an exception depending the platform support or their capabilities.
 
 ## Libraries Available:
 
 | Name | Documentation | Version | Cross-platform support | Development branch | Notes |
 | ---- | ------------- | ------- | ---------------------- | ------------------ | ----- |
-| LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 1.1.0-rc | Linux, Windows | `LoggerLibDev` | LoggerLib v1 received a new release part of migration to CMake |
-| SettingsLib | [README.md](/Libraries/SettingsLib/README.md) | 3.0.0-alpha | Linux, Windows | `SettingsLibDev` | This project is under development and was not merged into `master` |
-| VersionLib | [README.md](/Libraries/VersionLib/VersionLib/README.md) | 0.8.0-alpha | Linux, Windows | `VersionLibDev` |  |
+| LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 3.3.0-alpha | Linux, Windows, Mac | `LoggerLibDev` | LoggerLib v1 received a new release part of migration to CMake |
+| LoggerLibSolution | *Not available* | 1.1.0 | No. **Windows only** | `LoggerLibDev` | This is a deprecated project that was part from another one. Is recommended to use `LoggerLib` that has cross-platform support and receives constant updates |
+| SettingsLib | [README.md](/Libraries/SettingsLib/README.md) | 3.0.0-alpha | Linux, Windows, Mac | `SettingsLibDev` | This project is under development and was not merged into `master` |
+| VersionLib | [README.md](/Libraries/VersionLib/VersionLib/README.md) | 0.8.3-beta.2 | Linux, Windows, Mac | `VersionLibDev` |  |
+
+> **NOTE:** The projects with cross-platform marked with *Macintosh* support was not tested, because I do not have a Mac. But they use ISO C++, ISO C, .Net, or other language/framework that has support and their features are functional on Mac, considering the documentations.
 
 ## License
 
@@ -22,7 +25,7 @@ A copy is available in this [file](/LICENSE.txt)
 
 MIT License
 
-Copyright (c) 2022-2024 Matheus L. Silvati
+Copyright (c) 2022-2025 Matheus L. Silvati
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
