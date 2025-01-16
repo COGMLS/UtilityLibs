@@ -26,7 +26,11 @@ set(LoggerLibReposRoot ${CMAKE_CURRENT_LIST_DIR})
 # Define the DEBUG preprocessor definition:
 set(DebugLoggerLib True)
 
-project(LoggerLibProject VERSION 1.0.0 DESCRIPTION "Logger Library solution with a console for tests.")
+project(
+			LoggerLibProject
+			VERSION 1.0.0
+			DESCRIPTION "Logger Library solution with a console for tests."
+		)
 
 ###########################################################
 #
