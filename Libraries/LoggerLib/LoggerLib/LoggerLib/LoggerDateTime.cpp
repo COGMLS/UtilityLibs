@@ -291,6 +291,40 @@ bool LogFileDateTime::getLogDtFromFilename(std::string filename)
 	return this->isDateTimeOk;	// Return the date time status. This will be used in future modifications for this class
 }
 
+void LogFileDateTime::getLogDtFromFileDateTime(std::filesystem::path filepath, bool useTimezoneCorrection)
+{
+	std::chrono::system_clock::time_point dt = std::chrono::clock_cast<std::chrono::system_clock, std::chrono::file_clock>(std::filesystem::last_write_time(filepath));
+
+	if (useTimezoneCorrection)
+	{
+		std::chrono::seconds tz_offset = std::chrono::zoned_time(std::chrono::current_zone()).get_info().offset;
+		dt = dt + tz_offset;	// Overwrite the original date time file information with the timezone correction
+	}
+
+	time_t cTimet = std::chrono::system_clock::to_time_t(dt);
+	tm cTime = *std::localtime(&cTimet);	// Use localtime to use system local time
+
+	this->year = cTime.tm_year + 1900;	// On ctime, year is counted year - 1900.
+	this->month = cTime.tm_mon + 1;		// On C style, January starts with 0. Adding 1 will match with traditional calendar.
+	this->day = cTime.tm_mday;
+	this->hour = cTime.tm_hour;
+	this->minute = cTime.tm_min;
+	this->second = cTime.tm_sec;
+
+	if (
+			std::chrono::year_month_day{
+				std::chrono::year(this->year), 
+				std::chrono::month(this->month), 
+				std::chrono::day{static_cast<unsigned int>(this->day)}}.ok() &&
+			this->hour >= 0 && this->hour < 24 &&
+			this->minute >= 0 && this->minute < 60 &&
+			this->second >= 0 && this->second < 60
+		)
+	{
+		this->isDateTimeOk = true;
+	}
+}
+
 LogFileDateTime::LogFileDateTime()
 {
 }
@@ -322,19 +356,26 @@ LogFileDateTime::LogFileDateTime(std::string filename)
 
 		if (i > 0)
 		{
-			filename_noExt = filename.substr(0, i);
+			filename_noExt = filename.substr(0, i + 1);
 			this->getLogDtFromFilename(filename_noExt);
 		}
 	}
 }
 
-LogFileDateTime::LogFileDateTime(std::filesystem::path filepath)
+LogFileDateTime::LogFileDateTime(std::filesystem::path filepath, bool useFileDateTime, bool useTimezoneCorrection)
 {
 	if (std::filesystem::exists(filepath))
 	{
 		if (std::filesystem::is_regular_file(filepath))
 		{
-			this->getLogDtFromFilename(filepath.stem().string());
+			if (useFileDateTime)
+			{
+				this->getLogDtFromFileDateTime(filepath, useTimezoneCorrection);
+			}
+			else
+			{
+				this->getLogDtFromFilename(filepath.stem().string());
+			}
 		}
 	}
 }
@@ -368,6 +409,19 @@ LogFileDateTime::~LogFileDateTime()
 bool LogFileDateTime::isLogDtOk()
 {
     return this->isDateTimeOk;
+}
+
+unsigned long long LogFileDateTime::getLiteralUllDt()
+{
+	std::string dt = "";
+	
+	if (this->isDateTimeOk)
+	{
+		dt = std::to_string(this->year) + std::to_string(this->month) + std::to_string(this->day) + std::to_string(this->hour) + std::to_string(this->minute) + std::to_string(this->second);
+		return std::stoull(dt);
+	}
+
+    return 0;
 }
 
 LogFileDateTime &LogFileDateTime::operator=(const LogFileDateTime &other)
