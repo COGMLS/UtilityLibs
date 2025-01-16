@@ -35,6 +35,15 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.0-alpha (2025/01/15) -->
+    <dt><version-data>3.3.0-alpha</version-data></dt>
+    <dd>Cleaned unused code</dd>
+    <dd>Added alternative algorithm for sorting, using the bubble sort instead of selection sort. <strong>The selection sort is disabled by a preprocessor directive and is marked as deprecated</strong></dd>
+    <dd><fix-alert>[FIX]</fix-alert> string copy <code>LOGGER_LIB_BUILD_TYPE</code> to version build type</dd>
+    <dd>Updated constructor parameters when receiving a <code>std::filesystem::path</code> to control if will use the file date time and will apply the timezone correction.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> sorting <code>LogFileDateTime</code> objects in descending and ascending order</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing last date time character from string information in <code>LogFileDateTime</code> constructor.</dd>
+    <dd><note-alert>[NOTE]</note-alert> This version of Logger Library appears to be very stable, but no tests with sorting log files was made on Windows systems. Considering the lack of tests to one important platform, the LoggerLib will be marked as <code>alpha</code></dd>
     <!-- 3.2.0-alpha (2024/12/18) -->
     <dt><version-data>3.2.0-alpha</version-data></dt>
     <dd>Added <code>LogFileDateTime</code> class to focus on log file date time information report (not based on Last Time Write or Creation Time)</dd>
