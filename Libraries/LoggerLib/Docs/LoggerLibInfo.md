@@ -9,7 +9,6 @@ This document contains the information about the future plans, known bugs, depre
 ## Future Implementations:
 
 - Support to formatting log data
-- Unique header to include all library features
 - Move LoggerLib features to `LoggerLib` namespace
 - Better error handling
 
