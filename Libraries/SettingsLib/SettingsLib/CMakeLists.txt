@@ -25,7 +25,11 @@ set(SettingsLibReposRoot ${CMAKE_CURRENT_LIST_DIR})
 # Define the DEBUG preprocessor definition:
 set(DebugSettingsLib True)
 
-project(SettingsLibProject VERSION 3.0.0 DESCRIPTION "Settings Library solution with a console for tests.")
+project(
+			SettingsLibProject
+			VERSION 3.0.0
+			DESCRIPTION "Settings Library solution with a console for tests."
+		)
 
 ###########################################################
 #

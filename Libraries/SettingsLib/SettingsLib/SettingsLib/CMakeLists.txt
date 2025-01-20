@@ -38,7 +38,11 @@ add_compile_definitions(_UNICODE)
 #add_compile_definitions(MITIGATE_REF_FUNCTION)
 
 # Defined the project:
-project(SettingsLib VERSION 3.0.0 DESCRIPTION "Settings Library.")
+project(
+			SettingsLib
+			VERSION 3.0.0
+			DESCRIPTION "Settings Library."
+		)
 
 ###########################################################
 #
@@ -53,9 +57,9 @@ include_directories("${SettingsLibraryRoot}/Components/Exceptions")
 include_directories("${SettingsLibraryRoot}/Components/Configs/Ini")
 
 # Define to export the library methods if is Windows:
+add_compile_definitions(SETTINGS_LIB_EXPORTS)
 if(WIN32)
 	# Add the export here
-	add_compile_definitions(SETTINGS_LIB_EXPORTS)
 endif()
 
 # Define the library build properties:
@@ -64,7 +68,9 @@ if (WIN32)
 					SettingsLib
 					SHARED
 					"dllmain.hpp" "dllmain.cpp"
+					# Settings Library main header:
 					"SettingsLib.hpp" "SettingsLib.cpp"
+					# Settings Library headers:
 					"SettingsLibConfig.hpp" "SettingsLibConfig.hpp"
 					"SettingsLibConfigFileStream.hpp" "SettingsLibConfigFileStream.cpp"
 					"SettingsLibDataTypes.hpp" "SettingsLibDataTypes.cpp"
@@ -85,7 +91,9 @@ else()
 	add_library(
 					SettingsLib
 					SHARED
+					# Settings Library main header:
 					"SettingsLib.hpp" 									"SettingsLib.cpp"
+					# Settings Library headers:
 					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
 					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
 					"SettingsLibDataTypes.hpp"

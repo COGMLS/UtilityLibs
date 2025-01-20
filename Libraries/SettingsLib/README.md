@@ -38,9 +38,35 @@ The deprecated library was never finished, but was used with a few personal proj
 
 ### Version history:
 
+<!-- Settings Library History Table: -->
+<style>
+    version-data
+    {
+        font-weight: bold;
+    }
+    note-alert
+    {
+        font-weight: bold;
+        color: blue;
+    }
+    fix-alert
+    {
+        font-weight: bold;
+    }
+    bug-alert
+    {
+        font-weight: bold;
+        color: red;
+    }
+    warning-alert
+    {
+        font-weight: bold;
+        color: orange;
+    }
+</style>
 <dl>
     <!-- 3.0.0-alpha.25 (2024/11/09) -->
-    <dt><strong>3.0.0-alpha.25</strong></dt>
+    <dt><version-data>3.0.0-alpha.25</version-data></dt>
     <dd>Added method <code>getKeys</code> to <code>ConfigIniSectionData</code></dd>
     <dd>Added auxiliary method to convert the data to string.</dd>
     <dd>Added method <code>getConfigMapStr</code>.</dd>
@@ -50,30 +76,30 @@ The deprecated library was never finished, but was used with a few personal proj
     <dd>Added <code>isWideFileStream</code> method.</dd>
     <dd>Replaced use of <code>isWideData</code> variable to <code>isWideFileStream</code> method.</dd>
     <dd>Marked the method <code>setConfigLine</code> as <b>NOT READY</b>.</dd>
-    <dd><b><font color="orange">[WARNING]</font></b> The regression detected on version <b><code>3.0.0-alpha.24</code></b> on Unix systems occur because not all methods was defined and the methods implemented was mainly with <code>std::string</code> and the compiler may get confused with the function overloading.</dd>
-    <dd><b><font color="red">[CAUTION]</font></b> <b>This version was not compiled in Unix systems. Because not all methods was implemented and the link with other applications may fail as happened with previous version.</b></dd>
+    <dd><warning-alert>[WARNING]</warning-alert> The regression detected on version <b><code>3.0.0-alpha.24</code></b> on Unix systems occur because not all methods was defined and the methods implemented was mainly with <code>std::string</code> and the compiler may get confused with the function overloading.</dd>
+    <dd><bug-alert>[CAUTION]</bug-alert> <b>This version was not compiled in Unix systems. Because not all methods was implemented and the link with other applications may fail as happened with previous version.</b></dd>
     <!-- 3.0.0-alpha.24 (2024/11/07) -->
-    <dt><strong>3.0.0-alpha.24</strong></dt>
+    <dt><version-data>3.0.0-alpha.24</version-data></dt>
     <dd><u>Added first cross-platform support</u></dd>
     <dd>Added <code>GeneralException</code> to replace Microsoft's non standard C++ <code>std::exception</code> located in <b><i>Components/Exceptions</i></b></dd>
     <dd>Reorganized <code>SettingsIni</code> components to <b><i>Components/Configs/Ini</i></b></dd>
     <dd>Revised <code>SettingsLibVersion</code></dd>
     <dd>Updated <code>SettingsLib</code> version</dd>
     <dd>Updated version methods</dd>
-    <dd><b><font color="red">[CAUTION]</font></b> This version may contain a possible regression: The <code>SettingsLib</code> compile on Unix systems but fail to link and consume it on other applications</dd>
+    <dd><bug-alert>[CAUTION]</bug-alert> This version may contain a possible regression: The <code>SettingsLib</code> compile on Unix systems but fail to link and consume it on other applications</dd>
     <!-- 3.0.0-alpha.23 (2024/09/23) -->
-    <dt><strong>3.0.0-alpha.23</strong></dt>
+    <dt><version-data>3.0.0-alpha.23</version-data></dt>
     <dd>Added new constructor.</dd>
     <dd>Updated the documentation.</dd>
     <dd>Added <code>readLine</code>, <code>setConfigName</code> and <code>getConfigName</code>, <code>isWideData</code>, <code>isConfigFileOk</code>, <code>isUsingConfigFileStream</code> methods.</dd>
     <dd>Added <code>isConfigStreamOk</code> method.</dd>
     <!-- 3.0.0-alpha.22 (2024/09/23) -->
-    <dt><strong>3.0.0-alpha.22</strong></dt>
+    <dt><version-data>3.0.0-alpha.22</version-data></dt>
     <dd>Added new methods into <code>ConfigIni</code> class.</dd>
     <dd>Updated the class documentation.</dd>
-    <dd><b>NOTE:</b> only few methods are ready to be used at this moment.</dd>
+    <dd><note-alert>NOTE:</note-alert> only few methods are ready to be used at this moment.</dd>
     <!-- 3.0.0-alpha.21 (2024/06/31) -->
-    <dt><strong>3.0.0-alpha.21</strong></dt>
+    <dt><version-data>3.0.0-alpha.21</version-data></dt>
     <dd>Added declarations for comment methods.</dd>
     <dd>Changed the comment data to use <code>std::unique_ptr</code>.</dd>
     <dd>Added <code>getComment</code> and <code>setComment</code> methods.</dd>
@@ -94,7 +120,7 @@ A copy is available in this [file](./LICENSE.txt)
 
 MIT License
 
-Copyright (c) 2022-2024 Matheus L. Silvati
+Copyright (c) 2022-2025 Matheus L. Silvati
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
