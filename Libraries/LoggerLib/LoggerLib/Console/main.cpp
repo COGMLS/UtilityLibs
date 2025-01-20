@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include "LoggerLibVersionTools.hpp"
-#include "Logger.hpp"
+#include "LoggerLib.hpp"
 
 int main()
 {

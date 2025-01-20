@@ -12,6 +12,4 @@
 	#include "framework.h"
 #endif // !WIN32
 
-#include "LoggerLibDef.hpp"
-
 #endif //PCH_H
