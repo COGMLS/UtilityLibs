@@ -35,6 +35,10 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.0-alpha.1 (2025/01/27) -->
+    <dt><version-data>3.3.0-alpha.1</version-data></dt>
+    <dd><code>sortLogFileList2</code> marked as deprecated</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Added missing stream output for date and time information in <code>LogEntry</code> and <code>LogEntryW</code> classes</dd>
     <!-- 3.3.0-alpha (2025/01/15) -->
     <dt><version-data>3.3.0-alpha</version-data></dt>
     <dd>Cleaned unused code</dd>
