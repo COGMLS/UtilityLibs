@@ -92,9 +92,25 @@ int main(int argc, const char* argv[])
 
 	if (testVersionOperators)
 	{
-		for (size_t i = 0; i < versions.size() - 1; i++)
+		std::cout << "Testing version object operators:" << std::endl;
+		std::cout << "Test 1:" << std::endl << std::endl;
+
+		for (size_t i = 0; i < versions.size(); i++)
 		{
-			std::cout << testVersionData(versions[i], versions[i + 1]) << std::endl;
+			for (size_t j = 0; j < versions.size(); j++)
+			{
+				std::cout << testVersionData(versions[i], versions[j]) << std::endl;
+			}
+		}
+
+		std::cout << std::endl << "Test 2:" << std::endl << std::endl;
+
+		for (size_t i = versions.size() - 1; i > 0; i--)
+		{
+			for (size_t j = versions.size() - 1; j > 0; j--)
+			{
+				std::cout << testVersionData(versions[i], versions[j]) << std::endl;
+			}
 		}
 	}
 
