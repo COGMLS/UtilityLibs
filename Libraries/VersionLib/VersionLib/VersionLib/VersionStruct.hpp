@@ -43,6 +43,7 @@ namespace VersionLib
 		unsigned long long build;			// Build number
 		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 		unsigned int build_type_number;		// Build type number (alpha1, rc3)
+		bool compare_build;					// Build comparison control
 	};
 }
 
