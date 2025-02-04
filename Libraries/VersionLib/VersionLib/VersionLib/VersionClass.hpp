@@ -31,6 +31,9 @@
 #include "BuildTypes.hpp"
 #include "Tools.hpp"
 
+//#define COMPARISON_OPERATORS_V1
+#define COMPARISON_OPERATORS_V2
+
 namespace VersionLib
 {
 	/**

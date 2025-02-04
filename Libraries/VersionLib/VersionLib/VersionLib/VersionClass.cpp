@@ -287,10 +287,10 @@ bool VersionLib::VersionData::operator==(const VersionData &other)
 		return false;
 	}
 
-	if (this->build != other.build)
-	{
-		return false;
-	}
+	//if (this->build != other.build)
+	//{
+	//	return false;
+	//}
 
 	if (this->build_type != other.build_type)
 	{
@@ -312,66 +312,806 @@ bool VersionLib::VersionData::operator!=(const VersionData &other)
 
 bool VersionLib::VersionData::operator>(const VersionData &other)
 {
+	#ifdef COMPARISON_OPERATORS_V1
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
+	if (this->major <= other.major && this->minor < other.minor) return false;
+	if (this->major <= other.major) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+	
+	#ifdef COMPARISON_OPERATORS_V2
+	if (this->major > other.major)
+	{
+		if (this->minor > other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	if (this->major == other.major)
+	{
+		if (this->minor > other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+	#endif // !COMPARISON_OPERATORS_V2
+}
+
+bool VersionLib::VersionData::operator>=(const VersionData &other)
+{
+	#ifdef COMPARISON_OPERATORS_V1
+    if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
 	if (this->major <= other.major && this->minor < other.minor) return false;
 	if (this->major < other.major) return false;
 	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return true;
+	//return false;
+	if (this->major < other.major) return false;
+	if (this->major >= other.major && this->minor < other.minor) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch < other.patch) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type < other.build_type) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number < other.build_type_number) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::VersionData::operator>=(const VersionData &other)
+bool VersionLib::VersionData::operator<(const VersionData &other)
 {
-    if (this->major >= other.major)
+	#ifdef COMPARISON_OPERATORS_V1
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
+	if(this->major >= other.major && this->minor > other.minor) return false;
+	if(this->major >= other.major) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return true;
+	//return false;
+	if (this->major < other.major)
 	{
-		if (this->minor >= other.minor)
+		if (this->minor < other.minor)
 		{
-			if (this->patch >= other.patch)
+			if (this->patch < other.patch)
 			{
-				if (this->build_type >= other.build_type)
+				if (this->build_type < other.build_type)
 				{
-					if (this->build_type_number >= other.build_type_number)
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
 					{
 						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
 					}
 				}
 			}
 		}
 	}
 
-    return false;
+	if (this->major == other.major)
+	{
+		if (this->minor < other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::VersionData::operator<(const VersionData &other)
+bool VersionLib::VersionData::operator<=(const VersionData &other)
 {
-	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
+	#ifdef COMPARISON_OPERATORS_V1
+    if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number > other.build_type_number) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
 	if(this->major >= other.major && this->minor > other.minor) return false;
 	if(this->major > other.major) return false;
 	return true;
-}
+	#endif // !COMPARISON_OPERATORS_V1
 
-bool VersionLib::VersionData::operator<=(const VersionData &other)
-{
-    if (other.major >= this->major)
-	{
-		if (other.minor >= this->minor)
-		{
-			if (other.patch >= this->patch)
-			{
-				if (other.build_type >= this->build_type)
-				{
-					if (other.build_type_number >= this->build_type_number)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-    return false;
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return true;
+	//return false;
+	if (this->major > other.major) return false;
+	if (this->major <= other.major && this->minor > other.minor) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch > other.patch) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type > other.build_type) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number > other.build_type_number) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator==(const std::string &verStr)
