@@ -37,7 +37,7 @@ add_compile_definitions(_UNICODE)
 # Defined the project:
 project(
 			VersionLib
-			VERSION 0.8.0
+			VERSION 0.8.4
 			DESCRIPTION "Version Library."
 		)
 
@@ -53,16 +53,24 @@ project(
 # Define to export the library methods:
 add_compile_definitions(VERSION_LIB_EXPORTS)
 
+# Enable Version Library Experimental Features:
+add_compile_definitions(ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES)
+
 # Define the library build properties:
 if (WIN32)
 	add_library(
 					VersionLib
 					SHARED
-					"dllmain.cpp"
+					# Windows specific headers:
+					"dllmain.hpp" "dllmain.cpp"
+					# Version Library main header:
+					"VersionLib.hpp"
+					# Version Library components:
 					"BuildTypes.hpp"
+					"ExceptionComponents.hpp"
+					"ExperimentalFeatures.hpp"
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
-					"VersionLib.hpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp"
 				)
@@ -70,10 +78,14 @@ else()
 	add_library(
 					VersionLib
 					SHARED
+					# Version Library main header:
+					"VersionLib.hpp"
+					# Version Library components:
 					"BuildTypes.hpp"
+					"ExceptionComponents.hpp"
+					"ExperimentalFeatures.hpp"
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
-					"VersionLib.hpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp"
 				)
