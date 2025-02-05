@@ -28,6 +28,13 @@
 	#endif
 #endif // !WIN32
 
+#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+#include "ExperimentalFeatures.hpp"
+	#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+	#include "ExceptionComponents.hpp"
+	#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+
 #include "BuildTypes.hpp"
 #include "Tools.hpp"
 #include "VersionClass.hpp"
