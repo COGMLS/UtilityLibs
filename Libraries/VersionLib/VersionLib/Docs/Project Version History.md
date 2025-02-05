@@ -26,6 +26,21 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.4-beta (2025/02/04) -->
+    <dt><version-data>0.8.4-beta</version-data></dt>
+    <dd></dd>
+    <dd>Added preprocessor to disable the original comparison operators</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionData</code> comparison operators</dd>
+    <dd>Added <code>compare_build</code> to control the build comparison in <code>VersionData</code></dd>
+    <dd>Added experimental features compilation control</dd>
+    <dd>Moved preprocessor definitions to <code>ExperimentalFeatures.hpp</code></dd>
+    <dd>Added experimental features compilation control</dd>
+    <dd>Added <code>compare_build</code> control variable into <code>VersionStruct</code></dd>
+    <dd>Added <code>cmpBuild</code> parameter into constructors to enable/disable build comparison</dd>
+    <dd>Added wrapper constructors to avoid constructor ambiguous failure</dd>
+    <dd>Declared <code>VersionStruct</code> comparison operators in <code>VersionData</code></dd>
+    <dd>Small code writing changes</dd>
+    <dd>Small changes on documentation</dd>
     <!-- 0.8.3-beta.2 (2025/01/14) -->
     <dt><version-data>0.8.3-beta.2</version-data></dt>
     <dd>Updated <strong>Project Info.md</strong></dd>

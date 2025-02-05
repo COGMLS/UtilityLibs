@@ -63,14 +63,24 @@ To use a string as the source of the versioning information, the string must fol
 | M.m b | ❌️ | 17.5 782 | Build type number is confused with patch |
 | M.m.p b | ❌️ | 17.9.5 125 | Build number is not detected |
 
-## Future implementations:
+## Project components implementations:
+
+### Recent Implementations:
+
+- Support for convert `VersionStruct` to `VersionData` and vice-versa.
+
+### Implementations under development:
+
+- Add support to compare versions with build information.
+- Include the global internal Version Library data.
+- Full support for C-Style functions to better support for extern C linkage
+- Add Version Lib errors and exceptions components
+
+### Future Implementations:
 
 - Full support for extern C linkage
 - Support to identify version files by it's name
 - Support to detect Windows Metadata version information
-- Support for convert `VersionStruct` to `VersionData` and vice-versa.
-- Full support for C-Style functions to better support for extern C linkage
-- Include the global internal Version Library data.
 - Add and update all documentation for the Version Library
 
 ## Version Library History:
@@ -97,6 +107,28 @@ To use a string as the source of the versioning information, the string must fol
     }
 </style>
 <dl>
+    <!-- 0.8.4-beta (2025/02/04) -->
+    <dt><version-data>0.8.4-beta</version-data></dt>
+    <dd></dd>
+    <dd>Added preprocessor to disable the original comparison operators</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionData</code> comparison operators</dd>
+    <dd>Added <code>compare_build</code> to control the build comparison in <code>VersionData</code></dd>
+    <dd>Added experimental features compilation control</dd>
+    <dd>Moved preprocessor definitions to <code>ExperimentalFeatures.hpp</code></dd>
+    <dd>Added experimental features compilation control</dd>
+    <dd>Added <code>compare_build</code> control variable into <code>VersionStruct</code></dd>
+    <dd>Added <code>cmpBuild</code> parameter into constructors to enable/disable build comparison</dd>
+    <dd>Added wrapper constructors to avoid constructor ambiguous failure</dd>
+    <dd>Declared <code>VersionStruct</code> comparison operators in <code>VersionData</code></dd>
+    <dd>Small code writing changes</dd>
+    <dd>Small changes on documentation</dd>
+    <!-- 0.8.3-beta.2 (2025/01/14) -->
+    <dt><version-data>0.8.3-beta.2</version-data></dt>
+    <dd>Updated <strong>Project Info.md</strong></dd>
+    <dd>Marked missing attribute <i>deprecated</i> on <code>toVersionStruct</code> declaration.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>tolower_Cstr</code> now converts the strings to C string style correctly</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing instructions in <code>getBuildTypeCompleteCstr</code> method in <code>VersionData</code> class. </dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing instructions in <code>getBuildTypeCstr</code> method in <code>VersionData</code> class</dd>
     <!-- 0.8.3-beta (2025/01/10) -->
     <dt><version-data>0.8.3-beta</version-data></dt>
     <dd>Added new parameter <code>showReleaseType</code> in <code>getBuildTypeComplete</code> and <code>getVersionStr</code> methods.</dd>
@@ -127,6 +159,8 @@ To use a string as the source of the versioning information, the string must fol
 *Older versions was not tracked*
 
 # License
+
+A copy of the license is available [here](./LICENSE.txt)
 
 MIT License
 
