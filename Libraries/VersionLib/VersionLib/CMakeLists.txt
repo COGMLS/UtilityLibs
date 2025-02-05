@@ -31,6 +31,9 @@ endif()
 # Define the DEBUG preprocessor definition:
 set(DebugVersionLib True)
 
+# Enable Version Library Experimental Features:
+add_compile_definitions(ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES)
+
 project(
 			VersionLibProject
 			VERSION 1.0.0

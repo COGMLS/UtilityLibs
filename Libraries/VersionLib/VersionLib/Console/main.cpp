@@ -12,6 +12,7 @@ int main(int argc, const char* argv[])
 
 	bool testVersionStrFormats = false;
 	bool testVersionOperators = false;
+	bool testVersionExceptions = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -31,6 +32,11 @@ int main(int argc, const char* argv[])
 		if (cli[i] == "-test-operators")
 		{
 			testVersionOperators = true;
+		}
+
+		if (cli[i] == "-test-exceptions")
+		{
+			testVersionExceptions = true;
 		}
 	}
 
@@ -92,10 +98,42 @@ int main(int argc, const char* argv[])
 
 	if (testVersionOperators)
 	{
-		for (size_t i = 0; i < versions.size() - 1; i++)
+		std::cout << "Testing version object operators:" << std::endl;
+		std::cout << "Test 1:" << std::endl << std::endl;
+
+		for (size_t i = 0; i < versions.size(); i++)
 		{
-			std::cout << testVersionData(versions[i], versions[i + 1]) << std::endl;
+			for (size_t j = 0; j < versions.size(); j++)
+			{
+				std::cout << testVersionData(versions[i], versions[j]) << std::endl;
+			}
 		}
+
+		std::cout << std::endl << "Test 2:" << std::endl << std::endl;
+
+		for (size_t i = versions.size() - 1; i > 0; i--)
+		{
+			for (size_t j = versions.size() - 1; j > 0; j--)
+			{
+				std::cout << testVersionData(versions[i], versions[j]) << std::endl;
+			}
+		}
+	}
+
+	if (testVersionExceptions)
+	{
+		#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+		try
+		{
+			VersionLib::VersionData vTest(-1, -2, 0, 750, VersionLib::BuildType::RELEASE, 0, true);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		#else
+		std::cout << "Experimental VersionLib features was not enabled in this compilation!" << std::endl;
+		#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 	}
 
 	return 0;

@@ -1,5 +1,19 @@
 #include "VersionClass.hpp"
 
+#ifdef ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
+{
+	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
+
+	this->major = v.major;
+	this->minor = v.minor;
+	this->patch = v.patch;
+	this->build_type = v.build_type;
+	this->build_type_number = v.build_type_number;
+	this->build = v.build;
+	this->compare_build = cmpBuild;
+}
+#else
 VersionLib::VersionData::VersionData(std::string versionStr)
 {
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
@@ -10,8 +24,183 @@ VersionLib::VersionData::VersionData(std::string versionStr)
 	this->build_type = v.build_type;
 	this->build_type_number = v.build_type_number;
 	this->build = v.build;
+	this->compare_build = false;
+}
+#endif // !ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+
+VersionLib::VersionData::VersionData(VersionLib::VersionStruct version)
+{
+	this->major = version.major;
+	this->minor = version.minor;
+	this->patch = version.patch;
+	this->build_type = version.build_type;
+	this->build_type_number = version.build_type_number;
+	this->build = version.build;
+	this->compare_build = version.compare_build;
 }
 
+#ifdef ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = 0;
+	this->build_type = VersionLib::BuildType::RELEASE;
+	this->build_type_number = 0;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::BuildType::RELEASE;
+	this->build_type_number = 0;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = 0;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = 0;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = build_type;
+	this->build_type_number = 0;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type, unsigned int build_type_number, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = build_type_number;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_type_number, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = build_type_number;
+	this->compare_build = cmpBuild;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number, bool cmpBuild)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = build_type;
+	this->build_type_number = build_type_number;
+	this->compare_build = cmpBuild;
+}
+
+//
+// Wrappers Constructors:
+//
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, char *build_type, int build_type_number, bool cmpBuild)
+{
+	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
+	{
+		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		static_cast<unsigned long long>(build),
+		build_type,
+		static_cast<unsigned int>(build_type_number),
+		cmpBuild
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, std::string build_type, int build_type_number, bool cmpBuild)
+{
+	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
+	{
+		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		static_cast<unsigned long long>(build),
+		build_type,
+		static_cast<unsigned int>(build_type_number),
+		cmpBuild
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, VersionLib::BuildType build_type, int build_type_number, bool cmpBuild)
+{
+	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
+	{
+		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		static_cast<unsigned long long>(build),
+		build_type,
+		static_cast<unsigned int>(build_type_number),
+		cmpBuild
+	);
+}
+#else
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch)
 {
 	this->major = major;
@@ -20,6 +209,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = 0;
 	this->build_type = VersionLib::BuildType::RELEASE;
 	this->build_type_number = 0;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build)
@@ -30,6 +220,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::BuildType::RELEASE;
 	this->build_type_number = 0;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type)
@@ -40,6 +231,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = 0;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type)
@@ -50,6 +242,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = 0;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type)
@@ -60,6 +253,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = build_type;
 	this->build_type_number = 0;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type, unsigned int build_type_number)
@@ -70,6 +264,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = build_type_number;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_type_number)
@@ -80,6 +275,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = build_type_number;
+	this->compare_build = false;
 }
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number)
@@ -90,7 +286,9 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = build_type;
 	this->build_type_number = build_type_number;
+	this->compare_build = false;
 }
+#endif // !ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 
 VersionLib::VersionData::VersionData(const VersionLib::VersionData &other)
 {
@@ -100,6 +298,7 @@ VersionLib::VersionData::VersionData(const VersionLib::VersionData &other)
 	this->build = other.build;
 	this->build_type = other.build_type;
 	this->build_type_number = other.build_type_number;
+	this->compare_build = other.compare_build;
 }
 
 VersionLib::VersionData::VersionData(VersionLib::VersionData &&other) noexcept
@@ -110,6 +309,7 @@ VersionLib::VersionData::VersionData(VersionLib::VersionData &&other) noexcept
 	this->build = std::move(other.build);
 	this->build_type = std::move(other.build_type);
 	this->build_type_number = std::move(other.build_type_number);
+	this->compare_build = std::move(other.compare_build);
 }
 
 VersionLib::VersionData::~VersionData()
@@ -232,6 +432,7 @@ VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 	verData.build = this->build;
 	verData.build_type = this->build_type;
 	verData.build_type_number = this->build_type_number;
+	verData.compare_build = this->compare_build;
 
 	return verData;
 }
@@ -249,6 +450,7 @@ VersionLib::VersionData &VersionLib::VersionData::operator=(const VersionLib::Ve
 	this->build = other.build;
 	this->build_type = other.build_type;
 	this->build_type_number = other.build_type_number;
+	this->compare_build = other.compare_build;
 
 	return *this;
 }
@@ -266,6 +468,7 @@ VersionLib::VersionData &VersionLib::VersionData::operator=(VersionLib::VersionD
 	this->build = std::move(other.build);
 	this->build_type = std::move(other.build_type);
 	this->build_type_number = std::move(other.build_type_number);
+	this->compare_build = std::move(other.compare_build);
 
 	return *this;
 }
@@ -287,10 +490,15 @@ bool VersionLib::VersionData::operator==(const VersionData &other)
 		return false;
 	}
 
-	if (this->build != other.build)
+	#ifdef ENABLE_EXPERIMENTAL_BUILD_COMPARISON
+	if (this->compare_build || other.compare_build)
 	{
-		return false;
+		if (this->build != other.build)
+		{
+			return false;
+		}
 	}
+	#endif // !ENABLE_EXPERIMENTAL_BUILD_COMPARISON
 
 	if (this->build_type != other.build_type)
 	{
@@ -312,66 +520,806 @@ bool VersionLib::VersionData::operator!=(const VersionData &other)
 
 bool VersionLib::VersionData::operator>(const VersionData &other)
 {
+	#ifdef COMPARISON_OPERATORS_V1
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
+	if (this->major <= other.major && this->minor < other.minor) return false;
+	if (this->major <= other.major) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+	
+	#ifdef COMPARISON_OPERATORS_V2
+	if (this->major > other.major)
+	{
+		if (this->minor > other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	if (this->major == other.major)
+	{
+		if (this->minor > other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch > other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type > other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number > other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+	#endif // !COMPARISON_OPERATORS_V2
+}
+
+bool VersionLib::VersionData::operator>=(const VersionData &other)
+{
+	#ifdef COMPARISON_OPERATORS_V1
+    if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
 	if (this->major <= other.major && this->minor < other.minor) return false;
 	if (this->major < other.major) return false;
 	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return true;
+	//return false;
+	if (this->major < other.major) return false;
+	if (this->major >= other.major && this->minor < other.minor) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch < other.patch) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type < other.build_type) return false;
+	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number < other.build_type_number) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::VersionData::operator>=(const VersionData &other)
+bool VersionLib::VersionData::operator<(const VersionData &other)
 {
-    if (this->major >= other.major)
+	#ifdef COMPARISON_OPERATORS_V1
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
+	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
+	if(this->major >= other.major && this->minor > other.minor) return false;
+	if(this->major >= other.major) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V1
+
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return true;
+	//return false;
+	if (this->major < other.major)
 	{
-		if (this->minor >= other.minor)
+		if (this->minor < other.minor)
 		{
-			if (this->patch >= other.patch)
+			if (this->patch < other.patch)
 			{
-				if (this->build_type >= other.build_type)
+				if (this->build_type < other.build_type)
 				{
-					if (this->build_type_number >= other.build_type_number)
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
 					{
 						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
 					}
 				}
 			}
 		}
 	}
 
-    return false;
+	if (this->major == other.major)
+	{
+		if (this->minor < other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		if (this->minor == other.minor)
+		{
+			if (this->patch < other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			if (this->patch == other.patch)
+			{
+				if (this->build_type < other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
+				}
+
+				if (this->build_type == other.build_type)
+				{
+					if (this->build_type_number != 0 || other.build_type_number != 0)
+					{
+						if (this->build_type_number < other.build_type_number)
+						{
+							return true;
+						}
+
+						if (this->build_type_number == other.build_type_number)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::VersionData::operator<(const VersionData &other)
+bool VersionLib::VersionData::operator<=(const VersionData &other)
 {
-	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
+	#ifdef COMPARISON_OPERATORS_V1
+    if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number > other.build_type_number) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
 	if(this->major >= other.major && this->minor > other.minor) return false;
 	if(this->major > other.major) return false;
 	return true;
-}
+	#endif // !COMPARISON_OPERATORS_V1
 
-bool VersionLib::VersionData::operator<=(const VersionData &other)
-{
-    if (other.major >= this->major)
-	{
-		if (other.minor >= this->minor)
-		{
-			if (other.patch >= this->patch)
-			{
-				if (other.build_type >= this->build_type)
-				{
-					if (other.build_type_number >= this->build_type_number)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-    return false;
+	#ifdef COMPARISON_OPERATORS_V2
+	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return true;
+	//return false;
+	if (this->major > other.major) return false;
+	if (this->major <= other.major && this->minor > other.minor) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch > other.patch) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type > other.build_type) return false;
+	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number > other.build_type_number) return false;
+	return true;
+	#endif // !COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator==(const std::string &verStr)
