@@ -93,7 +93,6 @@ namespace SettingsLib
 				 */
 				ConfigIni();
 
-
 				/**
 				 * @brief Create an INI configuration object with an specific name
 				 * @param configName Configuration name for INI object.
@@ -162,17 +161,51 @@ namespace SettingsLib
 				/**
 				 * @brief Define the configuration name
 				 * @param newName New name for the object
-				 * @return 
+				 * @return -1: If the object is configured to use wide string
+				 * @return 0: The configuration name was successful changed
+				 * @return 1: Fail to get the original name to fallback in case of fail the operation
+				 * @return 2: The path already exists
+				 * @return 3: Fail to set a new configuration file
+				 * @return 4: Fail to store the configuration name, restoring the original name
+				 * @return 5: Fail to open the configuration stream
+				 * @return 6: The configuration is empty, try to create the file or use a existing one
+				 * @return 7: Fail to change the name
 				 */
 				int setConfigName (std::string newName);
+
+				/**
+				 * @brief Define the configuration name
+				 * @param newName New name for the object
+				 * @return -1: If the object is configured to use string
+				 * @return 0: The configuration name was successful changed
+				 * @return 1: Fail to get the original name to fallback in case of fail the operation
+				 * @return 2: The path already exists
+				 * @return 3: Fail to set a new configuration file
+				 * @return 4: Fail to store the configuration name, restoring the original name
+				 * @return 5: Fail to open the configuration stream
+				 * @return 6: The configuration is empty, try to create the file or use a existing one
+				 * @return 7: Fail to change the name
+				 */
 				int setConfigName (std::wstring newName);
 
 				/**
 				 * @brief Get the name defined to the object
 				 * @param configName String to hold the configuration name
-				 * @return 
+				 * @return 0: Successful return the configuration name
+				 * @return 1: The object is configured to use wide string
+				 * @return 2: configName is nullptr
+				 * @return 3: Fail to return the configuration name
 				 */
 				int getConfigName (std::string* configName);
+
+				/**
+				 * @brief Get the name defined to the object
+				 * @param configName String to hold the configuration name
+				 * @return 0: Successful return the configuration name
+				 * @return 1: The object is configured to use string
+				 * @return 2: configName is nullptr
+				 * @return 3: Fail to return the configuration name
+				 */
 				int getConfigName (std::wstring* configName);
 
 				/**
@@ -194,14 +227,14 @@ namespace SettingsLib
 				 * @brief Save the database in the memory into the configuration file
 				 * @return 
 				 */
-				int saveFile();
+				int saveFile(); // NOT READY
 
 				/**
 				 * @brief Load the database inside the file into the memory.
 				 * @param discardChanges If the database was marked as "modified" set it as true to discard the unsaved changes. If no changed was made, it won't take any effect.
 				 * @return 
 				 */
-				int loadFile(bool discardChanges);
+				int loadFile(bool discardChanges); // NOT READY
 
 				/**
 				 * @brief Convert the INI database to a vector string with a similar INI file format, allowing to consult using standard C++ or using to write the content in another file.
@@ -245,13 +278,85 @@ namespace SettingsLib
 				 */
 				int getSectionList (std::vector<std::wstring>* list);
 
+				/**
+				 * @brief Get the section data from the INI database
+				 * @param sectionName Section name to search and copy to section
+				 * @param section Section variable to store a copy of INI section database
+				 * @return 0: Found and copied to section variable
+				 * @return 1: Section is nullptr
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use wide string
+				 * @return 4: Found an exception
+				 * @return 5: Not found
+				 */
 				int getSection (std::string sectionName, SettingsLib::Types::ConfigIniSectionData* section);
+				
+				/**
+				 * @brief Get the section data from the INI database
+				 * @param sectionName Section name to search and copy to section
+				 * @param section Section variable to store a copy of INI section database
+				 * @return 0: Found and copied to section variable
+				 * @return 1: Section is nullptr
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use string
+				 * @return 4: Found an exception
+				 * @return 5: Not found
+				 */
 				int getSection (std::wstring sectionName, SettingsLib::Types::ConfigIniSectionData* section);
 
+				/**
+				 * @brief Get an INI database entry from a section
+				 * @param sectionName Database section
+				 * @param keyName Key from section database
+				 * @param entry Config INI data entry
+				 * @return 0: Found and copied the INI entry
+				 * @return 1: Section is nullptr
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use wide string
+				 * @return 4: Found an exception
+				 * @return 5: Not found
+				 * @return 6: Entry is not configured to use string
+				 */
 				int getEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData* entry);
+				
+				/**
+				 * @brief Get an INI database entry from a section
+				 * @param sectionName Database section
+				 * @param keyName Key from section database
+				 * @param entry Config INI data entry
+				 * @return 0: Found and copied the INI entry
+				 * @return 1: Section is nullptr
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use string
+				 * @return 4: Found an exception
+				 * @return 5: Not found
+				 * @return 6: Entry is not configured to use wide string
+				 */
 				int getEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData* entry);
 
+				/**
+				 * @brief Set a configuration INI section
+				 * @param section Section to add or overwrite if already exists
+				 * @return 0: Section was found/new entry was added into the section database
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use wide string
+				 * @return 4: Found an exception
+				 * @return 5: Section to add is not configured
+				 * @return 6: Fail to identify the section name
+				 */
 				int setSection (SettingsLib::Types::ConfigIniSectionData section);
+				
+				/**
+				 * @brief Set a configuration INI section
+				 * @param section Section to add or overwrite if already exists
+				 * @return 0: Section was found/new entry was added into the section database
+				 * @return 1: Section is nullptr
+				 * @return 2: Configuration file is not ready to use
+				 * @return 3: Object is configured to use wide string
+				 * @return 4: Found an exception
+				 * @return 5: Section to add is not configured
+				 * @return 6: Fail to identify the section name
+				 */
 				int setSection (SettingsLib::Types::ConfigIniSectionData* section);
 
 				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData entry);
@@ -264,11 +369,36 @@ namespace SettingsLib
 
 				int removeEntry (std::string sectionName, std::string keyName);
 				int removeEntry (std::wstring sectionName, std::wstring keyName);
+
+				bool hasSection (std::string sectionName);
+				bool hasSection (std::wstring sectionName);
+
+				bool hasEntry (std::string sectionName, std::string keyName);
+				bool hasEntry (std::wstring sectionName, std::wstring keyName);
 				
-				size_t popSection();
-				size_t popKeys();
-				size_t popSectionKeys (std::string sectionName);
-				size_t popSectionKeys (std::wstring sectionName);
+				/**
+				 * @brief Get the number of sections stored in database
+				 */
+				size_t numSections();
+
+				/**
+				 * @brief Get the number of keys stored in the database
+				 */
+				size_t numKeys();
+
+				/**
+				 * @brief Get the number of keys stored in the section
+				 * @param sectionName Section name to search for the number of keys
+				 * @note If the configuration object is configured to use wide string, it will return 0
+				 */
+				size_t numSectionKeys (std::string sectionName);
+
+				/**
+				 * @brief Get the number of keys stored in the section
+				 * @param sectionName Section name to search for the number of keys
+				 * @note If the configuration object is configured to use string, it will return 0
+				 */
+				size_t numSectionKeys (std::wstring sectionName);
 		};
 	}
 }

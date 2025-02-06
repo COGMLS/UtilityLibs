@@ -419,11 +419,9 @@ int SettingsLib::Types::ConfigIni::setConfigName(std::string newName)
 			// In case the configuration is empty, try to create the file or use a existing one depending on the path:
 			return 6;
 		}
-
-		return 7;
 	}
 
-	return 8;
+	return 7;
 }
 
 int SettingsLib::Types::ConfigIni::setConfigName(std::wstring newName)
@@ -498,11 +496,9 @@ int SettingsLib::Types::ConfigIni::setConfigName(std::wstring newName)
 			// In case the configuration is empty, try to create the file or use a existing one depending on the path:
 			return 6;
 		}
-
-		return 7;
 	}
 
-	return 8;
+	return 7;
 }
 
 int SettingsLib::Types::ConfigIni::getConfigName(std::string *configName)
@@ -819,4 +815,456 @@ int SettingsLib::Types::ConfigIni::getSectionList(std::vector<std::wstring> *lis
 	}
 
     return 0;
+}
+
+int SettingsLib::Types::ConfigIni::getSection(std::string sectionName, SettingsLib::Types::ConfigIniSectionData *section)
+{
+	if (section == nullptr)
+	{
+		return 1;	// Section is nullptr
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;	// ConfigIni is not ready to use
+	}
+
+	if (this->isWideData())
+	{
+		return 3;	// ConfigIni is configured to use wide strings
+	}
+
+	try
+	{
+		if (this->hasSection(sectionName))
+		{
+			for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+			{
+				if (sectionPair.first == sectionName)
+				{
+					*section = *sectionPair.second;
+					return 0;	// Found and copied to section variable
+				}
+			}
+		}
+	}
+	catch(const std::exception&)
+	{
+		return 4;	// Found an exception
+	}
+	
+    return 5;	// Not found
+}
+
+int SettingsLib::Types::ConfigIni::getSection(std::wstring sectionName, SettingsLib::Types::ConfigIniSectionData *section)
+{
+    if (section == nullptr)
+	{
+		return 1;	// Section is nullptr
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;	// ConfigIni is not ready to use
+	}
+
+	if (!this->isWideData())
+	{
+		return 3;	// ConfigIni is not configured to use wide strings
+	}
+
+	try
+	{
+		if (this->hasSection(sectionName))
+		{
+			for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> wSectionPair : this->wSectionMap)
+			{
+				if (wSectionPair.first == sectionName)
+				{
+					*section = *wSectionPair.second;
+					return 0;	// Found and copied to section variable
+				}
+			}
+		}
+	}
+	catch(const std::exception&)
+	{
+		return 4;	// Found an exception
+	}
+	
+    return 5;	// Not found
+}
+
+int SettingsLib::Types::ConfigIni::getEntry(std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+	if (entry == nullptr)
+	{
+		return 1;	// Section entry is nullptr
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;	// ConfigIni is not ready to use
+	}
+
+	if (this->isWideData())
+	{
+		return 3;	// ConfigIni is configured to use wide strings
+	}
+
+	if (!entry->isWideData())
+	{
+		return 6;	// The entry is configured to use wide string
+	}
+
+	try
+	{
+		if (this->hasSection(sectionName))
+		{
+			SettingsLib::Types::ConfigIniSectionData* pSection = nullptr;
+
+			for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+			{
+				if (sectionPair.first == sectionName)
+				{
+					pSection = sectionPair.second;
+					break;
+				}
+			}
+
+			if (pSection != nullptr)
+			{
+				if (pSection->getIniData(keyName, entry) == 1)
+				{
+					return 0;	// Found and copied the INI entry
+				}
+			}
+		}
+	}
+	catch(const std::exception&)
+	{
+		return 4;	// Found an exception
+	}
+	
+    return 5;	// Not found
+}
+
+int SettingsLib::Types::ConfigIni::getEntry(std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+    if (entry == nullptr)
+	{
+		return 1;	// Section entry is nullptr
+	}
+
+	if (!this->isConfigFileOk())
+	{
+		return 2;	// ConfigIni is not ready to use
+	}
+
+	if (!this->isWideData())
+	{
+		return 3;	// ConfigIni is not configured to use wide strings
+	}
+
+	if (!entry->isWideData())
+	{
+		return 6;	// The entry is not configured to use wide string
+	}
+
+	try
+	{
+		if (this->hasSection(sectionName))
+		{
+			SettingsLib::Types::ConfigIniSectionData* pSection = nullptr;
+
+			for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->wSectionMap)
+			{
+				if (sectionPair.first == sectionName)
+				{
+					pSection = sectionPair.second;
+					break;
+				}
+			}
+
+			if (pSection != nullptr)
+			{
+				if (pSection->getIniData(keyName, entry) == 1)
+				{
+					return 0;	// Found and copied the INI entry
+				}
+			}
+		}
+	}
+	catch(const std::exception&)
+	{
+		return 4;	// Found an exception
+	}
+	
+    return 5;	// Not found
+}
+
+int SettingsLib::Types::ConfigIni::setSection(SettingsLib::Types::ConfigIniSectionData section)
+{
+	if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (this->isWideData() && !section.isWideData() || !this->isWideData() && section.isWideData())
+	{
+		return 3;
+	}
+
+	if (!section.isConfigured())
+	{
+		return 5;
+	}
+
+	try
+	{
+		bool foundSection = false;
+		bool wideData = section.isWideData();
+		std::string sectionName;
+		std::wstring wSectionName;
+
+		if (wideData)
+		{
+			if (section.getSectionName(&wSectionName) == 1)
+			{
+				return 6;
+			}
+		}
+		else
+		{
+			if (section.getSectionName(&sectionName) == 1)
+			{
+				return 6;
+			}
+		}
+
+		if (wideData)
+		{
+			for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> wSectionPair : this->wSectionMap)
+			{
+				if (wSectionPair.first == wSectionName)
+				{
+					foundSection = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+			{
+				if (sectionPair.first == sectionName)
+				{
+					foundSection = true;
+					break;
+				}
+			}
+		}
+
+		if (wideData)
+		{
+			if (foundSection)
+			{
+				*this->wSectionMap.at(wSectionName) = section;
+			}
+			else
+			{
+				this->wSectionMap.insert({wSectionName, &section});
+			}
+		}
+		else
+		{
+			if (foundSection)
+			{
+				*this->sectionMap.at(sectionName) = section;
+			}
+			else
+			{
+				this->sectionMap.insert({sectionName, &section});
+			}
+		}
+
+		return 0;
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setSection(SettingsLib::Types::ConfigIniSectionData *section)
+{
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (this->isWideData() && !section->isWideData() || !this->isWideData() && section->isWideData())
+	{
+		return 3;
+	}
+
+	if (!section->isConfigured())
+	{
+		return 5;
+	}
+
+	try
+	{
+		bool foundSection = false;
+		bool wideData = section->isWideData();
+		std::string sectionName;
+		std::wstring wSectionName;
+
+		if (wideData)
+		{
+			if (section->getSectionName(&wSectionName) == 1)
+			{
+				return 6;
+			}
+		}
+		else
+		{
+			if (section->getSectionName(&sectionName) == 1)
+			{
+				return 6;
+			}
+		}
+
+		if (wideData)
+		{
+			for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> wSectionPair : this->wSectionMap)
+			{
+				if (wSectionPair.first == wSectionName)
+				{
+					foundSection = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> sectionPair : this->sectionMap)
+			{
+				if (sectionPair.first == sectionName)
+				{
+					foundSection = true;
+					break;
+				}
+			}
+		}
+
+		if (wideData)
+		{
+			if (foundSection)
+			{
+				*this->wSectionMap.at(wSectionName) = *section;
+			}
+			else
+			{
+				this->wSectionMap.insert({wSectionName, section});
+			}
+		}
+		else
+		{
+			if (foundSection)
+			{
+				*this->sectionMap.at(sectionName) = *section;
+			}
+			else
+			{
+				this->sectionMap.insert({sectionName, section});
+			}
+		}
+
+		return 0;
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+size_t SettingsLib::Types::ConfigIni::numSections()
+{
+	if (this->isWideData())
+	{
+		return this->wSectionMap.size();
+	}
+	else
+	{
+		return this->sectionMap.size();
+	}
+}
+
+size_t SettingsLib::Types::ConfigIni::numKeys()
+{
+    size_t numKeys = 0;
+	if (this->isWideData())
+	{
+		for (std::pair<std::wstring, SettingsLib::Types::ConfigIniSectionData*> section : this->wSectionMap)
+		{
+			std::vector<std::wstring> keys;
+			if (section.second->getKeys(&keys) == 0)
+			{
+				numKeys += keys.size();
+			}
+		}
+	}
+	else
+	{
+		for (std::pair<std::string, SettingsLib::Types::ConfigIniSectionData*> section : this->sectionMap)
+		{
+			std::vector<std::string> keys;
+			if (section.second->getKeys(&keys) == 0)
+			{
+				numKeys += keys.size();
+			}
+		}
+	}
+	return numKeys;
+}
+
+size_t SettingsLib::Types::ConfigIni::numSectionKeys(std::string sectionName)
+{
+	if (this->isWideData())
+	{
+		return 0;
+	}
+
+	if (this->sectionMap.contains(sectionName))
+	{
+		SettingsLib::Types::ConfigIniSectionData* section = this->sectionMap.at(sectionName);
+		std::vector<std::string> keys;
+		if (section->getKeys(&keys) == 0)
+		{
+			return keys.size();
+		}
+	}
+
+	return 0;
+}
+
+size_t SettingsLib::Types::ConfigIni::numSectionKeys(std::wstring sectionName)
+{
+    if (!this->isWideData())
+	{
+		return 0;
+	}
+
+	if (this->wSectionMap.contains(sectionName))
+	{
+		SettingsLib::Types::ConfigIniSectionData* section = this->wSectionMap.at(sectionName);
+		std::vector<std::wstring> keys;
+		if (section->getKeys(&keys) == 0)
+		{
+			return keys.size();
+		}
+	}
+
+	return 0;
 }
