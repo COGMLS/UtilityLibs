@@ -359,6 +359,33 @@ namespace SettingsLib
 				 */
 				int setSection (SettingsLib::Types::ConfigIniSectionData* section);
 
+				/**
+				 * @brief Add or update an existing entry in the configuration database
+				 * @param entry Configuration entry. The entry section data is used to determinate which section will be stored
+				 * @return 0: Successfully added or updated the entry
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 */
+				int setEntry (SettingsLib::Types::ConfigIniData entry);
+
+				/**
+				 * @brief Add or update an existing entry in the configuration database
+				 * @param entry Configuration entry. The entry section data is used to determinate which section will be stored
+				 * @return 0: Successfully added or updated the entry
+				 * @return 1: Entry is nullptr
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 */
+				int setEntry (SettingsLib::Types::ConfigIniData* entry);
+				
 				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData entry);
 				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData* entry);
 				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData entry);

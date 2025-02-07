@@ -1098,6 +1098,11 @@ int SettingsLib::Types::ConfigIni::setSection(SettingsLib::Types::ConfigIniSecti
 
 int SettingsLib::Types::ConfigIni::setSection(SettingsLib::Types::ConfigIniSectionData *section)
 {
+	if (section == nullptr)
+	{
+		return 1;
+	}
+
     if (!this->isConfigFileOk())
 	{
 		return 2;
@@ -1182,6 +1187,249 @@ int SettingsLib::Types::ConfigIni::setSection(SettingsLib::Types::ConfigIniSecti
 		}
 
 		return 0;
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(SettingsLib::Types::ConfigIniData entry)
+{
+	if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry.isWideData() || this->isWideData() && !entry.isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (this->isWideData())
+		{
+			std::wstring sectionName = L"";
+			std::wstring keyName = L"";
+			
+			if (entry.hasSection())
+			{
+				int entrySectionStatus = entry.getSection(&sectionName);
+				if (entrySectionStatus != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+				{
+					if (entrySectionStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE)
+					{
+						sectionName = L"";	// Make sure to fallback the value to empty section in case no section was set in database entry
+					}
+					else
+					{
+						return 5;	// Fail to get the section name
+					}
+				}
+			}
+
+			if (!this->wSectionMap.contains(sectionName))
+			{
+				SettingsLib::Types::ConfigIniSectionData newSection(sectionName);
+				this->wSectionMap.insert({sectionName, &newSection});
+			}
+
+			if (this->wSectionMap.contains(sectionName))
+			{
+				int sectionMapStatus = this->wSectionMap.at(sectionName)->contains(keyName);
+				if (sectionMapStatus >= 0)
+				{
+					if (sectionMapStatus == 0)
+					{
+						this->wSectionMap.at(sectionName)->addData(entry);
+					}
+					else
+					{
+						*this->wSectionMap.at(sectionName)->getIniEntryRef(keyName) = entry;
+					}
+
+					return 0;	// Entry was added/updated with success
+				}
+				
+				return 6;	// Section database fail
+			}
+
+			return 7;	// Fail to add or database section does not exist to store the current entry
+		}
+		else
+		{
+			std::string sectionName = "";
+			std::string keyName = "";
+			
+			if (entry.hasSection())
+			{
+				int entrySectionStatus = entry.getSection(&sectionName);
+				if (entrySectionStatus != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+				{
+					if (entrySectionStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE)
+					{
+						sectionName = "";	// Make sure to fallback the value to empty section in case no section was set in database entry
+					}
+					else
+					{
+						return 5;	// Fail to get the section name
+					}
+				}
+			}
+
+			if (!this->sectionMap.contains(sectionName))
+			{
+				SettingsLib::Types::ConfigIniSectionData newSection(sectionName);
+				this->sectionMap.insert({sectionName, &newSection});
+			}
+
+			if (this->sectionMap.contains(sectionName))
+			{
+				int sectionMapStatus = this->sectionMap.at(sectionName)->contains(keyName);
+				if (sectionMapStatus >= 0)
+				{
+					if (sectionMapStatus == 0)
+					{
+						this->sectionMap.at(sectionName)->addData(entry);
+					}
+					else
+					{
+						*this->sectionMap.at(sectionName)->getIniEntryRef(keyName) = entry;
+					}
+
+					return 0;	// Entry was added/updated with success
+				}
+				
+				return 6;	// Section database fail
+			}
+
+			return 7;	// Fail to add or database section does not exist to store the current entry
+		}
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(SettingsLib::Types::ConfigIniData *entry)
+{
+	if (entry == nullptr)
+	{
+		return 1;
+	}
+
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry->isWideData() || this->isWideData() && !entry->isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (this->isWideData())
+		{
+			std::wstring sectionName = L"";
+			std::wstring keyName = L"";
+			
+			if (entry->hasSection())
+			{
+				int entrySectionStatus = entry->getSection(&sectionName);
+				if (entrySectionStatus != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+				{
+					if (entrySectionStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE)
+					{
+						sectionName = L"";	// Make sure to fallback the value to empty section in case no section was set in database entry
+					}
+					else
+					{
+						return 5;	// Fail to get the section name
+					}
+				}
+			}
+
+			if (!this->wSectionMap.contains(sectionName))
+			{
+				SettingsLib::Types::ConfigIniSectionData newSection(sectionName);
+				this->wSectionMap.insert({sectionName, &newSection});
+			}
+
+			if (this->wSectionMap.contains(sectionName))
+			{
+				int sectionMapStatus = this->wSectionMap.at(sectionName)->contains(keyName);
+				if (sectionMapStatus >= 0)
+				{
+					if (sectionMapStatus == 0)
+					{
+						this->wSectionMap.at(sectionName)->addData(*entry);
+					}
+					else
+					{
+						*this->wSectionMap.at(sectionName)->getIniEntryRef(keyName) = *entry;
+					}
+
+					return 0;	// Entry was added/updated with success
+				}
+				
+				return 6;	// Section database fail
+			}
+
+			return 7;	// Fail to add or database section does not exist to store the current entry
+		}
+		else
+		{
+			std::string sectionName = "";
+			std::string keyName = "";
+			
+			if (entry->hasSection())
+			{
+				int entrySectionStatus = entry->getSection(&sectionName);
+				if (entrySectionStatus != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+				{
+					if (entrySectionStatus == SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_NO_DATA_AVAILABLE)
+					{
+						sectionName = "";	// Make sure to fallback the value to empty section in case no section was set in database entry
+					}
+					else
+					{
+						return 5;	// Fail to get the section name
+					}
+				}
+			}
+
+			if (!this->sectionMap.contains(sectionName))
+			{
+				SettingsLib::Types::ConfigIniSectionData newSection(sectionName);
+				this->sectionMap.insert({sectionName, &newSection});
+			}
+
+			if (this->sectionMap.contains(sectionName))
+			{
+				int sectionMapStatus = this->sectionMap.at(sectionName)->contains(keyName);
+				if (sectionMapStatus >= 0)
+				{
+					if (sectionMapStatus == 0)
+					{
+						this->sectionMap.at(sectionName)->addData(*entry);
+					}
+					else
+					{
+						*this->sectionMap.at(sectionName)->getIniEntryRef(keyName) = *entry;
+					}
+
+					return 0;	// Entry was added/updated with success
+				}
+				
+				return 6;	// Section database fail
+			}
+
+			return 7;	// Fail to add the database section to store the new entry data
+		}
 	}
 	catch(const std::exception& e)
 	{
