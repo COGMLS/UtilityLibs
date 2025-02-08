@@ -67,11 +67,7 @@ namespace VersionLib
 					this->msg_val = new char[msg_val_size];
 				}
 
-				#if _MSC_VER
-				std::strcpy_s(this->msg_val, msg_val_size, _msg);
-				#else
 				std::strcpy(this->msg_val, _msg);
-				#endif // !_MSC_VER
 			}
 
 			void copyMsg (const char* _msg)
@@ -89,11 +85,7 @@ namespace VersionLib
 					this->msg_val = new char[msg_val_size];
 				}
 
-				#if _MSC_VER
-				std::strcpy_s(this->msg_val, msg_val_size, _msg);
-				#else
 				std::strcpy(this->msg_val, _msg);
-				#endif // !_MSC_VER
 			}
 
 		protected:
@@ -185,11 +177,7 @@ namespace VersionLib
 				{
 					size_t msgSize = std::strlen(this->msg_val);
 					tmp_msg = new char[msgSize];
-					#if _MSC_VER
-					std::strcpy_s(tmp_msg, msgSize, this->msg_val);
-					#else
 					std::strcpy(tmp_msg, this->msg_val);
-					#endif // !_MSC_VER
 				}
 				return static_cast<const char*>(tmp_msg);
 			}
@@ -207,11 +195,7 @@ namespace VersionLib
 				strMsg += " | Code: " + std::to_string(this->code_val);
 				size_t c_msg_size = strMsg.size();
 				char* c_msg = new char[c_msg_size];
-				#if _MSC_VER
-				std::strcpy_s(c_msg, c_msg_size, strMsg.c_str());
-				#else
 				std::strcpy(c_msg, strMsg.c_str());
-				#endif // !_MSC_VER
 				return static_cast<const char*>(c_msg);
 			}
 
@@ -241,11 +225,7 @@ namespace VersionLib
 				{
 					size_t msgSize = strlen(other.msg_val);
 					this->msg_val = new char[msgSize];
-					#if _MSC_VER
-					std::strcpy_s(this->msg_val, msgSize, other.msg_val);
-					#else
 					std::strcpy(this->msg_val, other.msg_val);
-					#endif // !_MSC_VER
 				}
 				return *this;
 			}
