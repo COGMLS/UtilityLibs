@@ -5,7 +5,7 @@ const char *VersionLib::tolower_Cstr(const std::string &value)
 	size_t strlen = value.size();
 	char* tmp = new char[strlen];
 	char c = '\0';
-	for (size_t i = 0; i < value.size(); i++)
+	for (size_t i = 0; i < strlen; i++)
 	{
 		c = value[i];
 
@@ -262,7 +262,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 	unsigned int minor = 0;
 	unsigned int patch = 0;
 	std::string type = "";
-	VersionLib::BuildType typeEnum;
+	VersionLib::BuildType typeEnum = VersionLib::BuildType::RELEASE;
 	unsigned int type_num = 0;
 	unsigned long long build = 0;
 
