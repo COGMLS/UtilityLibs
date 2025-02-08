@@ -77,7 +77,8 @@ endif()
 
 # Enable tests if DEBUG is set:
 
-if (DEBUG)
+if (DebugVersionLib)
 	mkArgTest(VersionLib_FormatsTest VersionLibTestConsole "-test-formats")
 	mkArgTest(VersionLib_OperatorTest VersionLibTestConsole "-test-operators")
+	mkArgTest(VersionLib_ExceptionTest VersionLibTestConsole "-test-exceptions")
 endif()
