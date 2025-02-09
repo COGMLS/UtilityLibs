@@ -45,6 +45,13 @@ namespace VersionLib
 		unsigned int build_type_number;		// Build type number (alpha1, rc3)
 		bool compare_build;					// Build comparison control
 	};
+
+	/**
+	 * @brief Initialize the VersionStruct. This function is designed to reduce the possibility of failure of new struct variables.
+	 * @return Return a initialized VersionStruct
+	 * @note This function resolve the uninitialized compare_build variable in other methods
+	 */
+	VersionLib::VersionStruct VERSION_LIB_API initVersionStruct();
 }
 
 #endif // !VERSION_STRUCT_HPP
