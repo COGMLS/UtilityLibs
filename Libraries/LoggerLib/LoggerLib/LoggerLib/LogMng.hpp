@@ -58,8 +58,7 @@ std::vector<std::filesystem::path> LOGGER_LIB_API getLogFileList(std::filesystem
 /// @param logFileList Log File List reference
 /// @param newestFirst Use the inverse order, making the newest log file on top of the list
 /// @note This method filters the files that are not compatible with the LoggerLib file naming format <LogName>_YYYY-MM-ddThh-mm-ss.log
-/// @warning THIS FUNCTION IS UNDER DEVELOPMENT
-/// @bug This function does not sort correctly the file list
+/// @warning THIS FUNCTION WAS NOT TESTED ON WINDOWS SYSTEMS
 void LOGGER_LIB_API sortLogFileList(std::vector<std::filesystem::path>& logFileList, bool newestFirst = false);
 
 /// @brief Sort the Log File List (using selection sort algorithm) acquired from getLogFileList function
@@ -69,6 +68,8 @@ void LOGGER_LIB_API sortLogFileList(std::vector<std::filesystem::path>& logFileL
 /// @note This method calculates the age of the files to make the comparisons
 /// @warning THIS FUNCTION IS UNDER DEVELOPMENT
 /// @bug This function does not sort correctly the file list
+/// @deprecated This function uses file age to determinate the sorted list with std::filesystem::last_write_time, but does not provide a reliable sorting list
+[[deprecated("This function uses file age to determinate the sorted list with std::filesystem::last_write_time, but does not provide a reliable sorting list")]]
 void LOGGER_LIB_API sortLogFileList2(std::vector<std::filesystem::path>& logFileList, bool newestFirst = false);
 
 /// @brief Clean the old log files inside the log list

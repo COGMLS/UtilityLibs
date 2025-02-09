@@ -5,10 +5,10 @@ This document contains the information about the future plans, known bugs, depre
 ## Implementations under development:
 
 - Sort log files by age.
+- Support to formatting log data
 
 ## Future Implementations:
 
-- Support to formatting log data
 - Move LoggerLib features to `LoggerLib` namespace
 - Better error handling
 
@@ -24,6 +24,7 @@ This document contains the information about the future plans, known bugs, depre
 | Feature | Details | Workaround | Notes |
 | :------ | :-----: | :--------: | ----: |
 | Selection sort algorithm | The algorithm was falling to sort properly the log files | No workaround is necessary | The algorithm is disabled and a new algorithm is working. The code will be removed on future update |
+| `sortLogFileList2` | The function uses file age to determinate the sorted list with `std::filesystem::last_write_time`, but does not provide a reliable sorting list | Use `sortLogFileList` | This function will be removed in a future update |
 
 ## Removed Features:
 

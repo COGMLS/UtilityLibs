@@ -302,11 +302,14 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 		}
 		case LogDataType::LOG_DATE_TIME_ENTRY:
 		{
-			// TODO: Create a format date and time export
+			LoggerLocalDateTime dt = obj.data.LOG_ENTRY_DATE_TIME;
+			entryLine += convertDateTime2LogStrEntry(dt);
 			break;
 		}
 		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
 		{
+			LoggerLocalDateTime dt = obj.data.LOG_ENTRY_DATE_TIME;
+			entryLine += convertDateTime2LogStrEntry(dt, false, true);
 			break;
 		}
 		default:
@@ -622,11 +625,14 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 		}
 		case LogDataType::LOG_DATE_TIME_ENTRY:
 		{
-			// TODO: Create a format date and time export
+			LoggerLocalDateTime dt = obj.data.LOG_ENTRY_DATE_TIME;
+			entryLine += convertDateTime2LogStrEntryW(dt);
 			break;
 		}
 		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
 		{
+			LoggerLocalDateTime dt = obj.data.LOG_ENTRY_DATE_TIME;
+			entryLine += convertDateTime2LogStrEntryW(dt, false, true);
 			break;
 		}
 		default:

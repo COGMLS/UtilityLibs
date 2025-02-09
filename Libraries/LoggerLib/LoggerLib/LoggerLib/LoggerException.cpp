@@ -69,7 +69,10 @@ const char *LoggerException::what()
 {
 	if (this->message)
 	{
-		return this->message->c_str();
+		size_t msgSize = this->message->size();
+		char* msg = new char[msgSize + 1];
+		std::strcpy(msg, this->message->c_str());
+		return static_cast<const char*>(msg);
 	}
 
     return nullptr;
@@ -79,7 +82,10 @@ const wchar_t *LoggerException::whatW()
 {
 	if (this->messageW)
 	{
-		return this->messageW->c_str();
+		size_t wMsgSize = this->messageW->size();
+		wchar_t* wMsg = new wchar_t[wMsgSize + 1];
+		std::wcscpy(wMsg, this->messageW->c_str());
+		return static_cast<const wchar_t*>(wMsg);
 	}
 	
     return nullptr;

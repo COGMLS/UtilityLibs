@@ -32,6 +32,8 @@
 #include "pch.h"
 #endif // !WIN32
 
+#include <cstring>
+#include <cwchar>
 #include <string>
 #include <memory>
 
