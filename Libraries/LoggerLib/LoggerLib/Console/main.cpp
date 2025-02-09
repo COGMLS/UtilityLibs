@@ -2,7 +2,7 @@
 
 #include "LoggerLib.hpp"
 
-int main()
+int main(int argc, const char* argv[])
 {
 	std::cout << "Logger Library Console Test - " << LoggerLib::getVersionStr(LoggerLib::getLibVersion(), true, true) << std::endl;
 	std::cout << "-------------------------------------------------------" << std::endl;
@@ -16,6 +16,23 @@ int main()
 	logger.newEntry(LogEntry("LoggerLib version: ", LoggerLib::getVersionStr(LoggerLib::getLibVersion(), true, true)));
 	
 	int logSavStatus = logger.saveLog();
+
+	std::filesystem::path appRoot = std::filesystem::path(argv[0]).parent_path();
+
+	std::vector<std::filesystem::path> logs = getLogFileList(appRoot);
+
+	for (std::filesystem::path& l : logs)
+	{
+		std::cout << l.filename() << " | " << std::filesystem::last_write_time(l) << std::endl;
+	}
+
+	std::cout << std::endl << std::endl << "Sorting logs..." << std::endl << std::endl;
+	sortLogFileList(logs, false);
+
+	for (std::filesystem::path& l : logs)
+	{
+		std::cout << l.filename() << " | " << std::filesystem::last_write_time(l) << std::endl;
+	}
 	
 	return 0;
 }
