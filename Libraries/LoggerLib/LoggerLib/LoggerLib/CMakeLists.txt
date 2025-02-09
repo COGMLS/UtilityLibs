@@ -74,7 +74,7 @@ if (WIN32)
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibVersion.hpp"
-					"LoggerLibVersionTools.hpp"
+					"LoggerLibVersionTools.hpp" "LoggerLibVersionTools.cpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
 else()
@@ -89,7 +89,7 @@ else()
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
 					"LoggerLibVersion.hpp"
-					"LoggerLibVersionTools.hpp"
+					"LoggerLibVersionTools.hpp" "LoggerLibVersionTools.cpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
 endif()
