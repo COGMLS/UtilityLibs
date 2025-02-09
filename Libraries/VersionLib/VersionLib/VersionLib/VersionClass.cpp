@@ -341,11 +341,7 @@ const char *VersionLib::VersionData::getBuildTypeCstr(bool useShortStr)
 	std::string verStr = this->getBuildTypeStr(useShortStr);
 	size_t strLen = verStr.size();
 	char* tmp = new char[strLen];
-	#ifdef _MSC_VER
-	std::strcpy_s(tmp, strLen, verStr.c_str());
-	#else
 	std::strcpy(tmp, verStr.c_str());
-	#endif // !_MSC_VER
 	return const_cast<const char*>(tmp);
 }
 
@@ -369,11 +365,7 @@ const char *VersionLib::VersionData::getBuildTypeCompleteCstr(bool useShortStr, 
 	std::string verStr = this->getBuildTypeComplete(useShortStr, showReleaseType);
 	size_t strLen = verStr.size();
 	char* tmp = new char[strLen];
-	#ifdef _MSC_VER
-	std::strcpy_s(tmp, strLen, verStr.c_str());
-	#else
 	std::strcpy(tmp, verStr.c_str());
-	#endif // !_MSC_VER
 	return const_cast<const char*>(tmp);
 }
 
@@ -424,7 +416,7 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 
 VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 {
-	VersionLib::VersionStruct verData;
+	VersionLib::VersionStruct verData = initVersionStruct();
 
 	verData.major = this->major;
 	verData.minor = this->minor;

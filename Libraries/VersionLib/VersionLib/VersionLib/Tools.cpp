@@ -5,7 +5,7 @@ const char *VersionLib::tolower_Cstr(const std::string &value)
 	size_t strlen = value.size();
 	char* tmp = new char[strlen];
 	char c = '\0';
-	for (size_t i = 0; i < value.size(); i++)
+	for (size_t i = 0; i < strlen; i++)
 	{
 		c = value[i];
 
@@ -218,7 +218,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 [[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 {
-	VersionLib::VersionStruct v;
+	VersionLib::VersionStruct v = initVersionStruct();
 
 	/** tokens - positions used:
 	 * 0: Major version
@@ -262,7 +262,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 	unsigned int minor = 0;
 	unsigned int patch = 0;
 	std::string type = "";
-	VersionLib::BuildType typeEnum;
+	VersionLib::BuildType typeEnum = VersionLib::BuildType::RELEASE;
 	unsigned int type_num = 0;
 	unsigned long long build = 0;
 
@@ -375,12 +375,11 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 {
-	/// TODO: Add the Microsoft's iostream guard for Debug tests
-	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
-	VersionLib::VersionStruct v;
+	VersionLib::VersionStruct v = initVersionStruct();
 
 	// Disabled the method: The current method contains a bug that miss the lowercase characters
 	//version = VersionLib::tolower_str(version);
@@ -651,7 +650,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		}
 	}
 
-	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_type_number << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 

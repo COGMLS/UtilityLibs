@@ -72,7 +72,7 @@ if (WIN32)
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
-					"VersionStruct.hpp"
+					"VersionStruct.hpp" "VersionStruct.cpp"
 				)
 else()
 	add_library(
@@ -87,7 +87,7 @@ else()
 					"Tools.hpp" "Tools.cpp"
 					"VersionClass.hpp" "VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
-					"VersionStruct.hpp"
+					"VersionStruct.hpp" "VersionStruct.cpp"
 				)
 endif()
 
