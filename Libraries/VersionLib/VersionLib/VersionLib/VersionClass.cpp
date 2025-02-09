@@ -416,7 +416,7 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 
 VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 {
-	VersionLib::VersionStruct verData;
+	VersionLib::VersionStruct verData = initVersionStruct();
 
 	verData.major = this->major;
 	verData.minor = this->minor;

@@ -218,7 +218,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 [[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 {
-	VersionLib::VersionStruct v;
+	VersionLib::VersionStruct v = initVersionStruct();
 
 	/** tokens - positions used:
 	 * 0: Major version
@@ -379,7 +379,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
-	VersionLib::VersionStruct v;
+	VersionLib::VersionStruct v = initVersionStruct();
 
 	// Disabled the method: The current method contains a bug that miss the lowercase characters
 	//version = VersionLib::tolower_str(version);
@@ -650,7 +650,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		}
 	}
 
-	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_type_number << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
