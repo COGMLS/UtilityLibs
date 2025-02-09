@@ -375,8 +375,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 {
-	/// TODO: Add the Microsoft's iostream guard for Debug tests
-	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM)/* || defined()*/)
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
