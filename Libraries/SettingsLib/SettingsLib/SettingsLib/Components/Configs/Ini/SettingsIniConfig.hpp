@@ -516,13 +516,72 @@ namespace SettingsLib
 				 */
 				int removeSection (std::wstring sectionName);
 
+				/**
+				 * @brief Remove a key from section
+				 * @param sectionName Section reference to look for the key
+				 * @param keyName Key to remove
+				 * @return -3: If the section is not configured.
+				 * @return -2: If the section is defined to use wstring.
+				 * @return -1: If an exception occur in ConfigIniSectionData.
+				 * @return 0: Key removed with success
+				 * @return 1: The configuration object is not ready to be used
+				 * @return 2: The configuration object is defined to use wide strings
+				 * @return 3: The section database is empty
+				 * @return 4: An exception occurred
+				 * @return 5: The section does not exist in the database
+				 * @return 6: The section database does not contain the key
+				 */
 				int removeEntry (std::string sectionName, std::string keyName);
+
+				/**
+				 * @brief Remove a key from section
+				 * @param sectionName Section reference to look for the key
+				 * @param keyName Key to remove
+				 * @return -3: If the section is not configured.
+				 * @return -2: If the section is defined to use wstring.
+				 * @return -1: If an exception occur in ConfigIniSectionData.
+				 * @return 0: Key removed with success
+				 * @return 1: The configuration object is not ready to be used
+				 * @return 2: The configuration object is defined to use wide strings
+				 * @return 3: The section database is empty
+				 * @return 4: An exception occurred
+				 * @return 5: The section does not exist in the database
+				 * @return 6: The section database does not contain the key
+				 */
 				int removeEntry (std::wstring sectionName, std::wstring keyName);
 
+				/**
+				 * @brief Verify if the section database contains a specific section
+				 * @param sectionName Section to search in the database
+				 * @return True if the section exists.
+				 * @return False if the section does not exist or in other possible situations: 1) The configuration object is not ready to use. 2) The section database is empty. 3) The object is configured to use wide strings.
+				 */
 				bool hasSection (std::string sectionName);
+
+				/**
+				 * @brief Verify if the section database contains a specific section
+				 * @param sectionName Section to search in the database
+				 * @return True if the section exists.
+				 * @return False if the section does not exist or in other possible situations: 1) The configuration object is not ready to use. 2) The section database is empty. 3) The object is not configured to use wide strings.
+				 */
 				bool hasSection (std::wstring sectionName);
 
+				/**
+				 * @brief Verify if a key exist in a section
+				 * @param sectionName Section to search in the database
+				 * @param keyName Key to search in the section database
+				 * @return True if the key was found in the section database exists.
+				 * @return False if the key does not exist or in other possible situations: 1) The configuration object is not ready to use. 2) The section database is empty. 3) The object is configured to use wide strings.
+				 */
 				bool hasEntry (std::string sectionName, std::string keyName);
+
+				/**
+				 * @brief Verify if a key exist in a section
+				 * @param sectionName Section to search in the database
+				 * @param keyName Key to search in the section database
+				 * @return True if the key was found in the section database exists.
+				 * @return False if the key does not exist or in other possible situations: 1) The configuration object is not ready to use. 2) The section database is empty. 3) The object is not configured to use wide strings.
+				 */
 				bool hasEntry (std::wstring sectionName, std::wstring keyName);
 				
 				/**

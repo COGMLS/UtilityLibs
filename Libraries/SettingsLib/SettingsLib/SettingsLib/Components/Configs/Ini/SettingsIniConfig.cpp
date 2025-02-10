@@ -1729,6 +1729,150 @@ int SettingsLib::Types::ConfigIni::removeSection(std::wstring sectionName)
 	}
 }
 
+int SettingsLib::Types::ConfigIni::removeEntry(std::string sectionName, std::string keyName)
+{
+    if (!this->isConfigFileOk())
+	{
+		return 1;	// The configuration object is not ready to be used
+	}
+
+	if (this->isWideData())
+	{
+		return 2;	// The configuration object is defined to use wide strings
+	}
+
+	if (this->sectionMap.empty())
+	{
+		return 3;	// The section database is empty
+	}
+
+	try
+	{
+		if (!this->sectionMap.contains(sectionName))
+		{
+			return 5;	// The section does not exist in the database
+		}
+
+		if (!this->sectionMap.at(sectionName)->contains(keyName))
+		{
+			return 6;	// The section database does not contain the key
+		}
+
+		int status = this->sectionMap.at(sectionName)->remData(keyName);
+
+		if (status == 1)
+		{
+			return 0;	// The operation was successful
+		}
+
+		if (status != 2 && status != 0)
+		{
+			return status;	// All possible status code is negative numbers, indicating a error from remData
+		}
+
+		return 6;	// The possible status in this situation is 2, when the key does not exist in the database
+	}
+	catch(const std::exception& e)
+	{
+		return 4;	// An exception was found
+	}
+}
+
+int SettingsLib::Types::ConfigIni::removeEntry(std::wstring sectionName, std::wstring keyName)
+{
+    if (!this->isConfigFileOk())
+	{
+		return 1;	// The configuration object is not ready to be used
+	}
+
+	if (!this->isWideData())
+	{
+		return 2;	// The configuration object is defined to not use wide strings
+	}
+
+	if (this->wSectionMap.empty())
+	{
+		return 3;	// The section database is empty
+	}
+
+	try
+	{
+		if (!this->wSectionMap.contains(sectionName))
+		{
+			return 5;	// The section does not exist in the database
+		}
+
+		if (!this->wSectionMap.at(sectionName)->contains(keyName))
+		{
+			return 6;	// The section database does not contain the key
+		}
+
+		int status = this->wSectionMap.at(sectionName)->remData(keyName);
+
+		if (status == 1)
+		{
+			return 0;	// The operation was successful
+		}
+
+		if (status != 2 && status != 0)
+		{
+			return status;	// All possible status code is negative numbers, indicating a error from remData
+		}
+
+		return 6;	// The possible status in this situation is 2, when the key does not exist in the database
+	}
+	catch(const std::exception& e)
+	{
+		return 4;	// An exception was found
+	}
+}
+
+bool SettingsLib::Types::ConfigIni::hasSection(std::string sectionName)
+{
+	if (!this->isConfigFileOk() || this->sectionMap.empty() || this->isWideData())
+	{
+		return false;
+	}
+
+	return this->sectionMap.contains(sectionName);
+}
+
+bool SettingsLib::Types::ConfigIni::hasSection(std::wstring sectionName)
+{
+    if (!this->isConfigFileOk() || this->wSectionMap.empty() || !this->isWideData())
+	{
+		return false;
+	}
+
+	return this->wSectionMap.contains(sectionName);
+}
+
+bool SettingsLib::Types::ConfigIni::hasEntry(std::string sectionName, std::string keyName)
+{
+	if (this->hasSection(sectionName))
+	{
+		if (this->sectionMap.at(sectionName)->contains(keyName) == 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool SettingsLib::Types::ConfigIni::hasEntry(std::wstring sectionName, std::wstring keyName)
+{
+    if (this->hasSection(sectionName))
+	{
+		if (this->wSectionMap.at(sectionName)->contains(keyName) == 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 size_t SettingsLib::Types::ConfigIni::numSections()
 {
 	if (this->isWideData())
