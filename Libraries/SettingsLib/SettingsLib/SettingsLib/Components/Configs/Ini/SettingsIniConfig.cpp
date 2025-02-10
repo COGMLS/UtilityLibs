@@ -1437,6 +1437,298 @@ int SettingsLib::Types::ConfigIni::setEntry(SettingsLib::Types::ConfigIniData *e
 	}
 }
 
+int SettingsLib::Types::ConfigIni::setEntry(std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData entry)
+{
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry.isWideData() || this->isWideData() && !entry.isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (entry.setSection(sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 8;	// Fail to set the new section name
+		}
+
+		if (entry.setKey(keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 9;	// Fail to set the new key name
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+	if (entry == nullptr)
+	{
+		return 1;
+	}
+
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry->isWideData() || this->isWideData() && !entry->isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (entry->setSection(sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 8;	// Fail to set the new section name
+		}
+
+		if (entry->setKey(keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 9;	// Fail to set the new key name
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(std::string *sectionName, std::string *keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+    if (entry == nullptr)
+	{
+		return 1;
+	}
+
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry->isWideData() || this->isWideData() && !entry->isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (sectionName != nullptr)
+		{
+			if (entry->setSection(*sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				return 8;	// Fail to set the new section name
+			}
+		}
+
+		if (keyName != nullptr)
+		{
+			if (entry->setKey(*keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				return 9;	// Fail to set the new key name
+			}
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData entry)
+{
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry.isWideData() || this->isWideData() && !entry.isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (entry.setSection(sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 8;	// Fail to set the new section name
+		}
+
+		if (entry.setKey(keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 9;	// Fail to set the new key name
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+    if (entry == nullptr)
+	{
+		return 1;
+	}
+
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry->isWideData() || this->isWideData() && !entry->isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (entry->setSection(sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 8;	// Fail to set the new section name
+		}
+
+		if (entry->setKey(keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+		{
+			return 9;	// Fail to set the new key name
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::setEntry(std::wstring *sectionName, std::wstring *keyName, SettingsLib::Types::ConfigIniData *entry)
+{
+    if (entry == nullptr)
+	{
+		return 1;
+	}
+
+    if (!this->isConfigFileOk())
+	{
+		return 2;
+	}
+
+	if (!this->isWideData() && entry->isWideData() || this->isWideData() && !entry->isWideData())
+	{
+		return 3;
+	}
+
+	try
+	{
+		if (sectionName != nullptr)
+		{
+			if (entry->setSection(*sectionName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				return 8;	// Fail to set the new section name
+			}
+		}
+
+		if (keyName != nullptr)
+		{
+			if (entry->setKey(*keyName) != SettingsLib::ErrorCodes::ConfigIniStatus::CONFIG_INI_STATUS_SUCCESSFUL_OPERATION)
+			{
+				return 9;	// Fail to set the new key name
+			}
+		}
+
+		return this->setEntry(entry);	// Return values from setEntry
+	}
+	catch(const std::exception& e)
+	{
+		return 4;
+	}
+}
+
+int SettingsLib::Types::ConfigIni::removeSection(std::string sectionName)
+{
+	if (this->isConfigFileOk())
+	{
+		return 1;	// Check if the configuration object is not ready to use.
+	}
+
+	if (this->isWideData())
+	{
+		return 2;	// The configuration object is defined to use wide string
+	}
+
+	if (this->sectionMap.empty())
+	{
+		return 3;	// The section map is empty
+	}
+
+	try
+	{
+		if (!this->sectionMap.contains(sectionName))
+		{
+			return 5;	// The section map does not contain the desired section
+		}
+
+		this->sectionMap.erase(sectionName);
+
+		return 0;	// The section was erased with success
+	}
+	catch(const std::exception& e)
+	{
+		return 4;	// An exception was found
+	}
+}
+
+int SettingsLib::Types::ConfigIni::removeSection(std::wstring sectionName)
+{
+	if (this->isConfigFileOk())
+	{
+		return 1;	// Check if the configuration object is not ready to use.
+	}
+
+	if (!this->isWideData())
+	{
+		return 2;	// The configuration object is not defined to use wide string
+	}
+
+	if (this->wSectionMap.empty())
+	{
+		return 3;	// The section map is empty
+	}
+
+	try
+	{
+		if (!this->wSectionMap.contains(sectionName))
+		{
+			return 5;	// The section map does not contain the desired section
+		}
+
+		this->wSectionMap.erase(sectionName);
+
+		return 0;	// The section was erased with success
+	}
+	catch(const std::exception& e)
+	{
+		return 4;	// An exception was found
+	}
+}
+
 size_t SettingsLib::Types::ConfigIni::numSections()
 {
 	if (this->isWideData())

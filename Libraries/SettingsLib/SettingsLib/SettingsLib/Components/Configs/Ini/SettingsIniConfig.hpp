@@ -386,12 +386,134 @@ namespace SettingsLib
 				 */
 				int setEntry (SettingsLib::Types::ConfigIniData* entry);
 				
+				/**
+				 * @brief Add an entry overwriting the section and key name. If an entry with the same section and key already exist, the current entry will be updated.
+				 * @param sectionName New section name
+				 * @param keyName New key name
+				 * @param entry Configuration entry. The entry section and key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
 				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData entry);
+				
+				/**
+				 * @brief Add an entry overwriting the section and key name. If an entry with the same section and key already exist, the current entry will be updated.
+				 * @param sectionName New section name
+				 * @param keyName New key name
+				 * @param entry Configuration entry. The entry section and key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry
+				 * @return 1: Entry is nullptr
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
 				int setEntry (std::string sectionName, std::string keyName, SettingsLib::Types::ConfigIniData* entry);
-				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData entry);
-				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData* entry);
 
+				/**
+				 * @brief Add an entry allowing to overwriting the section and/or key name. If an entry with the same section and key already exist, the current entry will be updated. If a section does not exist, a new section will be created.
+				 * @param sectionName New section name to entry. If a nullptr is set, the section won't be overwrite.
+				 * @param keyName New key name to entry. If a nullptr is set, the key's name won't be overwrite.
+				 * @param entry Configuration entry. The entry section and/or key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry.
+				 * @return 1: Entry is nullptr
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
+				int setEntry (std::string* sectionName, std::string* keyName, SettingsLib::Types::ConfigIniData* entry);
+				
+				/**
+				 * @brief Add an entry overwriting the section and key name. If an entry with the same section and key already exist, the current entry will be updated.
+				 * @param sectionName New section name
+				 * @param keyName New key name
+				 * @param entry Configuration entry. The entry section and key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
+				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData entry);
+				
+				/**
+				 * @brief Add an entry allowing to overwriting the section and/or key name. If an entry with the same section and key already exist, the current entry will be updated. If a section does not exist, a new section will be created.
+				 * @param sectionName New section name to entry. If a nullptr is set, the section won't be overwrite.
+				 * @param keyName New key name to entry. If a nullptr is set, the key's name won't be overwrite.
+				 * @param entry Configuration entry. The entry section and/or key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry.
+				 * @return 1: Entry is nullptr
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
+				int setEntry (std::wstring sectionName, std::wstring keyName, SettingsLib::Types::ConfigIniData* entry);
+				
+				/**
+				 * @brief Add an entry allowing to overwriting the section and/or key name. If an entry with the same section and key already exist, the current entry will be updated. If a section does not exist, a new section will be created.
+				 * @param sectionName New section name to entry. If a nullptr is set, the section won't be overwrite.
+				 * @param keyName New key name to entry. If a nullptr is set, the key's name won't be overwrite.
+				 * @param entry Configuration entry. The entry section and/or key name will be overwrite.
+				 * @return 0: Successfully added or updated the entry.
+				 * @return 1: Entry is nullptr
+				 * @return 2: Configuration object is not ready to be used or has internal failure
+				 * @return 3: The configuration object string setting and entry string setting does not match
+				 * @return 4: Catch an exception during the operation
+				 * @return 5: Fail to get the section information from entry
+				 * @return 6: Section database fail
+				 * @return 7: Fail to add the database section to store the new entry data
+				 * @return 8: Fail to overwrite the section name
+				 * @return 9: Fail to overwrite the key name
+				 */
+				int setEntry (std::wstring* sectionName, std::wstring* keyName, SettingsLib::Types::ConfigIniData* entry);
+
+				/**
+				 * @brief Remove a section from configuration database
+				 * @param sectionName Section name to search and remove it
+				 * @return 0: If the section was removed with success
+				 * @return 1: Configuration object is not ready to use
+				 * @return 2: The configuration object is defined to use wide string
+				 * @return 3: The configuration database is empty
+				 * @return 4: An exception occurred
+				 * @return 5: The database does not contain the section
+				 */
 				int removeSection (std::string sectionName);
+
+				/**
+				 * @brief Remove a section from configuration database
+				 * @param sectionName Section name to search and remove it
+				 * @return 0: If the section was removed with success
+				 * @return 1: Configuration object is not ready to use
+				 * @return 2: The configuration object is not defined to use wide string
+				 * @return 3: The configuration database is empty
+				 * @return 4: An exception occurred
+				 * @return 5: The database does not contain the section
+				 */
 				int removeSection (std::wstring sectionName);
 
 				int removeEntry (std::string sectionName, std::string keyName);
