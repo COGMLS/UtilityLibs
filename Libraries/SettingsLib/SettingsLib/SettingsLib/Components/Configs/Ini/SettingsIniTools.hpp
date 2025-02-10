@@ -29,6 +29,7 @@
 #endif // !WIN32
 
 #include <fstream>
+#include <cwchar>
 #include <string>
 #include <cstring>
 #include <filesystem>
@@ -69,6 +70,18 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API int extractIniDataLine (std::string* line, std::string* sectionName, std::string* keyName, std::string* rawValue, std::string* comment);
 
+			/**
+			 * @brief Extract the INI data line, separating the section, key, value and comment, if exist. If one or more extractable data from this function fail or doesn't exist in the data line, no data will applied.
+			 * @param line Line from INI file to extract the data
+			 * @param sectionName Section configuration's name
+			 * @param keyName Configuration key's name
+			 * @param rawValue Raw configuration value (need be treated separately)
+			 * @param comment Comment present in the line. If the line is a commented line, will apply only to this value
+			 * @return Return a IniLineCheckStatus value from conversion value from data extraction
+			 * @note If one or more sending variables doesn't have values, will return an empty string. Use the return value to check the real condition.
+			 * @note When a key is returned, the section is not defined. This function only analyze one configuration line! To determinate if a key is part of a section, use another function // To-Do: Create the function to merge the key from a section into a section data.
+			 * @warning If one of the variables has nullptr value, the function will return SETTINGS_INI_LINE_CHECK_NULLPTR_ERROR status code.
+			 */
 			SETTINGS_LIB_API int extractIniDataLine (std::wstring* line, std::wstring* sectionName, std::wstring* keyName, std::wstring* rawValue, std::wstring* comment);
 
 			/**
@@ -79,6 +92,12 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API int identifyValueType (std::string* rawValue);
 
+			/**
+			 * @brief Identify the raw value extracted from INI file line
+			 * @param rawValue A raw value data extracted from INI file line
+			 * @return Return a IniRawValueConversionStatus value from conversion
+			 * @note This function is available for custom methods. The convertNumber and convertValue functions already analyze the value type
+			 */
 			SETTINGS_LIB_API int identifyValueType (std::wstring* rawValue);
 
 			/**
@@ -90,6 +109,13 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API int convertNumber (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore);
 
+			/**
+			 * @brief Function strict to only convert raw string values into numbers.
+			 * @param rawValue A raw value data extracted from INI file line
+			 * @param valueStore A initialized pointer to a ConfigDataStore object
+			 * @return Return a IniRawValueConversionStatus value from conversion
+			 * @note This function is available for custom methods. The convertValue function already analyze the value type
+			 */
 			SETTINGS_LIB_API int convertNumber (std::wstring* rawValue, SettingsLib::Types::ConfigDataStore* valueStore);
 
 			/**
@@ -101,6 +127,13 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API int convertValue (std::string* rawValue, SettingsLib::Types::ConfigDataStore* valueStore, bool trimSpaces);
 
+			/**
+			 * @brief Convert a raw value string extracted from INI configuration line into a number (unsigned integer/integer/decimal), boolean, or a literal string
+			 * @param rawValue A raw value data extracted from INI file line
+			 * @param valueStore A initialized pointer to a ConfigDataStore object
+			 * @param trimSpaces Cut the empty spaces in the begin of the string and in the end, only if the value is a string data. Otherwise, will be ignored.
+			 * @return Return a IniRawValueConversionStatus value from conversion
+			 */
 			SETTINGS_LIB_API int convertValue (std::wstring* rawValue, SettingsLib::Types::ConfigDataStore* valueStore, bool trimSpaces);
 
 			/**
