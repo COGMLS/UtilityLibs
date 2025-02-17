@@ -69,10 +69,12 @@ if (WIN32)
 					# Logger main header:
 					"LoggerLib.hpp"
 					# Library headers
+					"LogDataStore.hpp" "LogDataStore.cpp"
 					"Logger.hpp" "Logger.cpp"
 					"LoggerCommonDataTypes.hpp" "LoggerCommonDataTypes.cpp"
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
+					"LoggerExperimental.hpp"
 					"LoggerLibVersion.hpp"
 					"LoggerLibVersionTools.hpp" "LoggerLibVersionTools.cpp"
 					"LogMng.hpp" "LogMng.cpp"
@@ -84,10 +86,12 @@ else()
 					# Logger main header:
 					"LoggerLib.hpp"
 					# Library headers
+					"LogDataStore.hpp" "LogDataStore.cpp"
 					"Logger.hpp" "Logger.cpp"
 					"LoggerCommonDataTypes.hpp" "LoggerCommonDataTypes.cpp"
 					"LoggerDateTime.hpp" "LoggerDateTime.cpp"
 					"LoggerException.hpp" "LoggerException.cpp"
+					"LoggerExperimental.hpp"
 					"LoggerLibVersion.hpp"
 					"LoggerLibVersionTools.hpp" "LoggerLibVersionTools.cpp"
 					"LogMng.hpp" "LogMng.cpp"
