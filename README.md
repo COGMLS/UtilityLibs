@@ -12,10 +12,10 @@ The **Utility Libraries** repository contains some libraries that was designed f
 
 | Name | Documentation | Version | Cross-platform support | Development branch | Notes |
 | ---- | ------------- | ------- | ---------------------- | ------------------ | ----- |
-| LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 3.3.0-alpha | Linux, Windows, Mac | `LoggerLibDev` | LoggerLib v1 received a new release part of migration to CMake |
+| LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 3.3.0-alpha.2 | Linux, Windows, Mac | `LoggerLibDev` | Redesigned LoggerLibSolution with support to cross-platform and *wide strings* (`LoggerW` class), useful on Windows systems |
 | LoggerLibSolution | *Not available* | 1.1.0 | No. **Windows only** | `LoggerLibDev` | This is a deprecated project that was part from another one. Is recommended to use `LoggerLib` that has cross-platform support and receives constant updates |
 | SettingsLib | [README.md](/Libraries/SettingsLib/README.md) | 3.0.0-alpha | Linux, Windows, Mac | `SettingsLibDev` | This project is under development and was not merged into `master` |
-| VersionLib | [README.md](/Libraries/VersionLib/VersionLib/README.md) | 0.8.3-beta.2 | Linux, Windows, Mac | `VersionLibDev` |  |
+| VersionLib | [README.md](/Libraries/VersionLib/VersionLib/README.md) | 0.8.4-beta.2 | Linux, Windows, Mac | `VersionLibDev` | Version Library is design to easily create relations between version information available in a program and other libraries, allowing to make fast tests of compatible versions. This library is focus on provide [semantic versioning](https://semver.org/spec/v2.0.0.html) support. It can also be permissive on other version formats, check the documentation for more details. |
 
 > **NOTE:** The projects with cross-platform marked with *Macintosh* support was not tested, because I do not have a Mac. But they use ISO C++, ISO C, .Net, or other language/framework that has support and their features are functional on Mac, considering the documentations.
 
