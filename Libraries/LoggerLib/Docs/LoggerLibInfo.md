@@ -2,9 +2,14 @@
 
 This document contains the information about the future plans, known bugs, deprecated features.
 
-## Implementations under development:
+## Recently Implementations:
 
 - Sort log files by age.
+- Experimental code control
+
+## Implementations under development:
+
+- `LogDataStore` to easily store various datatype with better memory usage
 - Support to formatting log data
 
 ## Future Implementations:
@@ -16,8 +21,8 @@ This document contains the information about the future plans, known bugs, depre
 
 | Bug ID | Details | Status |
 | :---   | :---:   | ---:   |
-| 1 | On Linux systems the log files are not getting in order as occurs on Windows | Improvements under tests |
-| 2 | Sorting log files is not working correctly | On first tests, the new algorithm is sorting as expected on Linux systems. Tests on Windows platform are needed |
+| 1 | ~~On Linux systems the log files are not getting in order as occurs on Windows~~ | FIXED |
+| 2 | ~~Sorting log files is not working correctly~~ | FIXED - The algorithm passed in all tested platforms |
 
 ## Deprecated Features:
 

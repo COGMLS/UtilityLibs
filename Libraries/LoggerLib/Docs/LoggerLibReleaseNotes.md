@@ -1,4 +1,4 @@
-# Logger Library History:
+# Logger Library History/Release Notes:
 
 ## About this file:
 
@@ -35,6 +35,29 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.0-alpha.5 (2025/02/17) -->
+    <dt><version-data>3.3.0-alpha.5</version-data></dt>
+    <dt>Added experimental code control guards to enable/disable experimental features</dt>
+    <dt>Added <code>highPrecision</code> flag in <code>LoggerLocalDateTime</code>.</dt>
+    <dt>Added <code>useHighPrecision</code> parameter in <code>getLoggerDateTime</code> function.</dt>
+    <dt>Removed warning message on documentation.</dt>
+    <dt>Moved preprocessor definition to control the experimental sorting algorithm to LoggerExperimental.hpp</dt>
+    <dt>Added experimental <code>LogDataStore</code> class.</dt>
+    <dt>Moved and enhanced the LogDataType enum to LogDataStore.hpp</dt>
+    <dt>Moved and modified the LogEntryData union to LogDataStore.hpp</dt>
+    <dt><warning-alert>[WARNING]</warning-alert> The <code>LogDataStore</code> is under development and may contain bugs.</dt>
+    <dt>Added support to experimental <code>LogDataStore</code> in <code>LogEntry</code> and <code>LogEntryW</code>.</dt>
+    <dt>Added to <code>LogEntry</code> and <code>LogEntryW</code> <code>getTitle</code>, <code>getMessage</code>, <code>getType</code>, <code>getData</code> methods.</dt>
+    <dt>Added to <code>LogEntry</code> and <code>LogEntryW</code> <code>getStrData</code> method for non-experimental code.</dt>
+    <dt><note-alert>[NOTE]</note-alert> Using experimental <code>LogDataStore</code> compatible code, will make some methods not work as expected at this moment.</dt>
+    <dt>Added experimental <code>LogFormat</code> class.</dt>
+    <dt>Added experimental <code>LogFormatToken</code> class.</dt>
+    <dt><note-alert>[NOTE]</note-alert> The LogFormatToken and LogFormat classes are not ready for use yet</dt>
+    <!-- 3.3.0-alpha.2 (2025/02/08) -->
+    <dt><version-data>3.3.0-alpha.2</version-data></dt>
+    <dd>Modified the <code>LoggerException</code> to include custom error messages.</dd>
+    <dd><note-alert>[NOTE]</note-alert> <code>LoggerException</code> is an experimental feature and it is not been used by the library yet.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Added definition of inline methods <code>getLibVersion</code> and <code>getVersionStr</code> to resolve Visual Studio link fail.</dd>
     <!-- 3.3.0-alpha.1 (2025/01/27) -->
     <dt><version-data>3.3.0-alpha.1</version-data></dt>
     <dd><code>sortLogFileList2</code> marked as deprecated</dd>
