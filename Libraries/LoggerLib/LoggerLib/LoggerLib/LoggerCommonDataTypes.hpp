@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "LoggerExperimental.hpp"
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
@@ -37,6 +39,18 @@
 #include <string>
 
 #include "LoggerDateTime.hpp"
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#include "LogDataStore.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+#include "LoggerInfoFormatter.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_CUSTOM_EXCEPTIONS
+#include "LoggerException.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_CUSTOM_EXCEPTIONS
 
 #define LOGGER_LOG_FILE_TYPE								".log"
 #define LOGGER_LOG_FILE_TYPE_W								L".log"
@@ -53,6 +67,7 @@
 	#define LOGGER_DIRECTORY_PATH_SEPARATOR_W				L"/"
 #endif
 
+#ifndef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 /// @brief Log entry type
 enum LOGGER_LIB_API LogDataType
 {
@@ -72,6 +87,7 @@ union LogEntryData
 	bool LOG_ENTRY_STRING;
 	LoggerLocalDateTime LOG_ENTRY_DATE_TIME;
 };
+#endif
 
 /// @brief Log entry data
 class LOGGER_LIB_API LogEntry
@@ -79,9 +95,15 @@ class LOGGER_LIB_API LogEntry
 	private:
 		std::string title;			// Log title
 		std::string message;		// Log message
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		LogDataStore data;			// Log data. It can contain additional message or other datatypes like bool, int, float, date and time, etc.
+		LoggerLocalDateTime dtReg;	// Log date and time entry register.
+		#else
 		LogEntryData data;			// Log data
 		LogDataType dataType;		// Log data type id
 		std::string strData;		// Log additional string data
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 	public:
 		/// @brief Create a log entry
 		/// @param title Log entry title
@@ -136,6 +158,29 @@ class LOGGER_LIB_API LogEntry
 
 		~LogEntry();
 
+		/// @brief Get the log entry title
+		std::string getTitle();
+
+		/// @brief Get the log entry message
+		std::string getMessage();
+
+		/// @brief Get the type of data this entry holds.
+		LogDataType getType();
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		/// @brief Get the LogDataStore available in this entry.
+		/// @note If no data store is available, an empty data store will be returned
+		LogDataStore getData();
+		#else
+		/// @brief Get the log entry data union
+		/// @note If the entry does not hold a valid union, all values will set as zero.
+		LogEntryData getData();
+
+		/// @brief Get the additional string data the entry can hold.
+		/// @note If no additional string was set, an empty string will be returned.
+		std::string getStrData();
+		#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+
 		/// @brief Export the log entry as a string
 		/// @return 
 		std::string getEntry();
@@ -149,9 +194,15 @@ class LOGGER_LIB_API LogEntryW
 	private:
 		std::wstring title;			// Log title
 		std::wstring message;		// Log message
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		LogDataStore data;			// Log data. It can contain additional message or other datatypes like bool, int, float, date and time, etc.
+		LoggerLocalDateTime dtReg;	// Log date and time entry register.
+		#else
 		LogEntryData data;			// Log data
 		LogDataType dataType;		// Log data type id
 		std::wstring strData;		// Log additional string data
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 	public:
 		/// @brief Create a log entry
 		/// @param title Log entry title
@@ -205,6 +256,29 @@ class LOGGER_LIB_API LogEntryW
 		bool operator==(const LogEntryW& other) const;
 
 		~LogEntryW();
+
+		/// @brief Get the log entry title
+		std::wstring getTitle();
+
+		/// @brief Get the log entry message
+		std::wstring getMessage();
+
+		/// @brief Get the type of data this entry holds.
+		LogDataType getType();
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		/// @brief Get the LogDataStore available in this entry.
+		/// @note If no data store is available, an empty data store will be returned
+		LogDataStore getData();
+		#else
+		/// @brief Get the log entry data union
+		/// @note If the entry does not hold a valid union, all values will set as zero.
+		LogEntryData getData();
+
+		/// @brief Get the additional string data the entry can hold.
+		/// @note If no additional string was set, an empty string will be returned.
+		std::wstring getStrData();
+		#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 		/// @brief Export the log entry as a string
 		/// @return 

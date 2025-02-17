@@ -4,31 +4,46 @@ LogEntry::LogEntry(std::string title, std::string message)
 {
 	this->title = title;
 	this->message = message;
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_NULL_DATA_ENTRY;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(std::string title, std::string message, long long data)
 {
 	this->title = title;
 	this->message = message;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_INTEGER_ENTRY;
 	this->data.LOG_ENTRY_INT = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(std::string title, std::string message, double data)
 {
 	this->title = title;
 	this->message = message;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_FLOAT_ENTRY;
 	this->data.LOG_ENTRY_FLOAT = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(std::string title, std::string message, std::string data)
 {
 	this->title = title;
 	this->message = message;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_STRING_ENTRY;
 	this->strData = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(std::string title, std::string message, LoggerLocalDateTime data, bool useHighPrecisionTime)
@@ -36,6 +51,8 @@ LogEntry::LogEntry(std::string title, std::string message, LoggerLocalDateTime d
 	this->title = title;
 	this->message = message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	if (useHighPrecisionTime)
 	{
 		this->dataType = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
@@ -44,12 +61,18 @@ LogEntry::LogEntry(std::string title, std::string message, LoggerLocalDateTime d
 	{
 		this->dataType = LogDataType::LOG_DATE_TIME_ENTRY;
 	}
-
+	
 	this->data.LOG_ENTRY_DATE_TIME = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(const LogEntry& other)
 {
+	this->message = other.message;
+	this->title = other.title;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = other.dataType;
 
 	switch (this->dataType)
@@ -84,14 +107,17 @@ LogEntry::LogEntry(const LogEntry& other)
 			break;
 		}
 	}
-
-	this->message = other.message;
-	this->title = other.title;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::LogEntry(LogEntry&& other) noexcept
 {
-	this->dataType = other.dataType;
+	this->message = std::move(other.message);
+	this->title = std::move(other.title);
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = std::move(other.dataType);
 
 	switch (this->dataType)
 	{
@@ -101,23 +127,23 @@ LogEntry::LogEntry(LogEntry&& other) noexcept
 		}
 		case LogDataType::LOG_INTEGER_ENTRY:
 		{
-			this->data.LOG_ENTRY_INT = other.data.LOG_ENTRY_INT;
+			this->data.LOG_ENTRY_INT = std::move(other.data.LOG_ENTRY_INT);
 			break;
 		}
 		case LogDataType::LOG_FLOAT_ENTRY:
 		{
-			this->data.LOG_ENTRY_FLOAT = other.data.LOG_ENTRY_FLOAT;
+			this->data.LOG_ENTRY_FLOAT = std::move(other.data.LOG_ENTRY_FLOAT);
 			break;
 		}
 		case LogDataType::LOG_STRING_ENTRY:
 		{
-			this->strData = other.strData;
+			this->strData = std::move(other.strData);
 			break;
 		}
 		case LogDataType::LOG_DATE_TIME_ENTRY:
 		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
 		{
-			this->data.LOG_ENTRY_DATE_TIME = other.data.LOG_ENTRY_DATE_TIME;
+			this->data.LOG_ENTRY_DATE_TIME = std::move(other.data.LOG_ENTRY_DATE_TIME);
 			break;
 		}
 		default:
@@ -125,37 +151,50 @@ LogEntry::LogEntry(LogEntry&& other) noexcept
 			break;
 		}
 	}
-
-	this->message = other.message;
-	this->title = other.title;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry& LogEntry::operator=(const LogEntry& other)
 {
-	this->data = other.data;
-	this->dataType = other.dataType;
-	this->message = other.message;
-	this->strData = other.strData;
 	this->title = other.title;
+	this->message = other.message;
+	this->data = other.data;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = other.dataType;
+	this->strData = other.strData;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return *this;
 }
 
 LogEntry& LogEntry::operator=(LogEntry&& other) noexcept
 {
-	this->data = other.data;
-	this->dataType = other.dataType;
-	this->message = other.message;
-	this->strData = other.strData;
-	this->title = other.title;
+	if (this == &other)
+	{
+		return *this;
+	}
 
-	other.~LogEntry();
+	this->title = std::move(other.title);
+	this->message = std::move(other.message);
+	this->data = std::move(other.data);
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = std::move(other.dataType);
+	this->strData = std::move(other.strData);
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return *this;
 }
 
 bool LogEntry::operator==(const LogEntry& other) const
 {
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	/// @todo: Temporary to avoid compilation warnings.
+	return true;
+	#else
 	bool isSame = true;
 
 	if (this->dataType == other.dataType)
@@ -219,12 +258,54 @@ bool LogEntry::operator==(const LogEntry& other) const
 	}
 
 	return isSame;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntry::~LogEntry()
 {
 
 }
+
+std::string LogEntry::getTitle()
+{
+    return this->title;
+}
+
+std::string LogEntry::getMessage()
+{
+    return this->message;
+}
+
+LogDataType LogEntry::getType()
+{
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	return this->data.getType();
+	#else
+	return this->dataType;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+}
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+LogDataStore LogEntry::getData()
+{
+	return this->data;
+}
+#else
+LogEntryData LogEntry::getData()
+{
+	if (this->dataType != LogDataType::LOG_NULL_DATA_ENTRY)
+	{
+		return this->data;
+	}
+
+    return LogEntryData();
+}
+
+std::string LogEntry::getStrData()
+{
+    return this->strData;
+}
+#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 std::string LogEntry::getEntry()
 {
@@ -233,6 +314,8 @@ std::string LogEntry::getEntry()
 	entryLine += this->title;
 	entryLine += this->message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	switch (this->dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -272,6 +355,7 @@ std::string LogEntry::getEntry()
 			break;
 		}
 	}
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return entryLine;
 }
@@ -283,6 +367,8 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 	entryLine += obj.title;
 	entryLine += obj.message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	switch (obj.dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -317,6 +403,7 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 			break;
 		}
 	}
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	os << entryLine;
 
@@ -327,31 +414,43 @@ LogEntryW::LogEntryW(std::wstring title, std::wstring message)
 {
 	this->title = title;
 	this->message = message;
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_NULL_DATA_ENTRY;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message, long long data)
 {
 	this->title = title;
 	this->message = message;
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_INTEGER_ENTRY;
 	this->data.LOG_ENTRY_INT = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message, double data)
 {
 	this->title = title;
 	this->message = message;
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_FLOAT_ENTRY;
 	this->data.LOG_ENTRY_FLOAT = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message, std::wstring data)
 {
 	this->title = title;
 	this->message = message;
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = LogDataType::LOG_STRING_ENTRY;
 	this->strData = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message, LoggerLocalDateTime data, bool useHighPrecisionTime)
@@ -359,6 +458,8 @@ LogEntryW::LogEntryW(std::wstring title, std::wstring message, LoggerLocalDateTi
 	this->title = title;
 	this->message = message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	if (useHighPrecisionTime)
 	{
 		this->dataType = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
@@ -369,10 +470,16 @@ LogEntryW::LogEntryW(std::wstring title, std::wstring message, LoggerLocalDateTi
 	}
 
 	this->data.LOG_ENTRY_DATE_TIME = data;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::LogEntryW(const LogEntryW& other)
 {
+	this->message = other.message;
+	this->title = other.title;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	this->dataType = other.dataType;
 
 	switch (this->dataType)
@@ -407,14 +514,18 @@ LogEntryW::LogEntryW(const LogEntryW& other)
 			break;
 		}
 	}
-
-	this->message = other.message;
-	this->title = other.title;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	
 }
 
 LogEntryW::LogEntryW(LogEntryW&& other) noexcept
 {
-	this->dataType = other.dataType;
+	this->message = std::move(other.message);
+	this->title = std::move(other.title);
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = std::move(other.dataType);
 
 	switch (this->dataType)
 	{
@@ -424,23 +535,23 @@ LogEntryW::LogEntryW(LogEntryW&& other) noexcept
 		}
 		case LogDataType::LOG_INTEGER_ENTRY:
 		{
-			this->data.LOG_ENTRY_INT = other.data.LOG_ENTRY_INT;
+			this->data.LOG_ENTRY_INT = std::move(other.data.LOG_ENTRY_INT);
 			break;
 		}
 		case LogDataType::LOG_FLOAT_ENTRY:
 		{
-			this->data.LOG_ENTRY_FLOAT = other.data.LOG_ENTRY_FLOAT;
+			this->data.LOG_ENTRY_FLOAT = std::move(other.data.LOG_ENTRY_FLOAT);
 			break;
 		}
 		case LogDataType::LOG_STRING_ENTRY:
 		{
-			this->strData = other.strData;
+			this->strData = std::move(other.strData);
 			break;
 		}
 		case LogDataType::LOG_DATE_TIME_ENTRY:
 		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
 		{
-			this->data.LOG_ENTRY_DATE_TIME = other.data.LOG_ENTRY_DATE_TIME;
+			this->data.LOG_ENTRY_DATE_TIME = std::move(other.data.LOG_ENTRY_DATE_TIME);
 			break;
 		}
 		default:
@@ -448,37 +559,50 @@ LogEntryW::LogEntryW(LogEntryW&& other) noexcept
 			break;
 		}
 	}
-
-	this->message = other.message;
-	this->title = other.title;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW& LogEntryW::operator=(const LogEntryW& other)
 {
-	this->data = other.data;
-	this->dataType = other.dataType;
-	this->message = other.message;
-	this->strData = other.strData;
 	this->title = other.title;
+	this->message = other.message;
+	this->data = other.data;
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = std::move(other.dataType);
+	this->strData = std::move(other.strData);
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return *this;
 }
 
 LogEntryW& LogEntryW::operator=(LogEntryW&& other) noexcept
 {
-	this->data = other.data;
-	this->dataType = other.dataType;
-	this->message = other.message;
-	this->strData = other.strData;
-	this->title = other.title;
+	if (this == &other)
+	{
+		return *this;
+	}
 
-	other.~LogEntryW();
+	this->title = std::move(other.title);
+	this->message = std::move(other.message);
+	this->data = std::move(other.data);
+
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
+	this->dataType = std::move(other.dataType);
+	this->strData = std::move(other.strData);
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return *this;
 }
 
 bool LogEntryW::operator==(const LogEntryW& other) const
 {
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	/// @todo: Temporary to avoid compilation warnings.
+	return true;
+	#else
 	bool isSame = true;
 
 	if (this->dataType == other.dataType)
@@ -542,12 +666,54 @@ bool LogEntryW::operator==(const LogEntryW& other) const
 	}
 
 	return isSame;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 LogEntryW::~LogEntryW()
 {
 
 }
+
+std::wstring LogEntryW::getTitle()
+{
+    return this->title;
+}
+
+std::wstring LogEntryW::getMessage()
+{
+    return this->message;
+}
+
+LogDataType LogEntryW::getType()
+{
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	return this->data.getType();
+	#else
+	return this->dataType;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+}
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+LogDataStore LogEntryW::getData()
+{
+	return this->data;
+}
+#else
+LogEntryData LogEntryW::getData()
+{
+	if (this->dataType != LogDataType::LOG_NULL_DATA_ENTRY)
+	{
+		return this->data;
+	}
+
+    return LogEntryData();
+}
+
+std::wstring LogEntryW::getStrData()
+{
+    return this->strData;
+}
+#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 std::wstring LogEntryW::getEntry()
 {
@@ -556,6 +722,8 @@ std::wstring LogEntryW::getEntry()
 	entryLine += this->title;
 	entryLine += this->message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	switch (this->dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -595,6 +763,7 @@ std::wstring LogEntryW::getEntry()
 			break;
 		}
 	}
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	return entryLine;
 }
@@ -606,6 +775,8 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 	entryLine += obj.title;
 	entryLine += obj.message;
 
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	#else
 	switch (obj.dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -640,6 +811,7 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 			break;
 		}
 	}
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 	os << entryLine;
 
