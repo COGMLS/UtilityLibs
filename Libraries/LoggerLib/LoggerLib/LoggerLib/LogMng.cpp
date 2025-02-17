@@ -43,7 +43,7 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 			i++;
 		}
 
-		#ifdef LOGGER_LIB_USE_BUBBLE_SORT
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGGER_BUBBLE_SORT_1
 		for (size_t i = 0; i < logFileList.size() - 1; i++)
 		{
 			swap = false;
@@ -84,7 +84,7 @@ void sortLogFileList(std::vector<std::filesystem::path> &logFileList, bool newes
 				std::swap<LogFileDateTime>(logDtArr[i], logDtArr[min_index]);
 			}
 		}
-		#endif // !LOGGER_LIB_USE_BUBBLE_SORT
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGGER_BUBBLE_SORT_1
 
 		logFileList = logPaths;
 	}
@@ -104,7 +104,7 @@ void sortLogFileList2(std::vector<std::filesystem::path> &logFileList, bool newe
 
 		std::chrono::time_point now = std::chrono::utc_clock::now();
 
-		#ifdef LOGGER_LIB_USE_BUBBLE_SORT
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGGER_BUBBLE_SORT_2
 		for (size_t i = 0; i < logFileList.size() - 1; i++)
 		{
 			swap = false;
@@ -159,7 +159,7 @@ void sortLogFileList2(std::vector<std::filesystem::path> &logFileList, bool newe
 				std::swap(logFileList[i], logFileList[min_index]);
 			}
 		}
-		#endif // !LOGGER_LIB_USE_BUBBLE_SORT
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGGER_BUBBLE_SORT_2
 	}
 }
 
