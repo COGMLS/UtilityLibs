@@ -98,50 +98,53 @@ class LOGGER_LIB_API LogEntry
 
 		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 		LogDataStore data;			// Log data. It can contain additional message or other datatypes like bool, int, float, date and time, etc.
-		LoggerLocalDateTime dtReg;	// Log date and time entry register.
 		#else
 		LogEntryData data;			// Log data
 		LogDataType dataType;		// Log data type id
 		std::string strData;		// Log additional string data
 		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+		LoggerLocalDateTime dtReg;	// Log date and time entry register.
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
 	public:
 		/// @brief Create a log entry
 		/// @param title Log entry title
 		/// @param message Log entry message
-		LogEntry(std::string title, std::string message);
+		LogEntry (std::string title, std::string message);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntry(std::string title, std::string message, long long data);
+		LogEntry (std::string title, std::string message, long long data);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntry(std::string title, std::string message, double data);
+		LogEntry (std::string title, std::string message, double data);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntry(std::string title, std::string message, std::string data);
+		LogEntry (std::string title, std::string message, std::string data);
 		
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
 		/// @param useHighPrecisionTime Use milliseconds to date time log entry
-		LogEntry(std::string title, std::string message, LoggerLocalDateTime data, bool useHighPrecisionTime = false);
+		LogEntry (std::string title, std::string message, LoggerLocalDateTime data, bool useHighPrecisionTime = false);
 
 		/// @brief Copy a log entry to another
 		/// @param other Other log entry data reference
-		LogEntry(const LogEntry& other);
+		LogEntry (const LogEntry& other);
 
 		/// @brief Move a log entry to another
 		/// @param other Other log entry data that will receive the reference data
-		LogEntry(LogEntry&& other) noexcept;
+		LogEntry (LogEntry&& other) noexcept;
 
 		/// @brief Copy assignment
 		/// @param other Other log entry reference data
@@ -197,50 +200,53 @@ class LOGGER_LIB_API LogEntryW
 
 		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 		LogDataStore data;			// Log data. It can contain additional message or other datatypes like bool, int, float, date and time, etc.
-		LoggerLocalDateTime dtReg;	// Log date and time entry register.
 		#else
 		LogEntryData data;			// Log data
 		LogDataType dataType;		// Log data type id
 		std::wstring strData;		// Log additional string data
 		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+		LoggerLocalDateTime dtReg;	// Log date and time entry register.
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
 	public:
 		/// @brief Create a log entry
 		/// @param title Log entry title
 		/// @param message Log entry message
-		LogEntryW(std::wstring title, std::wstring message);
+		LogEntryW (std::wstring title, std::wstring message);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntryW(std::wstring title, std::wstring message, long long data);
+		LogEntryW (std::wstring title, std::wstring message, long long data);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntryW(std::wstring title, std::wstring message, double data);
+		LogEntryW (std::wstring title, std::wstring message, double data);
 
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
-		LogEntryW(std::wstring title, std::wstring message, std::wstring data);
+		LogEntryW (std::wstring title, std::wstring message, std::wstring data);
 		
 		/// @brief Create a log entry with additional data
 		/// @param title Log entry title
 		/// @param message Log entry message
 		/// @param data Log entry data
 		/// @param useHighPrecisionTime Use milliseconds to date time log entry
-		LogEntryW(std::wstring title, std::wstring message, LoggerLocalDateTime data, bool useHighPrecisionTime = false);
+		LogEntryW (std::wstring title, std::wstring message, LoggerLocalDateTime data, bool useHighPrecisionTime = false);
 
 		/// @brief Copy a log entry to another
 		/// @param other Other log entry data reference
-		LogEntryW(const LogEntryW& other);
+		LogEntryW (const LogEntryW& other);
 
 		/// @brief Move a log entry to another
 		/// @param other Other log entry data that will receive the reference data
-		LogEntryW(LogEntryW&& other) noexcept;
+		LogEntryW (LogEntryW&& other) noexcept;
 
 		/// @brief Copy assignment
 		/// @param other Other log entry reference data
