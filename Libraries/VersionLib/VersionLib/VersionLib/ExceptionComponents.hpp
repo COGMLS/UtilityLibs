@@ -31,20 +31,56 @@
 #include <exception>
 #include <cstring>
 #include <string>
+#include <array>
 
 namespace VersionLib
 {
 	/**
 	 * @brief Version Library Exception Codes
 	 */
-	enum VersionCodeException : int
+	enum VersionExceptionCode : int
 	{
-		Version_Code_Std_Exception = -2,				// STL Exception
-		Version_Code_Unknown_Exception = -1,			// Unknown exception was found
-		Version_Code_Success,							// No exception was found. This code is only for status reporting.
-		Version_Code_Incorrect_Parameter,				// Incorrect parameter exception
-		Version_Code_Parameter_Value_Less_Than_Zero		// Parameter exception with numeric value less than zero
+		VersionErrorCode_Std_Exception = -2,				// STL Exception
+		VersionErrorCode_Unknown_Exception = -1,			// Unknown exception was found
+		VersionErrorCode_Success,							// No exception was found. This code is only for status reporting.
+		VersionErrorCode_Incorrect_Parameter,				// Incorrect parameter exception
+		VersionErrorCode_Parameter_Value_Less_Than_Zero,	// Parameter exception with numeric value less than zero
+		VersionErrorCode_Invalid_Nullptr_Data_Passed		// A nullptr was passed as argument in a unacceptable condition
 	};
+
+	/// @brief Get the error message from VersionExceptionCode
+	inline const char* getErrorMessage (VersionLib::VersionExceptionCode code)
+	{
+		int codeInt = static_cast<int>(code);
+		
+		// Standard Version Library exception messages:
+		const std::array<const char*, 4> VersionCodeExceptionMessages = 
+		{
+			"Success",
+			"Incorrect parameter exception",
+			"Parameter value less than zero",
+			"A nullptr was passed as argument in a unacceptable condition"
+		};
+
+		if (codeInt >= 0 && codeInt < VersionCodeExceptionMessages.size())
+		{
+			return VersionCodeExceptionMessages[codeInt];
+		}
+		else
+		{
+			if (codeInt == -1)
+			{
+				return "Unknown exception";
+			}
+
+			if (codeInt == -2)
+			{
+				return "STL Exception";
+			}
+
+			return "";
+		}
+	}
 
 	/**
 	 * @brief Version Library Exception Component
@@ -63,7 +99,7 @@ namespace VersionLib
 			 */
 			VersionException ()
 			{
-				this->code_val = static_cast<int>(VersionLib::VersionCodeException::Version_Code_Success);
+				this->code_val = static_cast<int>(VersionLib::VersionExceptionCode::VersionErrorCode_Success);
 				this->msg_val = "Success";
 			}
 
@@ -74,51 +110,29 @@ namespace VersionLib
 			 */
 			VersionException (const std::exception& e)
 			{
-				this->code_val = static_cast<int>(VersionLib::VersionCodeException::Version_Code_Std_Exception);
+				this->code_val = static_cast<int>(VersionLib::VersionExceptionCode::VersionErrorCode_Std_Exception);
 				this->msg_val = e.what();
 			}
 
 			/**
-			 * @brief Create a Version Library Exception based on VersionCodeException and the exception message
+			 * @brief Create a Version Library Exception based on VersionExceptionCode and the exception message
 			 * @param type Version Library Exception code type
 			 * @param msg Exception message information
 			 */
-			VersionException (VersionLib::VersionCodeException type, const char* msg)
+			VersionException (VersionLib::VersionExceptionCode type, const char* msg)
 			{
 				this->code_val = static_cast<int>(type);
 				this->msg_val = msg;
 			}
 
 			/**
-			 * @brief Create a Version Library Exception based on VersionCodeException
+			 * @brief Create a Version Library Exception based on VersionExceptionCode
 			 * @param type Version Library Exception code type
 			 */
-			VersionException (VersionLib::VersionCodeException type)
+			VersionException (VersionLib::VersionExceptionCode type)
 			{
 				this->code_val = static_cast<int>(type);
-				switch (type)
-				{
-					case VersionCodeException::Version_Code_Success:
-					{
-						this->msg_val = "Success";
-						break;
-					}
-					case VersionCodeException::Version_Code_Incorrect_Parameter:
-					{
-						this->msg_val = "Incorrect parameter exception";
-						break;
-					}
-					case VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero:
-					{
-						this->msg_val = "Parameter value less than zero";
-						break;
-					}
-					default:
-					{
-						this->msg_val = "Unknown exception";
-						break;
-					}
-				}
+				this->msg_val = VersionLib::getErrorMessage(type);
 			}
 
 			~VersionException()
