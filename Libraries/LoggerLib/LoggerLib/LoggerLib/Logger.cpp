@@ -159,6 +159,47 @@ Logger& Logger::operator=(Logger&& other) noexcept
 
 bool Logger::operator==(const Logger& other) const
 {
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	bool isEq = this->baseFileName == other.baseFileName &&
+				this->lastLogStatus == other.lastLogStatus &&
+				//this->logEntries == other.logEntries &&
+				this->logFilePath == other.logFilePath &&
+				this->logPath == other.logPath &&
+				this->logStatus == other.logStatus &&
+				this->dtCreation.calendar == other.dtCreation.calendar &&
+				this->dtCreation.hours == other.dtCreation.hours &&
+				this->dtCreation.minutes == other.dtCreation.minutes &&
+				this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
+				this->dtCreation.seconds == other.dtCreation.seconds &&
+				this->dtCreation.weekday == other.dtCreation.weekday &&
+				this->autoSaveLogEntries == other.autoSaveLogEntries &&
+				this->maxLogEntries == other.maxLogEntries &&
+				this->lastLogPos == other.lastLogPos;
+
+	// Test log entries:
+	if (this->logEntries.size() != other.logEntries.size())
+	{
+		isEq = false;
+	}
+
+	if (isEq)
+	{
+		for (size_t i = 0; i < this->logEntries.size(); i++)
+		{
+			LogEntry lhs = this->logEntries[i];
+			LogEntry rhs = other.logEntries[i];
+
+			isEq = lhs == rhs;
+
+			if (!isEq)
+			{
+				break;
+			}
+		}
+	}
+
+	return isEq;
+	#else
 	return this->baseFileName == other.baseFileName &&
 			this->lastLogStatus == other.lastLogStatus &&
 			this->logEntries == other.logEntries &&
@@ -174,6 +215,7 @@ bool Logger::operator==(const Logger& other) const
 			this->autoSaveLogEntries == other.autoSaveLogEntries &&
 			this->maxLogEntries == other.maxLogEntries &&
 			this->lastLogPos == other.lastLogPos;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 int Logger::saveLog()
@@ -538,6 +580,47 @@ LoggerW& LoggerW::operator=(LoggerW&& other) noexcept
 
 bool LoggerW::operator==(const LoggerW& other) const
 {
+	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	bool isEq = this->baseFileName == other.baseFileName &&
+				this->lastLogStatus == other.lastLogStatus &&
+				//this->logEntries == other.logEntries &&
+				this->logFilePath == other.logFilePath &&
+				this->logPath == other.logPath &&
+				this->logStatus == other.logStatus &&
+				this->dtCreation.calendar == other.dtCreation.calendar &&
+				this->dtCreation.hours == other.dtCreation.hours &&
+				this->dtCreation.minutes == other.dtCreation.minutes &&
+				this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
+				this->dtCreation.seconds == other.dtCreation.seconds &&
+				this->dtCreation.weekday == other.dtCreation.weekday &&
+				this->autoSaveLogEntries == other.autoSaveLogEntries &&
+				this->maxLogEntries == other.maxLogEntries &&
+				this->lastLogPos == other.lastLogPos;
+
+	// Test log entries:
+	if (this->logEntries.size() != other.logEntries.size())
+	{
+		isEq = false;
+	}
+
+	if (isEq)
+	{
+		for (size_t i = 0; i < this->logEntries.size(); i++)
+		{
+			LogEntryW lhs = this->logEntries[i];
+			LogEntryW rhs = other.logEntries[i];
+
+			isEq = lhs == rhs;
+
+			if (!isEq)
+			{
+				break;
+			}
+		}
+	}
+
+	return isEq;
+	#else
 	return this->baseFileName == other.baseFileName &&
 			this->lastLogStatus == other.lastLogStatus &&
 			this->logEntries == other.logEntries &&
@@ -553,6 +636,7 @@ bool LoggerW::operator==(const LoggerW& other) const
 			this->autoSaveLogEntries == other.autoSaveLogEntries &&
 			this->maxLogEntries == other.maxLogEntries &&
 			this->lastLogPos == other.lastLogPos;
+	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 }
 
 int LoggerW::saveLog()
