@@ -191,6 +191,16 @@ class LOGGER_LIB_API LogDataStore
 		LogDataStore& operator= (const std::wstring& data);
 		LogDataStore& operator= (const LoggerLocalDateTime& data);
 
+		// LogDataStore equality operator:
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
+		friend bool operator== (const LogDataStore& lhs, const LogDataStore& rhs);
+		friend bool operator!= (const LogDataStore& lhs, const LogDataStore& rhs);
+		#else
+		bool operator== (const LogDataStore& other) const;
+		bool operator!= (const LogDataStore& other) const;
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
+		
 		// Test flag operator:
 
 		bool operator== (const LogDataType type);

@@ -438,6 +438,87 @@ LogDataStore &LogDataStore::operator=(const LoggerLocalDateTime &data)
 	return *this;
 }
 
+#ifndef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
+bool LogDataStore::operator==(const LogDataStore &other) const
+{
+	if (this->type == other.type)
+	{
+		if (this->str && other.str)
+		{
+			return *this->str == *other.str;
+		}
+
+		if (this->wstr && other.wstr)
+		{
+			return *this->wstr == *other.wstr;
+		}
+
+		if (this->unionVal && other.unionVal)
+		{
+			switch (this->type)
+			{
+				case LogDataType::LOG_UNSIGNED_INTEGER_ENTRY:
+				{
+					return this->unionVal->LOG_ENTRY_UINT == other.unionVal->LOG_ENTRY_UINT;
+				}
+				case LogDataType::LOG_INTEGER_ENTRY:
+				{
+					return this->unionVal->LOG_ENTRY_INT == other.unionVal->LOG_ENTRY_INT;
+				}
+				case LogDataType::LOG_FLOAT_ENTRY:
+				{
+					return this->unionVal->LOG_ENTRY_FLOAT == other.unionVal->LOG_ENTRY_FLOAT;
+				}
+				case LogDataType::LOG_BOOLEAN_ENTRY:
+				{
+					return this->unionVal->LOG_ENTRY_BOOL == other.unionVal->LOG_ENTRY_BOOL;
+				}
+				default:
+				{
+					return false;
+				}
+			}
+		}
+
+		if (this->localDt && other.localDt)
+		{
+			if (this->type == LogDataType::LOG_DATE_TIME_ENTRY || this->type == LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
+			{
+				bool dtEq = true;
+
+				if (this->localDt->calendar != other.localDt->calendar || this->localDt->hours != other.localDt->hours || this->localDt->minutes != other.localDt->minutes || this->localDt->seconds != other.localDt->seconds || this->localDt->weekday != other.localDt->weekday)
+				{
+					dtEq = false;
+				}
+
+				#ifdef LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+				if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != other.localDt->highPrecision && this->localDt->mSeconds != other.localDt->mSeconds)
+				{
+					dtEq = false;
+				}
+				#else
+					#ifdef WIN32	// On Windows platforms, high precision is already working
+					if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision && this->localDt->mSeconds != other.localDt->mSeconds)
+					{
+						dtEq = false;
+					}
+					#endif // !WIN32
+				#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+				
+				return dtEq;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool LogDataStore::operator!=(const LogDataStore &other) const
+{
+    return !(*this == other);
+}
+#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
+
 bool LogDataStore::operator==(const LogDataType type)
 {
     return this->type == type;
@@ -455,7 +536,7 @@ LogDataStore::operator bool() const
 
 bool LogDataStore::operator==(const bool &data)
 {
-	if (this)
+	if (this->unionVal)
 	{
 		if (this->type == LogDataType::LOG_BOOLEAN_ENTRY)
 		{
@@ -497,7 +578,7 @@ bool LogDataStore::operator==(const unsigned long &data)
 
 bool LogDataStore::operator==(const long long &data)
 {
-    if (this)
+    if (this->unionVal)
 	{
 		if (this->type == LogDataType::LOG_INTEGER_ENTRY)
 		{
@@ -509,7 +590,7 @@ bool LogDataStore::operator==(const long long &data)
 
 bool LogDataStore::operator==(const unsigned long long &data)
 {
-    if (this)
+    if (this->unionVal)
 	{
 		if (this->type == LogDataType::LOG_UNSIGNED_INTEGER_ENTRY)
 		{
@@ -526,7 +607,7 @@ bool LogDataStore::operator==(const float &data)
 
 bool LogDataStore::operator==(const double &data)
 {
-    if (this)
+    if (this->unionVal)
 	{
 		if (this->type == LogDataType::LOG_FLOAT_ENTRY)
 		{
@@ -538,7 +619,7 @@ bool LogDataStore::operator==(const double &data)
 
 bool LogDataStore::operator==(const std::string &data)
 {
-    if (this)
+    if (this->str)
 	{
 		if (this->type == LogDataType::LOG_STRING_ENTRY)
 		{
@@ -550,7 +631,7 @@ bool LogDataStore::operator==(const std::string &data)
 
 bool LogDataStore::operator==(const std::wstring &data)
 {
-    if (this)
+    if (this->wstr)
 	{
 		if (this->type == LogDataType::LOG_WSTRING_ENTRY)
 		{
@@ -562,30 +643,30 @@ bool LogDataStore::operator==(const std::wstring &data)
 
 bool LogDataStore::operator==(const LoggerLocalDateTime &data)
 {
-    if (this)
+    if (this->localDt)
 	{
 		if (this->type == LogDataType::LOG_DATE_TIME_ENTRY || this->type == LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
 		{
 			bool dtEq = true;
 
-			if (this->localDt->calendar != data.calendar || this->localDt->hours != data.hours || this->localDt->minutes != data.minutes || this->localDt->mSeconds != data.mSeconds || this->localDt->weekday != data.weekday)
+			if (this->localDt->calendar != data.calendar || this->localDt->hours != data.hours || this->localDt->minutes != data.minutes || this->localDt->seconds != data.seconds || this->localDt->weekday != data.weekday)
 			{
 				dtEq = false;
 			}
 
 			#ifdef LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
-			if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision)
+			if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision && this->localDt->mSeconds != data.mSeconds)
 			{
 				dtEq = false;
 			}
 			#else
 				#ifdef WIN32	// On Windows platforms, high precision is already working
-				if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision)
+				if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision && this->localDt->mSeconds != data.mSeconds)
 				{
 					dtEq = false;
 				}
-				#endif
-			#endif
+				#endif // !WIN32
+			#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
 			
 			return dtEq;
 		}
@@ -914,3 +995,84 @@ bool LogDataStore::hasData()
 {
     return this->type != LogDataType::LOG_NULL_DATA_ENTRY && (this->str || this->wstr || this->unionVal || this->localDt);
 }
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
+bool operator==(const LogDataStore &lhs, const LogDataStore &rhs)
+{
+    if (lhs.type == rhs.type)
+	{
+		if (lhs.str && rhs.str)
+		{
+			return *lhs.str == *rhs.str;
+		}
+
+		if (lhs.wstr && rhs.wstr)
+		{
+			return *lhs.wstr == *rhs.wstr;
+		}
+
+		if (lhs.unionVal && rhs.unionVal)
+		{
+			switch (lhs.type)
+			{
+				case LogDataType::LOG_UNSIGNED_INTEGER_ENTRY:
+				{
+					return lhs.unionVal->LOG_ENTRY_UINT == rhs.unionVal->LOG_ENTRY_UINT;
+				}
+				case LogDataType::LOG_INTEGER_ENTRY:
+				{
+					return lhs.unionVal->LOG_ENTRY_INT == rhs.unionVal->LOG_ENTRY_INT;
+				}
+				case LogDataType::LOG_FLOAT_ENTRY:
+				{
+					return lhs.unionVal->LOG_ENTRY_FLOAT == rhs.unionVal->LOG_ENTRY_FLOAT;
+				}
+				case LogDataType::LOG_BOOLEAN_ENTRY:
+				{
+					return lhs.unionVal->LOG_ENTRY_BOOL == rhs.unionVal->LOG_ENTRY_BOOL;
+				}
+				default:
+				{
+					return false;
+				}
+			}
+		}
+
+		if (lhs.localDt && rhs.localDt)
+		{
+			if (lhs.type == LogDataType::LOG_DATE_TIME_ENTRY || lhs.type == LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
+			{
+				bool dtEq = true;
+
+				if (lhs.localDt->calendar != rhs.localDt->calendar || lhs.localDt->hours != rhs.localDt->hours || lhs.localDt->minutes != rhs.localDt->minutes || lhs.localDt->seconds != rhs.localDt->seconds || lhs.localDt->weekday != rhs.localDt->weekday)
+				{
+					dtEq = false;
+				}
+
+				#ifdef LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+				if (lhs.type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && lhs.localDt->highPrecision != rhs.localDt->highPrecision && lhs.localDt->mSeconds != rhs.localDt->mSeconds)
+				{
+					dtEq = false;
+				}
+				#else
+					#ifdef WIN32	// On Windows platforms, high precision is already working
+					if (lhs.type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && lhs.localDt->highPrecision != data.highPrecision && lhs.localDt->mSeconds != rhs.localDt->mSeconds)
+					{
+						dtEq = false;
+					}
+					#endif // !WIN32
+				#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+				
+				return dtEq;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool operator!=(const LogDataStore &lhs, const LogDataStore &rhs)
+{
+    return !(lhs == rhs);
+}
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
