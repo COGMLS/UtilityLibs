@@ -15,6 +15,14 @@ The Logger Library is designed to help developers to easily create log files and
 * PowerShell ***(Not ready)***
 * Python 3 Module ***(Not ready)***
 
+## Additional Information:
+
+Additional information about this project can be found in the file `LoggerLibInfo.md`, with recent, development and future implementations. It also contain information about **known bugs** and deprecated/removed features. For bugs, deprecated and removed features are available in tables where can also provide additional information about how it is possible mitigate or replace (the features) with a workaround.
+
+The complete release notes and modified versions notes can be found in the `LoggerLibReleaseNotes.md` (originally called `LoggerLibHistory.md`) it contains more technical information of project changes.
+
+The additional documentation files can be found in the local [Docs](./Docs) directory.
+
 ## Logger Library History:
 
 <!-- Logger Library History Table: -->
@@ -44,6 +52,48 @@ The Logger Library is designed to help developers to easily create log files and
     }
 </style>
 <dl>
+    <!-- 3.3.0-alpha.9 (2025/02/18) -->
+    <dt><version-data>3.3.0-alpha.9</version-data></dt>
+    <dd><note-alert>[NOTE]</note-alert> THE PREVIOUS ALPHA VERSIONS WAS NOT DOCUMENTED.</dd>
+    <dd><warning-alert>[IMPORTANT]</warning-alert> <b>THIS VERSION CONTAINS SEVERAL MODIFICATIONS INSIDE THE MAIN COMPONENTS</b></dd>
+    <dd>Added new experimental definition flags.</dd>
+    <dd>Moved <code>dtReg</code> in <code>LogEntry</code> and <code>LogEntryW</code> to it’s own experimental code portion. Now it's possible to control this experimental feature independently</dd>
+    <dd>Added full support to <code>LogDataStore</code> in a experimental code part. Allowing use less memory and various datatype without need convert it's values to string.</dd>
+    <dd><note-alert>[NOTE]</note-alert> The data exportation from <code>LogDataStore</code> was not fully tested</dd>
+    <dd>Added partial support to <code>dtReg</code> in a experimental code part. Now each log entry contains it's own date and time registry. Coping the objects will copy the registry.</dd>
+    <dd>Added equality operators to <code>LogDataStore</code></dd>
+    <dd><note-alert>[NOTE]</note-alert> <code>LogDataStore</code> received experimental <i>friend</i> equality operators during tests to mitigate a compiler warning. These operators are disabled by default</dd>
+    <dd><fix-alert>[FIX]</fix-alert> coping data on MoveConstructor.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing <code>seconds</code> equality verification from <code>LoggerLocalDateTime</code> union in <code>LogEntry</code> and <code>LogEntryW</code> in equality operations, when LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE is <b>disabled</b></dd>
+    <dd><fix-alert>[FIX]</fix-alert> The standard algorithm to make the equality test between the both <code>logEntries</code> of <b>Logger</b> and <b>LoggerW</b> classes fails when <code>LogDataStore</code> is enabled</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Making equality of <code>LogEntry</code> or <code>LogEntryW</code> show the warning message: <i>C++20 says that these are ambiguous, even though the second is reversed</i> on GCC from equality operators</dd>
+    <!-- 3.3.0-alpha.5 (2025/02/17) -->
+    <dt><version-data>3.3.0-alpha.5</version-data></dt>
+    <dd>Added experimental code control guards to enable/disable experimental features</dd>
+    <dd>Added <code>highPrecision</code> flag in <code>LoggerLocalDateTime</code>.</dd>
+    <dd>Added <code>useHighPrecision</code> parameter in <code>getLoggerDateTime</code> function.</dd>
+    <dd>Removed warning message on documentation.</dd>
+    <dd>Moved preprocessor definition to control the experimental sorting algorithm to LoggerExperimental.hpp</dd>
+    <dd>Added experimental <code>LogDataStore</code> class.</dd>
+    <dd>Moved and enhanced the LogDataType enum to LogDataStore.hpp</dd>
+    <dd>Moved and modified the LogEntryData union to LogDataStore.hpp</dd>
+    <dd><warning-alert>[WARNING]</warning-alert> The <code>LogDataStore</code> is under development and may contain bugs.</dd>
+    <dd>Added support to experimental <code>LogDataStore</code> in <code>LogEntry</code> and <code>LogEntryW</code>.</dd>
+    <dd>Added to <code>LogEntry</code> and <code>LogEntryW</code> <code>getTitle</code>, <code>getMessage</code>, <code>getType</code>, <code>getData</code> methods.</dd>
+    <dd>Added to <code>LogEntry</code> and <code>LogEntryW</code> <code>getStrData</code> method for non-experimental code.</dd>
+    <dd><note-alert>[NOTE]</note-alert> Using experimental <code>LogDataStore</code> compatible code, will make some methods not work as expected at this moment</dd>
+    <dd>Added experimental <code>LogFormat</code> class</dd>
+    <dd>Added experimental <code>LogFormatToken</code> class</dd>
+    <dd><note-alert>[NOTE]</note-alert> The LogFormatToken and LogFormat classes are not ready for use yet</dd>
+    <!-- 3.3.0-alpha.2 (2025/02/08) -->
+    <dt><version-data>3.3.0-alpha.2</version-data></dt>
+    <dd>Modified the <code>LoggerException</code> to include custom error messages.</dd>
+    <dd><note-alert>[NOTE]</note-alert> <code>LoggerException</code> is an experimental feature and it is not been used by the library yet.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Added definition of inline methods <code>getLibVersion</code> and <code>getVersionStr</code> to resolve Visual Studio link fail.</dd>
+    <!-- 3.3.0-alpha.1 (2025/01/27) -->
+    <dt><version-data>3.3.0-alpha.1</version-data></dt>
+    <dd><code>sortLogFileList2</code> marked as deprecated</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Added missing stream output for date and time information in <code>LogEntry</code> and <code>LogEntryW</code> classes</dd>
     <!-- 3.3.0-alpha (2025/01/15) -->
     <dt><version-data>3.3.0-alpha</version-data></dt>
     <dd>Cleaned unused code</dd>

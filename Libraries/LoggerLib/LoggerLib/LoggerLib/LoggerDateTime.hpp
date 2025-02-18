@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "LoggerExperimental.hpp"
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
@@ -53,6 +55,7 @@ struct LOGGER_LIB_API LoggerLocalDateTime
 	std::chrono::minutes minutes;
 	std::chrono::seconds seconds;
 	std::chrono::milliseconds mSeconds;
+	bool highPrecision;
 };
 
 /**
@@ -136,8 +139,10 @@ class LOGGER_LIB_API LogFileDateTime
 };
 
 /// @brief Get all date and time data for log entries
+/// @param useHighPrecision Determinate if will use high precision time. By default, the function always create a high precision time report.
+/// @note On Linux and MacOS systems the high precision is disabled at this moment.
 /// @return Return a LoggerLocalDateTime struct to use in conditions tests and log reports
-LoggerLocalDateTime LOGGER_LIB_API getLoggerDateTime();
+LoggerLocalDateTime LOGGER_LIB_API getLoggerDateTime(bool useHighPrecision = true);
 
 /// @brief Convert the custom local date and time struct to string for log entries, using ISO 8601 format
 /// @param dt Date and time information that will be converted to ISO 8601

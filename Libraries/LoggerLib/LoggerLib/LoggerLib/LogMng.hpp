@@ -34,6 +34,8 @@
 	#endif
 #endif // !WIN32
 
+#include "LoggerExperimental.hpp"
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
@@ -58,7 +60,6 @@ std::vector<std::filesystem::path> LOGGER_LIB_API getLogFileList(std::filesystem
 /// @param logFileList Log File List reference
 /// @param newestFirst Use the inverse order, making the newest log file on top of the list
 /// @note This method filters the files that are not compatible with the LoggerLib file naming format <LogName>_YYYY-MM-ddThh-mm-ss.log
-/// @warning THIS FUNCTION WAS NOT TESTED ON WINDOWS SYSTEMS
 void LOGGER_LIB_API sortLogFileList(std::vector<std::filesystem::path>& logFileList, bool newestFirst = false);
 
 /// @brief Sort the Log File List (using selection sort algorithm) acquired from getLogFileList function

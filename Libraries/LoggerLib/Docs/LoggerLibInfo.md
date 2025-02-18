@@ -2,9 +2,14 @@
 
 This document contains the information about the future plans, known bugs, deprecated features.
 
-## Implementations under development:
+## Recently Implementations:
 
 - Sort log files by age.
+- Experimental code control
+
+## Implementations under development:
+
+- `LogDataStore` to easily store various datatype with better memory usage
 - Support to formatting log data
 
 ## Future Implementations:
@@ -14,10 +19,13 @@ This document contains the information about the future plans, known bugs, depre
 
 ## Known Bugs:
 
-| Bug ID | Details | Status |
-| :---   | :---:   | ---:   |
-| 1 | On Linux systems the log files are not getting in order as occurs on Windows | Improvements under tests |
-| 2 | Sorting log files is not working correctly | On first tests, the new algorithm is sorting as expected on Linux systems. Tests on Windows platform are needed |
+| Bug ID | Details | Notes/Workaround | Status |
+| :----- | :-----: | :--------------: | -----: |
+| 1 | ~~On Linux systems the log files are not getting in order as occurs on Windows~~ |  | FIXED |
+| 2 | ~~Sorting log files is not working correctly~~ |  | FIXED |
+| 3 | ~~`LogEntry` and `LogEntryW` does not make correct time check in equality operations, missing `seconds` variable check from `LoggerLocalDateTime` struct~~ |  | FIXED |
+| 4 | ~~The standard algorithm to make the equality test between the both `logEntries` of **Logger** and **LoggerW** classes fails with new `LogDataStore`.~~ | A new algorithm as designed in `Logger` and `LoggerW` equality operator. No workaround is necessary. | FIXED |
+| 5 | ~~Making equality of LogEntry or LogEntryW show the warning message: *C++20 says that these are ambiguous, even though the second is reversed*~~ | The GCC compiler show a warning message, but no anomaly in code functionality was found. **NOTE:** After the compilation, the warning disappears without reason. **NOTE 2:** Missing *const* in equality operators was the reason for warning messages | FIXED |
 
 ## Deprecated Features:
 

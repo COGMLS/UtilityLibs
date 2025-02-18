@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "LoggerExperimental.hpp"
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
@@ -40,7 +42,18 @@
 
 #include "LoggerCommonDataTypes.hpp"
 #include "LoggerDateTime.hpp"
-//#include "LoggerException.hpp"
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#include "LogDataStore.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+#include "LoggerInfoFormatter.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_CUSTOM_EXCEPTIONS
+#include "LoggerException.hpp"
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_CUSTOM_EXCEPTIONS
 
 enum LOGGER_LIB_API LoggerError : unsigned int
 {

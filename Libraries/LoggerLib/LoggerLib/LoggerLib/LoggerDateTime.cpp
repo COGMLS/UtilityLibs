@@ -1,6 +1,6 @@
 #include "LoggerDateTime.hpp"
 
-LoggerLocalDateTime getLoggerDateTime()
+LoggerLocalDateTime getLoggerDateTime(bool useHighPrecision)
 {
 	LoggerLocalDateTime dt{};
 
@@ -21,7 +21,16 @@ LoggerLocalDateTime getLoggerDateTime()
 		dt.hours = std::chrono::hours(tm.wHour);
 		dt.minutes = std::chrono::minutes(tm.wMinute);
 		dt.seconds = std::chrono::seconds(tm.wSecond);
-		dt.mSeconds = std::chrono::milliseconds(tm.wMilliseconds);
+		if (useHighPrecision)
+		{
+			dt.mSeconds = std::chrono::milliseconds(tm.wMilliseconds);
+			dt.highPrecision = true;
+		}
+		else
+		{
+			dt.mSeconds = std::chrono::milliseconds(0);
+			dt.highPrecision = false;
+		}
 	#else
 		const std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 		std::tm* tm = std::localtime(&t);
@@ -31,6 +40,7 @@ LoggerLocalDateTime getLoggerDateTime()
 		dt.minutes = std::chrono::minutes(tm->tm_min);
 		dt.seconds = std::chrono::seconds(tm->tm_sec);
 		dt.mSeconds = std::chrono::milliseconds(0);
+		dt.highPrecision = false;
 	#endif
 
 	return dt;

@@ -33,6 +33,19 @@ int main(int argc, const char* argv[])
 	{
 		std::cout << l.filename() << " | " << std::filesystem::last_write_time(l) << std::endl;
 	}
+
+	LogEntry a("Title", "Message", 1.5f);
+
+	LogEntry b = a;
+
+	if (a == b)
+	{
+		std::cout << "A eq B" << std::endl;
+	}
+	else
+	{
+		std::cout << "A not eq B" << std::endl;
+	}
 	
 	return 0;
 }
