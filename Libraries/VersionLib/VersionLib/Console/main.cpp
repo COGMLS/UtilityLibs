@@ -49,10 +49,25 @@ int main(int argc, const char* argv[])
 	}
 	
 	VersionLib::VersionData libVersion = VersionLib::internalVersionData();
+
+	#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+		VersionLib::VersionData appVersion (1, 0, 0, VersionLib::BuildType::BETA, 0, 1);
+		VersionLib::VersionData test0 (1, 0, 0, VersionLib::BuildType::ALPHA, 0, 1);
+		VersionLib::VersionData test1 (1, 1, 0, VersionLib::BuildType::RELEASE, 0, 12);
+		VersionLib::VersionData test2 (1, 2, 0, VersionLib::BuildType::RELEASE, 0, 20);
+		#else
+		VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
+		VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
+		VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
+		VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+	#else
 	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
 	VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
 	VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
 	VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 	// Add the libVersion appVersion and first test version:
 	versions.push_back(libVersion);
@@ -123,18 +138,48 @@ int main(int argc, const char* argv[])
 	if (testVersionExceptions)
 	{
 		#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+		// Test with negative values:
 		try
 		{
-			VersionLib::VersionData vTest(-1, -2, 0, 750, VersionLib::BuildType::RELEASE, 0, true);
+			VersionLib::VersionData vTest(-1, -2, 0, VersionLib::BuildType::RELEASE, 0, 750, true);
 		}
-		catch(const std::exception& e)
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		catch(const VersionLib::VersionException& e)	// Works with explicit VersionException
+		#else
+		catch (const std::exception& e)
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 		{
 			std::cerr << e.what() << '\n';
 		}
+		// Test with nullptr
+		try
+		{
+			VersionLib::VersionData vTest(-1, -2, 0, nullptr, 0, 750, true);
+		}
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		catch(const VersionLib::VersionException& e)	// Works with explicit VersionException
+		#else
+		catch (const std::exception& e)
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		{
+			std::cerr << e.what() << '\n';
+		}
+
 		#else
 		std::cout << "Experimental VersionLib features was not enabled in this compilation!" << std::endl;
 		#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 	}
+
+	#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+		VersionLib::VersionData ver0("1.0.5-alpha.4 build 700", true);
+		VersionLib::VersionData ver1(1, 0, 5);
+		VersionLib::VersionData ver2(1, 0, 5, VersionLib::BuildType::BETA);
+		VersionLib::VersionData ver3(1, 2, 3, VersionLib::BuildType::BETA, 3);
+		VersionLib::VersionData ver4(2, 5, 9, VersionLib::BuildType::RELEASE, 5, 800);
+		VersionLib::VersionData ver5(7, 8, 1, VersionLib::BuildType::RELEASE_CANDIDATE, 3, 1000, true);
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include "VersionClass.hpp"
 
-#ifdef ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 {
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
@@ -26,7 +26,7 @@ VersionLib::VersionData::VersionData(std::string versionStr)
 	this->build = v.build;
 	this->compare_build = false;
 }
-#endif // !ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 
 VersionLib::VersionData::VersionData(VersionLib::VersionStruct version)
 {
@@ -39,8 +39,7 @@ VersionLib::VersionData::VersionData(VersionLib::VersionStruct version)
 	this->compare_build = version.compare_build;
 }
 
-#ifdef ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch)
 {
 	this->major = major;
 	this->minor = minor;
@@ -48,21 +47,32 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = 0;
 	this->build_type = VersionLib::BuildType::RELEASE;
 	this->build_type_number = 0;
-	this->compare_build = cmpBuild;
+	this->compare_build = false;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, bool cmpBuild)
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type)
 {
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
 	this->build = build;
-	this->build_type = VersionLib::BuildType::RELEASE;
+	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = 0;
-	this->compare_build = cmpBuild;
+	this->compare_build = false;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type)
 {
 	this->major = major;
 	this->minor = minor;
@@ -70,21 +80,10 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_type_number = 0;
-	this->compare_build = cmpBuild;
+	this->compare_build = false;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, bool cmpBuild)
-{
-	this->major = major;
-	this->minor = minor;
-	this->patch = patch;
-	this->build = build;
-	this->build_type = VersionLib::str2BuildType(build_type);
-	this->build_type_number = 0;
-	this->compare_build = cmpBuild;
-}
-
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type)
 {
 	this->major = major;
 	this->minor = minor;
@@ -92,10 +91,74 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build = build;
 	this->build_type = build_type;
 	this->build_type_number = 0;
+	this->compare_build = false;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_type_number)
+{
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+	
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = build_type_number;
+	this->compare_build = false;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_type_number)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = build_type_number;
+	this->compare_build = false;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_type_number)
+{
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = build_type;
+	this->build_type_number = build_type_number;
+	this->compare_build = false;
+}
+
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild)
+{
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+	
+	this->major = major;
+	this->minor = minor;
+	this->patch = patch;
+	this->build = build;
+	this->build_type = VersionLib::str2BuildType(build_type);
+	this->build_type_number = build_type_number;
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char *build_type, unsigned int build_type_number, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild)
 {
 	this->major = major;
 	this->minor = minor;
@@ -106,18 +169,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_type_number, bool cmpBuild)
-{
-	this->major = major;
-	this->minor = minor;
-	this->patch = patch;
-	this->build = build;
-	this->build_type = VersionLib::str2BuildType(build_type);
-	this->build_type_number = build_type_number;
-	this->compare_build = cmpBuild;
-}
-
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild)
 {
 	this->major = major;
 	this->minor = minor;
@@ -132,15 +184,44 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 // Wrappers Constructors:
 //
 
-VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, char *build_type, int build_type_number, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch)
 {
-	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
+	if (major < 0 || minor < 0 || patch < 0)
 	{
-		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
-		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
 		#else
 		std::exception e;
-		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch)
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char* build_type)
+{
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	if (major < 0 || minor < 0 || patch < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 		throw e;
 	}
 
@@ -148,22 +229,165 @@ VersionLib::VersionData::VersionData(int major, int minor, int patch, long long 
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
-		static_cast<unsigned long long>(build),
+		build_type
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type)
+{
+	if (major < 0 || minor < 0 || patch < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		build_type
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type)
+{
+	if (major < 0 || minor < 0 || patch < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		build_type
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char* build_type, int build_type_number)
+{
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	if (major < 0 || minor < 0 || patch < 0 || build_type_number < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		build_type,
+		static_cast<unsigned int>(build_type_number)
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type, int build_type_number)
+{
+	if (major < 0 || minor < 0 || patch < 0 || build_type_number < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		build_type,
+		static_cast<unsigned int>(build_type_number)
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type, int build_type_number)
+{
+	if (major < 0 || minor < 0 || patch < 0 || build_type_number < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
+		build_type,
+		static_cast<unsigned int>(build_type_number)
+	);
+}
+
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char *build_type, int build_type_number, long long build, bool cmpBuild)
+{
+	if (build_type == nullptr)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Invalid_Nullptr_Data_Passed);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
+	{
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
+		#else
+		std::exception e;
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		throw e;
+	}
+
+	*this = VersionLib::VersionData(
+		static_cast<unsigned int>(major),
+		static_cast<unsigned int>(minor),
+		static_cast<unsigned int>(patch),
 		build_type,
 		static_cast<unsigned int>(build_type_number),
+		static_cast<unsigned long long>(build),
 		cmpBuild
 	);
 }
 
-VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, std::string build_type, int build_type_number, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type, int build_type_number, long long build, bool cmpBuild)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
 	{
-		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
-		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
 		#else
 		std::exception e;
-		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 		throw e;
 	}
 
@@ -171,22 +395,22 @@ VersionLib::VersionData::VersionData(int major, int minor, int patch, long long 
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
-		static_cast<unsigned long long>(build),
 		build_type,
 		static_cast<unsigned int>(build_type_number),
+		static_cast<unsigned long long>(build),
 		cmpBuild
 	);
 }
 
-VersionLib::VersionData::VersionData(int major, int minor, int patch, long long build, VersionLib::BuildType build_type, int build_type_number, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type, int build_type_number, long long build, bool cmpBuild)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_type_number < 0)
 	{
-		#ifdef ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
-		VersionLib::VersionException e(VersionLib::VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero);
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		VersionLib::VersionException e(VersionLib::VersionExceptionCode::VersionErrorCode_Parameter_Value_Less_Than_Zero);
 		#else
 		std::exception e;
-		#endif // !ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 		throw e;
 	}
 
@@ -194,23 +418,13 @@ VersionLib::VersionData::VersionData(int major, int minor, int patch, long long 
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
-		static_cast<unsigned long long>(build),
 		build_type,
 		static_cast<unsigned int>(build_type_number),
+		static_cast<unsigned long long>(build),
 		cmpBuild
 	);
 }
 #else
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch)
-{
-	this->major = major;
-	this->minor = minor;
-	this->patch = patch;
-	this->build = 0;
-	this->build_type = VersionLib::BuildType::RELEASE;
-	this->build_type_number = 0;
-	this->compare_build = false;
-}
 
 VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build)
 {
@@ -288,7 +502,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->build_type_number = build_type_number;
 	this->compare_build = false;
 }
-#endif // !ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 
 VersionLib::VersionData::VersionData(const VersionLib::VersionData &other)
 {
@@ -482,7 +696,7 @@ bool VersionLib::VersionData::operator==(const VersionData &other)
 		return false;
 	}
 
-	#ifdef ENABLE_EXPERIMENTAL_BUILD_COMPARISON
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_COMPARISON
 	if (this->compare_build || other.compare_build)
 	{
 		if (this->build != other.build)
@@ -490,7 +704,7 @@ bool VersionLib::VersionData::operator==(const VersionData &other)
 			return false;
 		}
 	}
-	#endif // !ENABLE_EXPERIMENTAL_BUILD_COMPARISON
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_COMPARISON
 
 	if (this->build_type != other.build_type)
 	{
@@ -512,16 +726,16 @@ bool VersionLib::VersionData::operator!=(const VersionData &other)
 
 bool VersionLib::VersionData::operator>(const VersionData &other)
 {
-	#ifdef COMPARISON_OPERATORS_V1
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V1
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
 	if (this->major <= other.major && this->minor < other.minor) return false;
 	if (this->major <= other.major) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V1
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V1
 	
-	#ifdef COMPARISON_OPERATORS_V2
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	if (this->major > other.major)
 	{
 		if (this->minor > other.minor)
@@ -885,21 +1099,21 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 	}
 
 	return false;
-	#endif // !COMPARISON_OPERATORS_V2
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator>=(const VersionData &other)
 {
-	#ifdef COMPARISON_OPERATORS_V1
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V1
     if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type < other.build_type) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch < other.patch) return false;
 	if (this->major <= other.major && this->minor < other.minor) return false;
 	if (this->major < other.major) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V1
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V1
 
-	#ifdef COMPARISON_OPERATORS_V2
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return true;
 	//return false;
 	if (this->major < other.major) return false;
@@ -908,21 +1122,21 @@ bool VersionLib::VersionData::operator>=(const VersionData &other)
 	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type < other.build_type) return false;
 	if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number < other.build_type_number) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V2
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator<(const VersionData &other)
 {
-	#ifdef COMPARISON_OPERATORS_V1
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V1
 	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number >= other.build_type_number) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
 	if(this->major >= other.major && this->minor > other.minor) return false;
 	if(this->major >= other.major) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V1
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V1
 
-	#ifdef COMPARISON_OPERATORS_V2
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number < other.build_type_number) return true;
 	//return false;
 	if (this->major < other.major)
@@ -1288,21 +1502,21 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 	}
 
 	return false;
-	#endif // !COMPARISON_OPERATORS_V2
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator<=(const VersionData &other)
 {
-	#ifdef COMPARISON_OPERATORS_V1
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V1
     if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_type_number > other.build_type_number) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type > other.build_type) return false;
 	if(this->major >= other.major && this->minor >= other.minor && this->patch > other.patch) return false;
 	if(this->major >= other.major && this->minor > other.minor) return false;
 	if(this->major > other.major) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V1
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V1
 
-	#ifdef COMPARISON_OPERATORS_V2
+	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number <= other.build_type_number) return true;
 	//return false;
 	if (this->major > other.major) return false;
@@ -1311,7 +1525,7 @@ bool VersionLib::VersionData::operator<=(const VersionData &other)
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type > other.build_type) return false;
 	if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_type_number > other.build_type_number) return false;
 	return true;
-	#endif // !COMPARISON_OPERATORS_V2
+	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
 bool VersionLib::VersionData::operator==(const std::string &verStr)

@@ -31,66 +31,65 @@
 #include <exception>
 #include <cstring>
 #include <string>
+#include <array>
 
 namespace VersionLib
 {
 	/**
 	 * @brief Version Library Exception Codes
 	 */
-	enum VersionCodeException : int
+	enum VersionExceptionCode : int
 	{
-		Version_Code_Std_Exception = -2,				// STL Exception
-		Version_Code_Unknown_Exception = -1,			// Unknown exception was found
-		Version_Code_Success,							// No exception was found. This code is only for status reporting.
-		Version_Code_Incorrect_Parameter,				// Incorrect parameter exception
-		Version_Code_Parameter_Value_Less_Than_Zero		// Parameter exception with numeric value less than zero
+		VersionErrorCode_Std_Exception = -2,				// STL Exception
+		VersionErrorCode_Unknown_Exception = -1,			// Unknown exception was found
+		VersionErrorCode_Success,							// No exception was found. This code is only for status reporting.
+		VersionErrorCode_Incorrect_Parameter,				// Incorrect parameter exception
+		VersionErrorCode_Parameter_Value_Less_Than_Zero,	// Parameter exception with numeric value less than zero
+		VersionErrorCode_Invalid_Nullptr_Data_Passed		// A nullptr was passed as argument in a unacceptable condition
 	};
+
+	/// @brief Get the error message from VersionExceptionCode
+	inline const char* getErrorMessage (VersionLib::VersionExceptionCode code)
+	{
+		int codeInt = static_cast<int>(code);
+		
+		// Standard Version Library exception messages:
+		const std::array<const char*, 4> VersionCodeExceptionMessages = 
+		{
+			"Success",
+			"Incorrect parameter exception",
+			"Parameter value less than zero",
+			"A nullptr was passed as argument in a unacceptable condition"
+		};
+
+		if (codeInt >= 0 && codeInt < VersionCodeExceptionMessages.size())
+		{
+			return VersionCodeExceptionMessages[codeInt];
+		}
+		else
+		{
+			if (codeInt == -1)
+			{
+				return "Unknown exception";
+			}
+
+			if (codeInt == -2)
+			{
+				return "STL Exception";
+			}
+
+			return "";
+		}
+	}
 
 	/**
 	 * @brief Version Library Exception Component
 	 */
 	class VERSION_LIB_API VersionException : std::exception
 	{
-		private:
-
-			void copyMsg (char* _msg)
-			{
-				size_t msg_val_size = std::strlen(_msg);
-				
-				if (this->msg_val != nullptr)
-				{
-					delete[] this->msg_val;
-				}
-
-				if (this->msg_val == nullptr)
-				{
-					this->msg_val = new char[msg_val_size];
-				}
-
-				std::strcpy(this->msg_val, _msg);
-			}
-
-			void copyMsg (const char* _msg)
-			{
-				size_t msg_val_size = std::strlen(_msg);
-				
-				if (this->msg_val != nullptr)
-				{
-					delete[] this->msg_val;
-					this->msg_val = nullptr;
-				}
-
-				if (this->msg_val == nullptr)
-				{
-					this->msg_val = new char[msg_val_size];
-				}
-
-				std::strcpy(this->msg_val, _msg);
-			}
-
 		protected:
 
-			char* msg_val = nullptr;		// Exception message
+			std::string msg_val;			// Exception message
 			int code_val = 0;				// Exception code
 
 		public:
@@ -100,8 +99,8 @@ namespace VersionLib
 			 */
 			VersionException ()
 			{
-				this->code_val = static_cast<int>(VersionLib::VersionCodeException::Version_Code_Success);
-				this->copyMsg("Success");
+				this->code_val = static_cast<int>(VersionLib::VersionExceptionCode::VersionErrorCode_Success);
+				this->msg_val = "Success";
 			}
 
 			/**
@@ -111,74 +110,45 @@ namespace VersionLib
 			 */
 			VersionException (const std::exception& e)
 			{
-				this->code_val = static_cast<int>(VersionLib::VersionCodeException::Version_Code_Std_Exception);
-				this->copyMsg(e.what());
+				this->code_val = static_cast<int>(VersionLib::VersionExceptionCode::VersionErrorCode_Std_Exception);
+				this->msg_val = e.what();
 			}
 
 			/**
-			 * @brief Create a Version Library Exception based on VersionCodeException and the exception message
+			 * @brief Create a Version Library Exception based on VersionExceptionCode and the exception message
 			 * @param type Version Library Exception code type
 			 * @param msg Exception message information
 			 */
-			VersionException (VersionLib::VersionCodeException type, const char* msg)
+			VersionException (VersionLib::VersionExceptionCode type, const char* msg)
 			{
 				this->code_val = static_cast<int>(type);
-				this->copyMsg(msg);
+				this->msg_val = msg;
 			}
 
 			/**
-			 * @brief Create a Version Library Exception based on VersionCodeException
+			 * @brief Create a Version Library Exception based on VersionExceptionCode
 			 * @param type Version Library Exception code type
 			 */
-			VersionException (VersionLib::VersionCodeException type)
+			VersionException (VersionLib::VersionExceptionCode type)
 			{
 				this->code_val = static_cast<int>(type);
-				switch (type)
-				{
-					case VersionCodeException::Version_Code_Success:
-					{
-						this->copyMsg("Success");
-						break;
-					}
-					case VersionCodeException::Version_Code_Incorrect_Parameter:
-					{
-						this->copyMsg("Incorrect parameter exception");
-						break;
-					}
-					case VersionCodeException::Version_Code_Parameter_Value_Less_Than_Zero:
-					{
-						this->copyMsg("Parameter value less than zero");
-						break;
-					}
-					default:
-					{
-						this->copyMsg("Unknown exception");
-						break;
-					}
-				}
+				this->msg_val = VersionLib::getErrorMessage(type);
 			}
 
 			~VersionException()
 			{
-				if (this->msg_val != nullptr)
-				{
-					delete[] this->msg_val;
-					this->msg_val = nullptr;
-				}
+				
 			}
 
 			/**
 			 * @brief Get the exception information about what happen
 			 */
-			const char* what()
+			const char* what() const noexcept
 			{
 				char* tmp_msg = nullptr;
-				if (this->msg_val != nullptr)
-				{
-					size_t msgSize = std::strlen(this->msg_val);
-					tmp_msg = new char[msgSize];
-					std::strcpy(tmp_msg, this->msg_val);
-				}
+				size_t msgSize = this->msg_val.size() + 1;
+				tmp_msg = new char[msgSize];
+				std::strcpy(tmp_msg, this->msg_val.c_str());
 				return static_cast<const char*>(tmp_msg);
 			}
 
@@ -188,12 +158,9 @@ namespace VersionLib
 			const char* msg()
 			{
 				std::string strMsg = "";
-				if (this->msg_val != nullptr)
-				{
-					strMsg = this->msg_val;
-				}
+				strMsg = this->msg_val;
 				strMsg += " | Code: " + std::to_string(this->code_val);
-				size_t c_msg_size = strMsg.size();
+				size_t c_msg_size = strMsg.size() + 1;
 				char* c_msg = new char[c_msg_size];
 				std::strcpy(c_msg, strMsg.c_str());
 				return static_cast<const char*>(c_msg);
@@ -215,18 +182,8 @@ namespace VersionLib
 				}
 
 				this->code_val = other.code_val;
-				if (this->msg_val != nullptr)
-				{
-					delete[] this->msg_val;
-					this->msg_val = nullptr;
-				}
-
-				if (other.msg_val != nullptr)
-				{
-					size_t msgSize = strlen(other.msg_val);
-					this->msg_val = new char[msgSize];
-					std::strcpy(this->msg_val, other.msg_val);
-				}
+				this->msg_val = other.msg_val;
+				
 				return *this;
 			}
 	};
