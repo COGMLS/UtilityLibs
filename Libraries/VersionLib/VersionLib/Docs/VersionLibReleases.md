@@ -26,6 +26,21 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.5-beta (2025/02/18) -->
+    <dt><version-data>0.8.5-beta</version-data></dt>
+    <dd>Added <code>getErrorMessage</code> function to translate the <code>VersionExceptionCode</code> into error messages</dd>
+    <dd>Added support to <code>internalVersionData</code> to use experimental constructors when enabled</dd>
+    <dd>Added wrapper constructors to avoid compilation warnings when using integers in <code>VersionData</code></dd>
+    <dd>Added new <code>VersionException</code> throws in few unaccepted conditions</dd>
+    <dd>Renamed to <code>VersionExceptionCode</code></dd>
+    <dd>Renamed <code>VersionExceptionCode</code> values</dd>
+    <dd>Renamed experimental guards</dd>
+    <dd>Renamed definitions for experimental features</dd>
+    <dd>Changed experimental constructors parameters</dd>
+    <dd>Changed <code>msg_val</code> to std::string to avoid missing control on memory block</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionException</code> class</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>what</code> method in VersionException</dd>
+    <dd><warning-alert>[WARNING]</warning-alert> These modifications may break any code that uses experimental constructors</dd>
     <!-- 0.8.4-beta (2025/02/04) -->
     <dt><version-data>0.8.4-beta</version-data></dt>
     <dd></dd>

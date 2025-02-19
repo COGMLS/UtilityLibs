@@ -10,7 +10,7 @@ The VersionLib contains all necessary methods and data type needed to work, allo
 
 The Version Library contains a main header, `VersionLib.hpp`. This header provide all features to be able to work with versioning for any library or application that is using this library to provide versioning support. To use it, version data information, there is the `VersionStruct`, a C-Style data struct for extern C linkage calling and for internal Version Library use. The most recommended version data is the `VersionData` class for C++ context. Both version structure data information holds the same values: `major`, `minor`, `patch`, `build_type`, `build_type_number` and `build` variables. The `VersionData` class contain constructors to allow to create the version object and use the internal operators to compare with other object version.
 
-The `VersionLib.hpp` header contain a global object version available to test and check the current Version Library version with your application or library. This global object is constant and can not be modified.
+The `VersionLib.hpp` header contain a function called `internalVersionData` that return the library version object, which can be used to test and check the current Version Library version with your application or other library.
 
 > ⚠️ **Warning:** The actual development priority is to make sure the C++ functions can work properly. When the algorithms in C++ became stable and reliable, the C methods version will be the main development focus.
 
@@ -20,8 +20,8 @@ This project contains other documentation files available in [Docs folder](./Doc
 
 | File | Documentation | Path |
 | ---- | ------------- | ---- |
-| Project Info | Information about the project, known bugs, future implementations, deprecated and removed features | [ProjectInfo.md](./Docs/Project%20Info.md)
-| Project Version History | Complete version history about this project. In the README.md file only contains part of the version changes | [ProjectVersionHistory.md](./Docs/Project%20Version%20History.md)
+| VersionLibInfo | Information about the project, known bugs, future implementations, deprecated and removed features | [VersionLibInfo.md](./Docs/VersionLibInfo.md)
+| VersionLibReleases | Complete version history about this project. In the README.md file only contains part of the version changes | [VersionLibReleases.md](./Docs/VersionLibReleases.md)
 
 > Other documentation files will be added in a future.
 
@@ -54,16 +54,26 @@ To use a string as the source of the versioning information, the string must fol
 | M.m.p build b | ✅️ | 14.5.6 build 79 | |
 | M.m.p-t build b | ✅️ | 3.1.9-rc build 54 | |
 | M.m.p-t.r build b | ✅️ | 10.3.1-alpha.3 build 569 | |
-| M.m.p.r build b | ⚠️ | 1.6.1.3 build 6100 | Revision is not recognized |
-| M.m.p.r | ⚠️ | 2.5.8.15 | Revision is not recognized |
-| M.m.p-t b | ⚠️ | 8.1.93-beta 856 | Build number is confused with Build type number |
+| M.m.p.r build b | ⚠️ | 1.6.1.3 build 6100 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
+| M.m.p.r | ⚠️ | 2.5.8.15 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
+| M.m.p-t b | ⚠️ | 8.1.93-beta 856 | Build number is confused with Build type number. **NOTE:** The algorithm will receive an update to recognize the missing components |
 | M-t | ✅️⚠️ | 10-b | Ok (Major and Build type are detected) |
 | M.m-t | ✅️⚠️ | 10.2-alpha | Ok (Major, Minor and Build type are detected) |
-| M.m.p b | ❌️ | 10.2.8 456 | Build number is not detected |
+| M.m.p b | ❌️ | 10.2.8 456 | Build number is not detected. **NOTE:** The algorithm will receive an update to recognize the missing components |
 | M.m b | ❌️ | 17.5 782 | Build type number is confused with patch |
 | M.m.p b | ❌️ | 17.9.5 125 | Build number is not detected |
 
 ## Project components implementations:
+
+> **WARNING:** From version **0.8.5-beta** the `VersionData` class will be using the experimental constructors. Which contain different parameter list after the `patch` parameter position, moving the `build` parameter to final position.
+>
+> This decision resolves the ambiguous constructor call failure and make the reading of the parameter list identical with the *Semantic Versioning*.
+>
+> E.g. `VersionLib::VersionData myAppVer(2, 5, 9, VersionLib::BuildType::RELEASE, 5, 800);` we are creating a `myAppVer` object with version **2.5.9-rc.5 build 800**.
+>
+> Before the experimental constructors the code was `VersionLib::VersionData myAppVer(2, 5, 9, 800, VersionLib::BuildType::RELEASE, 5);` which is not so intuitive.
+>
+> Using the experimental constructors combined with old constructor style, **may break your code**. Unless you only used the string constructor or the `VersionData (major, minor, patch)` constructor.
 
 ### Recent Implementations:
 
@@ -71,6 +81,7 @@ To use a string as the source of the versioning information, the string must fol
 
 ### Implementations under development:
 
+- Support to create objects versions without warning messages with wrapper constructors.
 - Add support to compare versions with build information.
 - Include the global internal Version Library data.
 - Full support for C-Style functions to better support for extern C linkage
@@ -107,6 +118,21 @@ To use a string as the source of the versioning information, the string must fol
     }
 </style>
 <dl>
+    <!-- 0.8.5-beta (2025/02/18) -->
+    <dt><version-data>0.8.5-beta</version-data></dt>
+    <dd>Added <code>getErrorMessage</code> function to translate the <code>VersionExceptionCode</code> into error messages</dd>
+    <dd>Added support to <code>internalVersionData</code> to use experimental constructors when enabled</dd>
+    <dd>Added wrapper constructors to avoid compilation warnings when using integers in <code>VersionData</code></dd>
+    <dd>Added new <code>VersionException</code> throws in few unaccepted conditions</dd>
+    <dd>Renamed to <code>VersionExceptionCode</code></dd>
+    <dd>Renamed <code>VersionExceptionCode</code> values</dd>
+    <dd>Renamed experimental guards</dd>
+    <dd>Renamed definitions for experimental features</dd>
+    <dd>Changed experimental constructors parameters</dd>
+    <dd>Changed <code>msg_val</code> to std::string to avoid missing control on memory block</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionException</code> class</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>what</code> method in VersionException</dd>
+    <dd><warning-alert>[WARNING]</warning-alert> These modifications may break any code that uses experimental constructors</dd>
     <!-- 0.8.4-beta (2025/02/04) -->
     <dt><version-data>0.8.4-beta</version-data></dt>
     <dd></dd>
