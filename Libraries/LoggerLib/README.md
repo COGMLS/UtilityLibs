@@ -23,6 +23,8 @@ The complete release notes and modified versions notes can be found in the `Logg
 
 The additional documentation files can be found in the local [Docs](./Docs) directory.
 
+> **TO DISABLE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `LoggerExperimental.hpp`**
+
 ## Logger Library History:
 
 <!-- Logger Library History Table: -->
