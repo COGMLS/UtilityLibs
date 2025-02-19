@@ -74,6 +74,8 @@ To use a string as the source of the versioning information, the string must fol
 > Before the experimental constructors the code was `VersionLib::VersionData myAppVer(2, 5, 9, 800, VersionLib::BuildType::RELEASE, 5);` which is not so intuitive.
 >
 > Using the experimental constructors combined with old constructor style, **may break your code**. Unless you only used the string constructor or the `VersionData (major, minor, patch)` constructor.
+>
+> **TO DISABLE THE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `ExperimentalFeatures.hpp`**
 
 ### Recent Implementations:
 
