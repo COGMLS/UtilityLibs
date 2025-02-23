@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "ExperimentalFeatures.hpp"
+
 #include <algorithm>
 #include <cctype>
 #include <string>
