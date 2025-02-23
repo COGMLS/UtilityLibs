@@ -40,28 +40,28 @@ To use a string as the source of the versioning information, the string must fol
 | **b** | build number |
 | **t** | Build type |
 
-| Format | Status | Example | Notes |
-| ------ | ------ | ------- | ----- |
-| M      | ✅️ ⚠️ | 10 | This versioning format is not part of Standard Versioning |
-| M.m | ✅️ ⚠️ | 10.2 | This versioning format is not part of Standard Versioning |
-| M.m.p | ✅️ | 10.2.45 | |
-| M.m.p-t | ✅️ | 0.8.3-beta | |
-| M.m.p-t.r | ✅️ | 3.1.7-beta.6 | |
-| M.m.p-t.r b | ✅️ | 7.1.3-rc.1 752 | |
-| M b | ❌️ | 10 487 | This format is not recognized |
-| M build b | ❌️ | 14 build 77 | This format is not recognized |
-| M.m build b | ✅️ | 14.3 build 78 | |
-| M.m.p build b | ✅️ | 14.5.6 build 79 | |
-| M.m.p-t build b | ✅️ | 3.1.9-rc build 54 | |
-| M.m.p-t.r build b | ✅️ | 10.3.1-alpha.3 build 569 | |
-| M.m.p.r build b | ⚠️ | 1.6.1.3 build 6100 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
-| M.m.p.r | ⚠️ | 2.5.8.15 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
-| M.m.p-t b | ⚠️ | 8.1.93-beta 856 | Build number is confused with Build type number. **NOTE:** The algorithm will receive an update to recognize the missing components |
-| M-t | ✅️⚠️ | 10-b | Ok (Major and Build type are detected) |
-| M.m-t | ✅️⚠️ | 10.2-alpha | Ok (Major, Minor and Build type are detected) |
-| M.m.p b | ❌️ | 10.2.8 456 | Build number is not detected. **NOTE:** The algorithm will receive an update to recognize the missing components |
-| M.m b | ❌️ | 17.5 782 | Build type number is confused with patch |
-| M.m.p b | ❌️ | 17.9.5 125 | Build number is not detected |
+| Format | Status | Experimental Detection | Example | Notes |
+| ------ | ------ | ---------------------- | ------- | ----- |
+| M      | ✅️ ⚠️ | N/A | 10 | This versioning format is not part of Standard Versioning |
+| M.m | ✅️ ⚠️ | N/A | 10.2 | This versioning format is not part of Standard Versioning |
+| M.m.p | ✅️ | N/A | 10.2.45 | |
+| M.m.p-t | ✅️ | N/A | 0.8.3-beta | |
+| M.m.p-t.r | ✅️ | N/A | 3.1.7-beta.6 | |
+| M.m.p-t.r b | ✅️ | N/A | 7.1.3-rc.1 752 | |
+| M b | ❌️ | N/A | 10 487 | This format is not recognized |
+| M build b | ❌️ | N/A | 14 build 77 | This format is not recognized |
+| M.m build b | ✅️ | N/A | 14.3 build 78 | |
+| M.m.p build b | ✅️ | N/A | 14.5.6 build 79 | |
+| M.m.p-t build b | ✅️ | N/A | 3.1.9-rc build 54 | |
+| M.m.p-t.r build b | ✅️ | N/A | 10.3.1-alpha.3 build 569 | |
+| M.m.p.r build b | ⚠️ | N/A | 1.6.1.3 build 6100 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
+| M.m.p.r | ⚠️ | N/A | 2.5.8.15 | Revision is not recognized. **NOTE:** This format is widely used in some applications, the algorithm will receive a modification to detect this type of format |
+| M.m.p-t b | ⚠️ | N/A | 8.1.93-beta 856 | Build number is confused with Build type number. **NOTE:** The algorithm will receive an update to recognize the missing components |
+| M-t | ✅️⚠️ | N/A | 10-b | Ok (Major and Build type are detected) |
+| M.m-t | ✅️⚠️ | N/A | 10.2-alpha | Ok (Major, Minor and Build type are detected) |
+| M.m.p b | ❌️ | N/A | 10.2.8 456 | Build number is not detected. **NOTE:** The algorithm will receive an update to recognize the missing components |
+| M.m b | ❌️ | N/A | 17.5 782 | Build type number is confused with patch |
+| M.m.p b | ❌️ | N/A | 17.9.5 125 | Build number is not detected |
 
 ## Project components implementations:
 
