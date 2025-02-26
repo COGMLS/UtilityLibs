@@ -496,13 +496,30 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				// Clean the accValHasNumbers status:
 				accValHasNumbers = false;
 
+				//
+				// Try to set the value to unsigned long long. This only used to build number:
+				//
+
+				try
+				{
+					token.ull = std::stoull(tmp);
+				}
+				catch (const std::exception& e)
+				{
+					// Do not generate error output
+				}
+
+				//
+				// Try yo set the numeric value to unsigned long. This field is used by all other version components that are not build:
+				//
+
 				try
 				{
 					token.ul = std::stoul(tmp);
 				}
 				catch (const std::exception& e)
 				{
-					
+					// Do not generate error output
 				}
 			}
 			else
@@ -516,6 +533,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					foundBuildStr = true;
 					lastFieldProcessed = 5;
+					goto JumpComponentDetection;
 				}
 
 				// Test for "alpha" build type:
@@ -523,6 +541,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
 				// Test for "beta" build type:
@@ -530,6 +549,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
 				// Test for "release candidate" build type:
@@ -537,6 +557,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
 				// Test for "release" build type:
@@ -544,8 +565,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 			}
+
+			//
+			// Jump to component detection: This reduce the test of unnecessary conditional statements.
+			//
+
+			JumpComponentDetection:
 
 			//
 			// Try to detect the version components:
@@ -563,6 +591,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 					if (foundBuildTypeVer)
 					{
 						if (!foundBuildTypeRev && foundBuildStr)				// Case: found Major, minor, type and revision components
+						{
+							setBuild = true;
+						}
 						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, type. No patch, revision and "build" world was found
 						{
 							setBuild = true;
@@ -571,6 +602,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 					else
 					{
 						if (!foundBuildTypeRev && foundBuildStr)				// Case: found major, minor, patch. No type, revision, but "build" was found
+						{
+							setBuild = true;
+						}
 						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" world was found
 						{
 							setBuild = true;
@@ -585,8 +619,17 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 					if (foundBuildTypeVer)
 					{
 						if (foundBuildTypeRev && foundBuildStr)					// Case: found all components in version string
+						{
+							setBuild = true;
+						}
 						if (foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found all components but no "build" world was found
+						{
+							setBuild = true;
+						}
 						if (!foundBuildTypeRev && foundBuildStr)				// Case: found Major, minor, patch, type and revision components
+						{
+							setBuild = true;
+						}
 						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch, type. No revision and "build" world was found
 						{
 							setBuild = true;
@@ -595,6 +638,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 					else
 					{
 						if (!foundBuildTypeRev && foundBuildStr)				// Case: found major, minor, patch. No type, revision, but "build" was found
+						{
+							setBuild = true;
+						}
 						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" world was found
 						{
 							setBuild = true;
