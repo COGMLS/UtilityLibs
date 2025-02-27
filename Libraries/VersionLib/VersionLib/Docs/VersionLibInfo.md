@@ -35,7 +35,7 @@ This document contains the information about the future plans, known bugs, depre
 | 6 | ~~VersionData method, `getBuildTypeCompleteCstr`, does not convert C++ string data into C-style string~~ |  | Resolved |
 | 7 | ~~`VersionData` constructors not working after implementation of `cmpBuild` parameter, resulting in ambiguous reference~~ | If `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS` is not defined, the modified constructors are disabled to avoid the ambiguous reference. **NOTE:** Using `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS`, will **break** any code that uses original constructor parameter list. **NOTE: On version 0.9.0-alpha, the experimental constructors will be the focus during the development** | Resolved  |
 | 8 | `VersionException` fails when throw the object | Using *`catch (VersionLib::VersionException& e)`* does not fail. The workaround is not definitive. New tests and modification may happen to make sure it's working properly | **Fix in development** |
-| 9 | Enabling experimental optimized memory layout result in missing correct data to `build_type_number` | To avoid missing any data, keep `VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT` disabled | Not resolved |
+| 9 | Enabling experimental optimized memory layout result in missing correct data to `build_type_number`. **NOTE: The experimental feature was only tested on Windows platforms with MSVC** | To avoid missing any data, keep `VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT` disabled | Not resolved |
 
 ## Deprecated Features:
 
@@ -48,7 +48,7 @@ This document contains the information about the future plans, known bugs, depre
 | Feature | Details | Workaround | Notes |
 | :------ | :-----: | :--------: | ----: |
 
-# Additional project information
+# Technical Information
 
 > This section was added to provide more technical information.
 >
