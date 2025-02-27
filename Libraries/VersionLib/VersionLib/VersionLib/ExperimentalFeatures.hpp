@@ -24,6 +24,9 @@
 // Enable experimental fix to toVersionStruct2 function
 #define VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT
 
+// Enable experimental optimized memory layout:
+//#define VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
+
 // Enable experimental build type class instead of enumerator values
 //#define VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
