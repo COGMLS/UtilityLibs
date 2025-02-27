@@ -421,7 +421,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	bool accValHasNumbers = false;			// Accumulator Value has number
 	bool useAccVal = false;					// Determinate to try to convert
 	char t = '\0';							// Current char in analysis
-	char l = '\0';							// Last char analyzed
+	char l = '\0';							// Last terminal char analyzed to detect the component
 	std::string tmp;						// Temporary variable accumulator
 
 	/** Version string analysis:
@@ -442,14 +442,10 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 	for (size_t i = 0; i < verStrSize; i++)
 	{
-		// Update last char analyzed:
-		if (i == 0)
+		// Update the last char used to mark:
+		if (t == '.' || t == ' ' || t == '-')
 		{
-			l = '\0';	// Set to NULL
-		}
-		else
-		{
-			l = t;		// Update last char
+			l = t;
 		}
 
 		// Get the current char:
