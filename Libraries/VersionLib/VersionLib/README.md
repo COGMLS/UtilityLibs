@@ -91,21 +91,23 @@ To use a string as the source of the versioning information, the string must fol
 ### Recent Implementations:
 
 - Support for convert `VersionStruct` to `VersionData` and vice-versa.
+- New experimental version string detection in ``toVersionStrut2` method.
+- New experimental memory layout of `VersionStruct` to reduce the memory size allocation. (See the details in [here](./Docs/VersionLibInfo.md#versionstruct-and-versiondata-memory-layout))
+- Support to create objects versions without warning messages with wrapper constructors.
 
 ### Implementations under development:
 
-- Support to create objects versions without warning messages with wrapper constructors.
 - Add support to compare versions with build information.
 - Include the global internal Version Library data.
 - Full support for C-Style functions to better support for extern C linkage
 - Add Version Lib errors and exceptions components
+- Add and update all documentation for the Version Library
 
 ### Future Implementations:
 
 - Full support for extern C linkage
 - Support to identify version files by it's name
 - Support to detect Windows Metadata version information
-- Add and update all documentation for the Version Library
 
 ## Version Library History:
 
@@ -131,6 +133,13 @@ To use a string as the source of the versioning information, the string must fol
     }
 </style>
 <dl>
+    <!-- 0.8.6-beta (2025/02/26) -->
+    <dt><version-data>0.8.6-beta</version-data></dt>
+    <dd>Added new experimental algorithm to fix <code>toVersionStruct2</code> function string version detection</dd>
+    <dd>Added experimental memory layout to reduce memory waste in <code>VersionStruct</code> and <code>VersionData</code></dd>
+    <dd>Updated VersionLib documentation</dd>
+    <dd><fix-alert>[FIX]</fix-alert> some permissive formats were not being detected or partially detected by <code>toVersionStruct2</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> some Semantic Versioning formats were not being fully detected or some version components were confused with others.</dd>
     <!-- 0.8.5-beta (2025/02/18) -->
     <dt><version-data>0.8.5-beta</version-data></dt>
     <dd>Added <code>getErrorMessage</code> function to translate the <code>VersionExceptionCode</code> into error messages</dd>
