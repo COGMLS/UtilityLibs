@@ -80,23 +80,23 @@ int main(int argc, const char* argv[])
 	if (versionTest)
 	{
 		versionTest->push_back(VersionFormatTest ("1.2.1 build 700"));				// OK
-		versionTest->push_back(VersionFormatTest ("1.6.1.3 build 6100"));			// FAIL: Revision is not recognized
-		versionTest->push_back(VersionFormatTest ("2.5.8.15"));						// FAIL: Revision is not recognized.
+		versionTest->push_back(VersionFormatTest ("1.6.1.3 build 6100"));			// FAIL: Revision is not recognized; Ok on experimental fix.
+		versionTest->push_back(VersionFormatTest ("2.5.8.15"));						// FAIL: Revision is not recognized; Ok on experimental fix.
 		versionTest->push_back(VersionFormatTest ("17.5.12-a"));					// Ok
 		versionTest->push_back(VersionFormatTest ("3.1.7-beta.6"));					// Ok
 		versionTest->push_back(VersionFormatTest ("7.1.3-rc.1 752"));				// Ok
 		versionTest->push_back(VersionFormatTest ("10.3.1-alpha.3 build 569"));		// Ok
-		versionTest->push_back(VersionFormatTest ("8.1.93-beta 856"));				// FAIL: Build number is confused with Build type number
+		versionTest->push_back(VersionFormatTest ("8.1.93-beta 856"));				// FAIL: Build number is confused with Build type number; Ok on experimental fix.
 		versionTest->push_back(VersionFormatTest ("10"));							// Ok (Major is detected)
 		versionTest->push_back(VersionFormatTest ("10.2"));							// Ok (Major, Minor are detected)
 		versionTest->push_back(VersionFormatTest ("10.2.45"));						// Ok (Major, Minor, Patch are detected)
-		versionTest->push_back(VersionFormatTest ("10-b"));							// Ok (Major and Build type are detected)
+		versionTest->push_back(VersionFormatTest ("10-b"));							// Ok (Major and Build type are detected); FAIL ON EXPERIMENTAL FIX: Build type is not detected. THIS BEHAVIOUR WON'T BE FIXED!
 		versionTest->push_back(VersionFormatTest ("10.2-alpha"));					// Ok (Major, Minor and Build type are detected)
-		versionTest->push_back(VersionFormatTest ("10.2.8 456"));					// FAIL: Build number is not detected
-		versionTest->push_back(VersionFormatTest ("10 487"));						// FAIL: This format is not recognized
-		versionTest->push_back(VersionFormatTest ("17.5 782"));						// FAIL: Build type number is confused with patch
-		versionTest->push_back(VersionFormatTest ("17.9.5 125"));					// FAIL: Build number is not detected
-		versionTest->push_back(VersionFormatTest ("14 build 77"));					// FAIL: Only build number is detected
+		versionTest->push_back(VersionFormatTest ("10.2.8 456"));					// FAIL: Build number is not detected; Ok on experimental fix.
+		versionTest->push_back(VersionFormatTest ("10 487"));						// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
+		versionTest->push_back(VersionFormatTest ("17.5 782"));						// FAIL: Build type number is confused with patch; Ok on experimental fix.
+		versionTest->push_back(VersionFormatTest ("17.9.5 125"));					// FAIL: Build number is not detected; Ok on experimental fix.
+		versionTest->push_back(VersionFormatTest ("14 build 77"));					// FAIL: Only build number is detected; Ok on experimental fix.
 		versionTest->push_back(VersionFormatTest ("14.3 build 78"));				// Ok
 		versionTest->push_back(VersionFormatTest ("14.5.6 build 79"));				// Ok
 		versionTest->push_back(VersionFormatTest ("3.1.9-rc build 54"));			// Ok

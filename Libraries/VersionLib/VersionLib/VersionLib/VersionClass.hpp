@@ -42,11 +42,21 @@ namespace VersionLib
 {
 	/**
 	 * @brief Version Data class with support to Major, Minor, Patch version numbers and Build and build type support.
+	 * @note In version 0.8.6-beta the build_type_number (or revision version core) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
 	 */
 	class VERSION_LIB_API VersionData
 	{
 		private:
 
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
+			unsigned int major;					// Major version number
+			unsigned int minor;					// Minor version number
+			unsigned int patch;					// Patch version number
+			unsigned int build_type_number;		// Build type number (alpha1, rc3)
+			unsigned long long build;			// Build number
+			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
+			bool compare_build;					// Build comparison control
+			#else
 			unsigned int major;					// Major version number
 			unsigned int minor;					// Minor version number
 			unsigned int patch;					// Patch version number
@@ -54,6 +64,7 @@ namespace VersionLib
 			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 			unsigned int build_type_number;		// Build type number (alpha1, rc3)
 			bool compare_build;					// Build comparison control
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
 		public:
 

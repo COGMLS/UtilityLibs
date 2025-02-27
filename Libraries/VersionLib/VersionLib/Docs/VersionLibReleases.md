@@ -26,6 +26,13 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.6-beta (2025/02/26) -->
+    <dt><version-data>0.8.6-beta</version-data></dt>
+    <dd>Added new experimental algorithm to fix <code>toVersionStruct2</code> function string version detection</dd>
+    <dd>Added experimental memory layout to reduce memory waste in <code>VersionStruct</code> and <code>VersionData</code></dd>
+    <dd>Updated VersionLib documentation</dd>
+    <dd><fix-alert>[FIX]</fix-alert> some permissive formats were not being detected or partially detected by <code>toVersionStruct2</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> some Semantic Versioning formats were not being fully detected or some version components were confused with others.</dd>
     <!-- 0.8.5-beta (2025/02/18) -->
     <dt><version-data>0.8.5-beta</version-data></dt>
     <dd>Added <code>getErrorMessage</code> function to translate the <code>VersionExceptionCode</code> into error messages</dd>

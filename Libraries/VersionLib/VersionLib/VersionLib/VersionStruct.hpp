@@ -32,6 +32,22 @@
 
 namespace VersionLib
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
+	/**
+	 * @brief Version struct used for C applications
+	 * @note In version 0.8.6-beta the build_type_number (or revision version core) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
+	 */
+	struct VersionStruct
+	{
+		unsigned int major;					// Major version number
+		unsigned int minor;					// Minor version number
+		unsigned int patch;					// Patch version number
+		unsigned int build_type_number;		// Build type number (alpha1, rc3)
+		unsigned long long build;			// Build number
+		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
+		bool compare_build;					// Build comparison control
+	};
+	#else
 	/**
 	 * @brief Version struct used for C applications
 	 */
@@ -45,6 +61,7 @@ namespace VersionLib
 		unsigned int build_type_number;		// Build type number (alpha1, rc3)
 		bool compare_build;					// Build comparison control
 	};
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
 	/**
 	 * @brief Initialize the VersionStruct. This function is designed to reduce the possibility of failure of new struct variables.
