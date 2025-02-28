@@ -12,16 +12,18 @@ This document contains the information about the future plans, known bugs, depre
 ## Implementations under development:
 
 - Add support to compare versions with build information.
-- Include the global internal Version Library data.
-- Full support for C-Style functions to better support for extern C linkage
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
+- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
 
 ## Future Implementations:
 
+- Full support for C-Style functions to better support for extern C linkage
 - Full support for extern C linkage
 - Support to identify version files by it's name
 - Support to detect Windows Metadata version information
+- Support to combined build type information. I.e. `1.0.0-alpha.beta`
+- Support to build metadata in version string
 
 ## Known Bugs:
 
@@ -53,6 +55,20 @@ This document contains the information about the future plans, known bugs, depre
 > This section was added to provide more technical information.
 >
 > This section may be moved in the future to a dedicated file.
+
+## About BuildType:
+
+In Semantic Versioning is allowed the use of combined pre-release components like `1.0.0-alpha.beta`. In actual moment, the library does not support this format. It's expected to add the support for combined release components in **version 0.9.0-alpha** after the implementation of `VersionBuildType` class.
+
+### `VersionBuildType` class:
+
+The `VersionBuildType` class is a new way to store and allow tests with build type available. Using an exclusive class also allows us to make more secure modifications with less code changes in the rest of the library's components. The class is designed to use comparison operators to test between the different build types and in future implementation, with combined build types, will make the tests internally, without necessity to change the other components.
+
+The class also allows the use *canary*, *development* and *pre release* build type words to determinate the release type. Those new terminologies have similar numeric values to *alpha*, *beta* and *release candidate* respectively. *It's important to beware the new build types words are a permissive way to declare the component, but those words are not used in Semantic Versioning and there are many different way to declare the releases.*
+
+The implementation of this experimental feature is defined by `VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT` and combined support to `VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE`. This last one only has effect if `VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT` is enabled.
+
+> **NOTE:** THE IMPLEMENTATION OF `VersionBuildType` IS UNDER PROGRESS AND WILL NOT WORK OR COMPILE YET.
 
 ## `VersionStruct` and `VersionData` memory layout:
 

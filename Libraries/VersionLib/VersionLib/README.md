@@ -98,16 +98,18 @@ To use a string as the source of the versioning information, the string must fol
 ### Implementations under development:
 
 - Add support to compare versions with build information.
-- Include the global internal Version Library data.
-- Full support for C-Style functions to better support for extern C linkage
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
+- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
 
 ### Future Implementations:
 
+- Full support for C-Style functions to better support for extern C linkage
 - Full support for extern C linkage
 - Support to identify version files by it's name
 - Support to detect Windows Metadata version information
+- Support to combined build type information. I.e. `1.0.0-alpha.beta`
+- Support to build metadata in version string
 
 ## Version Library History:
 
