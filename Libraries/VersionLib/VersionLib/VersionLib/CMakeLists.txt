@@ -66,13 +66,15 @@ if (WIN32)
 					# Version Library main header:
 					"VersionLib.hpp"
 					# Version Library components:
-					"BuildTypes.hpp"
+					"BuildMetadata.hpp" 						"BuildMetadata.cpp"
+					"BuildTypes.hpp" 							"BuildTypes.cpp"
+					"BuildTypesExt.hpp"							"BuildTypesExt.cpp"
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
-					"Tools.hpp" "Tools.cpp"
-					"VersionClass.hpp" "VersionClass.cpp"
+					"Tools.hpp" 								"Tools.cpp"
+					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
-					"VersionStruct.hpp" "VersionStruct.cpp"
+					"VersionStruct.hpp" 						"VersionStruct.cpp"
 				)
 else()
 	add_library(
@@ -81,13 +83,15 @@ else()
 					# Version Library main header:
 					"VersionLib.hpp"
 					# Version Library components:
-					"BuildTypes.hpp"
+					"BuildMetadata.hpp" 						"BuildMetadata.cpp"
+					"BuildTypes.hpp" 							"BuildTypes.cpp"
+					"BuildTypesExt.hpp"							"BuildTypesExt.cpp"
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
-					"Tools.hpp" "Tools.cpp"
-					"VersionClass.hpp" "VersionClass.cpp"
+					"Tools.hpp" 								"Tools.cpp"
+					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
-					"VersionStruct.hpp" "VersionStruct.cpp"
+					"VersionStruct.hpp" 						"VersionStruct.cpp"
 				)
 endif()
 
