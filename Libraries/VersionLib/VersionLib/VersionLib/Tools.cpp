@@ -215,6 +215,7 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	return BuildType::RELEASE;
 }
 
+#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 [[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 {
@@ -372,6 +373,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 
 	return v;
 }
+#endif // VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
@@ -791,7 +793,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		// Set build type:
 		if (tokens[i].type == 3)
 		{
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+				#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+				#error "No compatible implementation of EXPERIMENTAL SUPPORT TO COMBINED BUILD TYPE to toVersionStruct2 function!"
+				#else
+				VersionLib::setVersionBuildTypeC(v.build_type, VersionLib::str2BuildType(tokens[i].str));
+				#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			#else
 			v.build_type = VersionLib::str2BuildType(tokens[i].str);
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 			#if DEBUG
 			build_type_str = tokens[i].str;
 			build_type = VersionLib::str2BuildType(tokens[i].str);

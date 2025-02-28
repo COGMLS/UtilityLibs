@@ -39,6 +39,10 @@
 #include "BuildTypes.hpp"
 #include "VersionStruct.hpp"
 
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+#include "BuildTypesExt.hpp"
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+
 namespace VersionLib
 {
 	/**
@@ -84,6 +88,7 @@ namespace VersionLib
 	 */
 	VERSION_LIB_API BuildType str2BuildType (std::string value);
 
+	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	/**
 	 * @brief Convert a string using Semantic Versioning
 	 * @param version String with version information
@@ -93,6 +98,7 @@ namespace VersionLib
 	 */
 	[[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
 	VERSION_LIB_API VersionStruct toVersionStruct (std::string version);
+	#endif // VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 	/**
 	 * @brief Convert a string using Semantic Versioning
