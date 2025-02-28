@@ -36,13 +36,17 @@
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 	#include "ExceptionComponents.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+	#include "BuildTypesExt.hpp"
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 namespace VersionLib
 {
 	/**
 	 * @brief Version Data class with support to Major, Minor, Patch version numbers and Build and build type support.
-	 * @note In version 0.8.6-beta the build_type_number (or revision version core) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
+	 * @note In version 0.8.6-beta the build_type_number (or revision) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
 	 */
 	class VERSION_LIB_API VersionData
 	{
@@ -54,14 +58,22 @@ namespace VersionLib
 			unsigned int patch;					// Patch version number
 			unsigned int build_type_number;		// Build type number (alpha1, rc3)
 			unsigned long long build;			// Build number
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+			VersionLib::VersionBuildType build_type;	// Build type (alpha, a, beta, etc)
+			#else
 			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 			bool compare_build;					// Build comparison control
 			#else
 			unsigned int major;					// Major version number
 			unsigned int minor;					// Minor version number
 			unsigned int patch;					// Patch version number
 			unsigned long long build;			// Build number
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+			VersionLib::VersionBuildType build_type;	// Build type (alpha, a, beta, etc)
+			#else
 			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 			unsigned int build_type_number;		// Build type number (alpha1, rc3)
 			bool compare_build;					// Build comparison control
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
@@ -77,7 +89,6 @@ namespace VersionLib
 			 * @brief Create an VersionData object that can represent an software version data
 			 * @param versionStr String with version information
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
-			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct2 method and is under development.
 			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
 			VersionData (std::string versionStr, bool cmpBuild = false);			
@@ -86,7 +97,6 @@ namespace VersionLib
 			 * @brief Create an VersionData object that can represent an software version data
 			 * @param versionStr String with version information
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
-			 * @warning This constructor is not recommended to be used at this time, because uses toVersionStruct2 method and is under development.
 			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
 			VersionData (std::string versionStr);

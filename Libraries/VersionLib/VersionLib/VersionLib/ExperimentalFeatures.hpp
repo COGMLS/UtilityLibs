@@ -19,15 +19,21 @@
 #define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 
 // Enable experimental VersionData comparison operators with VersionStruct data
-//#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
+#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
 
 // Enable experimental fix to toVersionStruct2 function
 #define VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT
 
-// Enable experimental optimized memory layout:
+// Enable experimental optimized memory layout
 //#define VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
 // Enable experimental build type class instead of enumerator values
 //#define VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+
+// Enable experimental combined build type information
+//#define VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+
+// Enable experimental build metadata on version string
+//#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_STR_BUILD_METADATA
 
 #endif // !VERSION_LIBRARY_EXPERIMENTAL_FEATURES_CONTROL_HPP
