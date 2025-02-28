@@ -1528,6 +1528,38 @@ bool VersionLib::VersionData::operator<=(const VersionData &other)
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
+bool VersionLib::VersionData::operator==(const VersionLib::VersionStruct &other)
+{
+    return *this == VersionLib::VersionData(other);
+}
+
+bool VersionLib::VersionData::operator!=(const VersionLib::VersionStruct& other)
+{
+	return *this != VersionLib::VersionData(other);
+}
+
+bool VersionLib::VersionData::operator>(const VersionLib::VersionStruct& other)
+{
+	return *this > VersionLib::VersionData(other);
+}
+
+bool VersionLib::VersionData::operator>=(const VersionLib::VersionStruct& other)
+{
+	return *this >= VersionLib::VersionData(other);
+}
+
+bool VersionLib::VersionData::operator<(const VersionLib::VersionStruct& other)
+{
+	return *this < VersionLib::VersionData(other);
+}
+
+bool VersionLib::VersionData::operator<=(const VersionLib::VersionStruct& other)
+{
+	return *this <= VersionLib::VersionData(other);
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
+
 bool VersionLib::VersionData::operator==(const std::string &verStr)
 {
     return *this == VersionLib::VersionData(verStr);
