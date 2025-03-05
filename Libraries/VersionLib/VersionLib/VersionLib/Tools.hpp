@@ -62,13 +62,13 @@ namespace VersionLib
 	VERSION_LIB_API std::string tolower_str (const std::string& value);
 
 	/**
-	 * @brief Extract the build type number (alpha.2 or rc.3).
+	 * @brief Extract the build revision (alpha.2 or rc.3).
 	 * @param buildType Build type string
 	 */
 	VERSION_LIB_API unsigned int extractBuildTypeNumber (const char* buildType);
 	
 	/**
-	 * @brief Extract the build type number (alpha.2 or rc.3).
+	 * @brief Extract the build revision (alpha.2 or rc.3).
 	 * @param buildType Build type string
 	 */
 	VERSION_LIB_API unsigned int extractBuildTypeNumber (std::string buildType);
@@ -77,7 +77,7 @@ namespace VersionLib
 	 * @brief Convert the build type into a string with option to use short string version (rc, a).
 	 * @param type Build type enumerator
 	 * @param useShortStr Determinate if the string will be used in short case
-	 * @return Return the build type (alpha, rc) string type. No build type number is available here.
+	 * @return Return the build type (alpha, rc) string type. No build revision is available here.
 	 */
 	VERSION_LIB_API std::string buildType2Str (BuildType type, bool useShortStr);
 
@@ -105,7 +105,7 @@ namespace VersionLib
 	 * @param version String with version information
 	 * @return Return a VersionStruct with version data
 	 * @warning This function is compatible with Semantic Versioning, but is also permissive to other values conversions. Check the Conversion Notes.
-	 * @note Conversion Notes: The conversion formats accept by this method are (x: Major, y: Minor, z: Patch, t: Build Type, n: Build Type Number, "build": Word used to determinate the build field. b: Build number.): Semantic Versioning format: x.y.z, x.y.z-t, x.y.z-t.n, x.y-t, x.y-t.n. Other formats: x.y-t build b, x.y-t b, x.y-t.n build b, x.y.z-t.n build b, x.y.z-t.n b
+	 * @note Conversion Notes: The conversion formats accept by this method are (x: Major, y: Minor, z: Patch, t: Build Type, n: Build revision, "build": Word used to determinate the build field. b: Build number.): Semantic Versioning format: x.y.z, x.y.z-t, x.y.z-t.n, x.y-t, x.y-t.n. Other formats: x.y-t build b, x.y-t b, x.y-t.n build b, x.y.z-t.n build b, x.y.z-t.n b
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct2 (std::string version);
 

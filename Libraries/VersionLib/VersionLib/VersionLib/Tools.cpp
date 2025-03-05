@@ -48,18 +48,18 @@ unsigned int VersionLib::extractBuildTypeNumber(const char* buildType)
 	const char token[] = ".";
 	char* cStr = std::strtok(cValue, token);
 	bool foundBuildType = false;
-	unsigned int build_type_number = 0;
+	unsigned int build_revision = 0;
 	while (token)
 	{
 		if (foundBuildType)
 		{
 			try
 			{
-				build_type_number = std::stoul(token);
+				build_revision = std::stoul(token);
 			}
 			catch(const std::exception&)
 			{
-				build_type_number = 0;
+				build_revision = 0;
 			}
 		}
 		if (std::strcmp(token, "alpha") == 0 || std::strcmp(token, "a") == 0)
@@ -83,7 +83,7 @@ unsigned int VersionLib::extractBuildTypeNumber(const char* buildType)
 		}
 	}
 
-    return build_type_number;
+    return build_revision;
 }
 
 unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
@@ -93,18 +93,18 @@ unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
 	const char token[] = ".";
 	char* cStr = std::strtok(cValue, token);
 	bool foundBuildType = false;
-	unsigned int build_type_number = 0;
+	unsigned int build_revision = 0;
 	while (token)
 	{
 		if (foundBuildType)
 		{
 			try
 			{
-				build_type_number = std::stoul(token);
+				build_revision = std::stoul(token);
 			}
 			catch(const std::exception&)
 			{
-				build_type_number = 0;
+				build_revision = 0;
 			}
 		}
 		if (std::strcmp(token, "alpha") == 0 || std::strcmp(token, "a") == 0)
@@ -128,7 +128,7 @@ unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
 		}
 	}
 
-    return build_type_number;
+    return build_revision;
 }
 
 std::string VersionLib::buildType2Str(BuildType type, bool useShortStr)
@@ -368,7 +368,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
 	v.minor = minor;
 	v.patch = patch;
 	v.build_type = typeEnum;
-	v.build_type_number = type_num;
+	v.build_revision = type_num;
 	v.build = build;
 
 	return v;
@@ -757,7 +757,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	unsigned int patch = 0;
 	short build_type = 0;
 	std::string build_type_str;
-	unsigned int build_type_number = 0;
+	unsigned int build_revision = 0;
 	unsigned long long build = 0;
 	#endif // !DEBUG
 
@@ -811,9 +811,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		// Set revision:
 		if (tokens[i].type == 4)
 		{
-			v.build_type_number = tokens[i].ul;
+			v.build_revision = tokens[i].ul;
 			#if DEBUG
-			build_type_number = tokens[i].ul;
+			build_revision = tokens[i].ul;
 			#endif // !DEBUG
 		}
 
@@ -828,7 +828,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	}
 
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_type_number << " build " << build << std::endl << std::endl;
+	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
 	return v;
@@ -864,7 +864,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	short build_type = 0;
 	#endif // !DEBUG
 	std::string build_type_str;
-	unsigned int build_type_number = 0;
+	unsigned int build_revision = 0;
 	unsigned long long build = 0;
 
 	bool foundMajorVer = false;				// Found major version number
@@ -995,7 +995,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				{
 					try
 					{
-						build_type_number = std::stoul(tmp);
+						build_revision = std::stoul(tmp);
 						foundBuildTypeNum = true;
 						lastFieldProcessed = 4;
 					}
@@ -1112,14 +1112,14 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	}
 
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_type_number << " build " << build << std::endl << std::endl;
+	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
 	v.major = major;
 	v.minor = minor;
 	v.patch = patch;
 	v.build_type = VersionLib::str2BuildType(build_type_str);
-	v.build_type_number = build_type_number;
+	v.build_revision = build_revision;
 	v.build = build;
 
 	return v;
