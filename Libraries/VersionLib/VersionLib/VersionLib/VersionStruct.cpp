@@ -8,7 +8,7 @@ VersionLib::VersionStruct VersionLib::initVersionStruct()
 	v.minor = 0u;
 	v.patch = 0u;
 	v.build = 0ull;
-	v.build_type_number = 0u;
+	v.build_revision = 0u;
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	v.build_type = VersionLib::initVersionBuildTypeC();
 	#else
