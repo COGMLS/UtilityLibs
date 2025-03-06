@@ -100,7 +100,7 @@ int main(int argc, const char* argv[])
 		versionString->push_back("3.1.7-beta.6");					// Ok
 		versionString->push_back("7.1.3-rc.1 752");					// Ok
 		versionString->push_back("10.3.1-alpha.3 build 569");		// Ok
-		versionString->push_back("8.1.93-beta 856");				// FAIL: Build number is confused with Build type number; Ok on experimental fix.
+		versionString->push_back("8.1.93-beta 856");				// FAIL: Build number is confused with Build revision; Ok on experimental fix.
 		versionString->push_back("10");								// Ok (Major is detected)
 		versionString->push_back("10.2");							// Ok (Major, Minor are detected)
 		versionString->push_back("10.2.45");						// Ok (Major, Minor, Patch are detected)
@@ -108,7 +108,7 @@ int main(int argc, const char* argv[])
 		versionString->push_back("10.2-alpha");						// Ok (Major, Minor and Build type are detected)
 		versionString->push_back("10.2.8 456");						// FAIL: Build number is not detected; Ok on experimental fix.
 		versionString->push_back("10 487");							// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
-		versionString->push_back("17.5 782");						// FAIL: Build type number is confused with patch; Ok on experimental fix.
+		versionString->push_back("17.5 782");						// FAIL: Build revision is confused with patch; Ok on experimental fix.
 		versionString->push_back("17.9.5 125");						// FAIL: Build number is not detected; Ok on experimental fix.
 		versionString->push_back("14 build 77");					// FAIL: Only build number is detected; Ok on experimental fix.
 		versionString->push_back("14.3 build 78");					// Ok
@@ -127,7 +127,7 @@ int main(int argc, const char* argv[])
 		 * 3.1.7-beta.6					// Ok
 		 * 7.1.3-rc.1 752				// Ok
 		 * 10.3.1-alpha.3 build 569		// Ok
-		 * 8.1.93-beta 856				// FAIL: Build number is confused with Build type number; Ok on experimental fix.
+		 * 8.1.93-beta 856				// FAIL: Build number is confused with Build revision; Ok on experimental fix.
 		 * 10							// Ok (Major is detected)
 		 * 10.2							// Ok (Major, Minor are detected)
 		 * 10.2.45						// Ok (Major, Minor, Patch are detected)
@@ -135,7 +135,7 @@ int main(int argc, const char* argv[])
 		 * 10.2-alpha					// Ok (Major, Minor and Build type are detected)
 		 * 10.2.8 456					// FAIL: Build number is not detected; Ok on experimental fix.
 		 * 10 487						// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
-		 * 17.5 782						// FAIL: Build type number is confused with patch; Ok on experimental fix.
+		 * 17.5 782						// FAIL: Build revision is confused with patch; Ok on experimental fix.
 		 * 17.9.5 125					// FAIL: Build number is not detected; Ok on experimental fix.
 		 * 14 build 77					// FAIL: Only build number is detected; Ok on experimental fix.
 		 * 14.3 build 78				// Ok

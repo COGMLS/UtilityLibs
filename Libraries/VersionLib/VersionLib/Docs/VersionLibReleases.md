@@ -26,6 +26,10 @@ This document contain the complete change history to Version Library
     }
 </style>
 <dl>
+    <!-- 0.8.7-beta (2025/03/05) -->
+    <dt><version-data>0.8.7-beta</version-data></dt>
+    <dd><strong>Changed variable <code>build_type_number</code> to <code>build_revision</code> in <code>VersionStruct</code> and <code>VersionData</code></strong></dd>
+    <dd>Changed the <code>build_type_number</code> references to <code>build_revision</code></dd>
     <!-- 0.8.6-beta (2025/02/26) -->
     <dt><version-data>0.8.6-beta</version-data></dt>
     <dd>Added new experimental algorithm to fix <code>toVersionStruct2</code> function string version detection</dd>

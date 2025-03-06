@@ -8,6 +8,7 @@ This document contains the information about the future plans, known bugs, depre
 - New experimental version string detection in ``toVersionStrut2` method.
 - New experimental memory layout of `VersionStruct` to reduce the memory size allocation. (See the details in [here](#versionstruct-and-versiondata-memory-layout))
 - Support to create objects versions without warning messages with wrapper constructors.
+- **CHANGED `build_type_number` VARIABLE TO `build_revision` TO A BETTER COMPREHENSION.**
 
 ## Implementations under development:
 
@@ -81,13 +82,13 @@ Before version **0.8.6**, the original construction of the `VersionStruct` was:
 ```C
 struct VersionStruct
 {
-    unsigned int major;					// Major version number
-    unsigned int minor;					// Minor version number
-    unsigned int patch;					// Patch version number
-    unsigned long long build;			// Build number
+    unsigned int major;					      // Major version number
+    unsigned int minor;					      // Minor version number
+    unsigned int patch;					      // Patch version number
+    unsigned long long build;			    // Build number
     VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-    unsigned int build_type_number;		// Build type number (alpha1, rc3)
-    bool compare_build;					// Build comparison control
+    unsigned int build_revision;		  // Build revision (alpha.1, rc.3)
+    bool compare_build;					      // Build comparison control
 };
 ```
 
@@ -99,7 +100,7 @@ The original declarations make the struct use 40 bytes in memory allocation, fol
  0 | ############## Major ################ | ################ Minor ############## |
  8 | ############## Patch ################ |                                       |
 24 | ################################## Build #################################### |
-16 | ## Build Type ##  |                   | ######### build_type_number ######### |
+16 | ## Build Type ##  |                   | ########### build_revision ########## |
 32 | Compare |                             |                                       |
 ------------------------------------------------------------------------------------
 ```
@@ -109,13 +110,13 @@ On version **0.8.6** the `VersionStruct` will be declared differently when `VERS
 ```C
 struct VersionStruct
 {
-    unsigned int major;					// Major version number
-    unsigned int minor;					// Minor version number
-    unsigned int patch;					// Patch version number
-    unsigned int build_type_number;		// Build type number (alpha1, rc3)
-    unsigned long long build;			// Build number
+    unsigned int major;					      // Major version number
+    unsigned int minor;					      // Minor version number
+    unsigned int patch;					      // Patch version number
+    unsigned int build_revision;		  // Build revision (alpha.1, rc.3)
+    unsigned long long build;			    // Build number
     VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-    bool compare_build;					// Build comparison control
+    bool compare_build;					      // Build comparison control
 };
 ```
 
@@ -125,7 +126,7 @@ The memory layout will be different, using the 4 bytes that was being wasted, to
 ------------------------------------------------------------------------------------
    | 0 bytes |         |         |         | 4 bytes |         |         |         |
  0 | ############## Major ################ | ################ Minor ############## |
- 8 | ############## Patch ################ | ######### build_type_number ######### |
+ 8 | ############## Patch ################ | ########### build_revision ########## |
 24 | ################################## Build #################################### |
 16 | ## Build Type ##  | Compare |         |                                       |
 ------------------------------------------------------------------------------------

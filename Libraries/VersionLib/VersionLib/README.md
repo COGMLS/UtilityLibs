@@ -67,11 +67,11 @@ To use a string as the source of the versioning information, the string must fol
 | M.m.p-t.r build b | ✅️ | ✅️ | 10.3.1-alpha.3 build 569 | |
 | M.m.p.r build b | ⚠️ ❕ | ✅️ ❕ | 1.6.1.3 build 6100 | Revision is not recognized. |
 | M.m.p.r | ⚠️ ❕ | ✅️ ❕ | 2.5.8.15 | Revision is not recognized. |
-| M.m.p-t b | ⚠️ ❕ | ✅️ ❕ | 8.1.93-beta 856 | Build number is confused with Build type number. |
+| M.m.p-t b | ⚠️ ❕ | ✅️ ❕ | 8.1.93-beta 856 | Build number is confused with Build revision. |
 | M-t | ✅️⚠️ ❕ | ❌️ ❕ | 10-b | Ok (Major and Build type are detected) **NOTE:** This format will not be recognized any more by the algorithm. |
 | M.m-t | ✅️⚠️ | ✅️ | 10.2-alpha | Ok (Major, Minor and Build type are detected) |
 | M.m.p b | ❌️ | ✅️ | 10.2.8 456 | Build number is not detected. |
-| M.m b | ❌️ | ✅️ | 17.5 782 | Build type number is confused with patch |
+| M.m b | ❌️ | ✅️ | 17.5 782 | Build revision is confused with patch |
 | M.m.p b | ❌️ | ✅️ | 17.9.5 125 | Build number is not detected |
 
 ## Project components implementations:
