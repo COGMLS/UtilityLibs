@@ -748,17 +748,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch, build_type and revision are higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch and build_type are higher. But revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major, minor, patch and build_type are higher. Revision is disabled for both.
 					}
 				}
 
@@ -768,17 +768,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch are higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch are higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major, minor, patch are higher. Build_type is equal. Revision is disabled for both.
 					}
 				}
 			}
@@ -791,17 +791,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are higher. Patch is equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are higher. Patch is equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major and minor are higher. Patch is equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -811,17 +811,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are higher. Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are higher. Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major and minor are higher. Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
@@ -837,17 +837,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor is equal. Patch and build_type are higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor is equal. Patch and build_type are higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is higher. Minor is equal. Patch and build_type are higher. Revision is disabled.
 					}
 				}
 
@@ -857,17 +857,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is disabled.
 					}
 				}
 			}
@@ -880,17 +880,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -900,21 +900,23 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor, Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor, Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is higher. Minor, Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
 		}
+
+		return true;	// Major is already a higher version
 	}
 
 	if (this->major == other.major)
@@ -929,17 +931,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor, patch, build_type and revision are higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor, patch and build_type are higher. But revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is equal. Minor, patch and build_type are higher. Revision is disabled for both.
 					}
 				}
 
@@ -949,17 +951,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor, patch are higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor, patch are higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is equal. Minor, patch are higher. Build_type is equal. Revision is disabled for both.
 					}
 				}
 			}
@@ -972,17 +974,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -992,17 +994,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor are higher. Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor are higher. Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is equal. Minor are higher. Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
@@ -1018,17 +1020,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are equal. Patch and build_type are higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are equal. Patch and build_type are higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major and minor are equal. Patch and build_type are higher. Revision is disabled.
 					}
 				}
 
@@ -1038,17 +1040,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are equal. Patch is higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are equal. Patch is higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major and minor are equal. Patch is higher. Build_type is equal. Revision is disabled.
 					}
 				}
 			}
@@ -1061,17 +1063,17 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor and patch are equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor and patch are equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major, minor and patch are equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -1081,24 +1083,24 @@ bool VersionLib::VersionData::operator>(const VersionData &other)
 					{
 						if (this->build_revision > other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision < other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major, minor, patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
 		}
 	}
 
-	return false;
+	return false;	// Failed to test all possible true conditions
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
@@ -1151,17 +1153,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch, build_type and revision are higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch and build_type are higher. But revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major, minor, patch and build_type are higher. Revision is disabled for both.
 					}
 				}
 
@@ -1171,17 +1173,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch are higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch are higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major, minor, patch are higher. Build_type is equal. Revision is disabled for both.
 					}
 				}
 			}
@@ -1194,17 +1196,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are higher. Patch is equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are higher. Patch is equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major and minor are higher. Patch is equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -1214,17 +1216,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are higher. Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are higher. Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major and minor are higher. Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
@@ -1240,17 +1242,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor is equal. Patch and build_type are higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor is equal. Patch and build_type are higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is higher. Minor is equal. Patch and build_type are higher. Revision is disabled.
 					}
 				}
 
@@ -1260,17 +1262,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is higher. Minor is equal. Patch is higher. Build_type is equal. Revision is disabled.
 					}
 				}
 			}
@@ -1283,17 +1285,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is higher. Minor and Patch are equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -1303,21 +1305,23 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is higher. Minor, Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is higher. Minor, Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is higher. Minor, Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
 		}
+
+		return true;	// Major is already a higher version
 	}
 
 	if (this->major == other.major)
@@ -1332,17 +1336,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor, patch, build_type and revision are higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor, patch and build_type are higher. But revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is equal. Minor, patch and build_type are higher. Revision is disabled for both.
 					}
 				}
 
@@ -1352,17 +1356,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor, patch are higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor, patch are higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is equal. Minor, patch are higher. Build_type is equal. Revision is disabled for both.
 					}
 				}
 			}
@@ -1375,17 +1379,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major is equal. Minor are higher. Patch is equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -1395,17 +1399,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major is equal. Minor are higher. Patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major is equal. Minor are higher. Patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major is equal. Minor are higher. Patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
@@ -1421,17 +1425,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are equal. Patch and build_type are higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are equal. Patch and build_type are higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major and minor are equal. Patch and build_type are higher. Revision is disabled.
 					}
 				}
 
@@ -1441,17 +1445,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major and minor are equal. Patch is higher. Build_type is equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major and minor are equal. Patch is higher. Build_type is equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major and minor are equal. Patch is higher. Build_type is equal. Revision is disabled.
 					}
 				}
 			}
@@ -1464,17 +1468,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor and patch are equal. Build_type is higher. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor and patch are equal. Build_type is higher. Revision is equal or less
 						}
 					}
 					else
 					{
-						return true;
+						return true;		// Major, minor and patch are equal. Build_type is higher. Revision is disabled.
 					}
 				}
 
@@ -1484,17 +1488,17 @@ bool VersionLib::VersionData::operator<(const VersionData &other)
 					{
 						if (this->build_revision < other.build_revision)
 						{
-							return true;
+							return true;	// Major, minor, patch and build_type are equal. Revision is higher.
 						}
 
-						if (this->build_revision == other.build_revision)
+						if (this->build_revision == other.build_revision || this->build_revision > other.build_revision)
 						{
-							return false;
+							return false;	// Major, minor, patch and build_type are equal. Revision is equal or less
 						}
 					}
 					else
 					{
-						return false;
+						return false;		// Major, minor, patch and build_type are equal. Revision is disabled.
 					}
 				}
 			}
