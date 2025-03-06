@@ -69,18 +69,18 @@ int main(int argc, const char* argv[])
 		VersionLib::VersionData appVersion (1, 0, 0, VersionLib::BuildType::BETA, 0, 1);
 		VersionLib::VersionData test0 (1, 0, 0, VersionLib::BuildType::ALPHA, 0, 1);
 		VersionLib::VersionData test1 (1, 1, 0, VersionLib::BuildType::RELEASE, 0, 12);
-		VersionLib::VersionData test2 (1, 2, 0, VersionLib::BuildType::RELEASE, 0, 20);
+		VersionLib::VersionData test2 (2, 2, 0, VersionLib::BuildType::RELEASE, 0, 20);
 		#else
 		VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
 		VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
 		VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
-		VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+		VersionLib::VersionData test2 (2, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 	#else
 	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
 	VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
 	VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
-	VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+	VersionLib::VersionData test2 (2, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
 	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 	// Add the libVersion appVersion and first test version:
