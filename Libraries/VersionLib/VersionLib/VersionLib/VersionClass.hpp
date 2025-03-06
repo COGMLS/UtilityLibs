@@ -99,6 +99,7 @@ namespace VersionLib
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (std::string versionStr);
 
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
@@ -351,6 +352,7 @@ namespace VersionLib
 			 * @param patch Patch version
 			 * @param build Build of the version
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build);
 			
 			/**
@@ -361,6 +363,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type);
 			
 			/**
@@ -371,6 +374,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type);
 			
 			/**
@@ -381,6 +385,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type enumerator
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type);
 			
 			/**
@@ -392,6 +397,7 @@ namespace VersionLib
 			 * @param build_type Build type (alpha, beta, rc).
 			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type, unsigned int build_revision);
 			
 			/**
@@ -403,6 +409,7 @@ namespace VersionLib
 			 * @param build_type Build type (alpha, beta, rc).
 			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_revision);
 			
 			/**
@@ -414,6 +421,7 @@ namespace VersionLib
 			 * @param build_type Build type enumerator
 			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_revision);
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 			
