@@ -40,6 +40,7 @@ This document contains the information about the future plans, known bugs, depre
 | 8 | `VersionException` fails when throw the object | Using *`catch (VersionLib::VersionException& e)`* does not fail. The workaround is not definitive. New tests and modification may happen to make sure it's working properly | **Fix in development** |
 | 9 | Enabling experimental optimized memory layout result in missing correct data to `build_type_number`. **NOTE: The experimental feature was only tested on Windows platforms with MSVC** | To avoid missing any data, keep `VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT` disabled | Not fixed |
 | 10 | ~~Comparing with a version that has `major` as zero and another version with `major` greater than zero will always fail in comparison with the other version, when using the operators: `> >= < <=`~~ |  | Fixed |
+| 11 | On **ALPHA** version, the `initVersionBuildTypeC` method make the **MSVC** show *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* and *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* **NOTE: No tests was made with GCC and Linux systems** | After the modifications of `VersionBuildTypeC` and auxiliary functions the error messages started to show. No further investigation was made yet. | Use the **beta** version | **NOT FIXED** |
 
 ## Deprecated Features:
 
