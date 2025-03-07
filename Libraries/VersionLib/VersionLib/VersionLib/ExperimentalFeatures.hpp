@@ -119,7 +119,7 @@
 // Experimental Features for Release version:
 //
 
-#ifdef VERSION_LIB_BUILD_TYPE == 4
+#if VERSION_LIB_BUILD_TYPE == 4
 
 #endif // !VERSION_LIB_BUILD_TYPE is Release
 
