@@ -34,7 +34,7 @@
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
 	// Enable experimental build type class instead of enumerator values
-	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 	// Enable experimental combined build type information
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
