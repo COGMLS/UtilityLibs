@@ -116,7 +116,7 @@ VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(VersionLib
     return *this;
 }
 
-VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const VersionLib::BuildType type)
+VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const VersionLib::BuildType& type)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     this->types.clear();
@@ -124,6 +124,7 @@ VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const Vers
     #else
     this->type = type;
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    return *this;
 }
 
 VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const VersionLib::VersionBuildTypeC &type)
@@ -131,6 +132,7 @@ VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const Vers
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     #else
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    return *this;
 }
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
@@ -140,10 +142,11 @@ VersionLib::VersionBuildType &VersionLib::VersionBuildType::operator=(const std:
     {
         this->types = types;
     }
+    return *this;
 }
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
-bool VersionLib::VersionBuildType::operator==(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator==(const VersionLib::VersionBuildType &other)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     if ((this->types.size() == 0 || other.types.size() == 0) || (this->types.size() != other.types.size()))
@@ -165,12 +168,12 @@ bool VersionLib::VersionBuildType::operator==(VersionLib::VersionBuildType &othe
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
-bool VersionLib::VersionBuildType::operator!=(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator!=(const VersionLib::VersionBuildType &other)
 {
     return !(*this == other);
 }
 
-bool VersionLib::VersionBuildType::operator<(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator<(const VersionLib::VersionBuildType &other)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     if ((this->types.size() == 0 || other.types.size() == 0) || (this->types.size() != other.types.size()))
@@ -192,7 +195,7 @@ bool VersionLib::VersionBuildType::operator<(VersionLib::VersionBuildType &other
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
-bool VersionLib::VersionBuildType::operator>(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator>(const VersionLib::VersionBuildType &other)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     if ((this->types.size() == 0 || other.types.size() == 0) || (this->types.size() != other.types.size()))
@@ -214,7 +217,7 @@ bool VersionLib::VersionBuildType::operator>(VersionLib::VersionBuildType &other
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
-bool VersionLib::VersionBuildType::operator<=(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator<=(const VersionLib::VersionBuildType &other)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     if ((this->types.size() == 0 || other.types.size() == 0) || (this->types.size() != other.types.size()))
@@ -236,7 +239,7 @@ bool VersionLib::VersionBuildType::operator<=(VersionLib::VersionBuildType &othe
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
-bool VersionLib::VersionBuildType::operator>=(VersionLib::VersionBuildType &other)
+bool VersionLib::VersionBuildType::operator>=(const VersionLib::VersionBuildType &other)
 {
     #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
     if ((this->types.size() == 0 || other.types.size() == 0) || (this->types.size() != other.types.size()))
@@ -255,6 +258,76 @@ bool VersionLib::VersionBuildType::operator>=(VersionLib::VersionBuildType &othe
     return true;
     #else
     return this->type >= other.type;
+    #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+}
+
+bool VersionLib::VersionBuildType::operator==(const VersionLib::BuildType &other)
+{
+    #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    if (this->types.size() > 1 || this->types.empty())
+    {
+        return false;
+    }
+    return this->types[0] == other;
+    #else
+    return this->type == other;
+    #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+}
+
+bool VersionLib::VersionBuildType::operator!=(const VersionLib::BuildType &other)
+{
+    return !(*this == other);
+}
+
+bool VersionLib::VersionBuildType::operator<(const VersionLib::BuildType &other)
+{
+    #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    if (this->types.size() > 1 || this->types.empty())
+    {
+        return false;
+    }
+    return this->types[0] < other;
+    #else
+    return this->type < other;
+    #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+}
+
+bool VersionLib::VersionBuildType::operator>(const VersionLib::BuildType &other)
+{
+    #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    if (this->types.size() > 1 || this->types.empty())
+    {
+        return false;
+    }
+    return this->types[0] > other;
+    #else
+    return this->type > other;
+    #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+}
+
+bool VersionLib::VersionBuildType::operator<=(const VersionLib::BuildType &other)
+{
+    #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    if (this->types.size() > 1 || this->types.empty())
+    {
+        return false;
+    }
+    return this->types[0] <= other;
+    #else
+    return this->type <= other;
+    #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+}
+
+bool VersionLib::VersionBuildType::operator>=(const VersionLib::BuildType &other)
+{
+    #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+    if (this->types.size() > 1 || this->types.empty())
+    {
+        return false;
+    }
+    return this->types[0] >= other;
+    #else
+    return this->type >= other;
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 

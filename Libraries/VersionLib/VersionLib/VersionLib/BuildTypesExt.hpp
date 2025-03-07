@@ -58,7 +58,7 @@ namespace VersionLib
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 			std::vector<VersionLib::BuildType> types;
 			#else
-			BuildType type;
+			VersionLib::BuildType type;
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
 		public:
@@ -71,7 +71,7 @@ namespace VersionLib
 			 * @brief Create a empty VersionBuildType object with standard value.
 			 */
 			VersionBuildType();
-			
+
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 			/**
 			 * @brief Create a version build type object that contains a sequence of multiple build type information.
@@ -138,7 +138,7 @@ namespace VersionLib
 			VersionLib::VersionBuildType& operator= (const VersionLib::VersionBuildType& other);
 			VersionLib::VersionBuildType& operator= (VersionLib::VersionBuildType&& other) noexcept;
 
-			VersionLib::VersionBuildType& operator= (const VersionLib::BuildType type);
+			VersionLib::VersionBuildType& operator= (const VersionLib::BuildType& type);
 
 			VersionLib::VersionBuildType& operator= (const VersionLib::VersionBuildTypeC& type);
 
@@ -146,15 +146,29 @@ namespace VersionLib
 			VersionLib::VersionBuildType& operator= (const std::vector<VersionLib::BuildType> types);
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
+			//
 			// Comparison operators:
+			//
 
-			bool operator== (VersionLib::VersionBuildType& other);
-			bool operator!= (VersionLib::VersionBuildType& other);
+			// VersionBuildType:
 
-			bool operator< (VersionLib::VersionBuildType& other);
-			bool operator> (VersionLib::VersionBuildType& other);
-			bool operator<= (VersionLib::VersionBuildType& other);
-			bool operator>= (VersionLib::VersionBuildType& other);
+			bool operator== (const VersionLib::VersionBuildType& other);
+			bool operator!= (const VersionLib::VersionBuildType& other);
+
+			bool operator< (const VersionLib::VersionBuildType& other);
+			bool operator> (const VersionLib::VersionBuildType& other);
+			bool operator<= (const VersionLib::VersionBuildType& other);
+			bool operator>= (const VersionLib::VersionBuildType& other);
+
+			// BuildType:
+
+			bool operator== (const VersionLib::BuildType& other);
+			bool operator!= (const VersionLib::BuildType& other);
+
+			bool operator< (const VersionLib::BuildType& other);
+			bool operator> (const VersionLib::BuildType& other);
+			bool operator<= (const VersionLib::BuildType& other);
+			bool operator>= (const VersionLib::BuildType& other);
 	};
 }
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
