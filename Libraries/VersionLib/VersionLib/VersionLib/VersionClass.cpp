@@ -561,12 +561,28 @@ const char *VersionLib::VersionData::getBuildTypeCstr(bool useShortStr)
 
 std::string VersionLib::VersionData::getBuildTypeStr(bool useShortStr)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+		#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+		return VersionLib::buildType2Str(this->build_type.getBuildType(), useShortStr);
+		#else
+		#error "No support to VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE"
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+	#else
     return VersionLib::buildType2Str(this->build_type, useShortStr);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 }
 
 VersionLib::BuildType VersionLib::VersionData::getBuildType()
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+		#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+		return this->build_type.getBuildType();
+		#else
+		#error "No support to VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE"
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+	#else
 	return this->build_type;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 }
 
 unsigned int VersionLib::VersionData::getBuildRevision()
@@ -587,7 +603,7 @@ std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr, bool
 {
     std::string tmp;
 
-	if (this->build_type == BuildType::RELEASE && !showReleaseType)
+	if (this->build_type == VersionLib::BuildType::RELEASE && !showReleaseType)
 	{
 		return tmp;
 	}
@@ -610,7 +626,7 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 	tmp += std::to_string(this->minor) + ".";
 	tmp += std::to_string(this->patch);
 	
-	if (this->build_type != BuildType::RELEASE || this->build_type == BuildType::RELEASE && showReleaseType)
+	if (this->build_type != VersionLib::BuildType::RELEASE || this->build_type == VersionLib::BuildType::RELEASE && showReleaseType)
 	{
 		tmp += "-";
 	}
@@ -636,7 +652,11 @@ VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 	verData.minor = this->minor;
 	verData.patch = this->patch;
 	verData.build = this->build;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+	verData.build_type = this->build_type.toStruct();
+	#else
 	verData.build_type = this->build_type;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	verData.build_revision = this->build_revision;
 	verData.compare_build = this->compare_build;
 
