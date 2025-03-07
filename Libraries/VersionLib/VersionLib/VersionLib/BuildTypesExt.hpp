@@ -71,7 +71,20 @@ namespace VersionLib
 			 * @brief Create a empty VersionBuildType object with standard value.
 			 */
 			VersionBuildType();
-
+			
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			/**
+			 * @brief Create a version build type object that contains a sequence of multiple build type information.
+			 * @param combined_build_type 
+			 */
+			VersionBuildType (std::vector<VersionLib::BuildType> combined_build_type);
+			
+			/**
+			 * @brief Create a version build type object that contains a sequence of multiple build type information.
+			 * @param combined_build_type 
+			 */
+			VersionBuildType (VersionLib::VersionBuildTypeC& combined_build_type);
+			#else
 			/**
 			 * @brief Create a build type from a string information.
 			 * @param build_type_str Build type string. The accepted values are: alpha, beta, release candidate, release, canary, development and pre release.
@@ -85,19 +98,6 @@ namespace VersionLib
 			 * @param build_type 
 			 */
 			VersionBuildType (VersionLib::BuildType build_type);
-
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-			/**
-			 * @brief Create a version build type object that contains a sequence of multiple build type information.
-			 * @param combined_build_type 
-			 */
-			VersionBuildType (std::vector<VersionLib::BuildType> combined_build_type);
-
-			/**
-			 * @brief Create a version build type object that contains a sequence of multiple build type information.
-			 * @param combined_build_type 
-			 */
-			VersionBuildType (VersionLib::VersionBuildTypeC combined_build_type);
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
 			VersionBuildType (const VersionLib::VersionBuildType& other);
