@@ -33,6 +33,8 @@ bool VersionLib::destroyVersionBuildTypeC(VersionLib::VersionBuildTypeC &build_t
 	{
 		return false;
 	}
+	#else
+	return true;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
