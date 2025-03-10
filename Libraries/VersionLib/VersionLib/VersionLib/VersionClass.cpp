@@ -66,7 +66,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_revision = 0;
 	this->compare_build = false;
@@ -77,7 +77,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_revision = 0;
 	this->compare_build = false;
@@ -88,7 +88,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = build_type;
 	this->build_revision = 0;
 	this->compare_build = false;
@@ -109,7 +109,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_revision = build_revision;
 	this->compare_build = false;
@@ -120,7 +120,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	this->build_revision = build_revision;
 	this->compare_build = false;
@@ -131,7 +131,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
-	this->build = build;
+	this->build = 0;
 	this->build_type = build_type;
 	this->build_revision = build_revision;
 	this->compare_build = false;
