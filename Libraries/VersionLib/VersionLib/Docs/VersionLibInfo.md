@@ -16,6 +16,8 @@ This document contains the information about the future plans, known bugs, depre
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
 - Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
+    - *Only Alpha:* Experimental support to `VersionBuildType`
+- *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
 
 ## Future Implementations:
 
