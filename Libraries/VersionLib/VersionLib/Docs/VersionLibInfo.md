@@ -30,17 +30,18 @@ This document contains the information about the future plans, known bugs, depre
 
 | Bug ID | Details | Notes/Workaround | Status |
 | :----- | :-----: | :--------------: | -----: |
-| 1 | ~~`tolower_str` contains a bug that make miss the characters that already in lowercase.~~ |  | Fixed |
-| 2 | ~~`tolower_Cstr` contains a bug that make miss the characters that already in lowercase.~~ |  | Fixed |
+| 1 | ~~`tolower_str` contains a bug that make miss the characters that already in lowercase.~~ |  | FIXED |
+| 2 | ~~`tolower_Cstr` contains a bug that make miss the characters that already in lowercase.~~ |  | FIXED |
 | 3 | ~~When sending a version string on format *MAJOR.MINOR.PATCH.REVISION* to `VersionData`, the `build_type_number` or *revision* **can not be detected**~~ | The algorithm received a new version on **version 0.8.6** to eliminate the defections in detect string versions and add more permissive formats. To enable the experimental algorithm it's necessary enable `VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT`. **NOTE: Originally the fix was coming to version 0.8.7. In 0.8.7 the experimental algorithm will be enable by default** | **Fix in tests** |
-| 4 | ~~Using `VersionData` operators *less*, *less than*, *greater* and *greater than* does not work as expected~~ |  | Fixed |
-| 5 | ~~VersionData method,`getBuildTypeCstr`, does not convert the C++ string data into C-style string~~ |  | Fixed |
-| 6 | ~~VersionData method, `getBuildTypeCompleteCstr`, does not convert C++ string data into C-style string~~ |  | Fixed |
-| 7 | ~~`VersionData` constructors not working after implementation of `cmpBuild` parameter, resulting in ambiguous reference~~ | If `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS` is not defined, the modified constructors are disabled to avoid the ambiguous reference. **NOTE:** Using `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS`, will **break** any code that uses original constructor parameter list. **NOTE: On version 0.9.0-alpha, the experimental constructors will be the focus during the development** | Fixed |
+| 4 | ~~Using `VersionData` operators *less*, *less than*, *greater* and *greater than* does not work as expected~~ |  | FIXED |
+| 5 | ~~VersionData method,`getBuildTypeCstr`, does not convert the C++ string data into C-style string~~ |  | FIXED |
+| 6 | ~~VersionData method, `getBuildTypeCompleteCstr`, does not convert C++ string data into C-style string~~ |  | FIXED |
+| 7 | ~~`VersionData` constructors not working after implementation of `cmpBuild` parameter, resulting in ambiguous reference~~ | If `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS` is not defined, the modified constructors are disabled to avoid the ambiguous reference. **NOTE:** Using `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS`, will **break** any code that uses original constructor parameter list. **NOTE: On version 0.9.0-alpha, the experimental constructors will be the focus during the development** | FIXED |
 | 8 | `VersionException` fails when throw the object | Using *`catch (VersionLib::VersionException& e)`* does not fail. The workaround is not definitive. New tests and modification may happen to make sure it's working properly | **Fix in development** |
 | 9 | Enabling experimental optimized memory layout result in missing correct data to `build_type_number`. **NOTE: The experimental feature was only tested on Windows platforms with MSVC** | To avoid missing any data, keep `VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT` disabled | Not fixed |
-| 10 | ~~Comparing with a version that has `major` as zero and another version with `major` greater than zero will always fail in comparison with the other version, when using the operators: `> >= < <=`~~ |  | Fixed |
-| 11 | On **ALPHA** version, the `initVersionBuildTypeC` method make the **MSVC** show *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* and *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* **NOTE: No tests was made with GCC and Linux systems** | After the modifications of `VersionBuildTypeC` and auxiliary functions the error messages started to show. No further investigation was made yet. | Use the **beta** version | **NOT FIXED** |
+| 10 | ~~Comparing with a version that has `major` as zero and another version with `major` greater than zero will always fail in comparison with the other version, when using the operators: `> >= < <=`~~ |  | FIXED |
+| 11 | ~~On **ALPHA** version, the `initVersionBuildTypeC` method make the **MSVC** show *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* and *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* **NOTE: No tests was made with GCC and Linux systems**~~ | After an investigation of the last modifications, was detected the `initVersionBuildTypeC` was defined two times in `BuildTypes.cpp` and `BuildTypesExt.cpp`. The definition on last file, was removed to solve the multiple definition. | FIXED |
+| 12 | ~~`build` was not set properly in `VersionData` with ***Experimental Constructors*** when build number does not appear on constructor parameters.~~ |  | FIXED |
 
 ## Deprecated Features:
 
