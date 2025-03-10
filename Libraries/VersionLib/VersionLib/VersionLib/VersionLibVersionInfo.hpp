@@ -19,13 +19,13 @@
 	#define VERSION_LIB_BUILD_TYPE 2
 
 	#if VERSION_LIB_BUILD_TYPE == 1
-		#define VERSION_LIB_BUILD_TYPE_ALPHA				// Version Library compile alpha features
+		#define VERSION_LIB_BUILD_TYPE_ALPHA				// Version Library to compile with alpha features
 	#elif VERSION_LIB_BUILD_TYPE == 2
-		#define VERSION_LIB_BUILD_TYPE_BETA					// Version Library compile beta features
+		#define VERSION_LIB_BUILD_TYPE_BETA					// Version Library to compile with beta features
 	#elif VERSION_LIB_BUILD_TYPE == 3
-		#define VERSION_LIB_BUILD_TYPE_RELEASE_CANDIDATE	// Version Library compile release candidate features
+		#define VERSION_LIB_BUILD_TYPE_RELEASE_CANDIDATE	// Version Library to compile with release candidate features
 	#elif VERSION_LIB_BUILD_TYPE == 4
-		#define VERSION_LIB_BUILD_TYPE_RELEASE				// Version Library compile release features
+		#define VERSION_LIB_BUILD_TYPE_RELEASE				// Version Library to compile with release features
 	#else
 		#error "No VersionLib build type is defined!"
 	#endif // !VERSION_LIB_BUILD_TYPE
@@ -38,7 +38,7 @@
 		#define VERSION_LIB_VERSION_INFO_MAJOR_VERSION 0
 		#define VERSION_LIB_VERSION_INFO_MINOR_VERSION 8
 		#define VERSION_LIB_VERSION_INFO_PATCH_VERSION 8
-		#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 59
+		#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 71
 		#define VERSION_LIB_VERSION_INFO_BUILD_TYPE "alpha"
 		#define VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER 0
 	#endif // !VERSION_LIB_BUILD_TYPE_ALPHA
@@ -47,7 +47,7 @@
 		#define VERSION_LIB_VERSION_INFO_MAJOR_VERSION 0
 		#define VERSION_LIB_VERSION_INFO_MINOR_VERSION 8
 		#define VERSION_LIB_VERSION_INFO_PATCH_VERSION 7
-		#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 59
+		#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 68
 		#define VERSION_LIB_VERSION_INFO_BUILD_TYPE "beta"
 		#define VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER 0
 	#endif // !VERSION_LIB_BUILD_TYPE_BETA
@@ -73,7 +73,7 @@
 	#define VERSION_LIB_VERSION_INFO_MAJOR_VERSION 0
 	#define VERSION_LIB_VERSION_INFO_MINOR_VERSION 8
 	#define VERSION_LIB_VERSION_INFO_PATCH_VERSION 7
-	#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 59
+	#define VERSION_LIB_VERSION_INFO_BUILD_NUMBER 71
 	#define VERSION_LIB_VERSION_INFO_BUILD_TYPE "beta"
 	#define VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER 0
 #endif // !VERSION_LIB_USE_VERSION_TYPE_CONTROL
