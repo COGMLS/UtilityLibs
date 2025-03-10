@@ -331,19 +331,4 @@ bool VersionLib::VersionBuildType::operator>=(const VersionLib::BuildType &other
     #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 }
 
-VersionLib::VersionBuildTypeC VERSION_LIB_API VersionLib::initVersionBuildTypeC()
-{
-    VersionLib::VersionBuildTypeC buildType;
-
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-	buildType.size = 1;
-	buildType.types = new VersionLib::BuildType[buildType.size];
-	buildType.types[0] = VersionLib::BuildType::ALPHA;
-	#else
-	buildType.type = VersionLib::BuildType::ALPHA;
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-
-	return buildType;
-}
-
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT

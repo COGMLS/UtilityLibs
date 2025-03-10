@@ -1,7 +1,7 @@
 #include "BuildTypes.hpp"
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-VersionLib::VersionBuildTypeC VERSION_LIB_API VersionLib::initVersionBuildTypeC()
+VersionLib::VersionBuildTypeC VersionLib::initVersionBuildTypeC()
 {
     VersionLib::VersionBuildTypeC buildType;
 
