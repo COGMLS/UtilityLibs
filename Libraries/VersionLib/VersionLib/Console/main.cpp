@@ -13,6 +13,8 @@ int main(int argc, const char* argv[])
 	bool testVersionStrFormats = false;
 	bool testVersionOperators = false;
 	bool testVersionExceptions = false;
+	bool testVersionStrComp = false;
+	bool testVersionStructComp = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -38,13 +40,25 @@ int main(int argc, const char* argv[])
 		{
 			testVersionExceptions = true;
 		}
+
+		if (cli[i] == "-test-string-comparison")
+		{
+			testVersionStrComp = true;
+		}
+
+		if (cli[i] == "-test-struct-comparison")
+		{
+			testVersionStructComp = true;
+		}
 	}
 
 	std::vector<VersionLib::VersionData> versions;
+	std::unique_ptr<std::vector<std::string>> versionString;
 	std::unique_ptr<std::vector<VersionFormatTest>> versionTest;
-
+	
 	if (testVersionStrFormats)
 	{
+		versionString.reset(new std::vector<std::string>);
 		versionTest.reset(new std::vector<VersionFormatTest>);
 	}
 	
@@ -52,21 +66,21 @@ int main(int argc, const char* argv[])
 
 	#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
-		VersionLib::VersionData appVersion (1, 0, 0, VersionLib::BuildType::BETA, 0, 1);
-		VersionLib::VersionData test0 (1, 0, 0, VersionLib::BuildType::ALPHA, 0, 1);
+		VersionLib::VersionData appVersion (1, 0, 0, VersionLib::BuildType::BETA, 0, 153);
+		VersionLib::VersionData test0 (1, 0, 0, VersionLib::BuildType::ALPHA, 0, 120);
 		VersionLib::VersionData test1 (1, 1, 0, VersionLib::BuildType::RELEASE, 0, 12);
-		VersionLib::VersionData test2 (1, 2, 0, VersionLib::BuildType::RELEASE, 0, 20);
+		VersionLib::VersionData test2 (2, 2, 0, VersionLib::BuildType::RELEASE, 0, 20);
 		#else
-		VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
-		VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
+		VersionLib::VersionData appVersion (1, 0, 0, 153, VersionLib::BuildType::BETA, 0);
+		VersionLib::VersionData test0 (1, 0, 0, 120, VersionLib::BuildType::ALPHA, 0);
 		VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
-		VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+		VersionLib::VersionData test2 (2, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 	#else
-	VersionLib::VersionData appVersion (1, 0, 0, 1, VersionLib::BuildType::BETA, 0);
-	VersionLib::VersionData test0 (1, 0, 0, 1, VersionLib::BuildType::ALPHA, 0);
+	VersionLib::VersionData appVersion (1, 0, 0, 153, VersionLib::BuildType::BETA, 0);
+	VersionLib::VersionData test0 (1, 0, 0, 120, VersionLib::BuildType::ALPHA, 0);
 	VersionLib::VersionData test1 (1, 1, 0, 12, VersionLib::BuildType::RELEASE, 0);
-	VersionLib::VersionData test2 (1, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
+	VersionLib::VersionData test2 (2, 2, 0, 20, VersionLib::BuildType::RELEASE, 0);
 	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 	// Add the libVersion appVersion and first test version:
@@ -76,30 +90,65 @@ int main(int argc, const char* argv[])
 	versions.push_back(test1);
 	versions.push_back(test2);
 
-	// Add other versions formats for tests:
-	if (versionTest)
+	// Add the strings into version strings:
+	if (versionString)
 	{
-		versionTest->push_back(VersionFormatTest ("1.2.1 build 700"));				// OK
-		versionTest->push_back(VersionFormatTest ("1.6.1.3 build 6100"));			// FAIL: Revision is not recognized; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("2.5.8.15"));						// FAIL: Revision is not recognized; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("17.5.12-a"));					// Ok
-		versionTest->push_back(VersionFormatTest ("3.1.7-beta.6"));					// Ok
-		versionTest->push_back(VersionFormatTest ("7.1.3-rc.1 752"));				// Ok
-		versionTest->push_back(VersionFormatTest ("10.3.1-alpha.3 build 569"));		// Ok
-		versionTest->push_back(VersionFormatTest ("8.1.93-beta 856"));				// FAIL: Build number is confused with Build type number; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("10"));							// Ok (Major is detected)
-		versionTest->push_back(VersionFormatTest ("10.2"));							// Ok (Major, Minor are detected)
-		versionTest->push_back(VersionFormatTest ("10.2.45"));						// Ok (Major, Minor, Patch are detected)
-		versionTest->push_back(VersionFormatTest ("10-b"));							// Ok (Major and Build type are detected); FAIL ON EXPERIMENTAL FIX: Build type is not detected. THIS BEHAVIOUR WON'T BE FIXED!
-		versionTest->push_back(VersionFormatTest ("10.2-alpha"));					// Ok (Major, Minor and Build type are detected)
-		versionTest->push_back(VersionFormatTest ("10.2.8 456"));					// FAIL: Build number is not detected; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("10 487"));						// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
-		versionTest->push_back(VersionFormatTest ("17.5 782"));						// FAIL: Build type number is confused with patch; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("17.9.5 125"));					// FAIL: Build number is not detected; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("14 build 77"));					// FAIL: Only build number is detected; Ok on experimental fix.
-		versionTest->push_back(VersionFormatTest ("14.3 build 78"));				// Ok
-		versionTest->push_back(VersionFormatTest ("14.5.6 build 79"));				// Ok
-		versionTest->push_back(VersionFormatTest ("3.1.9-rc build 54"));			// Ok
+		versionString->push_back("1.2.1 build 700");				// OK
+		versionString->push_back("1.6.1.3 build 6100");				// FAIL: Revision is not recognized; Ok on experimental fix.
+		versionString->push_back("2.5.8.15");						// FAIL: Revision is not recognized; Ok on experimental fix.
+		versionString->push_back("17.5.12-a");						// Ok
+		versionString->push_back("3.1.7-beta.6");					// Ok
+		versionString->push_back("7.1.3-rc.1 752");					// Ok
+		versionString->push_back("10.3.1-alpha.3 build 569");		// Ok
+		versionString->push_back("8.1.93-beta 856");				// FAIL: Build number is confused with Build revision; Ok on experimental fix.
+		versionString->push_back("10");								// Ok (Major is detected)
+		versionString->push_back("10.2");							// Ok (Major, Minor are detected)
+		versionString->push_back("10.2.45");						// Ok (Major, Minor, Patch are detected)
+		versionString->push_back("10-b");							// Ok (Major and Build type are detected); FAIL ON EXPERIMENTAL FIX: Build type is not detected. THIS BEHAVIOUR WON'T BE FIXED!
+		versionString->push_back("10.2-alpha");						// Ok (Major, Minor and Build type are detected)
+		versionString->push_back("10.2.8 456");						// FAIL: Build number is not detected; Ok on experimental fix.
+		versionString->push_back("10 487");							// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
+		versionString->push_back("17.5 782");						// FAIL: Build revision is confused with patch; Ok on experimental fix.
+		versionString->push_back("17.9.5 125");						// FAIL: Build number is not detected; Ok on experimental fix.
+		versionString->push_back("14 build 77");					// FAIL: Only build number is detected; Ok on experimental fix.
+		versionString->push_back("14.3 build 78");					// Ok
+		versionString->push_back("14.5.6 build 79");				// Ok
+		versionString->push_back("3.1.9-rc build 54");				// Ok
+	}
+
+	// Add other versions formats for tests:
+	if (versionTest && versionString)
+	{
+		/** // ---------------- Version String Format Test Results ----------------------- //
+		 * 1.2.1 build 700				// OK
+		 * 1.6.1.3 build 6100			// FAIL: Revision is not recognized; Ok on experimental fix.
+		 * 2.5.8.15						// FAIL: Revision is not recognized; Ok on experimental fix.
+		 * 17.5.12-a					// Ok
+		 * 3.1.7-beta.6					// Ok
+		 * 7.1.3-rc.1 752				// Ok
+		 * 10.3.1-alpha.3 build 569		// Ok
+		 * 8.1.93-beta 856				// FAIL: Build number is confused with Build revision; Ok on experimental fix.
+		 * 10							// Ok (Major is detected)
+		 * 10.2							// Ok (Major, Minor are detected)
+		 * 10.2.45						// Ok (Major, Minor, Patch are detected)
+		 * 10-b							// Ok (Major and Build type are detected); FAIL ON EXPERIMENTAL FIX: Build type is not detected. THIS BEHAVIOUR WON'T BE FIXED!
+		 * 10.2-alpha					// Ok (Major, Minor and Build type are detected)
+		 * 10.2.8 456					// FAIL: Build number is not detected; Ok on experimental fix.
+		 * 10 487						// FAIL: This format is not recognized; FAIL ON EXPERIMENTAL FIX: build number is confused with minor. THIS BEHAVIOUR WON'T BE FIXED!
+		 * 17.5 782						// FAIL: Build revision is confused with patch; Ok on experimental fix.
+		 * 17.9.5 125					// FAIL: Build number is not detected; Ok on experimental fix.
+		 * 14 build 77					// FAIL: Only build number is detected; Ok on experimental fix.
+		 * 14.3 build 78				// Ok
+		 * 14.5.6 build 79				// Ok
+		 * 3.1.9-rc build 54			// Ok
+		 * // ---------------------------------------------------------------------------- //
+		*/
+
+		// Add the string versions to test:
+		for (size_t i = 0; i < versionString->size(); i++)
+		{
+			versionTest->push_back(VersionFormatTest(versionString->at(i)));
+		}
 	}
 
 	if (testVersionStrFormats)
@@ -131,6 +180,54 @@ int main(int argc, const char* argv[])
 			for (size_t j = versions.size() - 1; j > 0; j--)
 			{
 				std::cout << testVersionData(versions[i], versions[j]) << std::endl;
+			}
+		}
+	}
+
+	if (testVersionStructComp)
+	{
+		std::cout << "Testing version object operators with VersionStruct datatype:" << std::endl;
+		std::cout << "Test 1:" << std::endl << std::endl;
+
+		for (size_t i = 0; i < versions.size(); i++)
+		{
+			for (size_t j = 0; j < versions.size(); j++)
+			{
+				std::cout << testVersionData(versions[i], versions[j], true) << std::endl;
+			}
+		}
+
+		std::cout << std::endl << "Test 2:" << std::endl << std::endl;
+
+		for (size_t i = versions.size() - 1; i > 0; i--)
+		{
+			for (size_t j = versions.size() - 1; j > 0; j--)
+			{
+				std::cout << testVersionData(versions[i], versions[j], true) << std::endl;
+			}
+		}
+	}
+
+	if (testVersionStrComp)
+	{
+		std::cout << "Testing version object operators with direct Version String:" << std::endl;
+		std::cout << "Test 1:" << std::endl << std::endl;
+
+		for (size_t i = 0; i < versions.size(); i++)
+		{
+			for (size_t j = 0; j < versions.size(); j++)
+			{
+				std::cout << testVersionData(versions[i], versions[j].getVersionStr()) << std::endl;
+			}
+		}
+
+		std::cout << std::endl << "Test 2:" << std::endl << std::endl;
+
+		for (size_t i = versions.size() - 1; i > 0; i--)
+		{
+			for (size_t j = versions.size() - 1; j > 0; j--)
+			{
+				std::cout << testVersionData(versions[i], versions[j].getVersionStr()) << std::endl;
 			}
 		}
 	}

@@ -46,7 +46,7 @@ namespace VersionLib
 {
 	/**
 	 * @brief Version Data class with support to Major, Minor, Patch version numbers and Build and build type support.
-	 * @note In version 0.8.6-beta the build_type_number (or revision) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
+	 * @note In version 0.8.6-beta the build_revision (or revision) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
 	 */
 	class VERSION_LIB_API VersionData
 	{
@@ -56,7 +56,7 @@ namespace VersionLib
 			unsigned int major;					// Major version number
 			unsigned int minor;					// Minor version number
 			unsigned int patch;					// Patch version number
-			unsigned int build_type_number;		// Build type number (alpha1, rc3)
+			unsigned int build_revision;		// Build revision (alpha.1, rc.3)
 			unsigned long long build;			// Build number
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 			VersionLib::VersionBuildType build_type;	// Build type (alpha, a, beta, etc)
@@ -74,7 +74,7 @@ namespace VersionLib
 			#else
 			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-			unsigned int build_type_number;		// Build type number (alpha1, rc3)
+			unsigned int build_revision;		// Build revision (alpha.1, rc.3)
 			bool compare_build;					// Build comparison control
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
@@ -99,6 +99,7 @@ namespace VersionLib
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (std::string versionStr);
 
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
@@ -153,10 +154,10 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_type_number);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -164,9 +165,9 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_type_number);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -174,9 +175,9 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type enumerator
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_type_number);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -184,12 +185,12 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -197,11 +198,11 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -209,11 +210,11 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type enumerator
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_type_number, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
 
 			//
 			// Wrapper Constructors:
@@ -269,12 +270,12 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, const char* build_type, int build_type_number);
+			VersionData (int major, int minor, int patch, const char* build_type, int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -282,11 +283,11 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, std::string build_type, int build_type_number);
+			VersionData (int major, int minor, int patch, std::string build_type, int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -294,11 +295,11 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type enumerator
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, VersionLib::BuildType build_type, int build_type_number);
+			VersionData (int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -306,14 +307,14 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, const char* build_type, int build_type_number, long long build, bool cmpBuild = false);
+			VersionData (int major, int minor, int patch, const char* build_type, int build_revision, long long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -321,13 +322,13 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type (alpha, beta, rc, release)
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, std::string build_type, int build_type_number, long long build, bool cmpBuild = false);
+			VersionData (int major, int minor, int patch, std::string build_type, int build_revision, long long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -335,13 +336,13 @@ namespace VersionLib
 			 * @param minor Minor version
 			 * @param patch Patch version
 			 * @param build_type Build type enumerator
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw Will throw an exception if one or more version data parameters is less than zero
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
-			VersionData (int major, int minor, int patch, VersionLib::BuildType build_type, int build_type_number, long long build, bool cmpBuild = false);
+			VersionData (int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision, long long build, bool cmpBuild = false);
 			#else
 			
 			/**
@@ -351,6 +352,7 @@ namespace VersionLib
 			 * @param patch Patch version
 			 * @param build Build of the version
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build);
 			
 			/**
@@ -361,6 +363,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type);
 			
 			/**
@@ -371,6 +374,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type);
 			
 			/**
@@ -381,6 +385,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param build_type Build type enumerator
 			 */
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type);
 			
 			/**
@@ -390,9 +395,10 @@ namespace VersionLib
 			 * @param patch Patch version
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type, unsigned int build_type_number);
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type, unsigned int build_revision);
 			
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -401,9 +407,10 @@ namespace VersionLib
 			 * @param patch Patch version
 			 * @param build Build of the version
 			 * @param build_type Build type (alpha, beta, rc).
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_type_number);
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_revision);
 			
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -412,9 +419,10 @@ namespace VersionLib
 			 * @param patch Patch version
 			 * @param build Build of the version
 			 * @param build_type Build type enumerator
-			 * @param build_type_number Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_type_number will be ignored.
+			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_type_number);
+			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_revision);
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 			
 			VersionData (const VersionLib::VersionData& other);
@@ -469,9 +477,9 @@ namespace VersionLib
 			VersionLib::BuildType getBuildType();
 
 			/**
-			 * @brief Get the build type number (used like alpha.2, rc.3).
+			 * @brief Get the build revision (used like alpha.2, rc.3).
 			 */
-			unsigned int getBuildTypeNumber();
+			unsigned int getBuildRevision();
 
 			/**
 			 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style

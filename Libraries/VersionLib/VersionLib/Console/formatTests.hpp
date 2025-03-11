@@ -29,6 +29,8 @@ class VersionFormatTest
 		std::string getTest();
 };
 
-std::string testVersionData (VersionLib::VersionData& obj1, VersionLib::VersionData& obj2);
+std::string testVersionData (VersionLib::VersionData& obj1, VersionLib::VersionData& obj2, bool testStructOnObj2 = false);
+
+std::string testVersionData (VersionLib::VersionData& obj, std::string verStr);
 
 #endif // !VERSION_FORMAT_TEST
