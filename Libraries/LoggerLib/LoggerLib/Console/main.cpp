@@ -9,6 +9,9 @@ int main(int argc, const char* argv[])
 
 	Logger logger(std::filesystem::current_path(), "logTest");
 
+	LogEntry log_entry("StreamOperatorTest::", "Test with operator<< with LogDataStore enabled");
+	std::cout << log_entry << std::endl;
+
 	std::cout << "Created log " << logger.getLogFilePath().filename().string() << std::endl;
 
 	logger.newEntry(LogEntry("Test", "This is a log test"));
