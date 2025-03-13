@@ -394,6 +394,13 @@ std::string LogEntry::getStrData()
 }
 #endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+LoggerLocalDateTime LogEntry::getLogDtReg()
+{
+	return this->dtReg;
+}
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+
 std::string LogEntry::getEntry()
 {
 	std::string entryLine;
@@ -402,6 +409,47 @@ std::string LogEntry::getEntry()
 	entryLine += this->message;
 
 	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	switch (this->data.getType())
+	{
+		case LogDataType::LOG_INTEGER_ENTRY:
+		{
+			entryLine += std::to_string(this->data.getUnionData().LOG_ENTRY_INT);
+			break;
+		}
+		case LogDataType::LOG_FLOAT_ENTRY:
+		{
+			entryLine += std::to_string(this->data.getUnionData().LOG_ENTRY_FLOAT);
+			break;
+		}
+		case LogDataType::LOG_STRING_ENTRY:
+		{
+			if (this->data.getStr().empty())
+			{
+				entryLine += "{FAIL TO READ POINTER TO DATA STRING}";
+			}
+			else
+			{
+				entryLine += this->data.getStr();
+			}
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_ENTRY:
+		{
+			LoggerLocalDateTime dt = this->data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntry(dt);
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
+		{
+			LoggerLocalDateTime dt = this->data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntry(dt, false, true);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
 	#else
 	switch (this->dataType)
 	{
@@ -447,6 +495,54 @@ std::string LogEntry::getEntry()
 	return entryLine;
 }
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+std::ostream& operator<<(std::ostream& os, LogEntry& obj)
+{
+	std::string entryLine;
+
+	entryLine += obj.title;
+	entryLine += obj.message;
+
+	switch (obj.data.getType())
+	{
+		case LogDataType::LOG_INTEGER_ENTRY:
+		{
+			entryLine += std::to_string(obj.data.getUnionData().LOG_ENTRY_INT);
+			break;
+		}
+		case LogDataType::LOG_FLOAT_ENTRY:
+		{
+			entryLine += std::to_string(obj.data.getUnionData().LOG_ENTRY_FLOAT);
+			break;
+		}
+		case LogDataType::LOG_STRING_ENTRY:
+		{
+			entryLine += obj.data.getStr();
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_ENTRY:
+		{
+			LoggerLocalDateTime dt = obj.data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntry(dt);
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
+		{
+			LoggerLocalDateTime dt = obj.data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntry(dt, false, true);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+	
+	os << entryLine;
+	
+	return os;
+}
+#else
 std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 {
 	std::string entryLine;
@@ -454,8 +550,6 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 	entryLine += obj.title;
 	entryLine += obj.message;
 
-	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-	#else
 	switch (obj.dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -490,12 +584,12 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 			break;
 		}
 	}
-	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-
+	
 	os << entryLine;
-
+	
 	return os;
 }
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message)
 {
@@ -891,6 +985,13 @@ std::wstring LogEntryW::getStrData()
 }
 #endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+LoggerLocalDateTime LogEntryW::getLogDtReg()
+{
+    return this->dtReg;
+}
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+
 std::wstring LogEntryW::getEntry()
 {
 	std::wstring entryLine;
@@ -899,6 +1000,47 @@ std::wstring LogEntryW::getEntry()
 	entryLine += this->message;
 
 	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+	switch (this->data.getType())
+	{
+		case LogDataType::LOG_INTEGER_ENTRY:
+		{
+			entryLine += std::to_wstring(this->data.getUnionData().LOG_ENTRY_INT);
+			break;
+		}
+		case LogDataType::LOG_FLOAT_ENTRY:
+		{
+			entryLine += std::to_wstring(this->data.getUnionData().LOG_ENTRY_FLOAT);
+			break;
+		}
+		case LogDataType::LOG_STRING_ENTRY:
+		{
+			if (this->data.getWstr().empty())
+			{
+				entryLine += L"{FAIL TO READ POINTER TO DATA STRING}";
+			}
+			else
+			{
+				entryLine += this->data.getWstr();
+			}
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_ENTRY:
+		{
+			LoggerLocalDateTime dt = this->data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntryW(dt);
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
+		{
+			LoggerLocalDateTime dt = this->data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntryW(dt, false, true);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
 	#else
 	switch (this->dataType)
 	{
@@ -944,6 +1086,54 @@ std::wstring LogEntryW::getEntry()
 	return entryLine;
 }
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+std::wostream& operator<<(std::wostream& os, LogEntryW& obj)
+{
+	std::wstring entryLine;
+
+	entryLine += obj.title;
+	entryLine += obj.message;
+
+	switch (obj.data.getType())
+	{
+		case LogDataType::LOG_INTEGER_ENTRY:
+		{
+			entryLine += std::to_wstring(obj.data.getUnionData().LOG_ENTRY_INT);
+			break;
+		}
+		case LogDataType::LOG_FLOAT_ENTRY:
+		{
+			entryLine += std::to_wstring(obj.data.getUnionData().LOG_ENTRY_FLOAT);
+			break;
+		}
+		case LogDataType::LOG_STRING_ENTRY:
+		{
+			entryLine += obj.data.getWstr();
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_ENTRY:
+		{
+			LoggerLocalDateTime dt = obj.data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntryW(dt);
+			break;
+		}
+		case LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY:
+		{
+			LoggerLocalDateTime dt = obj.data.getLocalDt();
+			entryLine += convertDateTime2LogStrEntryW(dt, false, true);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+	
+	os << entryLine;
+	
+	return os;
+}
+#else
 std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 {
 	std::wstring entryLine;
@@ -951,8 +1141,6 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 	entryLine += obj.title;
 	entryLine += obj.message;
 
-	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-	#else
 	switch (obj.dataType)
 	{
 		case LogDataType::LOG_INTEGER_ENTRY:
@@ -987,9 +1175,9 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 			break;
 		}
 	}
-	#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-
+	
 	os << entryLine;
-
+	
 	return os;
 }
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE

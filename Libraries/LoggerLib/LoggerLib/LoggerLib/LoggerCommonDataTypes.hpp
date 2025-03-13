@@ -184,11 +184,19 @@ class LOGGER_LIB_API LogEntry
 		std::string getStrData();
 		#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+		LoggerLocalDateTime getLogDtReg();
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+
 		/// @brief Export the log entry as a string
 		/// @return 
 		std::string getEntry();
 
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		friend std::ostream& operator<<(std::ostream& os, LogEntry& obj);
+		#else
 		friend std::ostream& operator<<(std::ostream& os, const LogEntry& obj);
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 };
 
 /// @brief Log entry data
@@ -286,11 +294,19 @@ class LOGGER_LIB_API LogEntryW
 		std::wstring getStrData();
 		#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+		LoggerLocalDateTime getLogDtReg();
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+
 		/// @brief Export the log entry as a string
 		/// @return 
 		std::wstring getEntry();
 
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		friend std::wostream& operator<<(std::wostream& os, LogEntryW& obj);
+		#else
 		friend std::wostream& operator<<(std::wostream& os, const LogEntryW& obj);
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 };
 
 #endif // !LOGGER_COMMON_DATATYPES_HPP
