@@ -438,7 +438,6 @@ LogDataStore &LogDataStore::operator=(const LoggerLocalDateTime &data)
 	return *this;
 }
 
-#ifndef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
 bool LogDataStore::operator==(const LogDataStore &other) const
 {
 	if (this->type == other.type)
@@ -517,7 +516,6 @@ bool LogDataStore::operator!=(const LogDataStore &other) const
 {
     return !(*this == other);
 }
-#endif // LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
 
 bool LogDataStore::operator==(const LogDataType type)
 {
@@ -995,84 +993,3 @@ bool LogDataStore::hasData()
 {
     return this->type != LogDataType::LOG_NULL_DATA_ENTRY && (this->str || this->wstr || this->unionVal || this->localDt);
 }
-
-#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
-bool operator==(const LogDataStore &lhs, const LogDataStore &rhs)
-{
-    if (lhs.type == rhs.type)
-	{
-		if (lhs.str && rhs.str)
-		{
-			return *lhs.str == *rhs.str;
-		}
-
-		if (lhs.wstr && rhs.wstr)
-		{
-			return *lhs.wstr == *rhs.wstr;
-		}
-
-		if (lhs.unionVal && rhs.unionVal)
-		{
-			switch (lhs.type)
-			{
-				case LogDataType::LOG_UNSIGNED_INTEGER_ENTRY:
-				{
-					return lhs.unionVal->LOG_ENTRY_UINT == rhs.unionVal->LOG_ENTRY_UINT;
-				}
-				case LogDataType::LOG_INTEGER_ENTRY:
-				{
-					return lhs.unionVal->LOG_ENTRY_INT == rhs.unionVal->LOG_ENTRY_INT;
-				}
-				case LogDataType::LOG_FLOAT_ENTRY:
-				{
-					return lhs.unionVal->LOG_ENTRY_FLOAT == rhs.unionVal->LOG_ENTRY_FLOAT;
-				}
-				case LogDataType::LOG_BOOLEAN_ENTRY:
-				{
-					return lhs.unionVal->LOG_ENTRY_BOOL == rhs.unionVal->LOG_ENTRY_BOOL;
-				}
-				default:
-				{
-					return false;
-				}
-			}
-		}
-
-		if (lhs.localDt && rhs.localDt)
-		{
-			if (lhs.type == LogDataType::LOG_DATE_TIME_ENTRY || lhs.type == LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
-			{
-				bool dtEq = true;
-
-				if (lhs.localDt->calendar != rhs.localDt->calendar || lhs.localDt->hours != rhs.localDt->hours || lhs.localDt->minutes != rhs.localDt->minutes || lhs.localDt->seconds != rhs.localDt->seconds || lhs.localDt->weekday != rhs.localDt->weekday)
-				{
-					dtEq = false;
-				}
-
-				#ifdef LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
-				if (lhs.type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && lhs.localDt->highPrecision != rhs.localDt->highPrecision && lhs.localDt->mSeconds != rhs.localDt->mSeconds)
-				{
-					dtEq = false;
-				}
-				#else
-					#ifdef WIN32	// On Windows platforms, high precision is already working
-					if (lhs.type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && lhs.localDt->highPrecision != data.highPrecision && lhs.localDt->mSeconds != rhs.localDt->mSeconds)
-					{
-						dtEq = false;
-					}
-					#endif // !WIN32
-				#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
-				
-				return dtEq;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool operator!=(const LogDataStore &lhs, const LogDataStore &rhs)
-{
-    return !(lhs == rhs);
-}
-#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR
