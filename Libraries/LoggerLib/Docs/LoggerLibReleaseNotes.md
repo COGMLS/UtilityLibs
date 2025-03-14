@@ -35,8 +35,15 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.0-alpha.10 (2025/03/14) -->
+    <dt><version-data>3.3.0-alpha.10</version-data> | Release Date: 2025/03/14</dt>
+    <dd>Added getLogDtReg</dd>
+    <dd>Added missing treatment to export <code>LogDataStore</code> information</dd>
+    <dd>Updated <code>operator<<</code></dd>
+    <dd>Added documentation about experimental preprocessor definition guards</dd>
+    <dd>Removed experimental <code>LogDataStore</code> equality operator</dd>
     <!-- 3.3.0-alpha.9 (2025/02/18) -->
-    <dt><version-data>3.3.0-alpha.9</version-data></dt>
+    <dt><version-data>3.3.0-alpha.9</version-data> | Release Date: 2025/02/18</dt>
     <dd><note-alert>[NOTE]</note-alert> THE PREVIOUS ALPHA VERSIONS WAS NOT DOCUMENTED.</dd>
     <dd><warning-alert>[IMPORTANT]</warning-alert> <b>THIS VERSION CONTAINS SEVERAL MODIFICATIONS INSIDE THE MAIN COMPONENTS</b></dd>
     <dd>Added new experimental definition flags.</dd>
@@ -51,7 +58,7 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <dd><fix-alert>[FIX]</fix-alert> The standard algorithm to make the equality test between the both <code>logEntries</code> of <b>Logger</b> and <b>LoggerW</b> classes fails when <code>LogDataStore</code> is enabled</dd>
     <dd><fix-alert>[FIX]</fix-alert> Making equality of <code>LogEntry</code> or <code>LogEntryW</code> show the warning message: <i>C++20 says that these are ambiguous, even though the second is reversed</i> on GCC from equality operators</dd>
     <!-- 3.3.0-alpha.5 (2025/02/17) -->
-    <dt><version-data>3.3.0-alpha.5</version-data></dt>
+    <dt><version-data>3.3.0-alpha.5</version-data> | Release Date: 2025/02/17</dt>
     <dd>Added experimental code control guards to enable/disable experimental features</dd>
     <dd>Added <code>highPrecision</code> flag in <code>LoggerLocalDateTime</code>.</dd>
     <dd>Added <code>useHighPrecision</code> parameter in <code>getLoggerDateTime</code> function.</dd>
@@ -69,16 +76,16 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <dd>Added experimental <code>LogFormatToken</code> class</dd>
     <dd><note-alert>[NOTE]</note-alert> The LogFormatToken and LogFormat classes are not ready for use yet</dd>
     <!-- 3.3.0-alpha.2 (2025/02/08) -->
-    <dt><version-data>3.3.0-alpha.2</version-data></dt>
+    <dt><version-data>3.3.0-alpha.2</version-data> | Release Date: 2025/02/08</dt>
     <dd>Modified the <code>LoggerException</code> to include custom error messages.</dd>
     <dd><note-alert>[NOTE]</note-alert> <code>LoggerException</code> is an experimental feature and it is not been used by the library yet.</dd>
     <dd><fix-alert>[FIX]</fix-alert> Added definition of inline methods <code>getLibVersion</code> and <code>getVersionStr</code> to resolve Visual Studio link fail.</dd>
     <!-- 3.3.0-alpha.1 (2025/01/27) -->
-    <dt><version-data>3.3.0-alpha.1</version-data></dt>
+    <dt><version-data>3.3.0-alpha.1</version-data> | Release Date: 2025/01/27</dt>
     <dd><code>sortLogFileList2</code> marked as deprecated</dd>
     <dd><fix-alert>[FIX]</fix-alert> Added missing stream output for date and time information in <code>LogEntry</code> and <code>LogEntryW</code> classes</dd>
     <!-- 3.3.0-alpha (2025/01/15) -->
-    <dt><version-data>3.3.0-alpha</version-data></dt>
+    <dt><version-data>3.3.0-alpha</version-data> | Release Date: 2025/01/15</dt>
     <dd>Cleaned unused code</dd>
     <dd>Added alternative algorithm for sorting, using the bubble sort instead of selection sort. <strong>The selection sort is disabled by a preprocessor directive and is marked as deprecated</strong></dd>
     <dd><fix-alert>[FIX]</fix-alert> string copy <code>LOGGER_LIB_BUILD_TYPE</code> to version build type</dd>
@@ -88,13 +95,13 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <dd><note-alert>[NOTE]</note-alert> This version of Logger Library appears to be very stable, but no tests with sorting log files was made on Windows systems. Considering the lack of tests to one important platform, the LoggerLib will be marked as <code>alpha</code></dd>
     <dd><i>(Added in 2025/01/20) </i>Add <code>LoggerLib.hpp</code>a main header to include all library components on build 64</dd>
     <!-- 3.2.0-alpha (2024/12/18) -->
-    <dt><version-data>3.2.0-alpha</version-data></dt>
+    <dt><version-data>3.2.0-alpha</version-data> | Release Date: 2024/12/18</dt>
     <dd>Added <code>LogFileDateTime</code> class to focus on log file date time information report (not based on Last Time Write or Creation Time)</dd>
     <dd>Added <code>sortLogFileList</code> and <code>sortLogFileList2</code> to sort the log file list returned by <code>getLogFileList</code> method</dd>
     <dd><note-alert>[NOTE]</note-alert> The methods <code>sortLogFileList</code> and <code>sortLogFileList2</code> still in development and are not sorting correctly, missing some files from correct order. These functions may receive a new name or new version. Use with caution.</dd>
     <dd><fix-alert>[FIX]</fix-alert>Compiling the <code>LoggerLib</code> won't result in a ISO C++ forbidden warning when converting a <code>const char*</code> string to <code>char*</code></dd>
     <!-- 3.1.2-release (2024/10/08) -->
-    <dt><version-data>3.1.2-release<version-data></dt>
+    <dt><version-data>3.1.2-release<version-data> | Release Date: 2024/10/08</dt>
     <dd>Changed the getVersionStr parameter to accept an copy and not the variable address any more.</dd>
     <dd>Added missing <code>PATCH number</code></dd>
     <dd>Added better <code>const char[]</code> conversion to <code>char*</code></dd>
@@ -103,19 +110,19 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <dd>New tests with LoggerLib.</dd>
     <dd><i>(Added in 2024/12/06) </i><bug-alert>[BUG]</bug-alert> On Unix systems the log files entries are not added following the naming order as happens on Windows systems.</dd>
     <!-- 3.1.1-release (2024/10/07) -->
-    <dt><version-data>3.1.1-release<version-data></dt>
+    <dt><version-data>3.1.1-release<version-data> | Release Date: 2024/10/07</dt>
     <dd>Added LoggerLib API in all header files, removing the necessity to use <code>LoggerLibDef.hpp</code></dd>
     <dd>Disabled the use of <code>pch.h</code> for non Windows builds</dd>
     <dd><fix-alert>[FIX]</fix-alert> the use of non C++ Standard from Microsoft for <code>std::fstream</code> and <code>std::wstream</code> constructors</dd>
     <dd>Added <code>LoggerLibVersion.hpp</code> and <code>LoggerLibVersionTools.hpp</code> to allow a compatible way to communicate with <code>VersionLib</code> from UtilityLibs with string version conversion or use the raw version values</dd>
     <!-- 3.1.0-beta (2024/09/23) -->
-    <dt><version-data>3.1.0-beta</version-data></dt>
+    <dt><version-data>3.1.0-beta</version-data> | Release Date: 2024/09/23</dt>
     <dd>Added <code>LoggerW</code> and <code>LogEntryW</code> classes</dd>
     <dd>Added <code>convertDateTime2LogStrEntryW</code></dd>
     <dd>Update CMakeLists.txt</dd>
     <dd>Added <code>LoggerException.cpp</code> and <code>LoggerException.hpp</code></dd>
     <!-- 3.0.0-alpha (2024/09/16) -->
-    <dt><version-data>3.0.0-alpha</version-data></dt>
+    <dt><version-data>3.0.0-alpha</version-data> | Release Date: 2024/09/16</dt>
     <dd>Added <strong><i>LoggerLib V1</i></strong> migrated for CMake</dd>
     <dd>Added console for tests</dd>
     <dd>Added <strong>LoggerLib V1</strong></dd>
