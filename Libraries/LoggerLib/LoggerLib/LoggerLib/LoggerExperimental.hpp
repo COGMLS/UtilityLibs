@@ -6,9 +6,6 @@
 // Determinate to use LogDataStore class:
 #define LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
 
-// Determinate to use the experimental equality operator on LogDataStore:
-//#define LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE_EXPERIMENTAL_EQ_OPERATOR // Permanently disabled. No tests with this experimental feature are necessary.
-
 // Determinate to use log data formatter:
 //#define LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
 
