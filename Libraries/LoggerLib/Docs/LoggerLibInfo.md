@@ -33,9 +33,9 @@ This document contains the information about the future plans, known bugs, depre
 | :------ | :-----: | :--------: | ----: |
 | Selection sort algorithm | The algorithm was falling to sort properly the log files | No workaround is necessary | The algorithm is disabled and a new algorithm is working. The code will be removed on version **3.3.0-beta** |
 | `sortLogFileList2` | The function uses file age to determinate the sorted list with `std::filesystem::last_write_time`, but does not provide a reliable sorting list | Use `sortLogFileList` | This function will be removed on version **3.3.0-beta** |
-| Experimental equality operators in `LogDataStore` | The experimental equality operators will be removed because no more workarounds are necessary to make the components to work. |  | The components was removed on version **3.3.0-alpha.10** |
 
 ## Removed Features:
 
 | Feature | Details | Workaround | Notes |
 | :------ | :-----: | :--------: | ----: |
+| Experimental equality operators in `LogDataStore` | The experimental equality operators will be removed because no more workarounds are necessary to make the components to work. |  | The components was removed on version **3.3.0-alpha.10** |
