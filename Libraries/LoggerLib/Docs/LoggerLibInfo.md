@@ -14,8 +14,10 @@ This document contains the information about the future plans, known bugs, depre
 
 ## Future Implementations:
 
-- Move LoggerLib features to `LoggerLib` namespace
-- Better error handling
+- Move LoggerLib features to `LoggerLib` namespace. *(**NOTE:** May break the actual codes)*
+- Better error handling. *(**NOTE:** Support to `wstring` may bring difficulties to make it compatible with standard C++)*
+- Logger manager self guard thread to detect application abort or any other termination that does not treat correctly the Logger Manager. *(**NOTE:** Experimental and may not work as expected)*
+- *(Only for development)* Version build release type to control experimental features
 
 ## Known Bugs:
 
