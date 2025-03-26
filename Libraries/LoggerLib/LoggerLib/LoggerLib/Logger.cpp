@@ -250,7 +250,10 @@ int Logger::saveLog()
 
 Logger::~Logger()
 {
-
+	if (this->autoSaveLogEntries)
+	{
+		this->autoSave();
+	}
 }
 
 std::filesystem::path Logger::getLogDirectoryPath()
@@ -338,6 +341,8 @@ bool Logger::writeLogFile(bool ateMode)
 				{
 					logFile << entry.getEntry() << std::endl;
 				}
+
+				this->logEntries.clear();
 			}
 
 			if (isLogFileCreated)
@@ -377,10 +382,13 @@ LoggerError Logger::autoSave()
 		if (this->logEntries.size() >= this->maxLogEntries)
 		{
 			this->setLogStatus(LoggerError::LOGGER_ERROR_AUTOSAVE_LOG_ENTRIES_FULL);
+		}
 
+		if (this->logEntries.size() > 0)
+		{
 			bool logStatus = this->writeLogFile(true);
 
-			this->logEntries.clear();
+			//this->logEntries.clear();
 
 			if (logStatus)
 			{
@@ -418,6 +426,12 @@ void Logger::newEntry(LogEntry entry)
 void Logger::setAutoSave(bool autoSave, size_t maxLogEntries)
 {
 	this->autoSaveLogEntries = autoSave;
+
+	if (maxLogEntries == 0)
+	{
+		maxLogEntries = LOGGER_LIB_MAX_AUTOSAVE_ENTRIES;
+	}
+
 	this->maxLogEntries = maxLogEntries;
 }
 
@@ -671,7 +685,10 @@ int LoggerW::saveLog()
 
 LoggerW::~LoggerW()
 {
-
+	if (this->autoSaveLogEntries)
+	{
+		this->autoSave();
+	}
 }
 
 std::filesystem::path LoggerW::getLogDirectoryPath()
@@ -759,6 +776,8 @@ bool LoggerW::writeLogFile(bool ateMode)
 				{
 					logFile << entry.getEntry() << std::endl;
 				}
+
+				this->logEntries.clear();
 			}
 
 			if (isLogFileCreated)
@@ -798,10 +817,13 @@ LoggerError LoggerW::autoSave()
 		if (this->logEntries.size() >= this->maxLogEntries)
 		{
 			this->setLogStatus(LoggerError::LOGGER_ERROR_AUTOSAVE_LOG_ENTRIES_FULL);
+		}
 
+		if (this->logEntries.size() > 0)
+		{
 			bool logStatus = this->writeLogFile(true);
 
-			this->logEntries.clear();
+			//this->logEntries.clear();
 
 			if (logStatus)
 			{
@@ -839,5 +861,11 @@ void LoggerW::newEntry(LogEntryW entry)
 void LoggerW::setAutoSave(bool autoSave, size_t maxLogEntries)
 {
 	this->autoSaveLogEntries = autoSave;
+
+	if (maxLogEntries == 0)
+	{
+		maxLogEntries = LOGGER_LIB_MAX_AUTOSAVE_ENTRIES;
+	}
+
 	this->maxLogEntries = maxLogEntries;
 }
