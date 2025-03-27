@@ -35,6 +35,17 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.0-release (2025/03/26) -->
+    <dt><version-data>3.3.0-release</version-data> | Release Date: 2025/03/26</dt>
+    <dd>Removed <code>sortLogFileList2</code></dd>
+    <dd>Added experimental feature guards</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing autosave feature when destructor is called.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> autosave writing log entries.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing autosave treatment when logEntries not reach max entries.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing treatment when maxLogEntries is zero.</dd>
+    <dd><note-alert>NOTE:</note-alert> This release version does not implement the <code>LogDataStore</code> and does not provide a better memory management to store the data</dd>
+    <dd><strong>The <i>alpha</i> version features will be moved to next version 3.x</strong></dd>
+    <dd><strong>The <i>beta</i> version features will be moved to next version 3.3.x</strong></dd>
     <!-- 3.3.0-alpha.10 (2025/03/14) -->
     <dt><version-data>3.3.0-alpha.10</version-data> | Release Date: 2025/03/14</dt>
     <dd>Added getLogDtReg</dd>
