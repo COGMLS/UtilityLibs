@@ -55,6 +55,8 @@
 #include "LoggerException.hpp"
 #endif // !LOGGER_ENABLE_EXPERIMENTAL_CUSTOM_EXCEPTIONS
 
+#define LOGGER_LIB_MAX_AUTOSAVE_ENTRIES 10
+
 enum LOGGER_LIB_API LoggerError : unsigned int
 {
 	LOGGER_ERROR_OK,

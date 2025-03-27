@@ -37,7 +37,7 @@ add_compile_definitions(_UNICODE)
 # Defined the project:
 project(
 			LoggerLib
-			VERSION 3.2.0
+			VERSION 3.3.0
 			DESCRIPTION "Logger Library."
 		)
 
@@ -50,7 +50,7 @@ project(
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
 
-# Define to export the library methods for all compatible systems:
+# Define to export the library methods to all compatible systems:
 add_compile_definitions(LOGGER_LIB_EXPORTS)
 
 # Define to export the library methods if is Windows:

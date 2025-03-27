@@ -33,7 +33,7 @@ add_compile_definitions(UNICODE)
 add_compile_definitions(_UNICODE)
 
 # Defined the project:
-project(LoggerLibTestConsole VERSION 0.0.1 DESCRIPTION "Console to test the Settings Library.")
+project(LoggerLibTestConsole VERSION 1.5.1 DESCRIPTION "Console to test the Settings Library.")
 
 ###########################################################
 #
