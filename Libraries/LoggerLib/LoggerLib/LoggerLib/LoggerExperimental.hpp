@@ -85,7 +85,7 @@
 	//#define LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
 
 	// Enable the experimental LogEntry date register:
-	//#define LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
+	#define LOGGER_ENABLE_EXPERIMENTAL_LOGENTRY_DT_REG
 
 	// Enable UTC and Local date time. This enable the local date time on Unix systems.
 	//#define LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
