@@ -10,7 +10,7 @@ The **Utility Libraries** repository contains some libraries that was designed f
 
 ## Libraries Available:
 
-| Name | Documentation | Version | Cross-platform support | Languages/Frameworks Available | Development branch | Notes |
+| Name | Documentation | Version | Cross-platform support | Languages or Frameworks Available | Development branch | Notes |
 | ---- | ------------- | ------- | ---------------------- | ------------------------------ | ------------------ | ----- |
 | LoggerLib | [README.md](/Libraries/LoggerLib/README.md) | 3.3.1-release | Linux, Windows, Mac | C++20 | `LoggerLibDev` | Redesigned LoggerLibSolution with support to cross-platform and *wide strings* (`LoggerW` class), useful on Windows systems. |
 | LoggerLibSolution | *Not available* | 1.1.0 | No. **Windows only** | C++17 | `LoggerLibDev` | This is a deprecated project that was part from another one. Is recommended to use `LoggerLib` that has cross-platform support and receives constant updates |
