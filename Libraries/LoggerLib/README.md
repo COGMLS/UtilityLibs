@@ -72,11 +72,14 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
 
 - Sort log files by age.
 - Experimental code control
+- `LogDataStore` to easily store various datatype with better memory usage
+- *(Only for development)* Version build release type to control experimental features
 
 ### Implementations under development:
 
-- `LogDataStore` to easily store various datatype with better memory usage
 - Support to formatting log data
+- UTC time format
+- High Precision date and time to all platforms
 
 > **TO DISABLE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `LoggerExperimental.hpp` or set the `LOGGER_LIB_COMPILE_BUILD_TYPE` in `LoggerLibVersion.hpp` to *alpha (1)*, *beta (2)*, *release candidate (3)***
 
@@ -109,6 +112,12 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
     }
 </style>
 <dl>
+<!-- 3.3.1-release (2025/03/31) -->
+    <dt><version-data>3.3.1-release</version-data> | Release Date: 2025/03/31</dt>
+    <dd>Added support to UTC format</dd>
+    <dd>Added new constructor in <code>LogDataStore</code> with support to automatically define time precision</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Local datetime on Linux and MacOS</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing highPrecision check in Equality Operators in <code>Logger</code> and <code>LoggerW</code></dd>
     <!-- 3.3.0-release (2025/03/26) -->
     <dt><version-data>3.3.0-release</version-data> | Release Date: 2025/03/26</dt>
     <dd>Removed <code>sortLogFileList2</code></dd>
@@ -119,7 +128,7 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
     <dd><fix-alert>[FIX]</fix-alert> missing treatment when maxLogEntries is zero.</dd>
     <dd><note-alert>NOTE:</note-alert> This release version does not implement the <code>LogDataStore</code> and does not provide a better memory management to store the data</dd>
     <dd><strong>The <i>alpha</i> version features will be moved to next version 3.x</strong></dd>
-    <dd><strong>The <i>beta</i> version features will be moved to next version 3.3.x</strong></dd>
+    <dd><strong>Some <i>beta</i> version features will be moved to next version 3.3.x or 3.4.x</strong></dd>
     <!-- 3.3.0-alpha.10 (2025/03/14) -->
     <dt><version-data>3.3.0-alpha.10</version-data> | Release Date: 2025/03/14</dt>
     <dd>Added getLogDtReg</dd>
