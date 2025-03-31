@@ -35,6 +35,12 @@ An copy or partial copy of this history table is available in the `README.md` fi
     }
 </style>
 <dl>
+    <!-- 3.3.1-release (2025/03/31) -->
+    <dt><version-data>3.3.1-release</version-data> | Release Date: 2025/03/31</dt>
+    <dd>Added support to UTC format</dd>
+    <dd>Added new constructor in <code>LogDataStore</code> with support to automatically define time precision</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Local datetime on Linux and MacOS</dd>
+    <dd><fix-alert>[FIX]</fix-alert> missing highPrecision check in Equality Operators in <code>Logger</code> and <code>LoggerW</code></dd>
     <!-- 3.3.0-release (2025/03/26) -->
     <dt><version-data>3.3.0-release</version-data> | Release Date: 2025/03/26</dt>
     <dd>Removed <code>sortLogFileList2</code></dd>
@@ -45,7 +51,7 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <dd><fix-alert>[FIX]</fix-alert> missing treatment when maxLogEntries is zero.</dd>
     <dd><note-alert>NOTE:</note-alert> This release version does not implement the <code>LogDataStore</code> and does not provide a better memory management to store the data</dd>
     <dd><strong>The <i>alpha</i> version features will be moved to next version 3.x</strong></dd>
-    <dd><strong>The <i>beta</i> version features will be moved to next version 3.3.x</strong></dd>
+    <dd><strong>Some <i>beta</i> version features will be moved to next version 3.3.x or 3.4.x</strong></dd>
     <!-- 3.3.0-alpha.10 (2025/03/14) -->
     <dt><version-data>3.3.0-alpha.10</version-data> | Release Date: 2025/03/14</dt>
     <dd>Added getLogDtReg</dd>
