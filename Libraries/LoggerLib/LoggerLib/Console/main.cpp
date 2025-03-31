@@ -8,6 +8,8 @@
 
 int main(int argc, const char* argv[])
 {
+	LogEntry startApp = LogEntry("[Application Start]::", "HighPrecisionLocalTime::", getLoggerDateTime(true, false), true);
+
 	bool testAutoSave = false;
 	bool testSortLogFiles = false;
 	bool testPointerLogger = false;
@@ -59,6 +61,7 @@ int main(int argc, const char* argv[])
 	
 	std::cout << "Created log " << logger.getLogFilePath().filename().string() << std::endl;
 
+	logger.newEntry(startApp);
 	logger.newEntry(LogEntry("AppName::", "Utility Library Console Test"));
 	logger.newEntry(LogEntry("AppVersion::", "1.5.1"));
 	logger.newEntry(LogEntry("LoggerLib version: ", LoggerLib::getVersionStr(LoggerLib::getLibVersion(), true, true)));
