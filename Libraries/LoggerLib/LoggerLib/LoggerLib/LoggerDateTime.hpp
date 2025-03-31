@@ -56,6 +56,7 @@ struct LOGGER_LIB_API LoggerLocalDateTime
 	std::chrono::seconds seconds;
 	std::chrono::milliseconds mSeconds;
 	bool highPrecision;
+	bool utcTime;
 };
 
 /**
@@ -140,9 +141,12 @@ class LOGGER_LIB_API LogFileDateTime
 
 /// @brief Get all date and time data for log entries
 /// @param useHighPrecision Determinate if will use high precision time. By default, the function always create a high precision time report.
-/// @note On Linux and MacOS systems the high precision is disabled at this moment.
+/// @param utcTime Use the datetime in UTC format. By default the local date and time is used
+/// @note On Linux and MacOS systems the high precision is disabled on release versions.
 /// @return Return a LoggerLocalDateTime struct to use in conditions tests and log reports
-LoggerLocalDateTime LOGGER_LIB_API getLoggerDateTime(bool useHighPrecision = true);
+/// @note UTC format is under tests.
+/// @note High precision time is under tests for Linux and MacOS.
+LoggerLocalDateTime LOGGER_LIB_API getLoggerDateTime(bool useHighPrecision = true, bool utcTime = false);
 
 /// @brief Convert the custom local date and time struct to string for log entries, using ISO 8601 format
 /// @param dt Date and time information that will be converted to ISO 8601

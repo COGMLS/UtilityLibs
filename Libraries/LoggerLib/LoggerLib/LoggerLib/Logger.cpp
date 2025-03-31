@@ -172,6 +172,8 @@ bool Logger::operator==(const Logger& other) const
 				this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
 				this->dtCreation.seconds == other.dtCreation.seconds &&
 				this->dtCreation.weekday == other.dtCreation.weekday &&
+				this->dtCreation.highPrecision == other.dtCreation.highPrecision &&
+				this->dtCreation.utcTime == other.dtCreation.utcTime &&
 				this->autoSaveLogEntries == other.autoSaveLogEntries &&
 				this->maxLogEntries == other.maxLogEntries &&
 				this->lastLogPos == other.lastLogPos;
@@ -212,6 +214,8 @@ bool Logger::operator==(const Logger& other) const
 			this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
 			this->dtCreation.seconds == other.dtCreation.seconds &&
 			this->dtCreation.weekday == other.dtCreation.weekday &&
+			this->dtCreation.highPrecision == other.dtCreation.highPrecision &&
+			this->dtCreation.utcTime == other.dtCreation.utcTime &&
 			this->autoSaveLogEntries == other.autoSaveLogEntries &&
 			this->maxLogEntries == other.maxLogEntries &&
 			this->lastLogPos == other.lastLogPos;
@@ -607,6 +611,8 @@ bool LoggerW::operator==(const LoggerW& other) const
 				this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
 				this->dtCreation.seconds == other.dtCreation.seconds &&
 				this->dtCreation.weekday == other.dtCreation.weekday &&
+				this->dtCreation.highPrecision == other.dtCreation.highPrecision &&
+				this->dtCreation.utcTime == other.dtCreation.utcTime &&
 				this->autoSaveLogEntries == other.autoSaveLogEntries &&
 				this->maxLogEntries == other.maxLogEntries &&
 				this->lastLogPos == other.lastLogPos;
@@ -647,6 +653,8 @@ bool LoggerW::operator==(const LoggerW& other) const
 			this->dtCreation.mSeconds == other.dtCreation.mSeconds &&
 			this->dtCreation.seconds == other.dtCreation.seconds &&
 			this->dtCreation.weekday == other.dtCreation.weekday &&
+			this->dtCreation.highPrecision == other.dtCreation.highPrecision &&
+			this->dtCreation.utcTime == other.dtCreation.utcTime &&
 			this->autoSaveLogEntries == other.autoSaveLogEntries &&
 			this->maxLogEntries == other.maxLogEntries &&
 			this->lastLogPos == other.lastLogPos;

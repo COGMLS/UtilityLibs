@@ -150,8 +150,20 @@ class LOGGER_LIB_API LogDataStore
 		//
 		// Log Date and Time struct:
 		//
+		
+		/**
+		 * @brief Create a Log Data Store to store any type of data compatible with LoggerLib
+		 * @param data Data to be stored
+		 * @note If the data is in high precision, the type will be automatically defined as LOG_DATE_TIME_HIGH_PRECISION_ENTRY
+		 */
+		LogDataStore (LoggerLocalDateTime data);
 
-		LogDataStore (LoggerLocalDateTime data, bool highPrecisionTime = true);
+		/**
+		 * @brief Create a Log Data Store to store any type of data compatible with LoggerLib
+		 * @param data Data to be stored
+		 * @param highPrecisionTime Define if the high precision will be preserved. If the data is not in high precision, no modifications on datatime information will be removed.
+		 */
+		LogDataStore (LoggerLocalDateTime data, bool highPrecisionTime);
 
 		// ---------------------------- //
 

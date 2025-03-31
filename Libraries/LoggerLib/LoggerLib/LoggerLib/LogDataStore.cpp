@@ -174,9 +174,8 @@ LogDataStore::LogDataStore(std::wstring data)
 	*this->wstr = data;
 }
 
-LogDataStore::LogDataStore(LoggerLocalDateTime data, bool highPrecisionTime)
+LogDataStore::LogDataStore(LoggerLocalDateTime data)
 {
-	#ifdef EXPERIMENTAL_AUTO_PRECISION_TIME
 	if (data.highPrecision)
 	{
 		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
@@ -185,7 +184,20 @@ LogDataStore::LogDataStore(LoggerLocalDateTime data, bool highPrecisionTime)
 	{
 		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
 	}
-	#else
+	
+	this->localDt.reset(new LoggerLocalDateTime);
+	*this->localDt.get() = data;
+}
+
+LogDataStore::LogDataStore(LoggerLocalDateTime data, bool highPrecisionTime)
+{
+	// Remove the high precision time:
+	if (!highPrecisionTime && data.highPrecision)
+	{
+		data.mSeconds = std::chrono::milliseconds(0);
+		data.highPrecision = false;
+	}
+
 	if (highPrecisionTime)
 	{
 		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
@@ -194,7 +206,6 @@ LogDataStore::LogDataStore(LoggerLocalDateTime data, bool highPrecisionTime)
 	{
 		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
 	}
-	#endif // !EXPERIMENTAL_AUTO_PRECISION_TIME
 	
 	this->localDt.reset(new LoggerLocalDateTime);
 	*this->localDt.get() = data;
@@ -503,6 +514,13 @@ bool LogDataStore::operator==(const LogDataStore &other) const
 					}
 					#endif // !WIN32
 				#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+
+				#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+				if (this->localDt->utcTime != other.localDt->utcTime)
+				{
+					dtEq = false;
+				}
+				#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 				
 				return dtEq;
 			}
@@ -665,6 +683,13 @@ bool LogDataStore::operator==(const LoggerLocalDateTime &data)
 				}
 				#endif // !WIN32
 			#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+
+			#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+			if (this->localDt->utcTime != data.utcTime)
+			{
+				dtEq = false;
+			}
+			#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 			
 			return dtEq;
 		}
