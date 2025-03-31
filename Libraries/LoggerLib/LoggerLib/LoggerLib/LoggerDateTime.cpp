@@ -1,23 +1,30 @@
 #include "LoggerDateTime.hpp"
 
-LoggerLocalDateTime getLoggerDateTime(bool useHighPrecision)
+LoggerLocalDateTime getLoggerDateTime(bool useHighPrecision, bool utcTime)
 {
 	LoggerLocalDateTime dt{};
 
 	const std::chrono::time_point now{ std::chrono::system_clock::now() };
 
 	dt.calendar = std::chrono::year_month_day(std::chrono::floor<std::chrono::days>(now));
-	#if defined(WIN32) && defined(_MSC_VER)
-	dt.weekday = std::chrono::weekday(dt.calendar._Calculate_weekday());
-	#else
-	//dt.weekday = std::chrono::weekday(dt.calendar);
-	#endif // !WIN32
 
 	#ifdef _WIN32
 		SYSTEMTIME tm;
-		GetLocalTime(&tm);
 		
-		//dt.weekday = std::chrono::weekday(tm.wDayOfWeek);
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+		if (utcTime)
+		{
+			GetSystemTime(&tm);
+		}
+		else
+		{
+			GetLocalTime(&tm);
+		}
+		#else
+		GetLocalTime(&tm);
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+		
+		dt.weekday = std::chrono::weekday(static_cast<unsigned short>(tm.wDayOfWeek));
 		dt.hours = std::chrono::hours(tm.wHour);
 		dt.minutes = std::chrono::minutes(tm.wMinute);
 		dt.seconds = std::chrono::seconds(tm.wSecond);
@@ -32,16 +39,46 @@ LoggerLocalDateTime getLoggerDateTime(bool useHighPrecision)
 			dt.highPrecision = false;
 		}
 	#else
-		const std::time_t t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		std::chrono::system_clock::time_point localDt = std::chrono::system_clock::now();
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+		// On Unix systems the system_clock is in UTC time:
+		if (!utcTime)
+		{
+			// Calculate the local datetime using timezone information:
+			std::chrono::seconds tz_offset = std::chrono::zoned_time(std::chrono::current_zone()).get_info().offset;
+			localDt = localDt + tz_offset;	// Overwrite the original date time file information with the timezone correction
+		}
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+
+		const std::time_t t = std::chrono::system_clock::to_time_t(localDt);
 		std::tm* tm = std::localtime(&t);
 	
 		dt.weekday = std::chrono::weekday(tm->tm_wday);
 		dt.hours = std::chrono::hours(tm->tm_hour);
 		dt.minutes = std::chrono::minutes(tm->tm_min);
 		dt.seconds = std::chrono::seconds(tm->tm_sec);
+
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
+		if (useHighPrecision)
+		{
+			std::chrono::hh_mm_ss dayTime = std::chrono::hh_mm_ss(localDt - std::chrono::floor<std::chrono::days>(localDt));
+			std::chrono::milliseconds ms = std::chrono::floor<std::chrono::milliseconds>(dayTime.subseconds());
+			dt.mSeconds = ms;
+			dt.highPrecision = true;
+		}
+		else
+		{
+			dt.mSeconds = std::chrono::milliseconds(0);
+			dt.highPrecision = false;
+		}
+		#else
 		dt.mSeconds = std::chrono::milliseconds(0);
 		dt.highPrecision = false;
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_ALL_PLATFORMS_HIGH_PRECISION_TIME
 	#endif
+
+	dt.utcTime = utcTime;
 
 	return dt;
 }
