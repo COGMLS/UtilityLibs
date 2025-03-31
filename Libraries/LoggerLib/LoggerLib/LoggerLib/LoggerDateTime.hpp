@@ -55,8 +55,8 @@ struct LOGGER_LIB_API LoggerLocalDateTime
 	std::chrono::minutes minutes;
 	std::chrono::seconds seconds;
 	std::chrono::milliseconds mSeconds;
-	bool highPrecision = false;
-	bool utcTime = false;
+	bool highPrecision;
+	bool utcTime;
 };
 
 /**
