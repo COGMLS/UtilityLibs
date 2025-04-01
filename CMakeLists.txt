@@ -6,9 +6,6 @@
 
 cmake_minimum_required(VERSION 3.28)
 
-# Define if will compile test consoles:
-set(CompileTestConsole True)
-
 ###########################################################
 #
 # Define the general solution settings
@@ -17,6 +14,9 @@ set(CompileTestConsole True)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Define if will compile test consoles:
+set(CompileTestConsole True)
 
 # Define final location for binary files output:
 set(ReposRoot ${CMAKE_CURRENT_LIST_DIR})
