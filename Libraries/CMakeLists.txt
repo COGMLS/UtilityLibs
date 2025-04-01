@@ -16,11 +16,11 @@ set(LibsRoot ${CMAKE_CURRENT_LIST_DIR})
 ###########################################################
 
 if(EXISTS "${LibsRoot}/SettingsLib/CMakeLists.txt")
-	add_subdirectory("SettingsLib")
+	#add_subdirectory("SettingsLib")
 endif()
 
 if(EXISTS "${LibsRoot}/LoggerLib/CMakeLists.txt")
-	add_subdirectory("LoggerLib")
+	#add_subdirectory("LoggerLib")
 endif()
 
 if(EXISTS "${LibsRoot}/VersionLib/CMakeLists.txt")
