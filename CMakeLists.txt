@@ -6,6 +6,9 @@
 
 cmake_minimum_required(VERSION 3.28)
 
+# Define if will compile test consoles:
+set(CompileTestConsole True)
+
 ###########################################################
 #
 # Define the general solution settings
