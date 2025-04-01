@@ -39,4 +39,8 @@ project(
 ###########################################################
 
 add_subdirectory("LoggerLib")
-add_subdirectory("Console")
+
+# Compile test console:
+if(${CompileTestConsole})
+	add_subdirectory("Console")
+endif()

@@ -47,4 +47,8 @@ project(
 ###########################################################
 
 add_subdirectory("VersionLib")
-add_subdirectory("Console")
+
+# Compile test console:
+if(${CompileTestConsole})
+	add_subdirectory("Console")
+endif()
