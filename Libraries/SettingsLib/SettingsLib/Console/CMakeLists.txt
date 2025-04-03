@@ -33,7 +33,11 @@ add_compile_definitions(UNICODE)
 add_compile_definitions(_UNICODE)
 
 # Defined the project:
-project(SettingsLibTestConsole VERSION 0.0.1 DESCRIPTION "Console to test the Settings Library.")
+project(
+			SettingsLibTestConsole
+			VERSION 1.0.0
+			DESCRIPTION "Console to test the Settings Library."
+		)
 
 ###########################################################
 #
@@ -48,7 +52,12 @@ include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Exception")
 include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Configs/Ini")
 
 # Define the executable properties:
-add_executable(SettingsLibTestConsole "main.cpp" "test.hpp" "test.cpp" "debug.hpp" "debug.cpp")
+add_executable(
+					SettingsLibTestConsole
+					"main.cpp"
+					"test.hpp" "test.cpp"
+					"debug.hpp" "debug.cpp"
+				)
 
 # Link the SettingsLibV2:
 target_link_libraries(SettingsLibTestConsole SettingsLib)
