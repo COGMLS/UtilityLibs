@@ -2838,6 +2838,219 @@ long long SettingsLib::Tools::Ini::convertValue2Container(std::string *rawValue,
 	}
 }
 
+long long SettingsLib::Tools::Ini::convertValue2Container(std::wstring *rawValue, std::vector<SettingsLib::Types::ConfigDataStore> *vData, bool trimSpaces)
+{
+	// Verify if the pointers are nullptr:
+
+    if (rawValue == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	if (vData == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// If the rawValue is empty, return VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
+	}
+
+	//
+	// Container controls:
+	// 
+
+	bool foundContainerStartMark = false;
+	bool foundContainerEndMark = false;
+
+	long long nEntries = 0;					// Count how many entries was generated on algorithm.
+	size_t containerStartPos = 0;
+	size_t containerEndPos = 0;
+	
+	// Hold the result from last entry check:
+	SettingsLib::ErrorCodes::IniLineCheckStatus lastCheckStatus = SettingsLib::ErrorCodes::IniLineCheckStatus::SETTINGS_INI_LINE_CHECK_EMPTY_LINE;
+
+	if (rawValue->size() > 0)
+	{
+		containerEndPos = rawValue->size() - 1;
+	}
+
+	wchar_t c = L'\0';							// Temporary character
+
+	// Detect the possible entries and literal strings:
+	for (size_t i = 0, j = rawValue->size() - 1; i < rawValue->size() && j >= 0; i++, j--)
+	{
+		wchar_t c2 = rawValue->at(j);
+		c = rawValue->at(i);
+
+		if (c == SETTINGS_INI_CONTAINER_OPEN_MARK_W && !foundContainerStartMark)
+		{
+			foundContainerStartMark = true;
+			containerStartPos = i;
+		}
+
+		if (c2 == SETTINGS_INI_CONTAINER_CLOSE_MARK_W && !foundContainerEndMark)
+		{
+			foundContainerEndMark = true;
+			containerEndPos = j;
+		}
+	}
+
+	// If is not a container:
+	if (!foundContainerStartMark || !foundContainerEndMark)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FAIL;
+	}
+
+	//
+	// Extraction controls:
+	//
+
+	bool insertData = false;
+	bool foundLiteralStrOpenMark = false;
+	bool foundLiteralStrCloseMark = false;
+
+	size_t literalStrOpenMarkPos = 0;
+	size_t literalStrCloseMarkPos = 0;
+
+	size_t startDataPos = containerStartPos + 1;
+	size_t endDataPos = containerEndPos;
+	
+	std::wstring buffer;
+	std::vector<std::wstring> rawEntries;	// Separated entries without treatment
+
+	for (size_t i = containerStartPos + 1; i <= containerEndPos; i++)
+	{
+		c = rawValue->at(i);
+
+		// Check for data insertion conditions:
+		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR_W || c == SETTINGS_INI_CONTAINER_CLOSE_MARK_W)
+		{
+			// In case a literal string was found:
+			if (foundLiteralStrOpenMark && foundLiteralStrCloseMark)
+			{
+				insertData = true;
+			}
+
+			// In case a quote open mark was found and not closed, verify if the current position is the last inside the container:
+			if (foundLiteralStrOpenMark && !foundLiteralStrCloseMark && i == containerEndPos)
+			{
+				insertData = true;
+			}
+
+			// In case a non literal string will be inserted:
+			if (!foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
+			{
+				insertData = true;
+			}
+		}
+
+		// Insert the data:
+		if (insertData)
+		{
+			// Take the substring data:
+			if (foundLiteralStrCloseMark)
+			{
+				buffer = rawValue->substr(literalStrOpenMarkPos, (literalStrCloseMarkPos - literalStrOpenMarkPos) + 1);
+			}
+			else
+			{
+				buffer = rawValue->substr(startDataPos, (endDataPos - startDataPos) + 1);
+			}
+
+			// Insert the data:
+			rawEntries.push_back(buffer);
+			buffer.clear();
+			nEntries++;
+			insertData = false;
+
+			// Reset the control variables:
+			foundLiteralStrOpenMark = false;
+			foundLiteralStrCloseMark = false;
+			literalStrOpenMarkPos = 0;
+			literalStrCloseMarkPos = 0;
+		}
+
+		if (c == SETTINGS_INI_CONTAINER_VALUE_SEPARATOR_W)
+		{
+			// Check for possible new data position:
+			if (i <= containerEndPos && !foundLiteralStrOpenMark)
+			{
+				startDataPos = i + 1;
+			}
+		}
+		else
+		{
+			if (!foundLiteralStrCloseMark)
+			{
+				endDataPos = i;
+			}
+		}
+
+		// Check for close string marks only when an open mark was found:
+		if (c == SETTINGS_INI_DATA_TYPE_STRING_W && foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
+		{
+			foundLiteralStrCloseMark = true;
+			literalStrCloseMarkPos = i;
+		}
+
+		// Check for open string marks:
+		if (c == SETTINGS_INI_DATA_TYPE_STRING_W && !foundLiteralStrOpenMark && !foundLiteralStrCloseMark)
+		{
+			foundLiteralStrOpenMark = true;
+			literalStrOpenMarkPos = i;
+		}
+	}
+
+	long long nFails = 0;
+
+	if (!rawEntries.empty())
+	{
+		for (size_t i = 0; i < rawEntries.size(); i++)
+		{
+			SettingsLib::Types::ConfigDataStore tmpStore;
+			int convertStatus = SettingsLib::Tools::Ini::convertValue(&rawEntries[i], &tmpStore, trimSpaces);
+			SettingsLib::ErrorCodes::IniRawValueConversionStatus convertStatusCode = static_cast<SettingsLib::ErrorCodes::IniRawValueConversionStatus>(convertStatus);
+
+			switch (convertStatusCode)
+			{
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_UNSIGNED_INTEGER:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_INTEGER:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_FLOAT:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_BOOLEAN:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING:
+				case SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_WSTRING:
+				{
+					vData->push_back(tmpStore);
+					break;
+				}
+				default:
+				{
+					nFails++;
+					break;
+				}
+			}
+		}
+	}
+
+	if (nFails == 0)
+	{
+		return nEntries;
+	}
+	else
+	{
+		if (nEntries > nFails)
+		{
+			return -1;
+		}
+
+		return -2;
+	}
+}
+
 int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newStr, bool trimBegin, bool trimEnd)
 {
 	// Verify if the pointers are nullptr:
@@ -2930,6 +3143,100 @@ int SettingsLib::Tools::Ini::trimSpaces(std::string *rawValue, std::string *newS
 	*newStr = buffer;
 
     return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_STRING;
+}
+
+int SettingsLib::Tools::Ini::trimSpaces(std::wstring *rawValue, std::wstring *newStr, bool trimBegin, bool trimEnd)
+{
+	// Verify if the pointers are nullptr:
+
+    if (rawValue == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	if (newStr == nullptr)
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_NULLPTR_ERROR;
+	}
+
+	// If the rawValue is empty, return VALUE_EMPTY:
+	if (rawValue->empty())
+	{
+		return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_EMPTY;
+	}
+
+	// Make sure the newStr will only holds data from rawValue:
+	newStr->clear();
+
+	//
+	// Trim variable controls:
+	//
+
+	std::wstring buffer;
+
+	size_t firstNonSpaceChar = 0;
+	size_t lastNonSpaceChar = 0;
+	size_t lastDataPos = 0;
+
+	bool isCurrentCharSpace = false;
+	bool foundNonSpaceChar = false;
+
+	if (rawValue->size() > 0)
+	{
+		lastDataPos = rawValue->size() - 1;
+	}
+
+	wchar_t c = L'\0';
+
+	// Start the raw string analysis:
+	for (size_t i = 0; i < rawValue->size(); i++)
+	{
+		isCurrentCharSpace = false;
+
+		c = rawValue->at(i);
+
+		if (c == SETTINGS_INI_SPACE_CHAR_W)
+		{
+			isCurrentCharSpace = true;
+		}
+		else
+		{
+			if (!foundNonSpaceChar)
+			{
+				foundNonSpaceChar = true;
+				firstNonSpaceChar = i;
+			}
+		}
+
+		if (!isCurrentCharSpace)
+		{
+			lastNonSpaceChar = i;
+		}
+	}
+
+	if (lastNonSpaceChar < lastDataPos)
+	{
+		lastDataPos = lastNonSpaceChar;
+	}
+
+	if (trimBegin && trimEnd)
+	{
+		buffer = rawValue->substr(firstNonSpaceChar, (lastDataPos - firstNonSpaceChar) + 1);
+	}
+
+	if (trimBegin && !trimEnd)
+	{
+		buffer = rawValue->substr(firstNonSpaceChar, (rawValue->size() - firstNonSpaceChar));
+	}
+
+	if (!trimBegin && trimEnd)
+	{
+		buffer = rawValue->substr(0, (lastDataPos - firstNonSpaceChar) + 1);
+	}
+
+	*newStr = buffer;
+
+    return SettingsLib::ErrorCodes::IniRawValueConversionStatus::SETTINGS_INI_CONVERT_VALUE_WSTRING;
 }
 
 int SettingsLib::Tools::Ini::convertDataStore2Str(SettingsLib::Types::ConfigDataStore *data, std::string *strValue)

@@ -147,6 +147,15 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API long long convertValue2Container (std::string* rawValue, std::vector<SettingsLib::Types::ConfigDataStore>* vData, bool trimSpaces);
 
+			/**
+			 * @brief Convert a raw value string extracted from INI configuration line into a container that can hold a number (unsigned integer/integer/decimal), boolean, or a literal string values
+			 * @param rawValue A raw value data extracted from INI file line
+			 * @param vData A pointer/address to an initialized object Container Data.
+			 * @param trimSpaces Cut the empty spaces in the begin of the string and in the end, only if the value is a string data. Otherwise, will be ignored.
+			 * @return Return a positive value when no error was found, corresponding with the number of entries was generated inside the vData.
+			 * @return Return -1 if not all values was converted correctly.
+			 * @return Return -2 if all values failed in conversion task.
+			 */
 			SETTINGS_LIB_API long long convertValue2Container (std::wstring* rawValue, std::vector<SettingsLib::Types::ConfigDataStore>* vData, bool trimSpaces);
 
 			/**
@@ -157,6 +166,12 @@ namespace SettingsLib
 			 */
 			SETTINGS_LIB_API int trimSpaces (std::string* rawValue, std::string* newStr, bool trimBegin, bool trimEnd);
 
+			/**
+			 * @brief Remove the spaces from the string before the begin and the end.
+			 * @param rawValue Raw string.
+			 * @param newStr An copy of the rawValue with removed spaces.
+			 * @return 
+			 */
 			SETTINGS_LIB_API int trimSpaces (std::wstring* rawValue, std::wstring* newStr, bool trimBegin, bool trimEnd);
 
 			/**
