@@ -293,15 +293,23 @@ namespace SettingsLib
 				 * @brief Set a configuration line in file stream.
 				 * @param line String representing the configuration line
 				 * @param refLine Reference line with partial content to use to identify the first occurrence
-				 * @param lineN Line number
 				 * @param useRefLine Define to use reference line or line number if false
 				 * @return 
 				 * @note If lineN is bigger than file, the line will be put in the end of the file.
 				 * @note This method uses a temporary vector, but doesn't use Vector Memory Store.
 				 */
-				int setConfigLine (std::string line, std::string refLine, size_t lineN, bool useRefLine);	// NOT READY
+				int setConfigLine (std::string line, std::string refLine, bool useRefLine);
 
-				int setConfigLine (std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine);	// NOT READY
+				/**
+				 * @brief Set a configuration line in file stream.
+				 * @param line String representing the configuration line
+				 * @param refLine Reference line with partial content to use to identify the first occurrence
+				 * @param useRefLine Define to use reference line or line number if false
+				 * @return 
+				 * @note If lineN is bigger than file, the line will be put in the end of the file.
+				 * @note This method uses a temporary vector, but doesn't use Vector Memory Store.
+				 */
+				int setConfigLine (std::wstring line, std::wstring refLine, bool useRefLine);
 
 				/**
 				 * @brief Insert a new line in the file

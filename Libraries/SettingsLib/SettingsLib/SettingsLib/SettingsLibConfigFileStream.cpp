@@ -642,6 +642,7 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::strin
 
 		try
 		{
+			// Put the line to the end, if the size is higher than cfgStore:
 			if (lineN >= this->cfgStore->size())
 			{
 				this->cfgStore->push_back(line);
@@ -686,6 +687,7 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::wstri
 
 		try
 		{
+			// Put the line to the end, if the size is higher than cfgStore:
 			if (lineN >= this->wCfgStore->size())
 			{
 				this->wCfgStore->push_back(line);
@@ -712,29 +714,130 @@ int SettingsLib::Types::ConfigFileStream::setConfigLine(size_t lineN, std::wstri
     return 0;
 }
 
-int SettingsLib::Types::ConfigFileStream::setConfigLine(std::string line, std::string refLine, size_t lineN, bool useRefLine)
+int SettingsLib::Types::ConfigFileStream::setConfigLine(std::string line, std::string refLine, bool useRefLine)
 {
 	if (this->isWideFileStream())
 	{
-		return 1;
+		return 1;	// The configuration object is defined to use wstring
 	}
 
 	if (!this->isConfigStreamOpen())
 	{
-		return 4;
+		return 4;	// The configuration file stream is not open
 	}
 
-    return 0;
+	bool foundLine = false;
+	size_t lineN = 0;
+	std::vector<std::string> tmpVec;
+
+	std::streampos oldP = this->cfgFileStream->tellp();
+	std::streampos oldG = this->cfgFileStream->tellg();
+
+	int loadStatus = SettingsLib::Tools::storeFstream2Memory(this->cfgFileStream.get(), &tmpVec, 0, true, true);
+
+	if (loadStatus == 0)
+	{
+		int saveStatus = -1;
+	
+		for (size_t i = 0; i < tmpVec.size(); i++)
+		{
+			if (tmpVec[i] == refLine || refLine.starts_with(refLine))
+			{
+				lineN = i;
+				foundLine = true;
+				break;
+			}
+		}
+	
+		if (foundLine)
+		{
+			tmpVec[lineN] = line;
+		}
+		else
+		{
+			tmpVec.push_back(line);
+		}
+	
+		saveStatus = SettingsLib::Tools::storeMemory2Fstream(this->cfgFileStream.get(), &tmpVec, true, true, true, false);
+
+		this->cfgFileStream->seekg(oldG);
+		this->cfgFileStream->seekp(oldP);
+
+		if (saveStatus)
+		{
+			return 0;	// Successful operation
+		}
+	}
+	else
+	{
+		this->cfgFileStream->seekg(oldG);
+		this->cfgFileStream->seekp(oldP);
+	}
+
+    return 2;	// An exception occurred
 }
 
-int SettingsLib::Types::ConfigFileStream::setConfigLine(std::wstring line, std::wstring refLine, size_t lineN, bool useRefLine)
+int SettingsLib::Types::ConfigFileStream::setConfigLine(std::wstring line, std::wstring refLine, bool useRefLine)
 {
-    if (!this->isConfigStreamOpen())
+	if (!this->isWideFileStream())
 	{
-		return 4;
+		return 1;	// The configuration object is defined to use string
 	}
 
-    return 0;
+	if (!this->isConfigStreamOpen())
+	{
+		return 4;	// The configuration file stream is not open
+	}
+
+	bool foundLine = false;
+	size_t lineN = 0;
+	std::vector<std::wstring> tmpVec;
+
+	std::streampos oldP = this->wCfgFileStream->tellp();
+	std::streampos oldG = this->wCfgFileStream->tellg();
+
+	int loadStatus = SettingsLib::Tools::storeFstream2Memory(this->wCfgFileStream.get(), &tmpVec, 0, true, true);
+
+	if (loadStatus == 0)
+	{
+		int saveStatus = -1;
+	
+		for (size_t i = 0; i < tmpVec.size(); i++)
+		{
+			if (tmpVec[i] == refLine || refLine.starts_with(refLine))
+			{
+				lineN = i;
+				foundLine = true;
+				break;
+			}
+		}
+	
+		if (foundLine)
+		{
+			tmpVec[lineN] = line;
+		}
+		else
+		{
+			tmpVec.push_back(line);
+		}
+	
+		saveStatus = SettingsLib::Tools::storeMemory2Fstream(this->wCfgFileStream.get(), &tmpVec, true, true, true, false);
+
+		this->wCfgFileStream->seekg(oldG);
+		this->wCfgFileStream->seekp(oldP);
+
+		if (saveStatus)
+		{
+			return 0;	// Successful operation
+		}
+	}
+	else
+	{
+		this->wCfgFileStream->seekg(oldG);
+		this->wCfgFileStream->seekp(oldP);
+	}
+
+    return 2;	// An exception occurred
 }
 
 int SettingsLib::Types::ConfigFileStream::insertConfigLine(std::string line, bool insertOnBegin, bool resetPos)
