@@ -1279,7 +1279,7 @@ SettingsLib::Types::ConfigStrData::ConfigStrData(SettingsLib::Types::ConfigStrDa
 
 SettingsLib::Types::ConfigStrData::~ConfigStrData()
 {
-	
+	this->cleanData();
 }
 
 SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(std::string str)

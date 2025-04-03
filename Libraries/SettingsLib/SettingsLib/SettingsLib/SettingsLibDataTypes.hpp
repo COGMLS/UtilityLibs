@@ -96,8 +96,20 @@ namespace SettingsLib
 
 			public:
 
+				/**
+				 * @brief Create an empty Configuration String Data object
+				 */
 				ConfigStrData();
+
+
+				/**
+				 * @brief Create an Configuration String Data with a string data
+				 */
 				ConfigStrData (std::string str);
+
+				/**
+				 * @brief Create an Configuration String Data with a wstring data
+				 */
 				ConfigStrData (std::wstring str);
 
 				ConfigStrData (const SettingsLib::Types::ConfigStrData& other);
@@ -114,14 +126,41 @@ namespace SettingsLib
 				friend bool operator== (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
 				friend bool operator!= (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
 
+				/**
+				 * @brief Get the datatype stored in the object or if is empty or a fail occurred
+				 */
 				SettingsLib::Types::ConfigDataType getDataType();
 
+				/**
+				 * @brief Get the string data.
+				 * @note If no string or if is stored a wstring, an empty string is returned. 
+				 */
 				std::string getStr();
+
+				/**
+				 * @brief Get the wstring data.
+				 * @note If no wstring or if is stored a string, an empty wstring is returned. 
+				 */
 				std::wstring getStrW();
 
+				/**
+				 * @brief Define the string data. If a data already exist, it will be replaced by the new one
+				 * @param str New string data to store.
+				 * @return True if the data was set with success. Fail if fail to clean the data.
+				 */
 				bool setStr(std::string str);
+
+				/**
+				 * @brief Define the string data. If a data already exist, it will be replaced by the new one
+				 * @param str New string data to store.
+				 * @return True if the data was set with success. Fail if fail to clean the data.
+				 */
 				bool setStr(std::wstring str);
 
+				/**
+				 * @brief Clean the string data
+				 * @return True if the data was removed with success. False if fail to clean the data.
+				 */
 				bool cleanData();
 		};
 
@@ -146,6 +185,10 @@ namespace SettingsLib
 				 */
 				bool cleanStringData();
 
+				/**
+				 * @brief Prepare to allocate a Configuration String Data object
+				 * @return True if allocated with success.
+				 */
 				bool allocStringData();
 
 			public:
