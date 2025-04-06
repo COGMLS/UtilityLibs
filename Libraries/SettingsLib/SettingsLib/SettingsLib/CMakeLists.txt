@@ -69,23 +69,23 @@ if (WIN32)
 					SHARED
 					"dllmain.hpp" "dllmain.cpp"
 					# Settings Library main header:
-					"SettingsLib.hpp" "SettingsLib.cpp"
+					"SettingsLib.hpp" 									"SettingsLib.cpp"
 					# Settings Library headers:
-					"SettingsLibConfig.hpp" "SettingsLibConfig.hpp"
-					"SettingsLibConfigFileStream.hpp" "SettingsLibConfigFileStream.cpp"
-					"SettingsLibDataTypes.hpp" "SettingsLibDataTypes.cpp"
+					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
+					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
+					"SettingsLibDataTypes.hpp" 							"SettingsLibDataTypes.cpp"
 					"SettingsLibDefinitions.hpp"
 					"SettingsLibErrorCodes.hpp"
-					"SettingsLibTools.hpp" "SettingsLibTools.cpp"
-					"SettingsLibVersionHelper.hpp" "SettingsLibVersionHelper.cpp"
+					"SettingsLibTools.hpp" 								"SettingsLibTools.cpp"
+					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
 					# Error and Exceptions:
-					"Components/Exceptions/SettingsLibException.hpp" "Components/Exceptions/SettingsLibException.cpp"
+					"Components/Exceptions/SettingsLibException.hpp" 	"Components/Exceptions/SettingsLibException.cpp"
 					# Ini files:
-					"Components/Configs/Ini/SettingsIniConfig.hpp" "Components/Configs/Ini/SettingsIniConfig.cpp"
-					"Components/Configs/Ini/SettingsIniConfigData.hpp" "Components/Configs/Ini/SettingsIniConfigData.cpp"
+					"Components/Configs/Ini/SettingsIniConfig.hpp" 		"Components/Configs/Ini/SettingsIniConfig.cpp"
+					"Components/Configs/Ini/SettingsIniConfigData.hpp" 	"Components/Configs/Ini/SettingsIniConfigData.cpp"
 					"Components/Configs/Ini/SettingsIniDefinitions.hpp"
 					"Components/Configs/Ini/SettingsIniErrorCodes.hpp"
-					"Components/Configs/Ini/SettingsIniTools.hpp" "Components/Configs/Ini/SettingsIniTools.cpp"
+					"Components/Configs/Ini/SettingsIniTools.hpp" 		"Components/Configs/Ini/SettingsIniTools.cpp"
 				)
 else()
 	add_library(
@@ -96,7 +96,7 @@ else()
 					# Settings Library headers:
 					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
 					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
-					"SettingsLibDataTypes.hpp"
+					"SettingsLibDataTypes.hpp" 							"SettingsLibDataTypes.cpp"
 					"SettingsLibDefinitions.hpp"
 					"SettingsLibErrorCodes.hpp"
 					"SettingsLibTools.hpp" 								"SettingsLibTools.cpp"
