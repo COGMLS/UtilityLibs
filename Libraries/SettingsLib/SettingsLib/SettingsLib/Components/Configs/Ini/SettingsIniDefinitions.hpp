@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "SettingsLibExperimentalFeatures.hpp"
+
 // Settings Definitions for INI configuration files:
 
 // Settings marks:

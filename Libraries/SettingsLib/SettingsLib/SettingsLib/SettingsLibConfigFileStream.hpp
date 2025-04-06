@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "SettingsLibExperimentalFeatures.hpp"
+
 #include <climits>
 #include <filesystem>
 #include <fstream>

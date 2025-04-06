@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "SettingsLibExperimentalFeatures.hpp"
+
 // Settings General Definitions:
 
 #endif //! SETTINGS_LIB_DEFINITIONS_HPP

@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "SettingsLibExperimentalFeatures.hpp"
+
 #include "SettingsIniDefinitions.hpp"
 #include "SettingsIniErrorCodes.hpp"
 #include "SettingsIniTools.hpp"
