@@ -28,39 +28,34 @@
 	#endif
 #endif // !WIN32
 
-/**
- * @note This file was originally called "SettingsLibProperties.hpp"
- * @note Originally all functions were inline
-*/
-
 #include <string>
 
-#include "SettingsLibDataTypes.hpp"
-
-#define SETTINGS_LIBRARY_MAJOR_VERSION		3
-#define SETTINGS_LIBRARY_MINOR_VERSION		0
-#define SETTINGS_LIBRARY_PATCH_VERSION		0
-#define SETTINGS_LIBRARY_BUILD_TYPE			"alpha"
-#define SETTINGS_LIBRARY_BUILD_TYPE_W		L"alpha"
-#define SETTINGS_LIBRARY_REVISION_VERSION	24
-#define SETTINGS_LIBRARY_BUILD_VERSION		0
+#include "SettingsLibVersion.hpp"
 
 namespace SettingsLib
 {
-	/// @brief Get the Settings Library version string
-	SETTINGS_LIB_API std::string getSettingsLibVersion();
+	/// @brief Settings Library Version struct
+	struct SettingsLibVersion
+	{
+		unsigned int major;
+		unsigned int minor;
+		unsigned int patch;
+		unsigned int revision;
+		unsigned long long build;
+		char* type;
+	};
 
-	/// @brief Get the Settings Library build string
-	SETTINGS_LIB_API std::string getSettingsLibBuild();
+	/// @brief Get all version and build information on struct SettingsLibVersion
+	SettingsLib::SettingsLibVersion SETTINGS_LIB_API getSettingsLibVersion();
 
-	/// @brief Get the Settings Library version wide string
-	SETTINGS_LIB_API std::wstring getSettingsLibVersionW();
-
-	/// @brief Get the Settings Library build wide string
-	SETTINGS_LIB_API std::wstring getSettingsLibBuildW();
-
-	/// @brief Get all version and build information on struct SettingsLibVersion. NOTE: The build type is only given in ASCII.
-	SETTINGS_LIB_API const SettingsLib::Types::SettingsLibVersion getSettingsLibVersionData();
+	/**
+	 * @brief Transform the struct Version into a string version
+	 * @param version Console Extensions Version struct
+	 * @param showBuild Show the build number.
+	 * @param showType Show the build type.
+	 * @return Return a string version.
+	 */
+	std::string SETTINGS_LIB_API getVersionStr (SettingsLib::SettingsLibVersion version, bool showBuild, bool showType);
 }
 
 #endif //! SETTINGS_LIB_VERSION_HELPER_HPP

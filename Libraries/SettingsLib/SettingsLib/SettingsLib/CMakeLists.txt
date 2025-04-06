@@ -67,9 +67,14 @@ if (WIN32)
 	add_library(
 					SettingsLib
 					SHARED
-					"dllmain.hpp" "dllmain.cpp"
+					# Library Windows headers:
+					"dllmain.hpp" 										"dllmain.cpp"
 					# Settings Library main header:
 					"SettingsLib.hpp" 									"SettingsLib.cpp"
+					# Settings Library Version and Features headers:
+					"SettingsLibExperimentalFeatures.hpp"
+					"SettingsLibVersion.hpp"
+					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
 					# Settings Library headers:
 					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
 					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
@@ -77,7 +82,6 @@ if (WIN32)
 					"SettingsLibDefinitions.hpp"
 					"SettingsLibErrorCodes.hpp"
 					"SettingsLibTools.hpp" 								"SettingsLibTools.cpp"
-					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
 					# Error and Exceptions:
 					"Components/Exceptions/SettingsLibException.hpp" 	"Components/Exceptions/SettingsLibException.cpp"
 					# Ini files:
@@ -93,6 +97,10 @@ else()
 					SHARED
 					# Settings Library main header:
 					"SettingsLib.hpp" 									"SettingsLib.cpp"
+					# Settings Library Version and Features headers:
+					"SettingsLibExperimentalFeatures.hpp"
+					"SettingsLibVersion.hpp"
+					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
 					# Settings Library headers:
 					"SettingsLibConfig.hpp" 							"SettingsLibConfig.hpp"
 					"SettingsLibConfigFileStream.hpp" 					"SettingsLibConfigFileStream.cpp"
@@ -100,7 +108,6 @@ else()
 					"SettingsLibDefinitions.hpp"
 					"SettingsLibErrorCodes.hpp"
 					"SettingsLibTools.hpp" 								"SettingsLibTools.cpp"
-					"SettingsLibVersionHelper.hpp" 						"SettingsLibVersionHelper.cpp"
 					# Error and Exceptions:
 					"Components/Exceptions/SettingsLibException.hpp" 	"Components/Exceptions/SettingsLibException.cpp"
 					# Ini files:

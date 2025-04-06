@@ -37,17 +37,6 @@ namespace SettingsLib
 {
 	namespace Types
 	{
-		/// @brief Settings Library Version struct
-		struct SettingsLibVersion
-		{
-			unsigned int major;
-			unsigned int minor;
-			unsigned int patch;
-			char buildType[8];
-			unsigned int build;
-			unsigned int revision;
-		};
-
 		/// @brief Configuration Data for Container Type
 		enum ConfigDataContainerType : int
 		{

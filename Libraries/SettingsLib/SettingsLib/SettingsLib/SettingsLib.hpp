@@ -3,6 +3,12 @@
 #ifndef SETTINGS_LIB_HPP
 #define SETTINGS_LIB_HPP
 
+// Library Version components:
+
+#include "SettingsLibVersion.hpp"
+#include "SettingsLibExperimentalFeatures.hpp"
+#include "SettingsLibVersionHelper.hpp"
+
 // Main Settings Library header
 
 #include "SettingsLibConfig.hpp"
@@ -11,9 +17,10 @@
 #include "SettingsLibDefinitions.hpp"
 #include "SettingsLibErrorCodes.hpp"
 #include "SettingsLibTools.hpp"
-#include "SettingsLibVersionHelper.hpp"
 
+//
 // Components:
+//
 
 // Exception:
 

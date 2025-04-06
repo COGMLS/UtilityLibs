@@ -1,0 +1,41 @@
+#pragma once
+
+#ifndef SETTINGS_LIB_EXPERIMENTAL_FEATURES_CONTROL_HPP
+#define SETTINGS_LIB_EXPERIMENTAL_FEATURES_CONTROL_HPP
+
+#include "SettingsLibVersion.hpp"
+
+//
+// Alpha Features:
+//
+
+#ifdef SETTINGS_LIB_BUILD_TYPE_ALPHA
+	// Add ConfigDataStore wrapper constructors:
+	#define SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+#endif // !SETTINGS_LIB_BUILD_TYPE_ALPHA
+
+//
+// Beta Features:
+//
+
+#ifdef SETTINGS_LIB_BUILD_TYPE_BETA
+
+#endif // !SETTINGS_LIB_BUILD_TYPE_BETA
+
+//
+// Release Candidate Features:
+//
+
+#ifdef SETTINGS_LIB_BUILD_TYPE_RELEASE_CANDIDATE
+
+#endif // !SETTINGS_LIB_BUILD_TYPE_RELEASE_CANDIDATE
+
+//
+// Release Features:
+//
+
+#ifdef SETTINGS_LIB_BUILD_TYPE_RELEASE
+
+#endif // !SETTINGS_LIB_BUILD_TYPE_RELEASE
+
+#endif // !SETTINGS_LIB_EXPERIMENTAL_FEATURES_CONTROL_HPP

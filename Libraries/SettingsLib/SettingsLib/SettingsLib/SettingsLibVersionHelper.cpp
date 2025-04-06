@@ -1,26 +1,39 @@
 #include "SettingsLibVersionHelper.hpp"
 
-std::string getSettingsLibVersion()
+SettingsLib::SettingsLibVersion getSettingsLibVersion()
 {
-	return std::string(std::to_string(SETTINGS_LIBRARY_MAJOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_MINOR_VERSION) + "." + std::to_string(SETTINGS_LIBRARY_PATCH_VERSION) + "-" + SETTINGS_LIBRARY_BUILD_TYPE + "." + std::to_string(SETTINGS_LIBRARY_REVISION_VERSION));
+	SettingsLib::SettingsLibVersion version;
+
+	version.major = SETTINGS_LIBRARY_MAJOR_VERSION;
+	version.minor = SETTINGS_LIBRARY_MINOR_VERSION;
+	version.patch = SETTINGS_LIBRARY_PATCH_VERSION;
+	version.revision = SETTINGS_LIBRARY_REVISION_NUMBER;
+	version.build = SETTINGS_LIBRARY_BUILD_NUMBER;
+	version.type = new char[std::strlen(SETTINGS_LIBRARY_BUILD_TYPE)];
+	std::strcpy(version.type, SETTINGS_LIBRARY_BUILD_TYPE);
+
+	return version;
 }
 
-std::string getSettingsLibBuild()
+std::string SettingsLib::getVersionStr(SettingsLib::SettingsLibVersion version, bool showBuild, bool showType)
 {
-	return std::string("Build: ") + std::to_string(SETTINGS_LIBRARY_BUILD_VERSION);
-}
+	std::string s;
+	s = std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.patch);
 
-std::wstring getSettingsLibVersionW()
-{
-	return std::wstring(std::to_wstring(SETTINGS_LIBRARY_MAJOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_MINOR_VERSION) + L"." + std::to_wstring(SETTINGS_LIBRARY_PATCH_VERSION) + L"-" + SETTINGS_LIBRARY_BUILD_TYPE_W + L"." + std::to_wstring(SETTINGS_LIBRARY_REVISION_VERSION));
-}
+	if (showType && !(std::strcmp(version.type, "release") == 0 || std::strcmp(version.type, "RELEASE") == 0))
+	{
+		s += "-" + std::string(version.type);
+	}
 
-std::wstring getSettingsLibBuildW()
-{
-	return std::wstring(L"Build: ") + std::to_wstring(SETTINGS_LIBRARY_BUILD_VERSION);
-}
+	if (version.revision > 0)
+	{
+		s += "." + std::to_string(version.revision);
+	}
 
-const SettingsLib::Types::SettingsLibVersion getSettingsLibVersionData()
-{
-	return SettingsLib::Types::SettingsLibVersion{ SETTINGS_LIBRARY_MAJOR_VERSION, SETTINGS_LIBRARY_MINOR_VERSION, SETTINGS_LIBRARY_PATCH_VERSION, SETTINGS_LIBRARY_BUILD_TYPE, SETTINGS_LIBRARY_BUILD_VERSION, SETTINGS_LIBRARY_REVISION_VERSION };
+	if (showBuild)
+	{
+		s += " build " + std::to_string(version.build);
+	}
+
+	return s;
 }
