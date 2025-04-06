@@ -117,6 +117,23 @@ bool SettingsLib::Types::ConfigDataStore::allocStringData()
 	}
 }
 
+#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(unsigned short data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<unsigned long long>(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(unsigned int data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<unsigned long long>(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(unsigned long data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<unsigned long long>(data));
+}
+#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+
 SettingsLib::Types::ConfigDataStore::ConfigDataStore(unsigned long long data)
 {
 	try
@@ -129,6 +146,23 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(unsigned long long data)
 		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 	}
 }
+
+#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(short data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<long long>(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(int data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<long long>(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(long data)
+{
+	*this = SettingsLib::Types::ConfigDataStore(static_cast<long long>(data));
+}
+#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
 
 SettingsLib::Types::ConfigDataStore::ConfigDataStore(long long data)
 {
@@ -168,6 +202,42 @@ SettingsLib::Types::ConfigDataStore::ConfigDataStore(bool data)
 		this->type = SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_FAIL;
 	}
 }
+
+#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(char data)
+{
+	std::string lData;
+	lData += data;
+	*this = SettingsLib::Types::ConfigDataStore(lData);
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(char data[])
+{
+	*this = SettingsLib::Types::ConfigDataStore(std::string(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(const char data[])
+{
+	*this = SettingsLib::Types::ConfigDataStore(std::string(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(wchar_t data)
+{
+	std::wstring lData;
+	lData += data;
+	*this = SettingsLib::Types::ConfigDataStore(lData);
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(wchar_t data[])
+{
+	*this = SettingsLib::Types::ConfigDataStore(std::wstring(data));
+}
+
+SettingsLib::Types::ConfigDataStore::ConfigDataStore(const wchar_t data[])
+{
+	*this = SettingsLib::Types::ConfigDataStore(std::wstring(data));
+}
+#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
 
 SettingsLib::Types::ConfigDataStore::ConfigDataStore(std::string data)
 {
@@ -656,6 +726,51 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 
 	return *this;
 }
+
+#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
+bool SettingsLib::Types::ConfigDataStore::operator==(const SettingsLib::Types::ConfigDataStore &other)
+{
+	if (this->type != other.type)
+	{
+		return false;
+	}
+	
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_BOOLEAN)
+	{
+		return this->data.b == other.data.b;
+	}
+
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_UNSIGNED_INTEGER)
+	{
+		return this->data.ull == other.data.ull;
+	}
+
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_INTEGER)
+	{
+		return this->data.ll == other.data.ll;
+	}
+
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_FLOAT)
+	{
+		return this->data.d == other.data.d;
+	}
+
+	if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING || this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+	{
+		if (this->strData && other.strData)
+		{
+			return this->strData.get() == other.strData.get();
+		}
+	}
+
+    return false;
+}
+
+bool SettingsLib::Types::ConfigDataStore::operator!=(const SettingsLib::Types::ConfigDataStore &other)
+{
+    return !(*this == other);
+}
+#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
 
 int SettingsLib::Types::ConfigDataStore::getData (unsigned long long *data)
 {

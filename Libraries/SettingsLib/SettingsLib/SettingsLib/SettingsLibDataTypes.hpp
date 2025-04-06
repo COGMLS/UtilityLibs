@@ -201,11 +201,57 @@ namespace SettingsLib
 				 */
 				ConfigDataStore (SettingsLib::Types::ConfigDataStore&& other) noexcept;
 
+				#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a unsigned short in unsigned long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (unsigned short data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a unsigned int in unsigned long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (unsigned int data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a unsigned long in unsigned long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (unsigned long data);
+				#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+
 				/**
 				 * @brief Create a ConfigDataStore object that will hold a unsigned long long.
 				 * @param data Data that should be set in data store
 				 */
 				ConfigDataStore (unsigned long long data);
+
+				#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a short in long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (short data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a int in long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (int data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a long in long long field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (long data);
+				#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
 
 				/**
 				 * @brief Create a ConfigDataStore object that will hold a long long.
@@ -224,6 +270,50 @@ namespace SettingsLib
 				 * @param data Data that should be set in data store
 				 */
 				ConfigDataStore (bool data);
+
+				#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a char in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (char data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a char array in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (char data[]);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a const char array in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (const char data[]);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a wchar_t in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (wchar_t data);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a wchar_t array in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (wchar_t data[]);
+
+				/**
+				 * @brief Create a ConfigDataStore object that will hold a const wchar_t array in ConfigStrData field.
+				 * @param data Data that should be set in data store
+				 * @note This is a wrapper constructor
+				 */
+				ConfigDataStore (const wchar_t data[]);
+				#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
 
 				/**
 				 * @brief Create a ConfigDataStore object that will hold a string.
@@ -274,7 +364,17 @@ namespace SettingsLib
 
 				SettingsLib::Types::ConfigDataStore& operator= (const SettingsLib::Types::ConfigDataStore& other);
 				SettingsLib::Types::ConfigDataStore& operator= (SettingsLib::Types::ConfigDataStore&& other) noexcept;
+
+				#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
+				// Equality operators:
+
+				bool operator== (const SettingsLib::Types::ConfigDataStore& other);
+				bool operator!= (const SettingsLib::Types::ConfigDataStore& other);
+				#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
 				
+				//
+				// Methods:
+				//
 				
 				/**
 				 * @brief Get the data value

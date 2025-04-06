@@ -10,8 +10,11 @@
 //
 
 #ifdef SETTINGS_LIB_BUILD_TYPE_ALPHA
-	// Add ConfigDataStore wrapper constructors:
+	// Add ConfigDataStore wrapper constructors
 	#define SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_WRAPPER_CONSTRUCTORS
+	
+	// Add equality operator support in ConfigDataStore
+	#define SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
 #endif // !SETTINGS_LIB_BUILD_TYPE_ALPHA
 
 //
