@@ -36,6 +36,7 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
+#include <cwctype>
 
 #include "SettingsLibDefinitions.hpp"
 #include "SettingsIniDefinitions.hpp"
