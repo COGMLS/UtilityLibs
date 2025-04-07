@@ -29,6 +29,7 @@
 #endif // !WIN32
 
 #include <string>
+#include <cstring>
 
 #include "SettingsLibVersion.hpp"
 
