@@ -114,8 +114,13 @@ namespace SettingsLib
 				SettingsLib::Types::ConfigStrData& operator= (const SettingsLib::Types::ConfigStrData& other);
 				SettingsLib::Types::ConfigStrData& operator= (SettingsLib::Types::ConfigStrData&& other) noexcept;
 				
+				#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGSTRDATA_EQ_OPERATORS
+				bool operator== (const SettingsLib::Types::ConfigStrData& other);
+				bool operator!= (const SettingsLib::Types::ConfigStrData& other);
+				#else
 				friend bool operator== (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
 				friend bool operator!= (const SettingsLib::Types::ConfigStrData& lhs, const SettingsLib::Types::ConfigStrData& rhs);
+				#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGSTRDATA_EQ_OPERATORS
 
 				/**
 				 * @brief Get the datatype stored in the object or if is empty or a fail occurred

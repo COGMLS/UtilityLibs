@@ -15,6 +15,9 @@
 	
 	// Add equality operator support in ConfigDataStore
 	#define SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
+
+	// Use non-friend equality operators to ConfigStrData
+	#define SETTINGS_LIB_EXPERIMENTAL_CONFIGSTRDATA_EQ_OPERATORS
 #endif // !SETTINGS_LIB_BUILD_TYPE_ALPHA
 
 //

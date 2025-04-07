@@ -730,6 +730,11 @@ SettingsLib::Types::ConfigDataStore& SettingsLib::Types::ConfigDataStore::operat
 #ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGDATASTORE_EQ_OPERATORS
 bool SettingsLib::Types::ConfigDataStore::operator==(const SettingsLib::Types::ConfigDataStore &other)
 {
+	if (this == & other)
+	{
+		return true;
+	}
+
 	if (this->type != other.type)
 	{
 		return false;
@@ -1507,6 +1512,46 @@ SettingsLib::Types::ConfigStrData &SettingsLib::Types::ConfigStrData::operator=(
 	return *this;
 }
 
+#ifdef SETTINGS_LIB_EXPERIMENTAL_CONFIGSTRDATA_EQ_OPERATORS
+bool SettingsLib::Types::ConfigStrData::operator==(const SettingsLib::Types::ConfigStrData &other)
+{
+    if (this == &other)
+	{
+		return true;
+	}
+
+	if (this->type == other.type)
+	{
+		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_STRING)
+		{
+			if (*this->s == *other.s)
+			{
+				return true;
+			}
+		}
+
+		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_WSTRING)
+		{
+			if (*this->w == *other.w)
+			{
+				return true;
+			}
+		}
+
+		if (this->type == SettingsLib::Types::ConfigDataType::SETTINGS_LIB_CONFIG_DATA_UNION_TYPE_CONFIG_DATA_EMPTY)
+		{
+			return true;
+		}
+	}
+
+    return false;
+}
+
+bool SettingsLib::Types::ConfigStrData::operator!=(const SettingsLib::Types::ConfigStrData &other)
+{
+    return !(*this == other);
+}
+#else
 bool SettingsLib::Types::operator==(const SettingsLib::Types::ConfigStrData &lhs, const SettingsLib::Types::ConfigStrData &rhs)
 {
 	if (&lhs == &rhs)
@@ -1545,6 +1590,7 @@ bool SettingsLib::Types::operator!=(const SettingsLib::Types::ConfigStrData &lhs
 {
     return !(lhs == rhs);
 }
+#endif // !SETTINGS_LIB_EXPERIMENTAL_CONFIGSTRDATA_EQ_OPERATORS
 
 SettingsLib::Types::ConfigDataType SettingsLib::Types::ConfigStrData::getDataType()
 {
