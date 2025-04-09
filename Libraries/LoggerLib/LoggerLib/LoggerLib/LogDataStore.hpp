@@ -47,6 +47,7 @@
 /// @brief Log entry type
 enum LOGGER_LIB_API LogDataType
 {
+	LOG_DATA_FAIL = -1,
 	LOG_NULL_DATA_ENTRY,
 	LOG_UNSIGNED_INTEGER_ENTRY,
 	LOG_INTEGER_ENTRY,
@@ -65,11 +66,11 @@ union LogEntryData
 	long long LOG_ENTRY_INT;
 	double LOG_ENTRY_FLOAT;
 	bool LOG_ENTRY_BOOL;
-	//LoggerLocalDateTime LOG_ENTRY_DATE_TIME;	// Disable to reduce memory consume.
 };
 
 /**
  * @brief New Log storage, focus on better memory efficiency and easier way to use different datatypes
+ * @exception This class contains a enumeration mark from LogDataType to indicate when set a pointer was failed with LOG_DATA_FAIL value (-1)
  */
 class LOGGER_LIB_API LogDataStore
 {
@@ -85,13 +86,15 @@ class LOGGER_LIB_API LogDataStore
 		// Data store:
 		//
 
-		std::unique_ptr<std::string> str;
-		std::unique_ptr<std::wstring> wstr;
-		std::unique_ptr<LogEntryData> unionVal;
-		std::unique_ptr<LoggerLocalDateTime> localDt;
+		std::unique_ptr<std::string> str;				// Store a string data
+		std::unique_ptr<std::wstring> wstr;				// Store a wide string data
+		std::unique_ptr<LogEntryData> unionVal;			// Store a union LogEntryData, that can hold a Boolean, unsigned long long, long long or double value in the same memory space
+		std::unique_ptr<LoggerLocalDateTime> localDt;	// Store a LoggerLocalDateTime struct
 
-		/// @brief Clean the data store pointers. If set LOG_NULL_DATA_ENTRY, will preserve no data and set the 'type' flag as LOG_NULL_DATA_ENTRY.
-		void cleanData(LogDataType preserve = LogDataType::LOG_NULL_DATA_ENTRY);
+		/// @brief Clean and set the data store pointers. If set LOG_NULL_DATA_ENTRY, will preserve no data and set the 'type' flag as LOG_NULL_DATA_ENTRY.
+		/// @note LOG_DATA_FAIL does not take effect in data store. This is a exclusive mark when this method fails to define any data
+		/// @exception If fail to set a datatype, will reset all pointers and set the type as LOG_DATA_FAIL (-1)
+		void setDataStore(LogDataType type = LogDataType::LOG_NULL_DATA_ENTRY);
 
 	public:
 
@@ -392,9 +395,11 @@ class LOGGER_LIB_API LogDataStore
 		//
 
 		/// @brief Clean the data store
+		/// @note This method can clean the LOG_DATA_FAIL status, if no exception occur.
 		void clean();
 
 		/// @brief Check if the data store holds a data
+		/// @note If the LogDataStore was marked as LOG_DATA_FAIL, will return false
 		bool hasData();
 };
 	

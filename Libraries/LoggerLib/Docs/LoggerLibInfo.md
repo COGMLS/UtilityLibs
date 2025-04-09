@@ -8,6 +8,8 @@ This document contains the information about the future plans, known bugs, depre
 - Experimental code control
 - `LogDataStore` to easily store various datatype with better memory usage
 - *(Only for development)* Version build release type to control experimental features
+- Optimized `LogDataStore` to use less instructions to operate
+- Fix correct time format in log file format on *nix systems *(Version 3.4.0)*
 
 ## Implementations under development:
 
@@ -19,7 +21,7 @@ This document contains the information about the future plans, known bugs, depre
 
 - Move LoggerLib features to `LoggerLib` namespace. *(**NOTE:** May break the actual codes)*
 - Better error handling. *(**NOTE:** Support to `wstring` may bring difficulties to make it compatible with standard C++)*
-- Logger manager self guard thread to detect application abort or any other termination that does not treat correctly the Logger Manager. *(**NOTE:** Experimental and may not work as expected)*
+- Logger manager self guard thread to detect application abort or any other termination that does not treat correctly the Logger Manager. *(**NOTE:** This experimental feature may not work as expected)*
 - New ***Date and Time*** components to replace the actual `LogFileDateTime` class and functions `getLoggerDateTime` and `convertDateTime2LogStrEntry` and, struct `LoggerLocalDateTime`.
 
 ## Known Bugs:

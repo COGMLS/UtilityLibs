@@ -58,7 +58,15 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 
 	if (this->lastLogStatus == LoggerError::LOGGER_ERROR_OK && this->logStatus.size() == 0)
 	{
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+			#ifdef _WIN32
+			this->dtCreation = getLoggerDateTime(true, false);
+			#else
+			this->dtCreation = getLoggerDateTime(true, true);
+			#endif // _WIN32
+		#else
 		this->dtCreation = getLoggerDateTime();
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 
 		this->baseFileName = baseFileName + "_" + convertDateTime2LogStrEntry(dtCreation, true);
 
@@ -497,7 +505,15 @@ LoggerW::LoggerW(std::filesystem::path logPath, std::wstring baseFileName)
 
 	if (this->lastLogStatus == LoggerError::LOGGER_ERROR_OK && this->logStatus.size() == 0)
 	{
+		#ifdef LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+			#ifdef _WIN32
+			this->dtCreation = getLoggerDateTime(true, false);
+			#else
+			this->dtCreation = getLoggerDateTime(true, true);
+			#endif // _WIN32
+		#else
 		this->dtCreation = getLoggerDateTime();
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 
 		this->baseFileName = baseFileName + L"_" + convertDateTime2LogStrEntryW(dtCreation, true);
 
