@@ -8,7 +8,11 @@
 
 int main(int argc, const char* argv[])
 {
+	#ifdef _WIN32
 	LogEntry startApp = LogEntry("[Application Start]::", "HighPrecisionLocalTime::", getLoggerDateTime(true, false), true);
+	#else
+	LogEntry startApp = LogEntry("[Application Start]::", "HighPrecisionLocalTime::", getLoggerDateTime(true, true), true);
+	#endif // !_WIN32
 
 	bool testAutoSave = false;
 	bool testSortLogFiles = false;
@@ -135,7 +139,7 @@ int main(int argc, const char* argv[])
 	
 		for (size_t i = 0; i < 25; i++)
 		{
-			pLogger->newEntry(LogEntry("Test " + std::to_string(i) + "::", "Message " + std::to_string(i)));
+			pLogger->newEntry(LogEntry("Test " + std::to_string(i) + "::", "Message ", static_cast<long long>(i)));
 		}
 	
 		pLogger->~Logger();
