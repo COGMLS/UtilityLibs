@@ -6,35 +6,20 @@ This file contain the tracked version and modifications of the Logger Library pr
 
 An copy or partial copy of this history table is available in the `README.md` file in the root of the project.
 
-## Logger Library History:
+## Logger Library Release History:
 
 <!-- Logger Library History Table: -->
-<style>
-    version-data
-    {
-        font-weight: bold;
-    }
-    note-alert
-    {
-        font-weight: bold;
-        color: blue;
-    }
-    fix-alert
-    {
-        font-weight: bold;
-    }
-    bug-alert
-    {
-        font-weight: bold;
-        color: red;
-    }
-    warning-alert
-    {
-        font-weight: bold;
-        color: orange;
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
+</head>
 <dl>
+    <!-- 3.4.0-release candidate (2025/04/08) -->
+    <dt><version-data>3.4.0-release candidate</version-data> | Release Date: 2025/04/08</dt>
+    <dd>Changed private method <code>cleanData</code> to <code>setDataStore</code> in <strong>LogDataStore</strong></dd>
+    <dd>Optimized <code>LogDataStore</code> using less instructions to operate</dd>
+    <dd>Added <code>LOG_DATA_FAIL</code> in <strong>LogDataType</strong> to determinate when <i>LogDataStore</i> fail to set the data correctly</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Added experimental log file name in UTC time on Linux and MacOS platforms</dd>
+    <dd><code>LogDataStore</code> is now the new way to store data in Logger Library</dd>
     <!-- 3.3.1-release (2025/03/31) -->
     <dt><version-data>3.3.1-release</version-data> | Release Date: 2025/03/31</dt>
     <dd>Added support to UTC format</dd>

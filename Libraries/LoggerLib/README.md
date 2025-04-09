@@ -74,6 +74,8 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
 - Experimental code control
 - `LogDataStore` to easily store various datatype with better memory usage
 - *(Only for development)* Version build release type to control experimental features
+- Optimized `LogDataStore` to use less instructions to operate
+- Fix correct time format in log file format on *nix systems *(Version 3.4.0)*
 
 ### Implementations under development:
 
@@ -81,38 +83,23 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
 - UTC time format
 - High Precision date and time to all platforms
 
-> **TO DISABLE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `LoggerExperimental.hpp` or set the `LOGGER_LIB_COMPILE_BUILD_TYPE` in `LoggerLibVersion.hpp` to *alpha (1)*, *beta (2)*, *release candidate (3)***
+> **TO DISABLE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `LoggerExperimental.hpp` or set the `LOGGER_LIB_COMPILE_BUILD_TYPE` in `LoggerLibVersion.hpp` to *alpha (1)*, *beta (2)*, *release candidate (3)* or *release (4)***
 
-## Logger Library History:
+## Logger Library Release History:
 
 <!-- Logger Library History Table: -->
-<style>
-    version-data
-    {
-        font-weight: bold;
-    }
-    note-alert
-    {
-        font-weight: bold;
-        color: blue;
-    }
-    fix-alert
-    {
-        font-weight: bold;
-    }
-    bug-alert
-    {
-        font-weight: bold;
-        color: red;
-    }
-    warning-alert
-    {
-        font-weight: bold;
-        color: orange;
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="./Docs/CSS/ReleaseNotes.css">
+</head>
 <dl>
-<!-- 3.3.1-release (2025/03/31) -->
+    <!-- 3.4.0-release candidate (2025/04/08) -->
+    <dt><version-data>3.4.0-release candidate</version-data> | Release Date: 2025/04/08</dt>
+    <dd>Changed private method <code>cleanData</code> to <code>setDataStore</code> in <strong>LogDataStore</strong></dd>
+    <dd>Optimized <code>LogDataStore</code> using less instructions to operate</dd>
+    <dd>Added <code>LOG_DATA_FAIL</code> in <strong>LogDataType</strong> to determinate when <i>LogDataStore</i> fail to set the data correctly</dd>
+    <dd>Added experimental log file name in UTC time on Linux and MacOS platforms</dd>
+    <dd><code>LogDataStore</code> is now the new way to store data in Logger Library</dd>
+    <!-- 3.3.1-release (2025/03/31) -->
     <dt><version-data>3.3.1-release</version-data> | Release Date: 2025/03/31</dt>
     <dd>Added support to UTC format</dd>
     <dd>Added new constructor in <code>LogDataStore</code> with support to automatically define time precision</dd>
@@ -178,22 +165,6 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
     <dt><version-data>3.3.0-alpha.1</version-data> | Release Date: 2025/01/27</dt>
     <dd><code>sortLogFileList2</code> marked as deprecated</dd>
     <dd><fix-alert>[FIX]</fix-alert> Added missing stream output for date and time information in <code>LogEntry</code> and <code>LogEntryW</code> classes</dd>
-    <!-- 3.3.0-alpha (2025/01/15) -->
-    <dt><version-data>3.3.0-alpha</version-data> | Release Date: 2025/01/15</dt>
-    <dd>Cleaned unused code</dd>
-    <dd>Added alternative algorithm for sorting, using the bubble sort instead of selection sort. <strong>The selection sort is disabled by a preprocessor directive and is marked as deprecated</strong></dd>
-    <dd><fix-alert>[FIX]</fix-alert> string copy <code>LOGGER_LIB_BUILD_TYPE</code> to version build type</dd>
-    <dd>Updated constructor parameters when receiving a <code>std::filesystem::path</code> to control if will use the file date time and will apply the timezone correction.</dd>
-    <dd><fix-alert>[FIX]</fix-alert> sorting <code>LogFileDateTime</code> objects in descending and ascending order</dd>
-    <dd><fix-alert>[FIX]</fix-alert> missing last date time character from string information in <code>LogFileDateTime</code> constructor.</dd>
-    <dd><note-alert>[NOTE]</note-alert> This version of Logger Library appears to be very stable, but no tests with sorting log files was made on Windows systems. Considering the lack of tests to one important platform, the LoggerLib will be marked as <code>alpha</code></dd>
-    <dd><i>(Added in 2025/01/20) </i>Add <code>LoggerLib.hpp</code>a main header to include all library components on build 64</dd>
-    <!-- 3.2.0-alpha (2024/12/18) -->
-    <dt><version-data>3.2.0-alpha</version-data> | Release Date: 2024/12/18</dt>
-    <dd>Added <code>LogFileDateTime</code> class to focus on log file date time information report (not based on Last Time Write or Creation Time)</dd>
-    <dd>Added <code>sortLogFileList</code> and <code>sortLogFileList2</code> to sort the log file list returned by <code>getLogFileList</code> method</dd>
-    <dd><note-alert>[NOTE]</note-alert> The methods <code>sortLogFileList</code> and <code>sortLogFileList2</code> still in development and are not sorting correctly, missing some files from correct order. These functions may receive a new name or new version. Use with caution.</dd>
-    <dd><fix-alert>[FIX]</fix-alert>Compiling the <code>LoggerLib</code> won't result in a ISO C++ forbidden warning when converting a <code>const char*</code> string to <code>char*</code></dd>
 </dl>
 
 *Older versions was not tracked*
