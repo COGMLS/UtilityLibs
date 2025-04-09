@@ -1,0 +1,23 @@
+version-data
+{
+    font-weight: bold;
+}
+note-alert
+{
+    font-weight: bold;
+    color: blue;
+}
+fix-alert
+{
+    font-weight: bold;
+}
+bug-alert
+{
+    font-weight: bold;
+    color: red;
+}
+warning-alert
+{
+    font-weight: bold;
+    color: orange;
+}
