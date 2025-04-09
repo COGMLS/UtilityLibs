@@ -6,6 +6,8 @@ This repository is destined to store the development of important common utility
 
 The **Utility Libraries** repository contains some libraries that was designed first to specific projects and than adapted to a more generic approach, allowing an easy way to be used in many projects. The repository contain libraries focus on C++ development, but some libraries can contain ported versions to other languages. Check the project documentation to see more details about. Each project contain a folder *Docs* that holds their own documentations.
 
+**IMPORTANT:** All commits, branch merging and tags are managed in a local server. The GitHub repository is a secondary place to this project and the Pull Requests are not used by the author.
+
 > The repository is focus on development of cross-platform projects, but a few projects can may be an exception depending the platform support or their capabilities.
 
 ## Libraries Available:
