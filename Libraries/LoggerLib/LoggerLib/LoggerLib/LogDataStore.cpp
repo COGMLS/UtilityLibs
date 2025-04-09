@@ -1,176 +1,206 @@
 #include "LogDataStore.hpp"
 
-void LogDataStore::cleanData(LogDataType preserve)
+void LogDataStore::setDataStore(LogDataType type)
 {
-	if (preserve == LogDataType::LOG_NULL_DATA_ENTRY)
+	if (type == LogDataType::LOG_DATA_FAIL)
 	{
+		return;	// LOG_DATA_FAIL is exclusive for setDataStore method. No change will be made it.
+	}
+
+	try
+	{
+		// Destroy any data that does not match with new type:
+
+		if (type != LogDataType::LOG_STRING_ENTRY)
+		{
+			this->str.reset(nullptr);
+		}
+
+		if (type != LogDataType::LOG_WSTRING_ENTRY)
+		{
+			this->wstr.reset(nullptr);
+		}
+
+		if (
+				type != LogDataType::LOG_BOOLEAN_ENTRY || 
+				type != LogDataType::LOG_UNSIGNED_INTEGER_ENTRY || 
+				type != LogDataType::LOG_INTEGER_ENTRY || 
+				type != LogDataType::LOG_FLOAT_ENTRY
+			)
+		{
+			this->unionVal.reset(nullptr);
+		}
+
+		if (type != LogDataType::LOG_DATE_TIME_ENTRY || type != LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
+		{
+			this->localDt.reset(nullptr);
+		}
+
+		// Check and create the new data:
+
+		if (type == LogDataType::LOG_STRING_ENTRY)
+		{
+			if (!this->str)
+			{
+				this->str.reset(new std::string);
+			}
+		}
+		else if (type == LogDataType::LOG_WSTRING_ENTRY)
+		{
+			if (!this->wstr)
+			{
+				this->wstr.reset(new std::wstring);
+			}
+		}
+		else if (type == LogDataType::LOG_DATE_TIME_ENTRY || type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
+		{
+			if (!this->localDt)
+			{
+				this->localDt.reset(new LoggerLocalDateTime);
+			}
+		}
+		else if (	// Union possible values:
+					type == LogDataType::LOG_BOOLEAN_ENTRY || 
+					type == LogDataType::LOG_UNSIGNED_INTEGER_ENTRY || 
+					type == LogDataType::LOG_INTEGER_ENTRY || 
+					type == LogDataType::LOG_FLOAT_ENTRY
+				)
+		{
+			if (!this->unionVal)
+			{
+				this->unionVal.reset(new LogEntryData);
+			}
+		}
+		
+		this->type = type;	// Automatically define the type
+	}
+	catch(const std::exception&)
+	{
+		// If fail, set all data as nullptr and define the store as LOG_DATA_FAIL (-1)
 		this->str.reset(nullptr);
 		this->wstr.reset(nullptr);
 		this->unionVal.reset(nullptr);
 		this->localDt.reset(nullptr);
-		this->type = LogDataType::LOG_NULL_DATA_ENTRY;
-	}
-	else if (preserve == LogDataType::LOG_STRING_ENTRY)
-	{
-		this->wstr.reset(nullptr);
-		this->unionVal.reset(nullptr);
-		this->localDt.reset(nullptr);
-	}
-	else if (preserve == LogDataType::LOG_WSTRING_ENTRY)
-	{
-		this->str.reset(nullptr);
-		this->unionVal.reset(nullptr);
-		this->localDt.reset(nullptr);
-	}
-	else if (preserve == LogDataType::LOG_DATE_TIME_ENTRY || preserve == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY)
-	{
-		this->str.reset(nullptr);
-		this->wstr.reset(nullptr);
-		this->unionVal.reset(nullptr);
-	}
-	else
-	{
-		this->str.reset(nullptr);
-		this->wstr.reset(nullptr);
-		this->localDt.reset(nullptr);
+		this->type = LogDataType::LOG_DATA_FAIL;
 	}
 }
 
 LogDataStore::LogDataStore()
 {
-	this->type = LogDataType::LOG_NULL_DATA_ENTRY;
+	this->setDataStore(LogDataType::LOG_NULL_DATA_ENTRY);
 }
 
 LogDataStore::LogDataStore(bool data)
 {
-	this->type = LogDataType::LOG_BOOLEAN_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_BOOLEAN_ENTRY);
 	this->unionVal->LOG_ENTRY_BOOL = data;
 }
 
 LogDataStore::LogDataStore(char data)
 {
-	this->type = LogDataType::LOG_STRING_ENTRY;
-	this->str.reset(new std::string);
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str = data;
 }
 
 LogDataStore::LogDataStore(wchar_t data)
 {
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
-	this->wstr.reset(new std::wstring);
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr = data;
 }
 
 LogDataStore::LogDataStore(short data)
 {
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
 }
 
 LogDataStore::LogDataStore(unsigned short data)
 {
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
 }
 
 LogDataStore::LogDataStore(int data)
 {
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
 }
 
 LogDataStore::LogDataStore(unsigned int data)
 {
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
 }
 
 LogDataStore::LogDataStore(long data)
 {
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
 }
 
 LogDataStore::LogDataStore(unsigned long data)
 {
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
 }
 
 LogDataStore::LogDataStore(long long data)
 {
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
 }
 
 LogDataStore::LogDataStore(unsigned long long data)
 {
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
 }
 
 LogDataStore::LogDataStore(float data)
 {
-	this->type = LogDataType::LOG_FLOAT_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_FLOAT_ENTRY);
 	this->unionVal->LOG_ENTRY_FLOAT = data;
 }
 
 LogDataStore::LogDataStore(double data)
 {
-	this->type = LogDataType::LOG_FLOAT_ENTRY;
-	this->unionVal.reset(new LogEntryData);
+	this->setDataStore(LogDataType::LOG_FLOAT_ENTRY);
 	this->unionVal->LOG_ENTRY_FLOAT = data;
 }
 
 LogDataStore::LogDataStore(char *data)
 {
-	this->type = LogDataType::LOG_STRING_ENTRY;
-	this->str.reset(new std::string);
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str = data;
 }
 
 LogDataStore::LogDataStore(const char *data)
 {
-	this->type = LogDataType::LOG_STRING_ENTRY;
-	this->str.reset(new std::string);
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str = data;
 }
 
 LogDataStore::LogDataStore(wchar_t *data)
 {
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
-	this->wstr.reset(new std::wstring);
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr = data;
 }
 
 LogDataStore::LogDataStore(const wchar_t *data)
 {
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
-	this->wstr.reset(new std::wstring);
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr = data;
 }
 
 LogDataStore::LogDataStore(std::string data)
 {
-	this->type = LogDataType::LOG_STRING_ENTRY;
-	this->str.reset(new std::string);
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str = data;
 }
 
 LogDataStore::LogDataStore(std::wstring data)
 {
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
-	this->wstr.reset(new std::wstring);
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr = data;
 }
 
@@ -178,14 +208,13 @@ LogDataStore::LogDataStore(LoggerLocalDateTime data)
 {
 	if (data.highPrecision)
 	{
-		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY);
 	}
 	else
 	{
-		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_ENTRY);
 	}
 	
-	this->localDt.reset(new LoggerLocalDateTime);
 	*this->localDt.get() = data;
 }
 
@@ -200,14 +229,13 @@ LogDataStore::LogDataStore(LoggerLocalDateTime data, bool highPrecisionTime)
 
 	if (highPrecisionTime)
 	{
-		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY);
 	}
 	else
 	{
-		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_ENTRY);
 	}
 	
-	this->localDt.reset(new LoggerLocalDateTime);
 	*this->localDt.get() = data;
 }
 
@@ -215,7 +243,7 @@ LogDataStore::LogDataStore(const LogDataStore &other)
 {
 	if (this->type != other.type)
 	{
-		this->cleanData();
+		this->setDataStore();
 	}
 
 	this->type = other.type;
@@ -249,7 +277,7 @@ LogDataStore::LogDataStore(LogDataStore &&other) noexcept
 {
 	if (this->type != other.type)
 	{
-		this->cleanData();
+		this->setDataStore();
 	}
 
 	this->type = std::move(other.type);
@@ -277,14 +305,14 @@ LogDataStore::LogDataStore(LogDataStore &&other) noexcept
 
 LogDataStore::~LogDataStore()
 {
-	this->cleanData();
+	this->setDataStore();
 }
 
 LogDataStore &LogDataStore::operator=(const LogDataStore &other)
 {
 	if (this->type != other.type)
 	{
-		this->cleanData();
+		this->setDataStore();
 	}
 
 	this->type = other.type;
@@ -325,7 +353,7 @@ LogDataStore &LogDataStore::operator=(LogDataStore &&other) noexcept
 
     if (this->type != other.type)
 	{
-		this->cleanData();
+		this->setDataStore();
 	}
 
 	this->type = std::move(other.type);
@@ -547,7 +575,7 @@ bool LogDataStore::operator!=(const LogDataType type)
 
 LogDataStore::operator bool() const
 {
-	return this->type != LogDataType::LOG_NULL_DATA_ENTRY && (this->str || this->wstr || this->unionVal || this->localDt);
+	return (this->type != LogDataType::LOG_NULL_DATA_ENTRY || this->type != LogDataType::LOG_DATA_FAIL) && (this->str || this->wstr || this->unionVal || this->localDt);
 }
 
 bool LogDataStore::operator==(const bool &data)
@@ -745,264 +773,146 @@ LoggerLocalDateTime LogDataStore::getLocalDt()
 
 	LoggerLocalDateTime newDt;
 
-	newDt.highPrecision = false;	// Initialize the boolean. Other elements already contain an empty constructor.
+	// Initialize the boolean. Other elements already contain an empty constructor
+	newDt.highPrecision = false;
+	newDt.utcTime = false;
 
     return newDt;
 }
 
 void LogDataStore::setData(bool data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_BOOLEAN_ENTRY);
 	this->unionVal->LOG_ENTRY_BOOL = data;
-	this->type = LogDataType::LOG_BOOLEAN_ENTRY;
 }
 
 void LogDataStore::setData(char data)
 {
-	if (!this->str)
-	{
-		this->cleanData();
-		this->str.reset(new std::string);
-	}
-
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str.get() = data;
-	this->type = LogDataType::LOG_STRING_ENTRY;
 }
 
 void LogDataStore::setData(wchar_t data)
 {
-	if (!this->wstr)
-	{
-		this->cleanData();
-		this->wstr.reset(new std::wstring);
-	}
-
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr.get() = data;
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
 }
 
 void LogDataStore::setData(short data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(unsigned short data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(int data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(unsigned int data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(long data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(unsigned long data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(long long data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_INT = data;
-	this->type = LogDataType::LOG_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(unsigned long long data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_UNSIGNED_INTEGER_ENTRY);
 	this->unionVal->LOG_ENTRY_UINT = data;
-	this->type = LogDataType::LOG_UNSIGNED_INTEGER_ENTRY;
 }
 
 void LogDataStore::setData(float data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_FLOAT_ENTRY);
 	this->unionVal->LOG_ENTRY_FLOAT = data;
-	this->type = LogDataType::LOG_FLOAT_ENTRY;
 }
 
 void LogDataStore::setData(double data)
 {
-	if (!this->unionVal)
-	{
-		this->cleanData();
-		this->unionVal.reset(new LogEntryData);
-	}
-
+	this->setDataStore(LogDataType::LOG_FLOAT_ENTRY);
 	this->unionVal->LOG_ENTRY_FLOAT = data;
-	this->type = LogDataType::LOG_FLOAT_ENTRY;
 }
 
 void LogDataStore::setData(char *data)
 {
-	if (!this->str)
-	{
-		this->cleanData();
-		this->str.reset(new std::string);
-	}
-
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str.get() = *data;
-	this->type = LogDataType::LOG_STRING_ENTRY;
 }
 
 void LogDataStore::setData(const char *data)
 {
-	if (!this->str)
-	{
-		this->cleanData();
-		this->str.reset(new std::string);
-	}
-
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str.get() = *data;
-	this->type = LogDataType::LOG_STRING_ENTRY;
 }
 
 void LogDataStore::setData(wchar_t *data)
 {
-	if (!this->wstr)
-	{
-		this->cleanData();
-		this->wstr.reset(new std::wstring);
-	}
-
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr.get() = *data;
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
 }
 
 void LogDataStore::setData(const wchar_t *data)
 {
-	if (!this->wstr)
-	{
-		this->cleanData();
-		this->wstr.reset(new std::wstring);
-	}
-
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr.get() = *data;
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
 }
 
 void LogDataStore::setData(std::string data)
 {
-	if (!this->str)
-	{
-		this->cleanData();
-		this->str.reset(new std::string);
-	}
-
+	this->setDataStore(LogDataType::LOG_STRING_ENTRY);
 	*this->str.get() = data;
-	this->type = LogDataType::LOG_STRING_ENTRY;
 }
 
 void LogDataStore::setData(std::wstring data)
 {
-	if (!this->wstr)
-	{
-		this->cleanData();
-		this->wstr.reset(new std::wstring);
-	}
-
+	this->setDataStore(LogDataType::LOG_WSTRING_ENTRY);
 	*this->wstr.get() = data;
-	this->type = LogDataType::LOG_WSTRING_ENTRY;
 }
 
 void LogDataStore::setData(LoggerLocalDateTime data, bool highPrecisionTime)
 {
-	if (!this->localDt)
-	{
-		this->cleanData();
-		this->localDt.reset(new LoggerLocalDateTime);
-	}
-
 	#ifdef EXPERIMENTAL_AUTO_PRECISION_TIME
 	if (data.highPrecision)
 	{
-		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY);
 	}
 	else
 	{
-		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_ENTRY);
 	}
 	#else
 	if (highPrecisionTime)
 	{
-		this->type = LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY);
 	}
 	else
 	{
-		this->type = LogDataType::LOG_DATE_TIME_ENTRY;
+		this->setDataStore(LogDataType::LOG_DATE_TIME_ENTRY);
 	}
 	#endif // !EXPERIMENTAL_AUTO_PRECISION_TIME
 	
@@ -1011,10 +921,10 @@ void LogDataStore::setData(LoggerLocalDateTime data, bool highPrecisionTime)
 
 void LogDataStore::clean()
 {
-	this->cleanData();
+	this->setDataStore();
 }
 
 bool LogDataStore::hasData()
 {
-    return this->type != LogDataType::LOG_NULL_DATA_ENTRY && (this->str || this->wstr || this->unionVal || this->localDt);
+    return (this->type != LogDataType::LOG_NULL_DATA_ENTRY || this->type != LogDataType::LOG_DATA_FAIL) && (this->str || this->wstr || this->unionVal || this->localDt);
 }
