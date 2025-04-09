@@ -117,27 +117,20 @@ To use a string as the source of the versioning information, the string must fol
 ## Version Library History:
 
 <!-- Version Library History Table: -->
-<style>
-    version-data
-    {
-        font-weight: bold;
-    }
-    fix-alert
-    {
-        font-weight: bold;
-    }
-    bug-alert
-    {
-        font-weight: bold;
-        color: red;
-    }
-    warning-alert
-    {
-        font-weight: bold;
-        color: orange;
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="./Docs/CSS/ReleaseNotes.css">
+</head>
 <dl>
+    <!-- 0.8.7-beta (2025/03/10) -->
+    <dt><version-data>0.8.7-beta</version-data> | Release Date: 2025/03/10</dt>
+    <dd><strong>Changed variable <code>build_type_number</code> to <code>build_revision</code> in <code>VersionStruct</code> and <code>VersionData</code></strong></dd>
+    <dd>Changed the <code>build_type_number</code> references to <code>build_revision</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionData</code> experimental comparison operators.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>build</code> was not set properly in <code>VersionData</code> with <i><strong>Experimental Constructors</i></strong> when build number does not appear on constructor parameters.</dd>
+    <dd><strong>Added original</strong> <code>VersionData</code> <strong>constructors to deprecated features</strong></dd>
+    <dd><strong>Added original</strong> <code>VersionData</code> <strong>comparison operators to deprecated features</strong></dd>
+    <dd><i>Added in 2025/04/09:</i> Updated the build number after few tests.</dd>
+    <dd><i>Added in 2025/04/09:</i> Removed unnecessary controls to experimental features</dd>
     <!-- 0.8.6-beta (2025/02/26) -->
     <dt><version-data>0.8.6-beta</version-data> | Release Date: 2025/02/26</dt>
     <dd>Added new experimental algorithm to fix <code>toVersionStruct2</code> function string version detection</dd>
