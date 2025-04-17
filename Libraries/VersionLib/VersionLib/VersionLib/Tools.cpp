@@ -131,7 +131,7 @@ unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
     return build_revision;
 }
 
-std::string VersionLib::buildType2Str(BuildType type, bool useShortStr)
+std::string VersionLib::buildType2Str(BuildType type, bool useShortStr, bool showReleaseType)
 {
 	switch (type)
 	{
@@ -164,12 +164,17 @@ std::string VersionLib::buildType2Str(BuildType type, bool useShortStr)
 		}
 		case BuildType::RELEASE:
 		{
-			if (useShortStr)
+			if (showReleaseType)
 			{
-				return std::string("r");
+				if (useShortStr)
+				{
+					return std::string("r");
+				}
+	
+				return std::string("release");
 			}
 
-			return std::string("release");
+			return std::string();
 		}
 		default:
 		{
@@ -215,174 +220,13 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	return BuildType::RELEASE;
 }
 
-#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-[[deprecated("This function is not recommended to use. Use toVersionStrut2 with more reliable semantic versioning conversion.")]]
-VersionLib::VersionStruct VersionLib::toVersionStruct(std::string version)
-{
-	VersionLib::VersionStruct v = initVersionStruct();
-
-	/** tokens - positions used:
-	 * 0: Major version
-	 * 1: Minor version
-	 * 2; Patch version
-	 * 3: Build type
-	 * 4: Build Type Number
-	 * 5: Build Number
-	 */
-	std::vector<std::string> tokens;
-
-	version = VersionLib::tolower_str(version);
-
-	const char delimiters[] = ".- ";
-	char* cVersion = const_cast<char*>(version.c_str());
-	char* token = std::strtok(cVersion, delimiters);
-
-	size_t rcPos = version.find("release candidate");
-
-	if (rcPos > 0 && rcPos < version.size())
-	{
-		std::string tmp = version.replace(rcPos, std::strlen("release candidate"), "release_candidate");
-		version = tmp;
-	}
-
-	while (token)
-	{
-		tokens.push_back(token);
-		token = std::strtok(nullptr, delimiters);
-	}
-
-	bool foundMajorVer = false;
-	bool foundMinorVer = false;
-	bool foundPatchVer = false;
-	bool foundTypeVer = false;
-	bool foundTypeNum = false;
-	bool foundBuild = false;
-	bool foundBuildName = false;
-
-	unsigned int major = 0;
-	unsigned int minor = 0;
-	unsigned int patch = 0;
-	std::string type = "";
-	VersionLib::BuildType typeEnum = VersionLib::BuildType::RELEASE;
-	unsigned int type_num = 0;
-	unsigned long long build = 0;
-
-	for (size_t i = 0; i < tokens.size(); i++)
-	{
-		if (tokens[i].starts_with(' '))
-		{
-			tokens[i] = tokens[i].erase(0, 1);
-		}
-
-		if (tokens[i].ends_with(' '))
-		{
-			tokens[i] = tokens[i].erase(tokens[i].size() - 1, 1);
-		}
-
-		if (!foundBuild && (foundBuildName || foundTypeNum))
-		{
-			try
-			{
-				build = std::stoull(tokens[i]);
-				foundBuild = true;
-			}
-			catch(const std::exception&)
-			{
-				
-			}
-		}
-
-		if (!foundBuildName && tokens[i] == "build")
-		{
-			foundBuildName = true;
-		}
-
-		if ((foundPatchVer || foundTypeVer) && !foundTypeNum && (!foundBuild || !foundBuildName))
-		{
-			try
-			{
-				type_num = std::stoull(tokens[i]);
-				foundTypeNum = true;
-			}
-			catch(const std::exception&)
-			{
-				
-			}
-		}
-
-		if (!foundTypeVer)
-		{
-			if (
-					tokens[i] == "alpha" || tokens[i] == "a" || 
-					tokens[i] == "beta" || tokens[i] == "b" || 
-					tokens[i] == "release_candidate" || tokens[i] == "rc"
-				)
-			{
-				typeEnum = VersionLib::str2BuildType(tokens[i]);
-				type = tokens[i];
-				foundTypeVer = true;
-			}
-		}
-
-		if (foundMajorVer && foundMinorVer && !foundPatchVer)
-		{
-			try
-			{
-				patch = std::stoul(tokens[i].c_str());
-				foundPatchVer = true;
-			}
-			catch(const std::exception&)
-			{
-				
-			}
-		}
-
-		if (foundMajorVer && !foundMinorVer)
-		{
-			try
-			{
-				minor = std::stoul(tokens[i].c_str());
-				foundMinorVer = true;
-			}
-			catch(const std::exception&)
-			{
-				
-			}
-		}
-
-		if (!foundMajorVer)
-		{
-			try
-			{
-				major = std::stoul(tokens[i].c_str());
-				foundMajorVer = true;
-			}
-			catch(const std::exception&)
-			{
-
-			}
-		}
-	}
-
-	v.major = major;
-	v.minor = minor;
-	v.patch = patch;
-	v.build_type = typeEnum;
-	v.build_revision = type_num;
-	v.build = build;
-
-	return v;
-}
-#endif // VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-
-#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 {
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
-	VersionLib::VersionStruct v = initVersionStruct();
+	VersionLib::VersionStruct v = VersionLib::initVersionStruct();
 
 	// Make sure the version string is complete in lowercase:
 	version = VersionLib::tolower_str(version);
@@ -401,7 +245,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 	struct token_struct
 	{
-		short type 				= -2;		// Type of value 0: Major, 1: minor, 2: patch, 3: type, 4: number, 5: "build world", 6: build number
+		short type 				= -2;		// Type of value 0: Major, 1: minor, 2: patch, 3: type, 4: number, 5: "build word", 6: build number
 		std::string str 		= "";		// String token
 		unsigned int ul 		= 0;		// Value for major, minor, patch, revision
 		unsigned long long ull 	= 0;		// Value for build number
@@ -526,7 +370,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				// Try to detect a valid word:
 				//
 
-				// Test for "build" world:
+				// Test for "build" word:
 				if (tmp == "build")
 				{
 					foundBuildStr = true;
@@ -592,7 +436,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 						{
 							setBuild = true;
 						}
-						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, type. No patch, revision and "build" world was found
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, type. No patch, revision and "build" word was found
 						{
 							setBuild = true;
 						}
@@ -603,7 +447,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 						{
 							setBuild = true;
 						}
-						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" world was found
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" word was found
 						{
 							setBuild = true;
 						}
@@ -620,7 +464,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 						{
 							setBuild = true;
 						}
-						if (foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found all components but no "build" world was found
+						if (foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found all components but no "build" word was found
 						{
 							setBuild = true;
 						}
@@ -628,7 +472,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 						{
 							setBuild = true;
 						}
-						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch, type. No revision and "build" world was found
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch, type. No revision and "build" word was found
 						{
 							setBuild = true;
 						}
@@ -639,14 +483,14 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 						{
 							setBuild = true;
 						}
-						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" world was found
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" word was found
 						{
 							setBuild = true;
 						}
 					}
 				}
 
-				// Test for build number after found the "build" world:
+				// Test for build number after found the "build" word:
 				if (foundBuildStr || lastFieldProcessed == 5)
 				{
 					setBuild = true;
@@ -795,7 +639,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		{
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 				#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-				#error "No compatible implementation of EXPERIMENTAL SUPPORT TO COMBINED BUILD TYPE to toVersionStruct2 function!"
+				// Convert the build types in string format to BuildType enumerator:
+				std::vector<VersionLib::VersionReleaseDataC> buildTypes = VersionLib::findAndGetBuildTypes(tokens[i].str);
+				VersionLib::setVersionBuildTypeC(v.build_type, buildTypes.data(), static_cast<unsigned short>(buildTypes.size()));
 				#else
 				VersionLib::setVersionBuildTypeC(v.build_type, VersionLib::str2BuildType(tokens[i].str));
 				#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
@@ -811,7 +657,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		// Set revision:
 		if (tokens[i].type == 4)
 		{
-			v.build_revision = tokens[i].ul;
+			//v.build_revision = tokens[i].ul;
 			#if DEBUG
 			build_revision = tokens[i].ul;
 			#endif // !DEBUG
@@ -833,8 +679,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 	return v;
 }
-#else
-VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 {
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Version to convert: " << version << std::endl;
@@ -842,46 +689,44 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 	VersionLib::VersionStruct v = initVersionStruct();
 
-	// Disabled the method: The current method contains a bug that miss the lowercase characters
-	//version = VersionLib::tolower_str(version);
+	// Make sure the version string is complete in lowercase:
+	version = VersionLib::tolower_str(version);
 
 	size_t verStrSize = version.size();
-	size_t buildTypePos = version.find("release candidate");
-
-	if (buildTypePos > 0 && buildTypePos < verStrSize)
-	{
-		version.replace(buildTypePos, std::strlen("release_candidate"), "release_candidate");
-	}
 
 	//
 	// Variable controls:
 	//
 
-	unsigned int major = 0;
-	unsigned int minor = 0;
-	unsigned int patch = 0;
-	#ifdef DEBUG
-	short build_type = 0;
-	#endif // !DEBUG
-	std::string build_type_str;
-	unsigned int build_revision = 0;
-	unsigned long long build = 0;
+	struct token_struct
+	{
+		short type 				= -2;		// Type of value 0: Major, 1: minor, 2: patch, 3: type, 4: number, 5: "build word", 6: build number
+		std::string str 		= "";		// String token
+		union 								// Union to reduce memory usage
+		{
+			unsigned int ul;				// Value for major, minor, patch, revision
+			unsigned long long ull;			// Value for build number
+		} numVal;
+	};
+
+	std::vector<token_struct> tokens;		// Version tokens
+	std::vector<VersionLib::VersionReleaseDataC> buildTypes;	// Build types (include combined ones)
 
 	bool foundMajorVer = false;				// Found major version number
 	bool foundMinorVer = false;				// Found minor version number
 	bool foundPatchVer = false;				// Found patch version number
 	bool foundBuildTypeVer = false;			// Found build type version (alpha, beta, etc)
-	bool foundBuildTypeNum = false;			// Found the build type number
+	bool foundBuildTypeRev = false;			// Found the build type number
 	bool foundBuildStr = false;				// Found the build word
 	bool foundBuild = false;				// Found the build number
 
 	short lastFieldProcessed = -1;			// 0.1.2-3.4 "5" 6
-	//short lastTokenFound = 0;				// 0: None 1: Dot 2: dash 3: space 4: Index limit
 
 	bool foundValidChar = false;			// Identified valid characters
 	bool accValHasNumbers = false;			// Accumulator Value has number
 	bool useAccVal = false;					// Determinate to try to convert
-	char t = '\0';
+	char t = '\0';							// Current char in analysis
+	char l = '\0';							// Last terminal char analyzed to detect the component
 	std::string tmp;						// Temporary variable accumulator
 
 	/** Version string analysis:
@@ -902,6 +747,12 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 	for (size_t i = 0; i < verStrSize; i++)
 	{
+		// Update the last char used to mark:
+		if (t == '.' || t == ' ' || t == '-')
+		{
+			l = t;
+		}
+
 		// Get the current char:
 		t = version[i];
 
@@ -913,141 +764,73 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 		if (foundValidChar)
 		{
-			// Cumulate the number to try to convert:
+			// Accumulate the number to try to convert:
 			if (t >= '0' && t <= '9')
 			{
 				tmp += t;
 				accValHasNumbers = true;
 			}
 
-			// Cumulate the chars, to try to detect "build", "alpha", "beta", "release_candidate", "a", "b" or "rc" words:
+			// Accumulate the chars, to try to detect "build", "alpha", "beta", "release_candidate", "a", "b" or "rc" words:
 			if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z' || t == '_')
 			{
 				tmp += t;
 			}
 
 			// If detect the dot or the dash or the space (used for words separation). In case is the last char, make sure it will be analyzed:
-			if (t == '.' || t == ' ' || t == '-' || i + 1 == verStrSize)
+			if (t == '.' || t == ' ' || t == '-' || t == '+' || i + 1 == verStrSize)
 			{
-				// Check if the build number is available, using the accValHasNumber and if the word "build" does not founded and found the space separator:
-				if (accValHasNumbers && !foundBuildStr && t == ' ' && !foundMajorVer)
-				{
-					// There are two possible checks for this situation: the numeric accumulated value is the build number or not
-					// To make sure the accumulated number is the build number, the build type version and it's number most appear or both not. Otherwise, it will fall in a false condition, confused by the build type number as the build number.
-					if ((!foundBuildTypeVer && !foundBuildTypeNum) || (foundBuildTypeVer && foundBuildTypeNum))
-					{
-						lastFieldProcessed = 5;			// Force to go direct to convert build number
-					}
-
-					// To avoid the possibility to fall in the possible false condition, the next characters after the space separator, should be an numeric value to be a build number
-					if (foundBuildTypeVer && !foundBuildTypeNum && lastFieldProcessed == 3)
-					{
-						if (i + 1 < verStrSize)
-						{
-							if (!(version[i + 1] >= '0' && version[i + 1] <= '9') && !(version[i + 1] != 'b' || version[i + 1] != 'B'))
-							{
-								lastFieldProcessed = 5; // Force to go direct to convert build number
-							}
-						}
-					}
-				}
-
-				//if (
-				//		(foundBuildTypeVer && !foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ') || 
-				//		(!foundBuildTypeVer && !foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ') || 
-				//		(foundBuildTypeVer && foundBuildTypeNum && accValHasNumbers && !foundBuildStr && t == ' ')
-				//	)
-				//{
-				//	lastFieldProcessed = 5;
-				//}
-
 				// Set to use the accumulated value into the conversion instructions:
 				useAccVal = true;
+				
+				// Check if is necessary verify for combined build types:
+				if (i + 1 < verStrSize && !foundBuildTypeVer)
+				{
+					char tNext = version[i + 1];
+					if ((t == '.' || t == ' ') && (l >= 'a' && l <= 'z' || l >= 'A' && l <= 'Z') && (tNext >= 'a' && tNext <= 'z' || tNext >= 'A' && tNext <= 'Z'))
+					{
+						useAccVal = false;	// If is under condition to possible combined build types, keep accumulating the temporary string
+					}
+				}
 			}
 		}
 
 		// Try to detect the value:
 		if (useAccVal)
 		{
+			// Create the token structure:
+			token_struct token;
+
+			// If the string contain numbers, try to detect the component:
 			if (accValHasNumbers)
 			{
 				// Clean the accValHasNumbers status:
 				accValHasNumbers = false;
 
-				// Try to detect the build version:
-				//(foundMajorVer && foundMinorVer && foundPatchVer && ((foundBuildTypeVer && !foundBuildTypeNum && !foundBuild) || (foundBuildTypeVer && foundBuildTypeNum && !foundBuild) || (!foundBuildTypeVer && !foundBuildTypeNum && !foundBuild)))
-				if ((!foundBuildStr && lastFieldProcessed == 5) || (!foundBuildStr && foundBuildTypeNum && lastFieldProcessed == 4) || (foundBuildStr && lastFieldProcessed == 5))
-				{
-					try
-					{
-						build = std::stoul(tmp);
-						foundBuild = true;
-						lastFieldProcessed = 6;
-					}
-					catch(const std::exception&)
-					{
+				//
+				// Try to set the value to unsigned long long. This only used to build number:
+				//
 
-					}
+				try
+				{
+					token.numVal.ull = std::stoull(tmp);
 				}
-				
-				// Try to detect the build type number version:
-				if ((foundBuildTypeVer && !foundBuildTypeNum && (lastFieldProcessed == 3)) || (foundMajorVer && foundMinorVer && foundPatchVer && !foundBuildTypeNum && !foundBuildTypeVer && (lastFieldProcessed == 2 && std::isalpha(tmp[0]) != 0)))
+				catch (const std::exception& e)
 				{
-					try
-					{
-						build_revision = std::stoul(tmp);
-						foundBuildTypeNum = true;
-						lastFieldProcessed = 4;
-					}
-					catch(const std::exception&)
-					{
-
-					}
+					// Do not generate error output
 				}
 
-				// Try to detect the patch version:
-				if (foundMajorVer && foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
-				{
-					try
-					{
-						patch = std::stoul(tmp);
-						foundPatchVer = true;
-						lastFieldProcessed = 2;
-					}
-					catch(const std::exception&)
-					{
+				//
+				// Try yo set the numeric value to unsigned long. This field is used by all other version components that are not build:
+				//
 
-					}
+				try
+				{
+					token.numVal.ul = std::stoul(tmp);
 				}
-
-				// Try to detect the minor version:
-				if (foundMajorVer && !foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
+				catch (const std::exception& e)
 				{
-					try
-					{
-						minor = std::stoul(tmp);
-						foundMinorVer = true;
-						lastFieldProcessed = 1;
-					}
-					catch(const std::exception&)
-					{
-
-					}
-				}
-
-				// Try to detect the major version:
-				if (!foundMajorVer && !foundMinorVer && !foundPatchVer && !foundBuildTypeNum && !foundBuild)
-				{
-					try
-					{
-						major = std::stoul(tmp);
-						foundMajorVer = true;
-						lastFieldProcessed = 0;
-					}
-					catch(const std::exception&)
-					{
-
-					}
+					// Do not generate error output
 				}
 			}
 			else
@@ -1056,58 +839,316 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				// Try to detect a valid word:
 				//
 
+				// Test for "build" word:
 				if (tmp == "build")
 				{
 					foundBuildStr = true;
 					lastFieldProcessed = 5;
+					goto JumpComponentDetection;
 				}
 
+				#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+				// Test to identify any valid build type:
+				buildTypes = findAndGetBuildTypes(tmp);
+
+				if (!buildTypes.empty())
+				{
+					//foundBuildTypeVer = true;
+					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
+				}
+				#else
+				// Test for "alpha" build type:
 				if (tmp == "alpha" || tmp == "a")
 				{
-					#ifdef DEBUG
-					build_type = 1;
-					#endif // !DEBUG
-					build_type_str = tmp;
-					foundBuildTypeVer = true;
+					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
+				// Test for "beta" build type:
 				if (tmp == "beta" || tmp == "b")
 				{
-					#ifdef DEBUG
-					build_type = 2;
-					#endif // !DEBUG
-					build_type_str = tmp;
-					foundBuildTypeVer = true;
+					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
+				// Test for "release candidate" build type:
 				if (tmp == "release_candidate" || tmp == "rc")
 				{
-					#ifdef DEBUG
-					build_type = 3;
-					#endif // !DEBUG
-					build_type_str = tmp;
-					foundBuildTypeVer = true;
+					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
 				}
 
+				// Test for "release" build type:
 				if (tmp == "release" || tmp == "r")
 				{
-					#ifdef DEBUG
-					build_type = 4;
-					#endif // !DEBUG
-					build_type_str = tmp;
-					foundBuildTypeVer = true;
+					//foundBuildTypeVer = true;
 					lastFieldProcessed = 3;
+					goto JumpComponentDetection;
+				}
+				#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			}
+
+			//
+			// Jump to component detection: This reduce the test of unnecessary conditional statements.
+			//
+
+			JumpComponentDetection:
+
+			//
+			// Try to detect the version components:
+			//
+
+			// Build number:
+			if (foundMajorVer && (foundBuildStr || l == ' ') && !foundBuild)
+			{
+				bool setBuild = false;
+
+				// If only minor was found:
+				if (foundMinorVer && !foundPatchVer)
+				{
+					// If type was found:
+					if (foundBuildTypeVer)
+					{
+						if (!foundBuildTypeRev && foundBuildStr)				// Case: found Major, minor, type and revision components
+						{
+							setBuild = true;
+						}
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, type. No patch, revision and "build" word was found
+						{
+							setBuild = true;
+						}
+					}
+					else
+					{
+						if (!foundBuildTypeRev && foundBuildStr)				// Case: found major, minor, patch. No type, revision, but "build" was found
+						{
+							setBuild = true;
+						}
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" word was found
+						{
+							setBuild = true;
+						}
+					}
+				}
+
+				// If minor and patch was found:
+				if (foundMinorVer && foundPatchVer)
+				{
+					// If type was found:
+					if (foundBuildTypeVer)
+					{
+						if (foundBuildTypeRev && foundBuildStr)					// Case: found all components in version string
+						{
+							setBuild = true;
+						}
+						if (foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found all components but no "build" word was found
+						{
+							setBuild = true;
+						}
+						if (!foundBuildTypeRev && foundBuildStr)				// Case: found Major, minor, patch, type and revision components
+						{
+							setBuild = true;
+						}
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch, type. No revision and "build" word was found
+						{
+							setBuild = true;
+						}
+					}
+					else
+					{
+						if (!foundBuildTypeRev && foundBuildStr)				// Case: found major, minor, patch. No type, revision, but "build" was found
+						{
+							setBuild = true;
+						}
+						if (!foundBuildTypeRev && !foundBuildStr && l == ' ')	// Case: found major, minor, patch. No type, revision and "build" word was found
+						{
+							setBuild = true;
+						}
+					}
+				}
+
+				// Test for build number after found the "build" word:
+				if (foundBuildStr || lastFieldProcessed == 5)
+				{
+					setBuild = true;
+				}
+
+				// Set the build number:
+				if (setBuild)
+				{
+					foundBuild = true;
+					lastFieldProcessed = 6;
+					goto JumpAccValAnalysis;
 				}
 			}
+
+			// Revision version:
+			if (foundMajorVer && foundMinorVer && foundPatchVer && !foundBuildTypeRev && !foundBuildStr && !foundBuild)
+			{
+				// Detect the revision if no build type was detected yet but a revision number was:
+				if (!foundBuildTypeVer && lastFieldProcessed == 2)
+				{
+					foundBuildTypeRev = true;
+					lastFieldProcessed = 4;
+					goto JumpAccValAnalysis;
+				}
+
+				// Detect the revision when testing for Semantic Versioning:
+				if (foundBuildTypeVer)
+				{
+					foundBuildTypeRev = true;
+					lastFieldProcessed = 4;
+					goto JumpAccValAnalysis;
+				}
+			}
+
+			// Build type version:
+			if (foundMajorVer && lastFieldProcessed == 3 && !foundBuildTypeRev && !foundBuildStr && !foundBuild)
+			{
+				// Found minor and type:
+				if (foundMinorVer && !foundPatchVer)
+				{
+					foundBuildTypeVer = true;
+					goto JumpAccValAnalysis;
+				}
+
+				// Found minor, patch and type:
+				if (foundMinorVer && foundPatchVer)
+				{
+					foundBuildTypeVer = true;
+					goto JumpAccValAnalysis;
+				}
+			}
+
+			// Test for Minor or Patch:
+			if (foundMajorVer && !foundBuildTypeVer && !foundBuildTypeRev && !foundBuildStr && !foundBuild)
+			{
+				// Patch version:
+				if (foundMinorVer && !foundPatchVer)
+				{
+					foundPatchVer = true;
+					lastFieldProcessed = 2;
+					goto JumpAccValAnalysis;
+				}
+
+				// Minor version:
+				if (!foundMinorVer && !foundPatchVer)
+				{
+					foundMinorVer = true;
+					lastFieldProcessed = 1;
+					goto JumpAccValAnalysis;
+				}
+			}
+
+			// Major version. It must be the first component:
+			if (!foundMajorVer && !foundMinorVer && !foundPatchVer && !foundBuildTypeVer && !foundBuildTypeRev && !foundBuildStr && !foundBuild)
+			{
+				foundMajorVer = true;
+				lastFieldProcessed = 0;
+				goto JumpAccValAnalysis;
+			}
+
+			//
+			// Jump point:
+			//
+
+			JumpAccValAnalysis:
 
 			// Clear the useAccVal status for the next value analysis:
 			useAccVal = false;
 
+			// Include the component as a token in the vector:
+			token.type = lastFieldProcessed;
+			token.str = tmp;
+			tokens.push_back(token);
+
 			// Clear the accumulated value to reuse the variable:
 			tmp.clear();
+		}
+	}
+
+	//
+	// Set the token in to variables:
+	//
+
+	// Set the debug variables for tests:
+	#ifdef DEBUG
+	unsigned int major = 0;
+	unsigned int minor = 0;
+	unsigned int patch = 0;
+	short build_type = 0;
+	std::string build_type_str;
+	unsigned int build_revision = 0;
+	unsigned long long build = 0;
+	#endif // !DEBUG
+
+	for (size_t i = 0; i < tokens.size(); i++)
+	{
+		// Set major:
+		if (tokens[i].type == 0)
+		{
+			v.major = tokens[i].numVal.ul;
+			#if DEBUG
+			major = tokens[i].numVal.ul;
+			#endif // !DEBUG
+		}
+
+		// Set minor:
+		if (tokens[i].type == 1)
+		{
+			v.minor = tokens[i].numVal.ul;
+			#if DEBUG
+			minor = tokens[i].numVal.ul;
+			#endif // !DEBUG
+		}
+
+		// Set patch:
+		if (tokens[i].type == 2)
+		{
+			v.patch = tokens[i].numVal.ul;
+			#if DEBUG
+			patch = tokens[i].numVal.ul;
+			#endif // !DEBUG
+		}
+
+		// Set build type:
+		if (tokens[i].type == 3)
+		{
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+				#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+				VersionLib::setVersionBuildTypeC(v.build_type, buildTypes.data(), static_cast<unsigned short>(buildTypes.size()));
+				#else
+				VersionLib::setVersionBuildTypeC(v.build_type, VersionLib::str2BuildType(tokens[i].str));
+				#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			#else
+			v.build_type = VersionLib::str2BuildType(tokens[i].str);
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+			#if DEBUG
+			build_type_str = tokens[i].str;
+			build_type = VersionLib::str2BuildType(tokens[i].str);
+			#endif // !DEBUG
+		}
+
+		// Set revision:
+		if (tokens[i].type == 4)
+		{
+			//v.build_revision = tokens[i].numVal.ul;
+			#if DEBUG
+			build_revision = tokens[i].numVal.ul;
+			#endif // !DEBUG
+		}
+
+		// Set build:
+		if (tokens[i].type == 6)
+		{
+			v.build = tokens[i].numVal.ull;
+			#if DEBUG
+			build = tokens[i].numVal.ull;
+			#endif // !DEBUG
 		}
 	}
 
@@ -1115,13 +1156,337 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
-	v.major = major;
-	v.minor = minor;
-	v.patch = patch;
-	v.build_type = VersionLib::str2BuildType(build_type_str);
-	v.build_revision = build_revision;
-	v.build = build;
-
 	return v;
 }
-#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_FIX_VERSIONSTR_2_VERSIONSTRUCT
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+
+std::vector<VersionLib::VersionReleaseDataC> VersionLib::findAndGetBuildTypes(std::string &version, long long start, long long end)
+{
+	size_t verStrSize = version.size();
+
+	std::string tmp;
+
+	long releaseArrIndex = -1;
+	std::vector<VersionLib::VersionReleaseDataC> releaseArr;
+	
+	bool foundBuild = false;
+	bool foundBuildTypeField = false;
+	bool foundMetadataField = false;
+	char t = '\0';
+
+	if (start < 0)
+	{
+		// Throw an exception
+	}
+
+	if (end >= version.size())
+	{
+		// Throw an exception
+	}
+
+	if (start > 0 && end < 0)
+	{
+		start = -1;
+	}
+	
+	if (start < 0 && end < 0)
+	{
+		size_t buildPos = 0;
+
+		// Keep the additional local variable restrict to if statement:
+		if (!foundBuild)
+		{
+			std::string tmp;
+			bool foundAlphaChar = false;
+			long long buildStart = -1;
+			long long buildEnd = -1;
+	
+			// Try to find the build compilation information:
+			// On permissive string formats, build compilation can appear
+			// as a number after a space of version or after the "build" word.
+			for (size_t i = version.size() - 1; i >= 0; i--)
+			{
+				t = version[i];
+				
+				if (t >= '0' && t <= '9' && !foundAlphaChar)
+				{
+					buildEnd = i;
+				}
+	
+				if (t == ' ')
+				{
+					if (buildEnd != -1)
+					{
+						buildStart = i;
+					}
+	
+					if (foundAlphaChar)
+					{
+						break;
+					}
+				}
+	
+				if (!foundAlphaChar && t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z')
+				{
+					foundAlphaChar = true;
+					tmp += t;
+				}
+			}
+	
+			// Test directly the "build" word to reduce process time:
+			if (VersionLib::tolower_str(tmp) == "dliub" || buildStart > 0 && buildEnd != -1)
+			{
+				foundBuild = true;
+				buildPos = buildStart;
+			}
+		}
+
+		//buildPos = version.find(" build");
+		//if (buildPos > 0 && buildPos < verStrSize)
+		//{
+		//	foundBuild = true;
+		//}
+
+		// If didn't found build word, check if there is a numeric build directly:
+		if (!foundBuild)
+		{
+			for (t = '0'; t <= '9'; t++)
+			{
+				// Check if there is " #" pattern:
+				buildPos = version.find(" " + std::to_string(t));
+				if (buildPos > 0 && buildPos < verStrSize)
+				{
+					foundBuild = true;
+					break;
+				}
+			}
+		}
+
+		t = '\0';
+	
+		for (size_t i = 0; i < verStrSize; i++)
+		{
+			t = version[i];
+	
+			if (/*foundBuildTypeField && (t >= '0' && t <= '9') || */foundBuildTypeField && (t == ' ' && i + 1 == buildPos) || t == '+')
+			{
+				break;
+			}
+	
+			if ((t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z') && !(t == '.' || t == '-'))
+			{
+				end = i;
+	
+				if (!foundBuildTypeField)
+				{
+					foundBuildTypeField = true;
+					start = i;
+				}
+			}
+		}
+	}
+
+	// If found a possible substring that contains the build type(s) information, extract them:
+	if (start > 0 && end > start)
+	{
+		tmp = version.substr(start, end - start + 1);
+
+		start = -1;
+		end = -1;
+
+		int isRev = 0;	// -1: An exception occurred, 0: Is false, 1: Is true
+
+		for (size_t i = 0; i < tmp.size(); i++)
+		{
+			t = tmp[i];
+
+			// If detect dot (build type separator) or reach the end of string, try to get the substring:
+			if (t == '.' || i + 1 == tmp.size())
+			{
+				if (start > 0 && end > start)
+				{
+					if (isRev == 1)
+					{
+						try
+						{
+							int rev = std::stoi(tmp.substr(start, end - start + 1));
+
+							if (!releaseArr.empty())
+							{
+								releaseArr[releaseArrIndex].revision = static_cast<unsigned short>(rev);
+								releaseArr[releaseArrIndex].releaseIdentified = true;
+							}
+						}
+						catch(const std::exception&)
+						{
+							isRev = -1;
+						}
+					}
+					
+					if (isRev == 0)
+					{
+						VersionLib::VersionReleaseDataC release = VersionLib::initVersionReleaseDataC();
+						release.release = VersionLib::str2BuildType(tmp.substr(start, end - start + 1));
+						releaseArr.push_back(release);
+						releaseArrIndex++;
+					}
+					
+					// Reset the status:
+					start = -1;
+					end = -1;
+					isRev = 0;
+				}
+			}
+
+			// Detect all valid characters used by build type:
+			if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z' || t == ' ')
+			{
+				end = i;
+
+				if (start < 0)
+				{
+					start = i;
+				}
+			}
+
+			// Detect the revision:
+			if (t >= '0' && t <= '9')
+			{
+				end = i;
+
+				if (start < 0)
+				{
+					start = i;
+					isRev = 1;
+				}
+			}
+		}
+	}
+
+    return releaseArr;
+}
+
+std::string VersionLib::extractBuildMetadata(std::string &version)
+{
+	size_t verStrSize = version.size();
+
+	char t = '\0';
+	char l = '\0';
+	bool keepMetadataSearch = true;
+	bool actualCharIsMetadata = false;
+	bool lastCharWasMetadata = false;
+	long long plusCharPos = -1;
+	long long foundBuildTypeStart = -1;
+	long long foundBuildTypeEnd = -1;
+
+	std::string metadataStr;
+
+	for (size_t i = 0; i < verStrSize; i++)
+	{
+		if (!keepMetadataSearch)
+		{
+			break;
+		}
+
+		// Update the last char status and clean the actual char status:
+		lastCharWasMetadata = actualCharIsMetadata;
+		actualCharIsMetadata = false;
+
+		// Get the current char:
+		t = version[i];
+
+		// Detect '+' signal to remove from version string:
+		if (t == '+' && plusCharPos < 0)
+		{
+			plusCharPos = i;
+		}
+		
+		// Update the last char used to mark and try to detect if next character is the start of metadata if '+' was founded:
+		if (l == '+' && foundBuildTypeStart == -1)
+		{
+			if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z' || t == '-' || t >= '0' || t <= '9')
+			{
+				foundBuildTypeStart = i;	// Define the start position
+			}
+		}
+
+		l = t;	// Update last char
+		
+		// Detect if the next char is valid for metadata:
+		if (foundBuildTypeStart >= 0)
+		{
+			// Update the last valid position for metadata:
+			if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z' || t == '-' || t >= '0' && t <= '9')
+			{
+				foundBuildTypeEnd = i;
+				actualCharIsMetadata = true;
+			}
+	
+			// Check if has a next valid char:
+			if (i + 1 < verStrSize)
+			{
+				char tNext = version[i + 1];
+				if (!(actualCharIsMetadata && lastCharWasMetadata && (tNext >= 'a' && tNext <= 'z' || tNext >= 'A' && tNext <= 'Z' || tNext == '-' || tNext >= '0' && tNext <= '9')))
+				{
+					keepMetadataSearch = false;
+				}
+			}
+		}
+	}
+
+	// If found the start and end positions and they are not the same, recover from version string and remove from it:
+	if (foundBuildTypeStart > 0 && foundBuildTypeEnd > 0 && foundBuildTypeEnd > foundBuildTypeStart && plusCharPos >= 0)
+	{
+		metadataStr = version.substr(foundBuildTypeStart, (foundBuildTypeEnd - foundBuildTypeStart + 1));
+		version.erase(plusCharPos, (foundBuildTypeEnd - plusCharPos + 1));
+	}
+
+	return metadataStr;
+}
+
+VersionLib::VersionType VersionLib::idVersionType(std::string version, bool isVerFormatStr, std::string regex)
+{
+	VersionLib::VersionType type = VersionLib::VersionType::UNKNOWN_VERSION_TYPE;
+
+	std::regex ver_regex;
+
+	if (isVerFormatStr)
+	{
+		if (regex.empty())
+		{
+
+		}
+		else
+		{
+			
+		}
+	}
+	else
+	{
+		if (regex.empty())
+		{
+
+		}
+		else
+		{
+			struct knownVer
+			{
+				std::string verRegex;
+				VersionLib::VersionType type;
+			};
+
+			std::array<knownVer, 3> known_ver = {
+				{
+					"",
+					VersionLib::VersionType::SEMANTIC_VERSION_TYPE
+				}
+			};
+
+			for (size_t i = 0; i < known_ver.size(); i++)
+			{
+			}
+		}
+	}
+
+    return type;
+}
