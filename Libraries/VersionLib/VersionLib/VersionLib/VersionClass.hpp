@@ -40,7 +40,21 @@
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	#include "BuildTypesExt.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+
+	#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
+	#include "BuildReleaseId.hpp"
+	#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	#include "BuildMetadata.hpp"
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	#include <bitset>
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+
+#include <array>
 
 namespace VersionLib
 {
@@ -52,31 +66,41 @@ namespace VersionLib
 	{
 		private:
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
-			unsigned int major;					// Major version number
-			unsigned int minor;					// Minor version number
-			unsigned int patch;					// Patch version number
-			unsigned int build_revision;		// Build revision (alpha.1, rc.3)
-			unsigned long long build;			// Build number
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-			VersionLib::VersionBuildType build_type;	// Build type (alpha, a, beta, etc)
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+			std::array<unsigned int, 3> numeric_version;	// Numeric version values. 0: Major, 1: Minor, 2: Patch
+			unsigned short buildPos;						// Build component position on version data
+			unsigned short typePos;							// Build release type position on version data
+			unsigned short metadataPos;						// Build metadata relative position on version data
+			
+			// Components flags:
+			// ------------------
+			// 0: Major version status
+			// 1: Minor version status
+			// 2: Patch version status
+			// 3: Build type and revision status
+			// 4: Build version status
+			// 5: Metadata status
+			std::bitset<6> flags;
+			#else
+			unsigned int major;							// Major version number
+			unsigned int minor;							// Minor version number
+			unsigned int patch;							// Patch version number
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+			
+			unsigned long long build;					// Build number
+
+			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
+			VersionLib::VersionBuildType build_type;	// Complex Build type data to store the release type and revision, including composed types
 			#else
 			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-			bool compare_build;					// Build comparison control
-			#else
-			unsigned int major;					// Major version number
-			unsigned int minor;					// Minor version number
-			unsigned int patch;					// Patch version number
-			unsigned long long build;			// Build number
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-			VersionLib::VersionBuildType build_type;	// Build type (alpha, a, beta, etc)
-			#else
-			VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 			unsigned int build_revision;		// Build revision (alpha.1, rc.3)
-			bool compare_build;					// Build comparison control
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
+			#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
+
+			bool compare_build;							// Build comparison control
+
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+			VersionLib::BuildMetadata metadata;			// Version Metadata
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 		public:
 
@@ -84,31 +108,47 @@ namespace VersionLib
 			// Constructors:
 			//
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
 			 * @param versionStr String with version information
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
 			 */
-			VersionData (std::string versionStr, bool cmpBuild = false);			
-			#else
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param versionStr String with version information
-			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
-			 * @note Before use this constructor, check the versions formats accepted by the method toVersionStruct2.
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (std::string versionStr);
+			VersionData (std::string versionStr, bool cmpBuild = false);
 
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+			VersionData (std::string versionStr, std::string format = "%n.%n.%n-{%t.%r}+%m %B %b", bool cmpBuild = false);
+
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 			/**
 			 * @brief Convert a VersionStruct to a VersionData object, to represent a software version data
 			 * @param version Version struct to be converted
 			 */
 			VersionData (VersionLib::VersionStruct version);
+
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+			VersionData (std::array<unsigned int, 1> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, bool cmpBuild = false);
+
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, bool cmpBuild = false);
+
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
+
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
+
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -117,8 +157,6 @@ namespace VersionLib
 			 * @param patch Patch version
 			 */
 			VersionData (unsigned int major, unsigned int minor, unsigned int patch);
-
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -343,87 +381,6 @@ namespace VersionLib
 			 * @note This constructor is a wrapper to similar constructor using unsigned int values to version information
 			 */
 			VersionData (int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision, long long build, bool cmpBuild = false);
-			#else
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type (alpha, beta, rc).
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type (alpha, beta, rc).
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type enumerator
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type (alpha, beta, rc).
-			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, char* build_type, unsigned int build_revision);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type (alpha, beta, rc).
-			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, std::string build_type, unsigned int build_revision);
-			
-			/**
-			 * @brief Create an VersionData object that can represent an software version data
-			 * @param major Major version
-			 * @param minor Minor version
-			 * @param patch Patch version
-			 * @param build Build of the version
-			 * @param build_type Build type enumerator
-			 * @param build_revision Determinate if is the first or second or other version of the same build type (like 1.9.2-rc.3). Note: If set as zero, the build_revision will be ignored.
-			 */
-			[[deprecated("This constructor is marked as 'deprecated'. No fixes or additional support will be made. It's recommended to use 'experimental constructors'.")]]
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, unsigned long long build, VersionLib::BuildType build_type, unsigned int build_revision);
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 			
 			VersionData (const VersionLib::VersionData& other);
 
@@ -471,6 +428,12 @@ namespace VersionLib
 			 */
 			std::string getBuildTypeStr (bool useShortStr = true);
 
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+			/**
+			 * @brief Get the build type (alpha, beta, etc).
+			 */
+			VersionLib::VersionBuildType getBuildType();
+			#else
 			/**
 			 * @brief Get the build type (alpha, beta, etc).
 			 */
@@ -480,6 +443,7 @@ namespace VersionLib
 			 * @brief Get the build revision (used like alpha.2, rc.3).
 			 */
 			unsigned int getBuildRevision();
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 			/**
 			 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style
@@ -499,18 +463,30 @@ namespace VersionLib
 			 * @brief Get the version data as a string
 			 * @param useShortStr Use the short string version in build type
 			 * @param hideBuildWord Hide the word "build" from the version string
-			 * @param showReleaseType If true, the build type will be showed when is marked as RELEASE and the "release" or "r" world will be added
+			 * @param showReleaseType If true, the build type will be showed when is marked as RELEASE and the "release" or "r" word will be added
 			 */
 			std::string getVersionStr (bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
 
 			//
-			// Conversion methods:
+			// Setters:
+			//
+
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+			void setMetadata(std::string str_metadata);
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+			//
+			// Conversion or Extraction methods:
 			//
 
 			/**
 			 * @brief Convert the the VersionData object into a VersionStruct data
 			 */
 			VersionLib::VersionStruct toVersionStruct();
+
+			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
+			VersionLib::BuildRelease getBuildRelease();
+			#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 
 			//
 			// Operators:
@@ -529,7 +505,6 @@ namespace VersionLib
 			bool operator< (const VersionData& other);
 			bool operator<= (const VersionData& other);
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
 			// Version Struct direct comparison operators:
 
 			bool operator== (const VersionLib::VersionStruct& other);
@@ -538,7 +513,6 @@ namespace VersionLib
 			bool operator>= (const VersionLib::VersionStruct& other);
 			bool operator< (const VersionLib::VersionStruct& other);
 			bool operator<= (const VersionLib::VersionStruct& other);
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_OPERATOR_STRUCT_COMPARISON
 
 			// Direct version string comparisons:
 
