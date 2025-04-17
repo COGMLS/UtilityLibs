@@ -32,51 +32,56 @@
 
 namespace VersionLib
 {
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
-	/**
-	 * @brief Version struct used for C applications
-	 * @note In version 0.8.6-beta the build_revision (or revision) was moved below patch to redesign the memory allocation. See details in VersionLibInfo
-	 */
-	struct VersionStruct
-	{
-		unsigned int major;					// Major version number
-		unsigned int minor;					// Minor version number
-		unsigned int patch;					// Patch version number
-		unsigned int build_revision;		// Build revision (alpha.1, rc.3)
-		unsigned long long build;			// Build number
-		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-		VersionLib::VersionBuildTypeC build_type;	// Build type (alpha, a, beta, etc)
-		#else
-		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-		bool compare_build;					// Build comparison control
-	};
-	#else
 	/**
 	 * @brief Version struct used for C applications
 	 */
 	struct VersionStruct
 	{
-		unsigned int major;					// Major version number
-		unsigned int minor;					// Minor version number
-		unsigned int patch;					// Patch version number
-		unsigned long long build;			// Build number
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+		unsigned int* numeric_components;			// Numeric version components
+		unsigned short numCompSize;					// Number of components
+		char* compLoc;								// Components Location (Used to Custom formats)
+		#else
+		unsigned int major;							// Major version number
+		unsigned int minor;							// Minor version number
+		unsigned int patch;							// Patch version number
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+		unsigned long long build;					// Build number
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-		VersionLib::VersionBuildTypeC build_type;	// Build type (alpha, a, beta, etc)
+		VersionLib::VersionBuildTypeC build_type;	// Build type (alpha, a.1, beta, etc)
 		#else
 		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
-		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 		unsigned int build_revision;		// Build revision (alpha.1, rc.3)
-		bool compare_build;					// Build comparison control
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+
+		bool compare_build;							// Build comparison control
+		VersionLib::VersionType versionType;		// Versioning Type Id
+
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+		char* metadata;								// Metadata string (If nullptr, means no metadata is available)
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	};
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MEM_LAYOUT
 
 	/**
 	 * @brief Initialize the VersionStruct. This function is designed to reduce the possibility of failure of new struct variables.
 	 * @return Return a initialized VersionStruct
-	 * @note This function resolve the uninitialized compare_build variable in other methods
+	 * @note This function resolve the uninitialized variables to other methods
+	 * @warning It's recommended to use initVersionStruct method to safely destroy the internal data
 	 */
 	VersionLib::VersionStruct VERSION_LIB_API initVersionStruct();
+
+	/**
+	 * @brief Safe version release data information pointer destruction and set as nullptr
+	 * @param versionData Version struct data
+	 * @return 0: if successfully destroyed and set the pointer as nullptr
+	 * @return 1: Fail to destroy the numeric values array
+	 * @return 2: Fail to destroy the Component Location string data
+	 * @return 4: Fail to destroy the BuildType components
+	 * @return 8: Fail to destroy the build metadata string data
+	 * @note Other return values are the sum of multiple listed return type errors
+	 */
+	int VERSION_LIB_API destroyVersionStruct(VersionLib::VersionStruct& versionData);
 }
 
 #endif // !VERSION_STRUCT_HPP
