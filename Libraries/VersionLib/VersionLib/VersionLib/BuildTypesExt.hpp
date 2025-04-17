@@ -39,9 +39,10 @@
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 #include <string>
-#include <cctype>
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 	#include <vector>
+	#include "ReleaseTools.hpp"
+	#include "BuildReleaseId.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
@@ -55,11 +56,7 @@ namespace VersionLib
 	{
 		private:
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-			std::vector<VersionLib::BuildType> types;
-			#else
-			VersionLib::BuildType type;
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			std::vector<VersionLib::BuildRelease> types;
 
 		public:
 
@@ -72,19 +69,18 @@ namespace VersionLib
 			 */
 			VersionBuildType();
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 			/**
 			 * @brief Create a version build type object that contains a sequence of multiple build type information.
 			 * @param combined_build_type 
 			 */
-			VersionBuildType (std::vector<VersionLib::BuildType> combined_build_type);
+			VersionBuildType (std::vector<VersionLib::BuildRelease> combined_build_type);
 			
 			/**
 			 * @brief Create a version build type object that contains a sequence of multiple build type information.
 			 * @param combined_build_type 
 			 */
 			VersionBuildType (VersionLib::VersionBuildTypeC& combined_build_type);
-			#else
+			
 			/**
 			 * @brief Create a build type from a string information.
 			 * @param build_type_str Build type string. The accepted values are: alpha, beta, release candidate, release, canary, development and pre release.
@@ -95,10 +91,10 @@ namespace VersionLib
 
 			/**
 			 * @brief Create a build type object based on VersionBuildType enumerator
-			 * @param build_type 
+			 * @param build_type Build release type
+			 * @param revision Release revision
 			 */
-			VersionBuildType (VersionLib::BuildType build_type);
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			VersionBuildType (VersionLib::BuildType build_type, unsigned short revision = 0);
 
 			VersionBuildType (const VersionLib::VersionBuildType& other);
 
@@ -114,22 +110,26 @@ namespace VersionLib
 			// Getters and Auxiliary methods:
 			//
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-			std::vector<VersionLib::BuildType> getBuildType();
-			#else
-			VersionLib::BuildType getBuildType();
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			std::vector<VersionLib::BuildRelease> getBuildType();
 
 			/**
 			 * @brief Generate the build type string information. The string output does not contain the build type number/revision
 			 * @param useShortStr Use short build type short string variant, if available.
 			 */
-			std::string getBuildTypeStr(bool useShortStr = true);
+			std::string getBuildTypeStr (bool useShortStr = true, bool showReleaseType = false);
 
 			/**
 			 * @brief Create a copy converted to VersionBuildTypeC to use in C style programs
 			 */
 			VersionLib::VersionBuildTypeC toStruct();
+
+			/**
+			 * @brief Calculate the total build type of the release version. Single releases like, alpha, beta and others have the same weight of BuildType values. The composed build types like, alpha.beta or x.1.y.6.z.11, have a weight calculation to determinate if is near of a pure type x or y, etc.
+			 * @return 
+			 */
+			float getBuildTypeWeight();
+
+			//void setRelease(std::vector<VersionLib::BuildRelease> types);
 
 			//
 			// Operators:
@@ -140,11 +140,10 @@ namespace VersionLib
 
 			VersionLib::VersionBuildType& operator= (const VersionLib::BuildType& type);
 
-			VersionLib::VersionBuildType& operator= (const VersionLib::VersionBuildTypeC& type);
+			VersionLib::VersionBuildType& operator= (const VersionLib::VersionBuildTypeC& types);
 
-			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-			VersionLib::VersionBuildType& operator= (const std::vector<VersionLib::BuildType> types);
-			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+			VersionLib::VersionBuildType& operator= (const VersionLib::BuildRelease type);
+			VersionLib::VersionBuildType& operator= (const std::vector<VersionLib::BuildRelease> types);
 
 			//
 			// Comparison operators:
@@ -159,6 +158,18 @@ namespace VersionLib
 			bool operator> (const VersionLib::VersionBuildType& other);
 			bool operator<= (const VersionLib::VersionBuildType& other);
 			bool operator>= (const VersionLib::VersionBuildType& other);
+
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_DIRECT_COMP_WITH_BUILDTYPE_C
+			// VersionBuildTypeC:
+
+			bool operator== (const VersionLib::VersionBuildTypeC& other);
+			bool operator!= (const VersionLib::VersionBuildTypeC& other);
+
+			bool operator< (const VersionLib::VersionBuildTypeC& other);
+			bool operator> (const VersionLib::VersionBuildTypeC& other);
+			bool operator<= (const VersionLib::VersionBuildTypeC& other);
+			bool operator>= (const VersionLib::VersionBuildTypeC& other);
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_DIRECT_COMP_WITH_BUILDTYPE_C
 
 			// BuildType:
 

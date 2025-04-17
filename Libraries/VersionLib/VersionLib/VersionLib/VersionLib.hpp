@@ -36,11 +36,17 @@
 	
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	#include "BuildTypesExt.hpp"
+	#include "BuildReleaseId.hpp"
+	#include "ReleaseTools.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_STR_BUILD_METADATA
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	#include "BuildMetadata.hpp"
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_STR_BUILD_METADATA
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
+	#include "SemVerClass.hpp"
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 #include "BuildTypes.hpp"
@@ -54,11 +60,13 @@ namespace VersionLib
 	/**
 	 * @brief Generate an VersionData object representing the Version Library version information object
 	 */
-	inline VersionData internalVersionData()
+	inline VersionLib::VersionData internalVersionData()
 	{
 		VersionLib::BuildType type = VersionLib::str2BuildType(VERSION_LIB_VERSION_INFO_BUILD_TYPE);
 
-		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+		#else
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 		VersionLib::VersionData version(
 											VERSION_LIB_VERSION_INFO_MAJOR_VERSION,
 											VERSION_LIB_VERSION_INFO_MINOR_VERSION,
@@ -67,18 +75,28 @@ namespace VersionLib
 											VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER,
 											VERSION_LIB_VERSION_INFO_BUILD_NUMBER
 										);
-		#else
-		VersionLib::VersionData version(
+		return version;
+	}
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
+	/**
+	 * @brief Generate an SemVer object representing the Version Library version information object
+	 */
+	inline VersionLib::SemVer internalSemVer()
+	{
+		VersionLib::BuildType type = VersionLib::str2BuildType(VERSION_LIB_VERSION_INFO_BUILD_TYPE);
+
+		VersionLib::SemVer version(
 											VERSION_LIB_VERSION_INFO_MAJOR_VERSION,
 											VERSION_LIB_VERSION_INFO_MINOR_VERSION,
 											VERSION_LIB_VERSION_INFO_PATCH_VERSION,
-											VERSION_LIB_VERSION_INFO_BUILD_NUMBER,
 											type,
-											VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER
+											VERSION_LIB_VERSION_INFO_BUILD_TYPE_NUMBER,
+											VERSION_LIB_VERSION_INFO_BUILD_NUMBER
 										);
-		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 		return version;
-	}
+	};
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
 }
 
 #endif // !VERSION_HPP
