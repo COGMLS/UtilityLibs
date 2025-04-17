@@ -7,8 +7,30 @@ This document contain the complete change history to Version Library
 <!-- Version Library History Table: -->
 <head>
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
+    <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.0-alpha (2025/04/17) -->
+    <dt><version-data>0.9.0-alpha</version-data> | Release Date: 2025/04/17</dt>
+    <dd><strong>Redesign the internal components to bring support to new data types, support to combined release data and to provide a better support to other formats in the future</strong></dd>
+    <dd>Added <code>BuildRelease</code> class to store the <code>BuildType</code> data and the revision values. It also has a flag to hold the conversion data status</dd>
+    <dd>Added support to hold multiple releases in <code>VersionBuildType</code> class</dd>
+    <dd>Added initial support to build metadata</dd>
+    <dd>Added initial support to detect Semantic Versioning format</dd>
+    <dd>Added proper Semantic Versioning class: <code>SemVer</code> using modified <code>VersionData</code> class code to work with additional flags and method checks to see if is a correct Semantic Versioning data <strong>NOTE: This class is not ready to work as expected yet</strong></dd>
+    <dd>Added new struct types to make data transaction and use them to C linkage: <code>VersionBuildTypeC</code> and <code>VersionReleaseDataC</code></dd>
+    <dd>Changed the <code>VersionData</code> to be a generic version data approach to all other future version formats</dd>
+    <dd><strong>NOTE: THE MODIFICATIONS MADE IN THIS VERSION BREAK THE BETA CODE VERSION</strong></dd>
+    <dd>Removed deprecated <code>toVersionStruct</code> function</dd>
+    <dd>Added <code>VersionType</code> to determinate the versioning type used in <code>VersionStruct</code> and <code>VersionData</code></dd>
+    <dd>Added <code>idVersionType</code> method to identify the supported versioning formats or custom formats and return a <code>VersionType</code> <strong>NOTE: This method is not ready to be used</strong></dd>
+    <dd>Modified <code>VersionStruct</code> to support generic version formats as experimental feature</dd>
+    <dd>Previous memory optimizations was removed after all redesign work. New memory optimizations will be made it in a future release</dd>
+    <dd>Removed deprecated constructors in <code>VersionData</code></dd>
+    <dd>Removed unnecessary or unused experimental definition guards</dd>
+    <dd>Experimental constructors in <code>VersionData</code> are not marked as experimental feature</dd>
+    <dd><strong>IMPORTANT: THIS NEW VERSION CONTAINS SEVERAL MODIFICATIONS THAT MAY CONTAIN NEW BUGS THAT WAS NOT TRACKED YET</strong></dd>
+    <dd><strong>THE EXPERIMENTAL MODIFICATIONS MAY BREAK THE SUPPORT TO LAST BETA VERSION (0.8.7-beta).</strong> If you need to use the last beta, use the <strong>git tag - <i>VersionLib_0.8.7-beta</i></strong> to compile the library</dd>
     <!-- 0.8.7-beta (2025/03/10) -->
     <dt><version-data>0.8.7-beta</version-data> | Release Date: 2025/03/10</dt>
     <dd><strong>Changed variable <code>build_type_number</code> to <code>build_revision</code> in <code>VersionStruct</code> and <code>VersionData</code></strong></dd>
