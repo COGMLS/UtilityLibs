@@ -58,6 +58,11 @@ This document contains the information about the future plans, known bugs, depre
 | 10 | ~~Comparing with a version that has `major` as zero and another version with `major` greater than zero will always fail in comparison with the other version, when using the operators: `> >= < <=`~~ |  | FIXED |
 | 11 | ~~On **ALPHA** version, the `initVersionBuildTypeC` method make the **MSVC** show *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* and *error LNK2005: "struct VersionLib::VersionBuildTypeC __cdecl VersionLib::initVersionBuildTypeC(void)"* **NOTE: No tests was made with GCC and Linux systems**~~ | After an investigation of the last modifications, was detected the `initVersionBuildTypeC` was defined two times in `BuildTypes.cpp` and `BuildTypesExt.cpp`. The definition on last file, was removed to solve the multiple definition. | FIXED |
 | 12 | ~~`build` was not set properly in `VersionData` with ***Experimental Constructors*** when build number does not appear on constructor parameters.~~ |  | FIXED |
+| 13 | Creating `VersionData` and `SemVer` objects crash the library, with "String out of range" exception | Downgrade to version **0.8.7-beta** | **Fix in development** |
+| 14 | `findAndGetBuildTypes` method is not working as expected | Downgrade to version **0.8.7-beta** | **Fix in development** |
+| 15 | `VersionStruct2` does not store revision | Downgrade to version **0.8.7-beta** | **Fix in development** |
+| 16 | `VersionStruct2` does not recognizes build type/release when revision does not appear in string data | Downgrade to version **0.8.7-beta** | **Fix in development** |
+| 17 | `VersionStruct2` does not recognizes revision | Downgrade to version **0.8.7-beta** | **Fix in development** |
 
 ## Deprecated Features:
 
