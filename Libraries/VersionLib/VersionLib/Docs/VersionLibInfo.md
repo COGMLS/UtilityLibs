@@ -60,9 +60,9 @@ This document contains the information about the future plans, known bugs, depre
 | 12 | ~~`build` was not set properly in `VersionData` with ***Experimental Constructors*** when build number does not appear on constructor parameters.~~ |  | FIXED |
 | 13 | Creating `VersionData` and `SemVer` objects crash the library, with "String out of range" exception | Downgrade to version **0.8.7-beta** | **Fix in development** |
 | 14 | `findAndGetBuildTypes` method is not working as expected | Downgrade to version **0.8.7-beta** | **Fix in development** |
-| 15 | `VersionStruct2` does not store revision | Downgrade to version **0.8.7-beta** | **Fix in development** |
-| 16 | `VersionStruct2` does not recognizes build type/release when revision does not appear in string data | Downgrade to version **0.8.7-beta** | **Fix in development** |
-| 17 | `VersionStruct2` does not recognizes revision | Downgrade to version **0.8.7-beta** | **Fix in development** |
+| 15 | ~~`VersionStruct2` does not store revision~~ |  | FIXED |
+| 16 | ~~`VersionStruct2` does not recognizes build type/release when revision does not appear in string data~~ |  | FIXED |
+| 17 | ~~`VersionStruct2` does not recognizes revision~~ |  | FIXED |
 
 ## Deprecated Features:
 
