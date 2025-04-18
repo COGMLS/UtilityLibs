@@ -6,10 +6,15 @@ This document contain the complete change history to Version Library
 
 <!-- Version Library History Table: -->
 <head>
-    <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
     <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
+    <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.0-alpha.1 (2025/04/18) -->
+    <dt><version-data>0.9.0-alpha.1</version-data> | Release Date: 2025/04/18</dt>
+    <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 missing revision</dd>
+    <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 missing build release when no revision is available</dd>
+    <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 does not store revision</dd>
     <!-- 0.9.0-alpha (2025/04/17) -->
     <dt><version-data>0.9.0-alpha</version-data> | Release Date: 2025/04/17</dt>
     <dd><strong>Redesign the internal components to bring support to new data types, support to combined release data and to provide a better support to other formats in the future</strong></dd>

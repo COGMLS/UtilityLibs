@@ -73,6 +73,7 @@ if (WIN32)
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
+					"SemVerClass.hpp"							"SemVerClass.cpp"
 					"Tools.hpp" 								"Tools.cpp"
 					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
