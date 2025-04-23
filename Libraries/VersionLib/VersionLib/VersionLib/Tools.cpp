@@ -1462,16 +1462,20 @@ std::string VersionLib::extractBuildMetadata(std::string &version)
 				foundBuildTypeEnd = i;
 				actualCharIsMetadata = true;
 			}
-	
-			// Check if has a next valid char:
-			if (i + 1 < verStrSize)
+			else
 			{
-				char tNext = version[i + 1];
-				if (!(actualCharIsMetadata && lastCharWasMetadata && (tNext >= 'a' && tNext <= 'z' || tNext >= 'A' && tNext <= 'Z' || tNext == '-' || tNext >= '0' && tNext <= '9')))
-				{
-					keepMetadataSearch = false;
-				}
+				break;
 			}
+	
+			//// Check if has a next valid char:
+			//if (i + 1 < verStrSize)
+			//{
+			//	char tNext = version[i + 1];
+			//	if (!(actualCharIsMetadata && lastCharWasMetadata && !(tNext >= 'a' && tNext <= 'z' || tNext >= 'A' && tNext <= 'Z' || tNext == '-' || tNext >= '0' && tNext <= '9')))
+			//	{
+			//		keepMetadataSearch = false;
+			//	}
+			//}
 		}
 	}
 
@@ -1479,7 +1483,7 @@ std::string VersionLib::extractBuildMetadata(std::string &version)
 	if (foundBuildTypeStart > 0 && foundBuildTypeEnd > 0 && foundBuildTypeEnd > foundBuildTypeStart && plusCharPos >= 0)
 	{
 		metadataStr = version.substr(foundBuildTypeStart, (foundBuildTypeEnd - foundBuildTypeStart + 1));
-		version.erase(plusCharPos, (foundBuildTypeEnd - plusCharPos + 1));
+		version = version.erase(plusCharPos, (foundBuildTypeEnd - plusCharPos + 1));
 	}
 
 	return metadataStr;
