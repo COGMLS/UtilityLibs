@@ -2,7 +2,11 @@
 
 VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	VersionLib::VersionStruct v = VersionLib::toVersionStruct3(versionStr);
+	#else
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->numeric_version[0] = v.major;
