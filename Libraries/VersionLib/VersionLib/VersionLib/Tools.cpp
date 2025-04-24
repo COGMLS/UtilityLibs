@@ -176,6 +176,31 @@ std::string VersionLib::buildType2Str(BuildType type, bool useShortStr, bool sho
 
 			return std::string();
 		}
+
+		//
+		// Non standard build types:
+		//
+		
+		case BuildType::PRE_ALPHA:
+		{
+			return std::string("pre-alpha");
+		}
+		case BuildType::PRE_BETA:
+		{
+			return std::string("pre-beta");
+		}
+		case BuildType::DEVELOPMENT:
+		{
+			if (showReleaseType)
+			{
+				return std::string("dev");
+			}
+			return std::string("development");
+		}
+		case BuildType::PRE_RELEASE:
+		{
+			return std::string("pre-release");
+		}
 		default:
 		{
 			return std::string();
@@ -217,7 +242,36 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 		return BuildType::RELEASE;
 	}
 	
-	return BuildType::RELEASE;
+	//
+	// Non standard build types:
+	//
+	
+	if (value == "pre-alpha")
+	{
+		return BuildType::PRE_ALPHA;
+	}
+	
+	if (value == "pre-beta")
+	{
+		return BuildType::PRE_BETA;
+	}
+
+	if (value == "canary")
+	{
+		return BuildType::CANARY;
+	}
+	
+	if (value == "development" || value == "dev")
+	{
+		return BuildType::DEVELOPMENT;
+	}
+	
+	if (value == "pre-release")
+	{
+		return BuildType::PRE_RELEASE;
+	}
+	
+	return BuildType::NOT_DETECTED;
 }
 
 VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
