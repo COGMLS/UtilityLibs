@@ -47,6 +47,7 @@ namespace VersionLib
 	 */
 	enum BuildType : unsigned short
 	{
+		NOT_DETECTED,
 		PRE_ALPHA,
 		ALPHA,
 		CANARY,
