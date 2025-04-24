@@ -135,36 +135,6 @@ namespace VersionLib
 	 * @return Return the identified version type
 	 */
 	VERSION_LIB_API VersionLib::VersionType idVersionType (std::string version, bool isVerFormatStr, std::string regex = "");
-
-	/**
-	 * @brief Get the complete the build type data (like alpha.2, beta.3) with C string style
-	 * @param version Version Struct data
-	 * @param useShortStr Use the short string version
-	 * @param showReleaseType Show the "release" or "r" build type
-	 * @return Return a constant C string style of the complete build type data
-	 * @warning This function is not defined!
-	 */
-	const char* verStruct2BuildTypeComplete (const VersionLib::VersionStruct& version, bool useShortStr = true, bool showReleaseType = false);
-
-	/**
-	 * @brief Get the version data as a string
-	 * @param version Version Struct data
-	 * @param useShortStr Use the short string version
-	 * @param hideBuildWord 
-	 * @param showReleaseType Show the "release" or "r" build type
-	 * @return Return a constant C string style of the version data in the struct
-	 * @warning This function is not defined!
-	 */
-	const char* verStruct2Str (const VersionLib::VersionStruct& version, bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
-
-	/**
-	 * @brief Check each given Version Struct to determinate which one of them is greater, less or equal
-	 * @param ver1 Version Struct data left reference
-	 * @param ver2 Version Struct data right reference
-	 * @return 
-	 * @warning This function is not defined!
-	 */
-	int chkVerStruct (const VersionLib::VersionStruct& ver1, const VersionLib::VersionStruct& ver2);
 }
 
 #endif // !VERSION_TOOLS_HPP
