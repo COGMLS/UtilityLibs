@@ -48,6 +48,12 @@
 
 	// Enable the SemVer class
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
+
+	// Enable generic version detection algorithm
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_ALGORITHM
+
+	// Enable token system support
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 #endif // !VERSION_LIB_BUILD_TYPE is Alpha
 
 //
