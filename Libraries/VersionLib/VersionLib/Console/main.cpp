@@ -8,6 +8,17 @@
 
 int main(int argc, const char* argv[])
 {
+	#ifdef TEST_LIBRARY_COMPONENTS
+
+	std::string verStr = "1.2.3.15-beta.5";
+	std::string metadata = "+abcde";
+	std::string build = " build 9501";
+
+	std::string version = verStr + metadata + build;
+
+	VersionLib::VersionStruct data = VersionLib::toVersionStruct3(version);
+
+	#else
 	std::vector<std::string> cli;
 
 	bool testVersionStrFormats = false;
