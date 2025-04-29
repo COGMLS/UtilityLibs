@@ -817,10 +817,12 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	short foundMetadata = -1;					// Found the metadata info position (-1 is unknown position)
 
 	short lastFieldProcessed = -1;				// 0.1[.2][-3.4][+5] ["6"] [7] | -1 is unknown last field
-
+	
+	bool addToken = false;
+	
 	char t = '\0';								// Current char in analysis
 	std::string tmp;							// Temporary variable accumulator
-
+	
 	token_struct tmpToken;						// Temporary token struct data
 
 	/** Generate tokens from version string:
@@ -829,21 +831,31 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	 * separating the components by the separators,
 	 * numbers, alphanumerical values and spaces
 	 * 
-	*/
+	 */
 	for (size_t i = 0; i < verStrSize; i++)
 	{
 		t = version[i];		// Get the current char to analyze
-
-		// Test if the current char if alpha char and classify as string
+		
+		// Detect if is metadata:
+		if (t == '+')
+		{
+			foundMetadata = true;
+			tmpToken.type = 4;	// Set as metadata component
+			tmp += t;
+		}
+		
+		// Test if the current char is alphabetical char and classify as string
 		if (t >= 'a' && t <= 'z' || t >= 'A' && t <= 'Z')
 		{
 			tmp += t;
+			// Set to string classification when is not metadata. This overwrite numerical classification.
 			if (tmpToken.type != 4)
 			{
 				tmpToken.type = 3;
 			}
 		}
 
+		// Test if current char is numerical char
 		if (t >= '0' && t <= '9')
 		{
 			tmp += t;
@@ -857,45 +869,56 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		if (t == '-' && foundMetadata)
 		{
 			tmp += t;
-			tmpToken.type = 4;	// Set as metadata component
 		}
 
-		// If detect a separator char, test the current token data and if is the last check:
-		if (t == '.' || t == ' ' || t == '+' || t == '-' && !foundMetadata || i + 1 == verStrSize)
+		// Check if in condition to add the token into the vector:
+		if (t == '.' || t == ' ' || t == '-' && !foundMetadata || i + 1 == verStrSize)
 		{
-			if (foundMetadata)
-			{
-				foundMetadata = false;
-			}
+			addToken = true;
+		}
 
-			if (t == '+')
+		// Check if in condition to add the token when analyzing metadata:
+		if (i + 1 < verStrSize)
+		{
+			if (version[i + 1] == '+')
 			{
-				foundMetadata = true;
+				addToken = true;
 			}
+		}
+
+		// If is in condition to add the token:
+		if (addToken)
+		{
+			// Reset addToken status:
+			addToken = false;
 
 			// Set the string data into the token
 			tmpToken.str = tmp;
 
 			// Try to detect the type of numerical value:
-			if (tmpToken.type = 1)
+			if (tmpToken.type == 1)
 			{
-				bool convertUInt = false;
+				short convertUInt = 0;
+
+				// Try to convert to unsigned int type:
 				try
 				{
 					tmpToken.numVal.ul = static_cast<unsigned int>(std::stoi(tmp));
-					convertUInt = true;
+					convertUInt = 1;
 				}
 				catch(const std::exception&)
 				{
 					// Do not generate an output or throw an error
 				}
 
-				if (!convertUInt)
+				// Try to convert to unsigned long long type if failed in previous conversion:
+				if (convertUInt != 1)
 				{
 					try
 					{
 						tmpToken.numVal.ull = static_cast<unsigned long long>(std::stoull(tmp));
 						tmpToken.type = 2;
+						convertUInt = 2;
 					}
 					catch(const std::exception&)
 					{
@@ -903,13 +926,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 					}
 				}
 			}
+
+			// Insert the token into the vector and clean the temporary string:
 			tokens.push_back(tmpToken);
 			tmp.clear();
 
 			tmpToken = token_struct{};	// Overwrite the data
 
 			// Add the separator component into token list:
-			if (t == '.' || t == ' ' || t == '+' || t == '-' && !foundMetadata)
+			if (t == '.' || t == ' ' || t == '-' && !foundMetadata)
 			{
 				tmp += t;
 				tmpToken.str = tmp;
@@ -919,6 +944,12 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				tmp.clear();
 
 				tmpToken = token_struct{};	// Overwrite the data
+			}
+
+			// Reset the metadata status:
+			if (foundMetadata)
+			{
+				foundMetadata = false;
 			}
 		}
 	}
@@ -933,6 +964,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	// Make sure the foundMetadata is false
 	foundMetadata = false;
 	tmp.clear();
+
+	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
+	std::cout << "Detected Tokens:" << std::endl;
+	for (size_t j = 0; j < tokens.size(); j++)
+	{
+		std::cout << "[" << j << "]::" << tokens[j].str << std::endl;
+	}
+	std::cout << "----------------" << std::endl;
+	#endif // !Check for IOSTREAM and DEBUG
 
 	size_t tokenSize = tokens.size();
 	short lastType = -2;					// Last token type data type analyzed (-2 means no token was analyzed)
@@ -1009,7 +1049,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	}
 
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
+	//std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
 	return v;
