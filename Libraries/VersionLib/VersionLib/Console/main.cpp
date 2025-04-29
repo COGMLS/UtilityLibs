@@ -26,6 +26,7 @@ int main(int argc, const char* argv[])
 	bool testVersionExceptions = false;
 	bool testVersionStrComp = false;
 	bool testVersionStructComp = false;
+	bool test_toVersionStruct3 = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -60,6 +61,11 @@ int main(int argc, const char* argv[])
 		if (cli[i] == "-test-struct-comparison")
 		{
 			testVersionStructComp = true;
+		}
+
+		if (cli[i] == "-test2versionstruct3")
+		{
+			test_toVersionStruct3 = true;
 		}
 	}
 
@@ -245,6 +251,22 @@ int main(int argc, const char* argv[])
 		}
 	}
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	if (test_toVersionStruct3)
+	{
+		std::vector<VersionLib::VersionStruct> vData3;
+
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2de build 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200"));
+
+		std::cout << "End of toVersionStruct3 test" << std::endl;
+	}
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+
 	if (testVersionExceptions)
 	{
 		#ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
@@ -290,6 +312,8 @@ int main(int argc, const char* argv[])
 		VersionLib::VersionData ver5(7, 8, 1, VersionLib::BuildType::RELEASE_CANDIDATE, 3, 1000, true);
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+
+	#endif // !TEST_LIBRARY_COMPONENTS
 
 	return 0;
 }
