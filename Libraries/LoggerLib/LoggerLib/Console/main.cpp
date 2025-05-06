@@ -19,6 +19,7 @@ int main(int argc, const char* argv[])
 	bool testPointerLogger = false;
 	bool testStreamOperator = false;
 	bool testLogEntryEqOperator = false;
+	bool testLogInfoFormatter = false;
 
 	std::vector<std::string> args;
 	for (size_t i = 0; i < argc; i++)
@@ -56,10 +57,40 @@ int main(int argc, const char* argv[])
 		{
 			testLogEntryEqOperator = true;
 		}
+
+		if (arg == "--testloginfoformatter" || arg == "-formatter")
+		{
+			testLogInfoFormatter = true;
+		}
 	}
 
 	std::cout << "Logger Library Console Test - " << LoggerLib::getVersionStr(LoggerLib::getLibVersion(), true, true) << std::endl;
 	std::cout << "-------------------------------------------------------" << std::endl;
+
+	/* Space to test the parameters and send error messages:
+	 * ---------------------------------------------------------
+	 * 
+	*/
+
+	int errorStatus = 0;
+
+	#ifndef LOGGER_INFORMATION_FORMATTER_HPP
+	if (testLogInfoFormatter)
+	{
+		std::cout << "Invalid Argument: --testloginfoformatter | -formatter" << std::endl;
+	}
+	#endif // !LOGGER_INFORMATION_FORMATTER_HPP
+
+	if (errorStatus != 0)
+	{
+		return errorStatus;	// Terminate the application
+	}
+
+	//
+	// ---------------------------------------------------------
+	//
+
+	// Create the application logger:
 
 	Logger logger(std::filesystem::current_path(), "logTest");
 	
