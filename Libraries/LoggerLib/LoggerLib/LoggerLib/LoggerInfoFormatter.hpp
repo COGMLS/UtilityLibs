@@ -30,6 +30,8 @@
 
 #include "LoggerExperimental.hpp"
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
@@ -142,6 +144,7 @@ class LOGGER_LIB_API LogFormat
 		 * @param emptyDataReplacer String information to replace any empty data that was identified
 		 * @note Format information: %t to identify the title. %m Identify the message. %d to identify the log data.
 		 * @note Adding other marks like '::', will be skiped to format id and used as part of custom information format
+		 * @note If is necessary add '%' into the string data, use double characters '%%'
 		 */
 		LogFormat (std::string formatStr, std::string emptyDataReplacer = "");
 
@@ -174,3 +177,5 @@ class LOGGER_LIB_API LogFormat
 std::vector<LogFormatToken> createFormatTokens (std::string format);
 
 #endif // !LOGGER_INFORMATION_FORMATTER_HPP
+
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
