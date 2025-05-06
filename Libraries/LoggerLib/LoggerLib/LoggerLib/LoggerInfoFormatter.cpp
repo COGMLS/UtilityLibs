@@ -143,13 +143,74 @@ LogFormat &LogFormat::operator=(LogFormat &&other) noexcept
 	return *this;
 }
 
-std::string LogFormat::formatInfo(std::vector<std::string> info)
+std::string LogFormat::formatInfo(std::vector<std::string> data)
 {
 	std::string formattedInfo = "";
 
-	for (std::string& s : info)
-	{
+	size_t i = 0;
+	size_t j = 0;
 
+	bool replaceToken = false;
+	bool formatTokensProcessed = false;
+	bool dataComponentsProcessed = false;
+
+	while (!formatTokensProcessed && !dataComponentsProcessed)
+	{
+		replaceToken = false;
+		if (i < this->formatTokens.size())
+		{
+			if (this->formatTokens[i].getId() != LogFormatId::Unknown)
+			{
+				replaceToken = true;
+			}
+
+			// If is not marked to replace the token data, use it in the final formatted string
+			if (!replaceToken)
+			{
+				if (this->formatTokens[i].getData().empty())
+				{
+					formattedInfo += this->emptyReplacer;
+				}
+				else
+				{
+					formattedInfo += this->formatTokens[i].getData();
+				}
+			}
+
+			i++;
+		}
+		else
+		{
+			if (!formatTokensProcessed)
+			{
+				formatTokensProcessed = true;	// All components on format tokens was analyzed
+			}
+		}
+
+		if (j < data.size())
+		{
+			if (replaceToken)
+			{
+				formattedInfo += data[j];
+				j++;
+			}
+			else
+			{
+				// If there are more items to add, include then in the final of formatted string
+				if (i >= this->formatTokens.size())
+				{
+					formattedInfo += data[j];
+					j++;
+				}
+			}
+		}
+		else
+		{
+			if (!dataComponentsProcessed)
+			{
+				dataComponentsProcessed = true;	// All string components was analyzed
+			}
+		}
 	}
 
     return formattedInfo;
