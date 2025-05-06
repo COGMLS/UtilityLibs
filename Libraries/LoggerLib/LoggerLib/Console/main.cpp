@@ -176,6 +176,20 @@ int main(int argc, const char* argv[])
 		pLogger->~Logger();
 		pLogger = nullptr;
 	}
+
+	#ifdef LOGGER_INFORMATION_FORMATTER_HPP
+	if (testLogInfoFormatter)
+	{
+		std::string logInfo = "{title}::{message}-{data}";
+		//createFormatTest(logInfo);
+		LogFormat formatter1(logInfo, "");
+		LogFormat formatter2(") {title} => {message}");
+
+		std::cout << formatter1.formatInfo({"Entry Test", "Message test"}) << std::endl;
+		std::cout << formatter1.formatInfo({"Entry Test 1", "Message test 1", "Data test"}) << std::endl;
+		std::cout << formatter2.formatInfo({"Entry Test 2", "Message 2", "Extra data example"}) << std::endl;
+	}
+	#endif // !LOGGER_INFORMATION_FORMATTER_HPP
 	
 	return 0;
 }
