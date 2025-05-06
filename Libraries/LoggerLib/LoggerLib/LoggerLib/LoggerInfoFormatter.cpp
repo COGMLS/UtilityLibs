@@ -3,25 +3,41 @@
 LogFormatToken::LogFormatToken()
 {
 	this->id = LogFormatId::Unknown;
-	this->info = "";
+	this->data = "";
 }
 
-LogFormatToken::LogFormatToken(LogFormatId id, std::string info)
+LogFormatToken::LogFormatToken(std::string token)
+{
+	this->id = LogFormatId::Unknown;
+
+	for (size_t i = 0; i < LogFormatIdStr.size(); i++)
+	{
+		if (token == LogFormatIdStr[i])
+		{
+			this->id = static_cast<LogFormatId>(i);
+			break;
+		}
+	}
+
+	this->data = token;
+}
+
+LogFormatToken::LogFormatToken(LogFormatId id, std::string data)
 {
 	this->id = id;
-	this->info = info;
+	this->data = data;
 }
 
 LogFormatToken::LogFormatToken(const LogFormatToken &other)
 {
 	this->id = other.id;
-	this->info = other.info;
+	this->data = other.data;
 }
 
 LogFormatToken::LogFormatToken(LogFormatToken &&other) noexcept
 {
 	this->id = std::move(other.id);
-	this->info = std::move(other.info);
+	this->data = std::move(other.data);
 }
 
 LogFormatToken::~LogFormatToken()
@@ -31,7 +47,7 @@ LogFormatToken::~LogFormatToken()
 LogFormatToken &LogFormatToken::operator=(const LogFormatToken &other)
 {
     this->id = other.id;
-	this->info = other.info;
+	this->data = other.data;
 	return *this;
 }
 
@@ -43,19 +59,19 @@ LogFormatToken &LogFormatToken::operator=(LogFormatToken &&other) noexcept
 	}
 
 	this->id = std::move(other.id);
-	this->info = std::move(other.info);
+	this->data = std::move(other.data);
 
 	return *this;
 }
 
 std::string LogFormatToken::operator+(const LogFormatToken &other)
 {
-    return other.info + this->info;
+    return other.data + this->data;
 }
 
 std::string LogFormatToken::operator+(const std::string &str)
 {
-    return str + this->info;
+    return str + this->data;
 }
 
 LogFormatId LogFormatToken::getId()
@@ -63,37 +79,38 @@ LogFormatId LogFormatToken::getId()
     return this->id;
 }
 
-std::string LogFormatToken::getInfo()
+std::string LogFormatToken::getData()
 {
-    return this->info;
+    return this->data;
 }
 
-void LogFormat::createFormat(std::string &format)
+void LogFormatToken::setData (std::string data)
 {
-	for (size_t i = 0; i < format.size(); i++)
-	{
-
-	}
+	this->data = data;
 }
 
 LogFormat::LogFormat()
 {
-	
+	this->emptyReplacer = "";
+	this->formatTokens = createFormatTokens("{title}::{message} {data}");
 }
 
 LogFormat::LogFormat(std::string format, std::string emptyDataReplacer)
 {
-	
+	this->emptyReplacer = emptyDataReplacer;
+	this->formatTokens = createFormatTokens(format);
 }
 
 LogFormat::LogFormat(const LogFormat &other)
 {
-	this->format = other.format;
+	this->formatTokens = other.formatTokens;
+	this->emptyReplacer = other.emptyReplacer;
 }
 
 LogFormat::LogFormat(LogFormat &&other) noexcept
 {
-	this->format = std::move(other.format);
+	this->formatTokens = std::move(other.formatTokens);
+	this->emptyReplacer = std::move(other.emptyReplacer);
 }
 
 LogFormat::~LogFormat()
@@ -102,7 +119,14 @@ LogFormat::~LogFormat()
 
 LogFormat &LogFormat::operator=(const LogFormat &other)
 {
-    this->format = other.format;
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	this->formatTokens = other.formatTokens;
+	this->emptyReplacer = other.emptyReplacer;
+
 	return *this;
 }
 
@@ -112,7 +136,10 @@ LogFormat &LogFormat::operator=(LogFormat &&other) noexcept
 	{
 		return *this;
 	}
-	this->format = std::move(other.format);
+
+	this->formatTokens = std::move(other.formatTokens);
+	this->emptyReplacer = std::move(other.emptyReplacer);
+
 	return *this;
 }
 
