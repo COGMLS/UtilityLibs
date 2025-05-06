@@ -30,28 +30,33 @@
 
 #include "LoggerExperimental.hpp"
 
+#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
+
 #ifdef WIN32
 #include "pch.h"
 #endif // !WIN32
 
+#include <array>
 #include <string>
 #include <vector>
-#include <filesystem>
-#include <chrono>
-#include <ostream>
-#include <array>
+
+#ifdef DEBUG
+#include <iostream>
+#endif // !DEBUG
 
 #ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
 #include "LoggerException.hpp"
 #endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER
 
-enum LogFormatId : unsigned int
+//#include "LoggerCommonDataTypes.hpp"
+
+enum LogFormatId : int
 {
+	Unknown = -1,				// If an unknown identify was send, like "%w", identify as Unknown id
 	RawStr,						// If a raw string content was found, identify as RawStr
-	Unknown,					// If an unknown identify was send, like "%w", identify as Unknown id
-	Title,						// Title id (%t)
-	Message,					// Message id (%m)
-	Data						// Data id (%d)
+	Title,						// Title id
+	Message,					// Message id
+	Data						// Data id
 	//DateTime,					// Reserved
 	//Date,						// Reserved
 	//Time,						// Reserved
@@ -59,11 +64,12 @@ enum LogFormatId : unsigned int
 	//HighPrecisionTime			// Reserved
 };
 
-const std::array<const char*, 3> LogFormatIdStr = 
+const std::array<const char*, 4> LogFormatIdStr = 
 {
-	"t",
-	"m",
-	"d"
+	"{RawStr}",
+	"{title}",
+	"{message}",
+	"{data}"
 };
 
 /**
@@ -73,15 +79,21 @@ class LOGGER_LIB_API LogFormatToken
 {
 	private:
 
-		LogFormatId id;
-		std::string info;
+		LogFormatId id;			// Token ID
+		std::string data;		// String hold by the token
 
 	public:
 
 		/**
 		 * @brief Create an empty format token, marked as Unknown id and empty information.
 		 */
-		LogFormatToken ();
+		LogFormatToken();
+
+		/**
+		 * @brief Create a format token with a string and identify the type of token
+		 * @param token String token data
+		 */
+		LogFormatToken (std::string token);
 
 		/**
 		 * @brief Create a format token with specific ID and information
@@ -106,7 +118,9 @@ class LOGGER_LIB_API LogFormatToken
 
 		LogFormatId getId();
 
-		std::string getInfo();
+		std::string getData();
+
+		void setData (std::string data);
 };
 
 class LOGGER_LIB_API LogFormat
@@ -116,8 +130,6 @@ class LOGGER_LIB_API LogFormat
 		//LogDataType formatType;					// Identify which type this format should be used, raw data, date and time, etc.
 		std::string emptyReplacer;					// If a id is empty, use an generic information to generate a proper output
 		std::vector<LogFormatToken> formatTokens;	// Format tokens: The tokens are defined by each type of id located in the given format. Unidentified tokens will be considered as a part of raw string output for log generation.
-
-		void createFormat (std::string& format);
 
 	public:
 
@@ -132,6 +144,7 @@ class LOGGER_LIB_API LogFormat
 		 * @param emptyDataReplacer String information to replace any empty data that was identified
 		 * @note Format information: %t to identify the title. %m Identify the message. %d to identify the log data.
 		 * @note Adding other marks like '::', will be skiped to format id and used as part of custom information format
+		 * @note If is necessary add '%' into the string data, use double characters '%%'
 		 */
 		LogFormat (std::string formatStr, std::string emptyDataReplacer = "");
 
@@ -145,7 +158,24 @@ class LOGGER_LIB_API LogFormat
 
 		LogFormat& operator= (LogFormat&& other) noexcept;
 
+		/**
+		 * @brief Transform a sequence of log entry data into a single formatted string
+		 * @param info Sequence of string that will compose the final log entry information
+		 * @return Formatted log entry information
+		 * @note If more strings than log tokens supported was send, the rest of components will be added as raw strings
+		 */
 		std::string formatInfo (std::vector<std::string> info);
+
+		//std::string formatInfo (std::vector<LogFormatToken> infoTokens);
 };
 
+/**
+ * @brief Create format tokens
+ * @param format Format to create tokens
+ * @note This method is under development and may not work as expected
+ */
+std::vector<LogFormatToken> createFormatTokens (std::string format);
+
 #endif // !LOGGER_INFORMATION_FORMATTER_HPP
+
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_FORMATTER

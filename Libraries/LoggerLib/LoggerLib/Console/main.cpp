@@ -19,6 +19,7 @@ int main(int argc, const char* argv[])
 	bool testPointerLogger = false;
 	bool testStreamOperator = false;
 	bool testLogEntryEqOperator = false;
+	bool testLogInfoFormatter = false;
 
 	std::vector<std::string> args;
 	for (size_t i = 0; i < argc; i++)
@@ -56,10 +57,40 @@ int main(int argc, const char* argv[])
 		{
 			testLogEntryEqOperator = true;
 		}
+
+		if (arg == "--testloginfoformatter" || arg == "-formatter")
+		{
+			testLogInfoFormatter = true;
+		}
 	}
 
 	std::cout << "Logger Library Console Test - " << LoggerLib::getVersionStr(LoggerLib::getLibVersion(), true, true) << std::endl;
 	std::cout << "-------------------------------------------------------" << std::endl;
+
+	/* Space to test the parameters and send error messages:
+	 * ---------------------------------------------------------
+	 * 
+	*/
+
+	int errorStatus = 0;
+
+	#ifndef LOGGER_INFORMATION_FORMATTER_HPP
+	if (testLogInfoFormatter)
+	{
+		std::cout << "Invalid Argument: --testloginfoformatter | -formatter" << std::endl;
+	}
+	#endif // !LOGGER_INFORMATION_FORMATTER_HPP
+
+	if (errorStatus != 0)
+	{
+		return errorStatus;	// Terminate the application
+	}
+
+	//
+	// ---------------------------------------------------------
+	//
+
+	// Create the application logger:
 
 	Logger logger(std::filesystem::current_path(), "logTest");
 	
@@ -145,6 +176,20 @@ int main(int argc, const char* argv[])
 		pLogger->~Logger();
 		pLogger = nullptr;
 	}
+
+	#ifdef LOGGER_INFORMATION_FORMATTER_HPP
+	if (testLogInfoFormatter)
+	{
+		std::string logInfo = "{title}::{message}-{data}";
+		//createFormatTest(logInfo);
+		LogFormat formatter1(logInfo, "");
+		LogFormat formatter2(") {title} => {message}");
+
+		std::cout << formatter1.formatInfo({"Entry Test", "Message test"}) << std::endl;
+		std::cout << formatter1.formatInfo({"Entry Test 1", "Message test 1", "Data test"}) << std::endl;
+		std::cout << formatter2.formatInfo({"Entry Test 2", "Message 2", "Extra data example"}) << std::endl;
+	}
+	#endif // !LOGGER_INFORMATION_FORMATTER_HPP
 	
 	return 0;
 }
