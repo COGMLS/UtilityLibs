@@ -1,4 +1,4 @@
-﻿###########################################################
+###########################################################
 #
 # CMakeLists: LoggerLib Library
 #
@@ -51,7 +51,7 @@ project(
 #include_directories("${ReposRoot}/Libraries/<lib>")
 
 # Define to export the library methods to all compatible systems:
-add_compile_definitions(LOGGER_LIB_EXPORTS)
+add_compile_definitions(LOGGER_EXPORTS)
 
 # Define to export the library methods if is Windows:
 if(WIN32)
