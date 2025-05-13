@@ -495,7 +495,7 @@ std::string LogEntry::getEntry()
 	return entryLine;
 }
 
-#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#if defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 std::ostream& operator<<(std::ostream& os, LogEntry& obj)
 {
 	std::string entryLine;
@@ -542,7 +542,7 @@ std::ostream& operator<<(std::ostream& os, LogEntry& obj)
 	
 	return os;
 }
-#else
+#elif !defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && !defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 {
 	std::string entryLine;
@@ -589,7 +589,7 @@ std::ostream& operator<<(std::ostream& os, const LogEntry& obj)
 	
 	return os;
 }
-#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE && !LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 
 LogEntryW::LogEntryW(std::wstring title, std::wstring message)
 {
@@ -1086,7 +1086,7 @@ std::wstring LogEntryW::getEntry()
 	return entryLine;
 }
 
-#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#if defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 std::wostream& operator<<(std::wostream& os, LogEntryW& obj)
 {
 	std::wstring entryLine;
@@ -1133,7 +1133,7 @@ std::wostream& operator<<(std::wostream& os, LogEntryW& obj)
 	
 	return os;
 }
-#else
+#elif !defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && !defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 {
 	std::wstring entryLine;
@@ -1180,4 +1180,4 @@ std::wostream& operator<<(std::wostream& os, const LogEntryW& obj)
 	
 	return os;
 }
-#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE && !LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS

@@ -536,7 +536,7 @@ bool LogDataStore::operator==(const LogDataStore &other) const
 				}
 				#else
 					#ifdef WIN32	// On Windows platforms, high precision is already working
-					if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != data.highPrecision && this->localDt->mSeconds != other.localDt->mSeconds)
+					if (this->type == LogDataType::LOG_DATE_TIME_HIGH_PRECISION_ENTRY && this->localDt->highPrecision != other.localDt->highPrecision && this->localDt->mSeconds != other.localDt->mSeconds)
 					{
 						dtEq = false;
 					}

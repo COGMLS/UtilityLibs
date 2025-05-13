@@ -27,6 +27,9 @@
 
 	// Enable UTC and Local date time. This enable the local date time on Unix systems.
 	#define LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+
+	// Enable Stream Insertion operators in LogEntry with LogDataStore support. NOTE: If LogDataStore is enabled but, not this feature, the operators will be disabled:
+	#define LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 #endif // !LOGGER_LIB_COMPILE_BUILD_TYPE
 
 //
@@ -51,6 +54,9 @@
 
 	// Enable UTC and Local date time. This enable the local date time on Unix systems.
 	#define LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+
+	// Enable Stream Insertion operators in LogEntry with LogDataStore support. NOTE: If LogDataStore is enabled but, not this feature, the operators will be disabled:
+	//#define LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 #endif // !LOGGER_LIB_COMPILE_BUILD_TYPE
 
 //
@@ -75,6 +81,9 @@
 
 	// Enable UTC and Local date time. This enable the local date time on Unix systems.
 	#define LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+
+	// Enable Stream Insertion operators in LogEntry with LogDataStore support. NOTE: If LogDataStore is enabled but, not this feature, the operators will be disabled:
+	//#define LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 #endif // !LOGGER_LIB_COMPILE_BUILD_TYPE
 
 //
@@ -99,6 +108,9 @@
 
 	// Enable UTC and Local date time. This enable the local date time on Unix systems.
 	//#define LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
+
+	// Enable Stream Insertion operators in LogEntry with LogDataStore support. NOTE: If LogDataStore is enabled but, not this feature, the operators will be disabled:
+	//#define LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 #endif // !LOGGER_LIB_COMPILE_BUILD_TYPE
 
 #endif // !LOGGER_EXPERIMENTAL_FEATURES_CONTROL_HPP

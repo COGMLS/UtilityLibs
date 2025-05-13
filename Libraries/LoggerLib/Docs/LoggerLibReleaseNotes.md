@@ -13,6 +13,14 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 3.3.2-release (2025/05/13) -->
+    <dt><version-data>3.3.2-release</version-data> | Release Date: 2025/05/13</dt>
+    <dd><fix-alert>[FIX]</fix-alert> <strong>Windows platform library compilation</strong></dd>
+    <dd><fix-alert>[FIX]</fix-alert> Missing correct compile definition to Windows platforms</dd>
+    <dd><fix-alert>[FIX]</fix-alert> Missing correct instruction to check data between two <code>LogDataStore</code> objects, leading to compilation fail on Windows platform</dd>
+    <dd>Added new experimental feature control: <i>LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS</i></dd>
+    <dd><strong>Disabled <code>operator<<</code> when <code>LogDataStore</code> is only enabled to avoid compilation failure on Windows platforms</strong></dd>
+    <dd><strong>IMPORTANT NOTE:</strong> On last release version introduced LogDataStore feature, and the testing process was not correctly followed. Before launching a release version of the library, all platforms that I have (Windows and Linux) <strong>must pass</strong> through the console test. The same console used to present the library functionalities. I did not test correctly on Windows platform. This patch fixes this mistake with almost the same expected behavior, except with <code>LogEntry</code> and <code>LogEntryW</code> Stream Insertion operators (<code>operator<<</code>) that was disabled to avoid compilation failures.</dd>
     <!-- 3.4.0-release candidate (2025/04/08) -->
     <dt><version-data>3.4.0-release candidate</version-data> | Release Date: 2025/04/08</dt>
     <dd>Changed private method <code>cleanData</code> to <code>setDataStore</code> in <strong>LogDataStore</strong></dd>

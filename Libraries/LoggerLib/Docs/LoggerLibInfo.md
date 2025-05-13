@@ -10,6 +10,7 @@ This document contains the information about the future plans, known bugs, depre
 - *(Only for development)* Version build release type to control experimental features
 - Optimized `LogDataStore` to use less instructions to operate
 - Fix correct time format in log file format on *nix systems *(Version 3.4.0)*
+- `LogEntry` and `LogEntryW` `operator<<` **are disabled** when not using both `LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE` and `LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS` *(Version 3.3.2)*
 
 ## Implementations under development:
 
@@ -31,13 +32,16 @@ This document contains the information about the future plans, known bugs, depre
 | 1 | ~~On Linux systems the log files are not getting in order as occurs on Windows~~ |  | **FIXED** |
 | 2 | ~~Sorting log files is not working correctly~~ |  | **FIXED** |
 | 3 | ~~`LogEntry` and `LogEntryW` does not make correct time check in equality operations, missing `seconds` variable check from `LoggerLocalDateTime` struct~~ |  | **FIXED** |
-| 4 | ~~The standard algorithm to make the equality test between the both `logEntries` of **Logger** and **LoggerW** classes fails with new `LogDataStore`.~~ | A new algorithm as designed in `Logger` and `LoggerW` equality operator. No workaround is necessary. | **FIXED** |
+| 4 | ~~The standard algorithm to make the equality test between the both `logEntries` of **Logger** and **LoggerW** classes fails with new `LogDataStore`.~~ | A new algorithm was designed in `Logger` and `LoggerW` equality operator. No workaround is necessary. | **FIXED** |
 | 5 | ~~Making equality of LogEntry or LogEntryW show the warning message: *C++20 says that these are ambiguous, even though the second is reversed*~~ | The GCC compiler show a warning message, but no anomaly in code functionality was found. **NOTE:** After the compilation, the warning disappears without reason. **NOTE 2:** Missing *const* in equality operators was the reason for warning messages | **FIXED** |
 | 6 | ~~Autosave feature writes incorrectly the log entries when the `logEntries` vector is less than `maxLogEntries`~~ |  | **FIXED** |
 | 7 | ~~Missing autosave feature when the `Logger` and `LoggerW` destructors are called~~ |  | **FIXED** |
-| 8 | ~~Autosave can fail to operate if `maxLogEntries` on `setAutoSave` method's parameter is set to zero~~ | Avoid set `maxLogEntries` to zero, while a fix is not fixed | **FIXED** |
+| 8 | ~~Autosave can fail to operate if `maxLogEntries` on `setAutoSave` method's parameter is set to zero~~ | Avoid set `maxLogEntries` to zero, while a fix is not released | **FIXED** |
 | 9 | ~~`getLoggerDateTime` return UTC time format in Linux and MacOS when time should be returned as local time~~ |  | **FIXED** |
 | 10 | ~~Missing `highPrecision` check in Equality Operators in `Logger` and `LoggerW`~~ |  | **FIXED** |
+| 11 | ~~Missing correct instruction to check data between two ``LogDataStore` objects on Windows platforms~~ |  | **FIXED** |
+| 12 | ~~Missing correct compile definition to Windows platforms~~ | **NOTE:** A fix in CMakeLists.txt file was made, but the original naming will be revised in a future update | **FIXED** |
+| 13 | `LogEntry` and `LogEntryW` Stream Insertion operators are causing compilation failure on Windows platforms | **NOTE:** Added new experimental guard *LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS* to enable when `LogDataStore` is enabled too. Otherwise the operators will be disabled. | Not fixed |
 
 ## Deprecated Features:
 
