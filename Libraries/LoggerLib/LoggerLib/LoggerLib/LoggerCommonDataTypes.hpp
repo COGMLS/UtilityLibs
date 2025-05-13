@@ -192,11 +192,13 @@ class LOGGER_LIB_API LogEntry
 		/// @return 
 		std::string getEntry();
 
-		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		#if defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 		friend std::ostream& operator<<(std::ostream& os, LogEntry& obj);
-		#else
+		#elif !defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && !defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 		friend std::ostream& operator<<(std::ostream& os, const LogEntry& obj);
-		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		#elif defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
+			#error Experimental LogEntry Stream Insertion operator is only available with LogDataStore
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE && !LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 };
 
 /// @brief Log entry data
@@ -302,11 +304,13 @@ class LOGGER_LIB_API LogEntryW
 		/// @return 
 		std::wstring getEntry();
 
-		#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		#if defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 		friend std::wostream& operator<<(std::wostream& os, LogEntryW& obj);
-		#else
+		#elif !defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && !defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 		friend std::wostream& operator<<(std::wostream& os, const LogEntryW& obj);
-		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
+		#elif defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
+			#error Experimental LogEntry Stream Insertion operator is only available with LogDataStore
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE && !LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 };
 
 #endif // !LOGGER_COMMON_DATATYPES_HPP
