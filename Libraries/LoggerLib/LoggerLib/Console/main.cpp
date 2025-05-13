@@ -121,7 +121,11 @@ int main(int argc, const char* argv[])
 	if (testStreamOperator)
 	{
 		LogEntry log_entry("StreamOperatorTest::", "Test with operator<< with LogDataStore enabled");
+		#if defined(LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE) && defined(LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS)
 		std::cout << log_entry << std::endl;
+		#else
+		std::cout << "LogEntry Stream Insertion operator is disabled in this compilation" << std::endl;
+		#endif // !LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE && !LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS
 	}
 
 	if (testSortLogFiles)
