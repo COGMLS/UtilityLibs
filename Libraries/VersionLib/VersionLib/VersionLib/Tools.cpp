@@ -805,7 +805,15 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	};
 
 	std::vector<token_struct> tokens;			// Version tokens
-	std::vector<VersionLib::VersionReleaseDataC> buildTypes;	// Build types (include combined ones)
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+	struct token_struct2
+	{
+		short type = -2;
+		VersionLib::VersionTokenData token;
+	};
+	std::vector<token_struct2> tokens2;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
 	short foundMajorVer = -1;					// Found major version number position (-1 is unknown position)
 	short foundMinorVer = -1;					// Found minor version number position (-1 is unknown position)
@@ -818,12 +826,16 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 
 	short lastFieldProcessed = -1;				// 0.1[.2][-3.4][+5] ["6"] [7] | -1 is unknown last field
 	
-	bool addToken = false;
+	bool addToken = false;						// Add the new token into the token vector
 	
 	char t = '\0';								// Current char in analysis
 	std::string tmp;							// Temporary variable accumulator
 	
 	token_struct tmpToken;						// Temporary token struct data
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+	token_struct2 tmpToken2;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
 	/** Generate tokens from version string:
 	 * ----------------------------------------

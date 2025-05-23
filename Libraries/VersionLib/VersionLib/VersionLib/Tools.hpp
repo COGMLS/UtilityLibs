@@ -38,8 +38,14 @@
 #include <regex>
 #include <array>
 
+#include <iostream>
+
 #include "BuildTypes.hpp"
 #include "VersionStruct.hpp"
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+	#include "VersionToken.hpp"
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
 namespace VersionLib
 {
