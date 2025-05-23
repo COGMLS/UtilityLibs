@@ -28,6 +28,8 @@
 	#endif
 #endif // !WIN32
 
+#include "ExperimentalFeatures.hpp"
+
 #include "BuildTypes.hpp"
 
 namespace VersionLib
