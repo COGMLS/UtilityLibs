@@ -78,6 +78,7 @@ if (WIN32)
 					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
+					"VersionToken.hpp"							"VersionToken.cpp"
 				)
 else()
 	add_library(
@@ -98,6 +99,7 @@ else()
 					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
+					"VersionToken.hpp"							"VersionToken.cpp"
 				)
 endif()
 
