@@ -89,6 +89,9 @@
 
 namespace VersionLib
 {
+	/**
+	 * @brief Version Token Type identifier
+	 */
 	enum VersionTokenType : unsigned short
 	{
 		UNDEFINED_TOKEN,			// Token that was not identified. This value can appear when an empty token is used
@@ -99,10 +102,96 @@ namespace VersionLib
 		VERSION_MARK_TOKEN			// Any type of string mark that separates the version components
 	};
 
-	union VersionTokenData
+	/**
+	 * @brief Version Token Data Type identifier
+	 */
+	enum VersionTokenDataType : short
 	{
-		unsigned int int_data;
-		unsigned long long long_data;
+		UNKNOWN_DATA_TYPE = -1,
+		NULL_TYPE,
+		UNSIGNED_INT_TYPE,
+		UNSIGNED_LONG_LONG_TYPE,
+		STRING_TYPE
+	};
+
+	/**
+	 * @brief Version Token Data Store
+	 */
+	class VERSION_LIB_API VersionTokenData
+	{
+		private:
+
+			union VersionTokenNumData
+			{
+				unsigned int int_data;
+				unsigned long long long_data;
+			};
+
+			VersionLib::VersionTokenDataType type;			// Type of the data
+			std::unique_ptr<std::string> strData;			// String data
+			std::unique_ptr<VersionTokenNumData> numData;	// Numeric union data
+
+		public:
+
+			//
+			// Constructors:
+			//
+
+			VersionTokenData();
+
+			VersionTokenData (std::string data);
+
+			VersionTokenData (unsigned int data);
+
+			VersionTokenData (unsigned long long data);
+
+			VersionTokenData (const VersionLib::VersionTokenData& other);
+
+			VersionTokenData (VersionLib::VersionTokenData&& other) noexcept;
+
+			//
+			// Destructor:
+			//
+
+			~VersionTokenData();
+
+			//
+			// Operators:
+			//
+
+			VersionLib::VersionTokenData& operator= (const VersionLib::VersionTokenData& other);
+			VersionLib::VersionTokenData& operator= (VersionLib::VersionTokenData&& other) noexcept;
+
+			VersionLib::VersionTokenData& operator= (std::string data);
+			VersionLib::VersionTokenData& operator= (unsigned int data);
+			VersionLib::VersionTokenData& operator= (unsigned long long data);
+
+			bool operator== (const VersionLib::VersionTokenData& other);
+			bool operator== (VersionLib::VersionTokenDataType type);
+
+			explicit operator bool() const;
+
+			//
+			// Checkers:
+			//
+
+			VersionLib::VersionTokenDataType getDataType();
+
+			bool isNumVal();
+
+			bool isLongVal();
+
+			bool isStringVal();
+
+			//
+			// Getters:
+			//
+
+			std::string getStr();
+			
+			unsigned int getInt();
+			
+			unsigned long long getLong();
 	};
 
 	class VERSION_LIB_API VersionTokenSet
@@ -149,7 +238,7 @@ namespace VersionLib
 
 			VersionToken (const VersionLib::VersionToken& other);
 
-			VersionToken (VersionLib::VersionToken& other) noexcept;
+			VersionToken (VersionLib::VersionToken&& other) noexcept;
 
 			//
 			// Destructor:
