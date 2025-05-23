@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
 	bool testVersionExceptions = false;
 	bool testVersionStrComp = false;
 	bool testVersionStructComp = false;
-	bool test_toVersionStruct3 = false;
+	bool test_toVersionStruct3 = true;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -262,6 +262,7 @@ int main(int argc, const char* argv[])
 		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e 9200"));
 		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta+ab1c2d-e build 9200"));
 		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.beta.2+ab1c2d-e build 9200"));
 
 		std::cout << "End of toVersionStruct3 test" << std::endl;
 	}
