@@ -322,14 +322,312 @@ void VersionLib::VersionTokenData::setNull()
 
 VersionLib::VersionToken::VersionToken()
 {
+	this->position = -1;
 	this->mandatory = false;
 	this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
 }
 
-VersionLib::VersionToken::VersionToken (std::string tokenPattern)
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data)
 {
+	this->position = -1;
 	this->mandatory = false;
-	this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
+	this->data = data;
+	
+	if (this->data.isEmpty() || this->data.isNull())
+	{
+		this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
+	}
+	else if (this->data.isNumVal())
+	{
+		if (this->data.isLongVal())
+		{
+			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
+		}
+		else
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+	}
+	else if (this->data.isStringVal())
+	{
+		this->type = VersionLib::VersionTokenType::STRING_TOKEN;
+	}
+	else
+	{
+		this->type = VersionLib::VersionTokenType::UNDEFINED_TOKEN;
+	}
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, int position)
+{
+	if (position < 0)
+	{
+		position = -1;	// Set as a default value to disable the position
+	}
+
+	this->position = position;
+	this->mandatory = false;
+	this->data = data;
+	
+	if (this->data.isEmpty() || this->data.isNull())
+	{
+		this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
+	}
+	else if (this->data.isNumVal())
+	{
+		if (this->data.isLongVal())
+		{
+			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
+		}
+		else
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+	}
+	else if (this->data.isStringVal())
+	{
+		this->type = VersionLib::VersionTokenType::STRING_TOKEN;
+	}
+	else
+	{
+		this->type = VersionLib::VersionTokenType::UNDEFINED_TOKEN;
+	}
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, int position, bool mandatory)
+{
+	if (position < 0)
+	{
+		position = -1;	// Set as a default value to disable the position
+	}
+
+	this->position = position;
+	this->mandatory = mandatory;
+	this->data = data;
+	
+	if (this->data.isEmpty() || this->data.isNull())
+	{
+		this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
+	}
+	else if (this->data.isNumVal())
+	{
+		if (this->data.isLongVal())
+		{
+			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
+		}
+		else
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+	}
+	else if (this->data.isStringVal())
+	{
+		this->type = VersionLib::VersionTokenType::STRING_TOKEN;
+	}
+	else
+	{
+		this->type = VersionLib::VersionTokenType::UNDEFINED_TOKEN;
+	}
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, VersionLib::VersionTokenType type)
+{
+	this->position = -1;
+	this->mandatory = false;
+	this->data = data;
+	this->type = type;
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, VersionLib::VersionTokenType type, int position)
+{
+	if (position < 0)
+	{
+		position = -1;	// Set as a default value to disable the position
+	}
+
+	this->position = position;
+	this->mandatory = false;
+	this->data = data;
+	this->type = type;
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, VersionLib::VersionTokenType type, int position, bool mandatory)
+{
+	if (position < 0)
+	{
+		position = -1;	// Set as a default value to disable the position
+	}
+
+	this->position = position;
+	this->mandatory = mandatory;
+	this->data = data;
+	this->type = type;
+}
+
+VersionLib::VersionToken::VersionToken(const VersionLib::VersionToken &other)
+{
+	this->position = other.position;
+	this->mandatory = other.mandatory;
+	this->type = other.type;
+	this->data = other.data;
+}
+
+VersionLib::VersionToken::VersionToken(VersionLib::VersionToken &&other) noexcept
+{
+	this->position = std::move(other.position);
+	this->mandatory = std::move(other.mandatory);
+	this->type = std::move(other.type);
+	this->data = std::move(other.data);
+}
+
+VersionLib::VersionToken::~VersionToken()
+{
+}
+
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (const VersionLib::VersionToken& other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	this->position = other.position;
+	this->mandatory = other.mandatory;
+	this->type = other.type;
+	this->data = other.data;
+
+	return *this;
+}
+
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (VersionLib::VersionToken&& other) noexcept
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	this->position = std::move(other.position);
+	this->mandatory = std::move(other.mandatory);
+	this->type = std::move(other.type);
+	this->data = std::move(other.data);
+
+	return *this;
+}
+
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (std::string& val)
+{
+	this->data = val;
+	return *this;
+}
+
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned int& val)
+{
+	this->data = val;
+	return *this;
+}
+
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned long long& val)
+{
+	this->data = val;
+	return *this;
+}
+
+bool VersionLib::VersionToken::operator== (VersionLib::VersionTokenType type)
+{
+	return this->type == type;
+}
+
+bool VersionLib::VersionToken::operator!= (VersionLib::VersionTokenType type)
+{
+	return !(*this == type);
+}
+
+VersionLib::VersionToken::operator bool() const
+{
+	return true;
+}
+
+bool VersionLib::VersionToken::isMandatory()
+{
+	return this->mandatory;
+}
+
+bool VersionLib::VersionToken::isEmpty()
+{
+	return this->type == VersionLib::VersionTokenType::EMPTY_TOKEN;
+}
+
+bool VersionLib::VersionToken::isNumVal()
+{
+	return this->type == VersionLib::VersionTokenType::NUMERIC_TOKEN;
+}
+
+bool VersionLib::VersionToken::isLongVal()
+{
+	return this->type == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
+}
+
+bool VersionLib::VersionToken::isStringVal()
+{
+	return this->type == VersionLib::VersionTokenType::STRING_TOKEN;
+}
+
+bool VersionLib::VersionToken::isSpecialToken()
+{
+	return this->type >= VersionLib::VersionTokenType::VERSION_TOKEN_VERSION_CORE_SEPARATOR;
+}
+
+int VersionLib::VersionToken::getPos()
+{
+	return this->position;
+}
+
+std::string VersionLib::VersionToken::getTokenStr()
+{
+	std::string tmp;
+
+	if (this->data)
+	{
+		if (this->data.isLongVal())
+		{
+			tmp = this->data.getLong();
+		}
+		else if (this->data.isNumVal())
+		{
+			tmp = data.getInt();
+		}
+		else
+		{
+			tmp = data.getStr();
+		}
+	}
+
+	return tmp;
+}
+
+VersionLib::VersionTokenType VersionLib::VersionToken::getType()
+{
+	return this->type;
+}
+
+VersionLib::VersionTokenData VersionLib::VersionToken::getTokenData()
+{
+	return this->data;
+}
+
+void VersionLib::VersionToken::setPos (int position)
+{
+	if (position < 0)
+	{
+		position = -1;
+	}
+
+	this->position = position;
+}
+
+void VersionLib::VersionToken::setMandatory (bool mandatory)
+{
+	this->mandatory = mandatory;
 }
 
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM

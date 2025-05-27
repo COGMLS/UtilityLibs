@@ -281,11 +281,10 @@ namespace VersionLib
 	{
 		private:
 
-			bool mandatory;												// Indicate if the component must be part of the version to be validated
-			VersionLib::VersionTokenType type;							// Indicate the type of token
-			std::vector<std::string> pattern_data;						// String values to be used to identify the type of token
-			std::unique_ptr<std::string> str_data;						// String data store
-			std::unique_ptr<VersionLib::VersionTokenData> num_data;		// Numerical values hold by a union
+			int position;								// Token position. If set a negative value, it means there is no specific position
+			bool mandatory;								// Indicate if the component must be part of the version to be validated
+			VersionLib::VersionTokenType type;			// Indicate the type of token
+			VersionLib::VersionTokenData data;			// Token data
 
 		public:
 
@@ -295,14 +294,18 @@ namespace VersionLib
 
 			VersionToken();
 
-			VersionToken (std::string tokenPattern);
+			VersionToken (VersionLib::VersionTokenData data);
 
-			VersionToken (std::string tokenPattern, bool mandatory);
-
-			VersionToken (VersionLib::VersionTokenType type, std::string tokenPattern);
-
-			VersionToken (VersionLib::VersionTokenType type, std::string tokenPattern, bool mandatory);
-
+			VersionToken (VersionLib::VersionTokenData data, int position);
+			
+			VersionToken (VersionLib::VersionTokenData data, int position, bool mandatory);
+			
+			VersionToken (VersionLib::VersionTokenData data, VersionLib::VersionTokenType type);
+			
+			VersionToken (VersionLib::VersionTokenData data, VersionLib::VersionTokenType type, int position);
+			
+			VersionToken (VersionLib::VersionTokenData data, VersionLib::VersionTokenType type, int position, bool mandatory);
+			
 			VersionToken (const VersionLib::VersionToken& other);
 
 			VersionToken (VersionLib::VersionToken&& other) noexcept;
@@ -318,13 +321,14 @@ namespace VersionLib
 			//
 
 			VersionLib::VersionToken& operator= (const VersionLib::VersionToken& other);
-			VersionLib::VersionToken& operator= (VersionLib::VersionToken& other) noexcept;
+			VersionLib::VersionToken& operator= (VersionLib::VersionToken&& other) noexcept;
 
 			VersionLib::VersionToken& operator= (std::string& val);
 			VersionLib::VersionToken& operator= (unsigned int& val);
-			VersionLib::VersionToken& operator= (unsigned long long val);
+			VersionLib::VersionToken& operator= (unsigned long long& val);
 
 			bool operator== (VersionLib::VersionTokenType type);
+			bool operator!= (VersionLib::VersionTokenType type);
 
 			explicit operator bool() const;
 
@@ -332,42 +336,38 @@ namespace VersionLib
 			// Check methods:
 			//
 
+			bool isMandatory();
+
+			bool isEmpty();
+
 			bool isNumVal();
 
 			bool isLongVal();
-			
-			VersionLib::VersionTokenType getType();
+
+			bool isStringVal();
+
+			bool isSpecialToken();
 
 			//
 			// Getters:
 			//
 			
-			std::string getStrVal();
+			int getPos();
+			
+			std::string getTokenStr();
+			
+			VersionLib::VersionTokenType getType();
+			
+			VersionLib::VersionTokenData getTokenData();
 
-			unsigned int getIntVal();
+			//
+			// Setters:
+			//
 
-			unsigned long long getLongVal();
+			void setPos (int position);
+
+			void setMandatory (bool mandatory);
 	};
-
-	/**
-	 * @brief Version Library Token Map. It contains the entire token list and holds the token positions, used to recreate the string version from token elements.
-	 */
-	class VERSION_LIB_API VersionTokenMap
-	{
-		private:
-
-			std::vector<VersionLib::VersionToken> tokens;
-
-		public:
-
-			VersionTokenMap(std::string version, std::vector<VersionLib::VersionToken> tokenList);
-
-			~VersionTokenMap();
-	};
-
-	int setTokens (std::string version, std::vector<VersionLib::VersionToken>& token);
-
-	std::map<std::string, VersionLib::VersionToken> genTokenMap (std::string version, std::string codedVersion);
 }
 
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
