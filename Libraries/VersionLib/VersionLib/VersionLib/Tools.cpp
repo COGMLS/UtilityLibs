@@ -795,25 +795,10 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 
 	struct token_struct
 	{
-		short type 				= -2;		// Type of value 0: Separator 1: Numerical value 2: Long numerical value 3: String value 4: Metadata value 5: BuildType
-		std::string str 		= "";		// String token
-		union 								// Union to reduce memory usage
-		{
-			unsigned int ul;				// Value for major, minor, patch, revision
-			unsigned long long ull;			// Value for build number
-		} numVal;
+		short type = -2;					// Type of value 0: Separator 1: Numerical value 2: Long numerical value 3: String value 4: Metadata value 5: BuildType
+		VersionLib::VersionTokenData token;	// Token data
 	};
-
-	std::vector<token_struct> tokens;			// Version tokens
-
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
-	struct token_struct2
-	{
-		short type = -2;
-		VersionLib::VersionTokenData token;
-	};
-	std::vector<token_struct2> tokens2;
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+	std::vector<token_struct> tokens;		// Version tokens
 
 	short foundMajorVer = -1;					// Found major version number position (-1 is unknown position)
 	short foundMinorVer = -1;					// Found minor version number position (-1 is unknown position)
@@ -832,10 +817,6 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	std::string tmp;							// Temporary variable accumulator
 	
 	token_struct tmpToken;						// Temporary token struct data
-
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
-	token_struct2 tmpToken2;
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
 	/** Generate tokens from version string:
 	 * ----------------------------------------
@@ -905,7 +886,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 			addToken = false;
 
 			// Set the string data into the token
-			tmpToken.str = tmp;
+			tmpToken.token = tmp;
 
 			// Try to detect the type of numerical value:
 			if (tmpToken.type == 1)
@@ -915,7 +896,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				// Try to convert to unsigned int type:
 				try
 				{
-					tmpToken.numVal.ul = static_cast<unsigned int>(std::stoi(tmp));
+					tmpToken.token = static_cast<unsigned int>(std::stoi(tmp));
 					convertUInt = 1;
 				}
 				catch(const std::exception&)
@@ -928,7 +909,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				{
 					try
 					{
-						tmpToken.numVal.ull = static_cast<unsigned long long>(std::stoull(tmp));
+						tmpToken.token = static_cast<unsigned long long>(std::stoull(tmp));
 						tmpToken.type = 2;
 						convertUInt = 2;
 					}
@@ -949,7 +930,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 			if (t == '.' || t == ' ' || t == '-' && !foundMetadata)
 			{
 				tmp += t;
-				tmpToken.str = tmp;
+				tmpToken.token = tmp;
 				tmpToken.type = 0;
 	
 				tokens.push_back(tmpToken);
@@ -981,7 +962,38 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	std::cout << "Detected Tokens:" << std::endl;
 	for (size_t j = 0; j < tokens.size(); j++)
 	{
-		std::cout << "[" << j << "]::" << tokens[j].str << std::endl;
+		std::cout << "[" << j << "]::";
+		
+		switch (tokens[j].token.getDataType())
+		{
+			case VersionLib::VersionTokenDataType::NULL_TYPE:
+			{
+				std::cout << "NULL_TOKEN_DATA";
+				break;
+			}
+			case VersionLib::VersionTokenDataType::STRING_TYPE:
+			{
+				std::cout << tokens[j].token.getStr();
+				break;
+			}
+			case VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE:
+			{
+				std::cout << tokens[j].token.getInt();
+				break;
+			}
+			case VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE:
+			{
+				std::cout << tokens[j].token.getLong();
+				break;
+			}
+			default:
+			{
+				std::cout << "EMPTY_TOKEN_DATA";
+				break;
+			}
+		}
+		
+		std::cout << std::endl;
 	}
 	std::cout << "----------------" << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
@@ -998,14 +1010,14 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		{
 			if (tokens[i].type == 3)
 			{
-				if (VersionLib::str2BuildType(tokens[i].str) != VersionLib::BuildType::NOT_DETECTED)
+				if (VersionLib::str2BuildType(tokens[i].token.getStr()) != VersionLib::BuildType::NOT_DETECTED)
 				{
 
 				}
 			}
 		}
 
-		if (tokens[i].type == 0 && tokens[i].str == "-")
+		if (tokens[i].type == 0 && tokens[i].token.getStr() == "-")
 		{
 			foundBuildTypeDash = true;
 		}
@@ -1037,7 +1049,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				}
 
 				// Found the build number:
-				if (lastType == 0 && tokens[i - 1].str == " " && foundBuild == -1)
+				if (lastType == 0 && tokens[i - 1].token.getStr() == " " && foundBuild == -1)
 				{
 					foundBuild = i;
 				}
