@@ -94,12 +94,20 @@ namespace VersionLib
 	 */
 	enum VersionTokenType : unsigned short
 	{
-		UNDEFINED_TOKEN,			// Token that was not identified. This value can appear when an empty token is used
-		EMPTY_TOKEN,				// EMPTY token id
-		NUMERIC_TOKEN,				// Any type of numeric value inside the version, like major, minor, patch or revision
-		LONG_NUMBER_TOKEN,			// Long numeric values hold by the token, this is focus for build compilation values that can be very high values
-		STRING_TOKEN,				// String elements or entire strings used to identify. To identify numeric values use NUMERIC_TOKEN or LONG_NUMERIC_TOKEN
-		VERSION_MARK_TOKEN			// Any type of string mark that separates the version components
+		UNDEFINED_TOKEN,							// Token that was not identified. This value can appear when an empty token is used
+		EMPTY_TOKEN,								// EMPTY token id
+		NUMERIC_TOKEN,								// Any type of numeric value inside the version, like major, minor, patch or revision
+		LONG_NUMBER_TOKEN,							// Long numeric values hold by the token, this is focus for build compilation values that can be very high values
+		STRING_TOKEN,								// String elements or entire strings used to identify. To identify numeric values use NUMERIC_TOKEN or LONG_NUMERIC_TOKEN
+		VERSION_TOKEN_VERSION_CORE_SEPARATOR,		// Version core component separators or identifiers. Normally used dot separators.
+		VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION,	// Unique version release component that identify the release or pre release information segment
+		VERSION_TOKEN_RELEASE_SEPARATOR,			// Separator identifiers used by release or pre release information segment. Normally used dot to separate between release information. I.e. alpha.15
+		VERSION_TOKEN_BUILD_WORD,					// A word that can appear in some version informations formats that can be used as special token identifier
+		VERSION_TOKEN_BUILD_VALUE,					// A special numeric value position that can express the build compilation value in some version formats
+		VERSION_TOKEN_BUILD_SEPARATOR,				// A separator used to build compilation segment
+		VERSION_TOKEN_METADATA_SEPARATOR,			// Unique version component that contains the version metadata information segment
+		VERSION_TOKEN_GENERIC_SEPARATOR,			// Generic token mark to identify a verion separator
+		VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION	// Generic token mark to identify a component version. It can be used to identify unique marks too.
 	};
 
 	/**
