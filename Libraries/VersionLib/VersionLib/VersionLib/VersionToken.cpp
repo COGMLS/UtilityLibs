@@ -8,7 +8,7 @@
 
 VersionLib::VersionTokenData::VersionTokenData()
 {
-	this->type = VersionLib::VersionTokenDataType::UNKNOWN_DATA_TYPE;
+	this->type = VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE;
 }
 
 VersionLib::VersionTokenData::VersionTokenData (std::string data)
@@ -207,7 +207,7 @@ bool VersionLib::VersionTokenData::operator==(VersionLib::VersionTokenDataType t
 
 VersionLib::VersionTokenData::operator bool() const
 {
-	if (this->type != VersionTokenDataType::UNKNOWN_DATA_TYPE || this->type != VersionTokenDataType::NULL_TYPE)
+	if (this->type != VersionTokenDataType::EMPTY_DATA_TYPE || this->type != VersionTokenDataType::NULL_TYPE)
 	{
 		if (this->numData || this->strData)
 		{
@@ -220,6 +220,16 @@ VersionLib::VersionTokenData::operator bool() const
 VersionLib::VersionTokenDataType VersionLib::VersionTokenData::getDataType()
 {
 	return this->type;
+}
+
+bool VersionLib::VersionTokenData::isEmpty()
+{
+	return this->type == VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE;
+}
+
+bool VersionLib::VersionTokenData::isNull()
+{
+	return this->type == VersionLib::VersionTokenDataType::NULL_TYPE;
 }
 
 bool VersionLib::VersionTokenData::isNumVal()
@@ -279,6 +289,27 @@ unsigned long long VersionLib::VersionTokenData::getLong()
 	return 0ull;
 }
 
+void VersionLib::VersionTokenData::clear()
+{
+	if (this->numData)
+	{
+		this->numData.reset(nullptr);
+	}
+
+	if (this->strData)
+	{
+		this->strData.reset(nullptr);
+	}
+
+	this->type = VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE;
+}
+
+void VersionLib::VersionTokenData::setNull()
+{
+	this->clear();
+	this->type = VersionLib::VersionTokenDataType::NULL_TYPE;
+}
+
 //
 // Version Token class:
 //
@@ -286,13 +317,13 @@ unsigned long long VersionLib::VersionTokenData::getLong()
 VersionLib::VersionToken::VersionToken()
 {
 	this->mandatory = false;
-	this->type = VersionLib::VersionTokenType::UNKNOWN_TOKEN;
+	this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
 }
 
 VersionLib::VersionToken::VersionToken (std::string tokenPattern)
 {
 	this->mandatory = false;
-	this->type = VersionLib::VersionTokenType::UNKNOWN_TOKEN;
+	this->type = VersionLib::VersionTokenType::EMPTY_TOKEN;
 }
 
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM

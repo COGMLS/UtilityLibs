@@ -95,7 +95,7 @@ namespace VersionLib
 	enum VersionTokenType : unsigned short
 	{
 		UNDEFINED_TOKEN,			// Token that was not identified. This value can appear when an empty token is used
-		UNKNOWN_TOKEN,				// Unknown token id
+		EMPTY_TOKEN,				// EMPTY token id
 		NUMERIC_TOKEN,				// Any type of numeric value inside the version, like major, minor, patch or revision
 		LONG_NUMBER_TOKEN,			// Long numeric values hold by the token, this is focus for build compilation values that can be very high values
 		STRING_TOKEN,				// String elements or entire strings used to identify. To identify numeric values use NUMERIC_TOKEN or LONG_NUMERIC_TOKEN
@@ -107,7 +107,7 @@ namespace VersionLib
 	 */
 	enum VersionTokenDataType : short
 	{
-		UNKNOWN_DATA_TYPE = -1,
+		EMPTY_DATA_TYPE = -1,
 		NULL_TYPE,
 		UNSIGNED_INT_TYPE,
 		UNSIGNED_LONG_LONG_TYPE,
@@ -121,10 +121,11 @@ namespace VersionLib
 	{
 		private:
 
+			// Union for numeric values, designed to reduce memory usage
 			union VersionTokenNumData
 			{
-				unsigned int int_data;
-				unsigned long long long_data;
+				unsigned int int_data;						// Unsigned Integer data
+				unsigned long long long_data;				// Unsigned Long integer data
 			};
 
 			VersionLib::VersionTokenDataType type;			// Type of the data
@@ -137,12 +138,27 @@ namespace VersionLib
 			// Constructors:
 			//
 
+			/**
+			 * @brief Create an object marked as EMPTY data
+			 */
 			VersionTokenData();
 
+			/**
+			 * @brief Create an object that holds a string data
+			 * @param data Data that will be stored in the object
+			 */
 			VersionTokenData (std::string data);
 
+			/**
+			 * @brief Create an object that holds an unsigned int data
+			 * @param data Data that will be stored in the object
+			 */
 			VersionTokenData (unsigned int data);
 
+			/**
+			 * @brief Create an object that holds an unsigned long data
+			 * @param data Data that will be stored in the object
+			 */
 			VersionTokenData (unsigned long long data);
 
 			VersionTokenData (const VersionLib::VersionTokenData& other);
@@ -169,29 +185,85 @@ namespace VersionLib
 			bool operator== (const VersionLib::VersionTokenData& other);
 			bool operator== (VersionLib::VersionTokenDataType type);
 
+			/**
+			 * @brief Test if it has a data and if it holds a known data
+			 */
 			explicit operator bool() const;
 
 			//
 			// Checkers:
 			//
 
+			/**
+			 * @brief Get the flag data type
+			 */
 			VersionLib::VersionTokenDataType getDataType();
 
+			/**
+			 * @brief Check if the flag type is marked as EMPTY data
+			 */
+			bool isEmpty();
+
+			/**
+			 * @brief Check if the flag type is marked as NULL data
+			 */
+			bool isNull();
+
+			/**
+			 * @brief Check if the internal data is a numeric value
+			 * @note This function checks if has a numeric data, that could be a integer or long value
+			 */
 			bool isNumVal();
 
+			/**
+			 * @brief Check if the internal data is a unsigned long data
+			 */
 			bool isLongVal();
 
+			/**
+			 * @brief Check if the internal data is a string
+			 */
 			bool isStringVal();
 
 			//
 			// Getters:
 			//
 
+			/**
+			 * @brief Get the string value, if exist
+			 * @return If exist, the string value will be returned. Otherwise, it will return an empty string.
+			 * @note Check the data type TokenData holds before call this function
+			 */
 			std::string getStr();
 			
+			/**
+			 * @brief Get the unsigned integer value, if exist
+			 * @return If exist, the unsigned integer value will be returned. Otherwise, it will return zero.
+			 * @note Check the data type TokenData holds before call this function
+			 */
 			unsigned int getInt();
 			
+			/**
+			 * @brief Get the long numeric value, if exist
+			 * @return If exist, the unsigned long value will be returned. Otherwise, it will return zero.
+			 * @note Check the data type TokenData holds before call this function
+			 */
 			unsigned long long getLong();
+
+			//
+			// Setters:
+			//
+
+			/**
+			 * @brief Erase all internal data and reset the type flag to EMPTY data type
+			 */
+			void clear();
+
+			/**
+			 * @brief Set the type flag as NULL data
+			 * @note If the TokenData has any type of data inside, it will call the clear method to erase all information first
+			 */
+			void setNull();
 	};
 
 	class VERSION_LIB_API VersionTokenSet
