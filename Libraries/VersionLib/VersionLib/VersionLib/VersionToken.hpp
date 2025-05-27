@@ -274,19 +274,6 @@ namespace VersionLib
 			void setNull();
 	};
 
-	class VERSION_LIB_API VersionTokenSet
-	{
-		private:
-
-			std::vector<std::string> set;
-
-		public:
-
-			VersionTokenSet (std::vector<std::string> set);
-
-			~VersionTokenSet();
-	};
-
 	/**
 	 * @brief Version Library Token class. Holds the token pattern and the data that was detected from version string. It also holds the type of token and if is a mandatory component
 	 */
