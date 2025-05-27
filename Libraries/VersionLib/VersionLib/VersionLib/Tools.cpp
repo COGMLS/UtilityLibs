@@ -793,12 +793,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	// Variable controls:
 	//
 
-	struct token_struct
-	{
-		short type = -2;					// Type of value 0: Separator 1: Numerical value 2: Long numerical value 3: String value 4: Metadata value 5: BuildType
-		VersionLib::VersionTokenData token;	// Token data
-	};
-	std::vector<token_struct> tokens;		// Version tokens
+	std::vector<VersionLib::VersionToken> tokens;	// Vector of tokens
 
 	short foundMajorVer = -1;					// Found major version number position (-1 is unknown position)
 	short foundMinorVer = -1;					// Found minor version number position (-1 is unknown position)
@@ -816,7 +811,11 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	char t = '\0';								// Current char in analysis
 	std::string tmp;							// Temporary variable accumulator
 	
-	token_struct tmpToken;						// Temporary token struct data
+	int position = 0;							// Token position counter
+	short type = -2;							// Type of value 0: Separator 1: Numerical value 2: Long numerical value 3: String value 4: Metadata value 5: BuildType
+	VersionLib::VersionToken tmpToken;			// Temporary token
+	VersionLib::VersionTokenData tmpData;		// Temporary token data
+	VersionLib::VersionTokenType tokenType;		// Temporary token type ID
 
 	/** Generate tokens from version string:
 	 * ----------------------------------------
@@ -833,7 +832,8 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		if (t == '+')
 		{
 			foundMetadata = true;
-			tmpToken.type = 4;	// Set as metadata component
+			type = 4;	// Set as metadata component
+			tokenType = VersionLib::VersionTokenType::VERSION_TOKEN_METADATA_SEPARATOR;
 			tmp += t;
 		}
 		
@@ -842,9 +842,10 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		{
 			tmp += t;
 			// Set to string classification when is not metadata. This overwrite numerical classification.
-			if (tmpToken.type != 4)
+			if (type != 4)
 			{
-				tmpToken.type = 3;
+				type = 3;
+				tokenType = VersionLib::VersionTokenType::STRING_TOKEN;
 			}
 		}
 
@@ -852,9 +853,10 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		if (t >= '0' && t <= '9')
 		{
 			tmp += t;
-			if (tmpToken.type == -2)
+			if (type == -2)
 			{
-				tmpToken.type = 1;	// Set as numerical value
+				type = 1;	// Set as numerical value
+				tokenType = VersionLib::VersionTokenType::NUMERIC_TOKEN;
 			}
 		}
 
@@ -886,17 +888,17 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 			addToken = false;
 
 			// Set the string data into the token
-			tmpToken.token = tmp;
+			tmpData = tmp;
 
 			// Try to detect the type of numerical value:
-			if (tmpToken.type == 1)
+			if (type == 1)
 			{
 				short convertUInt = 0;
 
 				// Try to convert to unsigned int type:
 				try
 				{
-					tmpToken.token = static_cast<unsigned int>(std::stoi(tmp));
+					tmpData = static_cast<unsigned int>(std::stoi(tmp));
 					convertUInt = 1;
 				}
 				catch(const std::exception&)
@@ -909,8 +911,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				{
 					try
 					{
-						tmpToken.token = static_cast<unsigned long long>(std::stoull(tmp));
-						tmpToken.type = 2;
+						tmpData = static_cast<unsigned long long>(std::stoull(tmp));
+						type = 2;
+						tokenType = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
 						convertUInt = 2;
 					}
 					catch(const std::exception&)
@@ -920,23 +923,32 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				}
 			}
 
+			// Set the token type:
+			tmpToken = VersionLib::VersionToken(tmpData, tokenType);
+
 			// Insert the token into the vector and clean the temporary string:
 			tokens.push_back(tmpToken);
 			tmp.clear();
 
-			tmpToken = token_struct{};	// Overwrite the data
+			tmpToken = VersionLib::VersionToken();	// Overwrite the data
 
 			// Add the separator component into token list:
 			if (t == '.' || t == ' ' || t == '-' && !foundMetadata)
 			{
 				tmp += t;
-				tmpToken.token = tmp;
-				tmpToken.type = 0;
+				tmpData = tmp;
+				type = 0;
+
+				// Set the token type:
+				tokenType = VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_SEPARATOR;
+				tmpToken = VersionLib::VersionToken(tmpData, tokenType);
 	
 				tokens.push_back(tmpToken);
 				tmp.clear();
 
-				tmpToken = token_struct{};	// Overwrite the data
+				// Overwrite temporary data:
+				tmpToken = VersionLib::VersionToken();
+				tokenType = VersionLib::VersionTokenType::UNDEFINED_TOKEN;
 			}
 
 			// Reset the metadata status:
@@ -947,24 +959,13 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		}
 	}
 
-	/** Try to detect which token component correspond on version data:
-	 * 
-	 * 
-	 * 
-	 * 
-	*/
-
-	// Make sure the foundMetadata is false
-	foundMetadata = false;
-	tmp.clear();
-
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Detected Tokens:" << std::endl;
 	for (size_t j = 0; j < tokens.size(); j++)
 	{
 		std::cout << "[" << j << "]::";
 		
-		switch (tokens[j].token.getDataType())
+		switch (tokens[j].getTokenData().getDataType())
 		{
 			case VersionLib::VersionTokenDataType::NULL_TYPE:
 			{
@@ -973,17 +974,17 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 			}
 			case VersionLib::VersionTokenDataType::STRING_TYPE:
 			{
-				std::cout << tokens[j].token.getStr();
+				std::cout << tokens[j].getTokenData().getStr();
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE:
 			{
-				std::cout << tokens[j].token.getInt();
+				std::cout << tokens[j].getTokenData().getInt();
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE:
 			{
-				std::cout << tokens[j].token.getLong();
+				std::cout << tokens[j].getTokenData().getLong();
 				break;
 			}
 			default:
@@ -996,84 +997,6 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 		std::cout << std::endl;
 	}
 	std::cout << "----------------" << std::endl;
-	#endif // !Check for IOSTREAM and DEBUG
-
-	size_t tokenSize = tokens.size();
-	short lastType = -2;					// Last token type data type analyzed (-2 means no token was analyzed)
-	bool buildTypeSearchMode = false;		// Change the behavior of the search mechanism to work properly with combined build types
-	bool foundBuildTypeDash = false;
-	short combinedBuildTypes = -1;
-
-	for (size_t i = 0; i < tokenSize; i++)
-	{
-		if (foundBuildTypeDash)
-		{
-			if (tokens[i].type == 3)
-			{
-				if (VersionLib::str2BuildType(tokens[i].token.getStr()) != VersionLib::BuildType::NOT_DETECTED)
-				{
-
-				}
-			}
-		}
-
-		if (tokens[i].type == 0 && tokens[i].token.getStr() == "-")
-		{
-			foundBuildTypeDash = true;
-		}
-	}
-
-	for (size_t i = 0; i < tokenSize; i++)
-	{
-		// Look for numerical values:
-		if (tokens[i].type == 1 || tokens[i].type == 2)
-		{
-			if (!buildTypeSearchMode)
-			{
-				// If lastType is -2, it means the first component and it is the major version:
-				if (lastType == -2 && foundMajorVer == -1)
-				{
-					foundMajorVer = i;
-				}
-	
-				// Found Major and minor values
-				if (lastType == 0 && foundMajorVer >= 0 && foundMinorVer == -1 && foundPatchVer == -1)
-				{
-					foundMinorVer = i;
-				}
-	
-				// Found Major, Minor and Patch values
-				if (lastType == 0 && foundMajorVer >= 0 && foundMinorVer >= 0 && foundPatchVer == -1)
-				{
-					foundPatchVer = i;
-				}
-
-				// Found the build number:
-				if (lastType == 0 && tokens[i - 1].token.getStr() == " " && foundBuild == -1)
-				{
-					foundBuild = i;
-				}
-			}
-		}
-
-		// Look for string values:
-		if (tokens[i].type == 3)
-		{
-			
-		}
-
-		// Look for metadata:
-		if (tokens[i].type == 4 && foundMetadata == -1)
-		{
-			foundMetadata = i;
-		}
-
-		// Update the last token type:
-		lastType = tokens[i].type;
-	}
-
-	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	//std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
 	return v;
