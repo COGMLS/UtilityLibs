@@ -367,6 +367,10 @@ namespace VersionLib
 			void setPos (int position);
 
 			void setMandatory (bool mandatory);
+
+			void setTokenType (VersionLib::VersionTokenType type);
+
+			void setTokenData (VersionLib::VersionTokenData& data);
 	};
 }
 

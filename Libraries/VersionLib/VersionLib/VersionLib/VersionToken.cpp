@@ -630,4 +630,14 @@ void VersionLib::VersionToken::setMandatory (bool mandatory)
 	this->mandatory = mandatory;
 }
 
+void VersionLib::VersionToken::setTokenType (VersionLib::VersionTokenType type)
+{
+	this->type = type;
+}
+
+void VersionLib::VersionToken::setTokenData (VersionLib::VersionTokenData& data)
+{
+	this->data = data;
+}
+
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
