@@ -107,11 +107,11 @@ namespace VersionLib
 	 */
 	enum VersionTokenDataType : short
 	{
-		EMPTY_DATA_TYPE = -1,
-		NULL_TYPE,
-		UNSIGNED_INT_TYPE,
-		UNSIGNED_LONG_LONG_TYPE,
-		STRING_TYPE
+		EMPTY_DATA_TYPE = -1,		// Mark the Token Data as EMPTY data
+		NULL_TYPE,					// Mark the Token Data as NULL data
+		UNSIGNED_INT_TYPE,			// Flag to data type unsigned int
+		UNSIGNED_LONG_LONG_TYPE,	// Flag to data type unsigned long
+		STRING_TYPE					// Flag to data type string
 	};
 
 	/**
