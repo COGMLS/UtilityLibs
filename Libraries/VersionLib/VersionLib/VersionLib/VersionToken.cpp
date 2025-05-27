@@ -34,15 +34,18 @@ VersionLib::VersionTokenData::VersionTokenData (unsigned long long data)
 
 VersionLib::VersionTokenData::VersionTokenData (const VersionLib::VersionTokenData& other)
 {
+	this->clear();
 	this->type = other.type;
 
 	if (other.strData)
 	{
+		this->strData.reset(new std::string);
 		*this->strData = *other.strData;
 	}
 
 	if (other.numData)
 	{
+		this->numData.reset(new VersionLib::VersionTokenData::VersionTokenNumData);
 		*this->numData = *other.numData;
 	}
 }
@@ -82,15 +85,18 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (const Ver
 		return *this;
 	}
 
+	this->clear();
 	this->type = other.type;
 
 	if (other.strData)
 	{
+		this->strData.reset(new std::string);
 		*this->strData = *other.strData;
 	}
 
 	if (other.numData)
 	{
+		this->numData.reset(new VersionLib::VersionTokenData::VersionTokenNumData);
 		*this->numData = *other.numData;
 	}
 
