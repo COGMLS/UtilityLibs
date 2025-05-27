@@ -178,9 +178,9 @@ namespace VersionLib
 			VersionLib::VersionTokenData& operator= (const VersionLib::VersionTokenData& other);
 			VersionLib::VersionTokenData& operator= (VersionLib::VersionTokenData&& other) noexcept;
 
-			VersionLib::VersionTokenData& operator= (std::string data);
-			VersionLib::VersionTokenData& operator= (unsigned int data);
-			VersionLib::VersionTokenData& operator= (unsigned long long data);
+			VersionLib::VersionTokenData& operator= (std::string& data);
+			VersionLib::VersionTokenData& operator= (unsigned int& data);
+			VersionLib::VersionTokenData& operator= (unsigned long long& data);
 
 			bool operator== (const VersionLib::VersionTokenData& other);
 			bool operator== (VersionLib::VersionTokenDataType type);

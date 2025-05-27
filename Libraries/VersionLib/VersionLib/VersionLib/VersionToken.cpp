@@ -125,7 +125,7 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (VersionLi
 	return *this;
 }
 
-VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (std::string data)
+VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (std::string& data)
 {
 	if (this->numData)
 	{
@@ -143,7 +143,7 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (std::stri
 	return *this;
 }
 
-VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned int data)
+VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned int& data)
 {
 	if (this->strData)
 	{
@@ -161,7 +161,7 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned 
 	return *this;
 }
 
-VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned long long data)
+VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned long long& data)
 {
 	if (this->strData)
 	{
