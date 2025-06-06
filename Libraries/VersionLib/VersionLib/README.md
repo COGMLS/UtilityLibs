@@ -1,5 +1,15 @@
 # Version Library
 
+> **UPDATE 2025/06/06:**
+>
+> **WARNING:** on version 0.9.x, the VersionLib is now receiving the preparations to bring the definitive 1.0.0 with several modifications of internal methods and data structs.
+>
+> ***All internal methods created or just declared to C linkage will be moved into another file***
+>
+> The C linkage components will be calling the C++ internal components. All files for C programs will use a `*.h` extension file. A proper version of `version.hpp` file, for C programs, will be called `version.h` and will not use the namespace `VersionLib` to make easier to other developers to call the C linkage methods. All these functions will use the naming with `VersionLib_`
+>
+> The components used to data transaction will be redesigned and the structures with "C" on naming will be moved to only C language files.
+
 The VersionLib is a versioning library to provide to other libraries and applications a easier way the implementation of version number control and tests to analyze if the version value is greater, equal, etc. The library also check if the *version core* is a release, beta or alpha build type. It's possible to check if the version is marked as incompatible with an application or library, using an know list of versions, provided by the dependency application or library and test it, with support to generate an exception or not.
 
 The VersionLib contains all necessary methods and data type needed to work, allowing to consume this library without dependencies. All VersionLib methods, data types and classes, are inside the namespace `VersionLib`.
@@ -33,6 +43,7 @@ This project contains other documentation files available in [Docs folder](./Doc
 | VersionLibInfo | Information about the project, known bugs, future implementations, deprecated and removed features | [VersionLibInfo.md](./Docs/VersionLibInfo.md)
 | VersionLibReleases | Complete version history about this project. In the README.md file only contains part of the version changes | [VersionLibReleases.md](./Docs/VersionLibReleases.md)
 | TechnicalInformation | Technical information document to offer the details of the implementations | [TechnicalInformation.md](./Docs/TechnicalInformation.md)
+| VersionLibComponentsDiagram | Version Library components relationship diagram | [VersionLibComponentsDiagram.pdf](./Docs/VersionLibComponentsDiagram.pdf)
 
 > Other documentation files will be added in a future.
 
@@ -149,6 +160,9 @@ To use a string as the source of the versioning information, the string must fol
     <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.0-alpha.2 (2025/06/06) -->
+    <dt><version-data>0.9.0-alpha.2</version-data> | Release Date: 2025/06/06</dt>
+    <dd>Separated methods from files <code>Tools.hpp</code> <code>Tools.cpp</code> into <code>CommonTools.hpp</code> <code>CommonTools.cpp</code>, <code>ReleaseTools.hpp</code> <code>ReleaseTools.cpp</code> and <code>VersionTools.hpp</code> <code>VersionTools.cpp</code> to reduce possible future compilation cyclic dependencies</dd>
     <!-- 0.9.0-alpha.1 (2025/04/18) -->
     <dt><version-data>0.9.0-alpha.1</version-data> | Release Date: 2025/04/18</dt>
     <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 missing revision</dd>

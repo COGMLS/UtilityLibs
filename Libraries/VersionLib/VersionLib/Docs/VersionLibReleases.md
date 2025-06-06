@@ -10,6 +10,9 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.0-alpha.2 (2025/06/06) -->
+    <dt><version-data>0.9.0-alpha.2</version-data> | Release Date: 2025/06/06</dt>
+    <dd>Separated methods from files <code>Tools.hpp</code> <code>Tools.cpp</code> into <code>CommonTools.hpp</code> <code>CommonTools.cpp</code>, <code>ReleaseTools.hpp</code> <code>ReleaseTools.cpp</code> and <code>VersionTools.hpp</code> <code>VersionTools.cpp</code> to reduce possible future compilation cyclic dependencies</dd>
     <!-- 0.9.0-alpha.1 (2025/04/18) -->
     <dt><version-data>0.9.0-alpha.1</version-data> | Release Date: 2025/04/18</dt>
     <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 missing revision</dd>
