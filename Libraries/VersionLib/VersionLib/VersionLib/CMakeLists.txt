@@ -70,15 +70,16 @@ if (WIN32)
 					"BuildReleaseId.hpp"						"BuildReleaseId.cpp"
 					"BuildTypes.hpp" 							"BuildTypes.cpp"
 					"BuildTypesExt.hpp"							"BuildTypesExt.cpp"
+					"CommonTools.hpp"							"CommonTools.cpp"
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"SemVerClass.hpp"							"SemVerClass.cpp"
-					"Tools.hpp" 								"Tools.cpp"
 					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
+					"VersionTools.hpp"							"VersionTools.cpp"
 				)
 else()
 	add_library(
@@ -91,15 +92,16 @@ else()
 					"BuildReleaseId.hpp"						"BuildReleaseId.cpp"
 					"BuildTypes.hpp" 							"BuildTypes.cpp"
 					"BuildTypesExt.hpp"							"BuildTypesExt.cpp"
+					"CommonTools.hpp"							"CommonTools.cpp"
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"SemVerClass.hpp"							"SemVerClass.cpp"
-					"Tools.hpp" 								"Tools.cpp"
 					"VersionClass.hpp" 							"VersionClass.cpp"
 					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
+					"VersionTools.hpp"							"VersionTools.cpp"
 				)
 endif()
 

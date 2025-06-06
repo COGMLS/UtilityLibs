@@ -41,6 +41,8 @@
 #include <iostream>
 
 #include "BuildTypes.hpp"
+#include "CommonTools.hpp"
+#include "ReleaseTools.hpp"
 #include "VersionStruct.hpp"
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
@@ -49,50 +51,6 @@
 
 namespace VersionLib
 {
-	/**
-	 * @brief Transform the string to lowercase
-	 * @param value String value to be transformed into lowercase
-	 * @return Return a C-Style string in lowercase
-	 * @bug This method is missing the characters that already are in lowercase.
-	 */
-	VERSION_LIB_API const char* tolower_Cstr (const std::string& value);
-
-	/**
-	 * @brief Transform the string to lowercase
-	 * @param value String value to be transformed into lowercase
-	 * @return Return a string in lowercase
-	 * @bug This method is missing the characters that already are in lowercase.
-	 */
-	VERSION_LIB_API std::string tolower_str (const std::string& value);
-
-	/**
-	 * @brief Extract the build revision (alpha.2 or rc.3).
-	 * @param buildType Build type string
-	 */
-	VERSION_LIB_API unsigned int extractBuildTypeNumber (const char* buildType);
-	
-	/**
-	 * @brief Extract the build revision (alpha.2 or rc.3).
-	 * @param buildType Build type string
-	 */
-	VERSION_LIB_API unsigned int extractBuildTypeNumber (std::string buildType);
-	
-	/**
-	 * @brief Convert the build type into a string with option to use short string version (rc, a).
-	 * @param type Build type enumerator
-	 * @param useShortStr Determinate if the string will be used in short case
-	 * @param showReleaseType Show the 'release' type or 'r' if short string type is defined
-	 * @return Return the build type (alpha, rc) string type. No build revision is available here.
-	 */
-	VERSION_LIB_API std::string buildType2Str (BuildType type, bool useShortStr, bool showReleaseType);
-
-	/**
-	 * @brief Convert the string with a build type data into a BuildType enumerator
-	 * @param value String with build type information
-	 * @return Return a enumeration of BuildType
-	 */
-	VERSION_LIB_API BuildType str2BuildType (std::string value);
-
 	/**
 	 * @brief Convert a string using Semantic Versioning
 	 * @param version String with version information

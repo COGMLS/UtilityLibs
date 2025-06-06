@@ -50,7 +50,9 @@
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 #include "BuildTypes.hpp"
-#include "Tools.hpp"
+#include "CommonTools.hpp"
+#include "ReleaseTools.hpp"
+#include "VersionTools.hpp"
 #include "VersionClass.hpp"
 #include "VersionStruct.hpp"
 #include "VersionLibVersionInfo.hpp"

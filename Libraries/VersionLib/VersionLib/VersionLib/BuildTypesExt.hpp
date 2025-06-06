@@ -31,7 +31,7 @@
 #include "ExperimentalFeatures.hpp"
 
 #include "BuildTypes.hpp"
-#include "Tools.hpp"
+#include "VersionTools.hpp"
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 #include "ExceptionComponents.hpp"

@@ -29,7 +29,7 @@
 #endif // !WIN32
 
 #include "BuildTypes.hpp"
-#include "Tools.hpp"
+#include "VersionTools.hpp"
 
 #ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 #include "ExperimentalFeatures.hpp"
