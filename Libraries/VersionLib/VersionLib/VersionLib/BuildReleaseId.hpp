@@ -81,10 +81,10 @@ namespace VersionLib
 			BuildRelease (VersionLib::BuildType release, unsigned short revision = 0);
 
 			/**
-			 * @brief Create an object representing a build release information, using the VersionReleaseDataC struct.
+			 * @brief Create an object representing a build release information, using the VersionReleaseData struct.
 			 * @param build_release Release data
 			 */
-			BuildRelease (VersionLib::VersionReleaseDataC& build_release);
+			BuildRelease (VersionLib::VersionReleaseData& build_release);
 
 			BuildRelease (const VersionLib::BuildRelease& other);
 
@@ -132,9 +132,9 @@ namespace VersionLib
 			std::string toString (bool useShortStr = true, bool showReleaseType = false);
 
 			/**
-			 * @brief Export the internal data to VersionReleaseDataC struct
+			 * @brief Export the internal data to VersionReleaseData struct
 			 */
-			VersionLib::VersionReleaseDataC toReleaseDataC();
+			VersionLib::VersionReleaseData toReleaseDataC();
 
 			//
 			// Build Release Operators:

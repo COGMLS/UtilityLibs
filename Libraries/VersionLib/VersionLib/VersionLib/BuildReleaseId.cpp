@@ -9,7 +9,7 @@ VersionLib::BuildRelease::BuildRelease()
 
 VersionLib::BuildRelease::BuildRelease(std::string release)
 {
-	std::vector<VersionLib::VersionReleaseDataC> types = VersionLib::findAndGetBuildTypes(release);
+	std::vector<VersionLib::VersionReleaseData> types = VersionLib::findAndGetBuildTypes(release);
 	if (types.empty())
 	{
 		this->release = VERSION_LIB_DEFAULT_BUILD_RELEASE_TYPE_INIT;
@@ -31,7 +31,7 @@ VersionLib::BuildRelease::BuildRelease(VersionLib::BuildType release, unsigned s
 	this->releaseIdentified = true;
 }
 
-VersionLib::BuildRelease::BuildRelease(VersionLib::VersionReleaseDataC &build_release)
+VersionLib::BuildRelease::BuildRelease(VersionLib::VersionReleaseData &build_release)
 {
 	this->release = build_release.release;
 	this->revision = build_release.revision;
@@ -95,9 +95,9 @@ std::string VersionLib::BuildRelease::toString(bool useShortStr, bool showReleas
     return tmp;
 }
 
-VersionLib::VersionReleaseDataC VersionLib::BuildRelease::toReleaseDataC()
+VersionLib::VersionReleaseData VersionLib::BuildRelease::toReleaseDataC()
 {
-	VersionLib::VersionReleaseDataC tmp = VersionLib::initVersionReleaseDataC();
+	VersionLib::VersionReleaseData tmp = VersionLib::initVersionReleaseDataC();
 
 	tmp.release = this->release;
 	tmp.revision = this->revision;

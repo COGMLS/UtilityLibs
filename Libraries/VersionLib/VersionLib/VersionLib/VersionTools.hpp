@@ -82,7 +82,7 @@ namespace VersionLib
 	 * @exception This method throw an exception if start position is less than zero
 	 * @exception This method throw an exception if end position is bigger than version string
 	 */
-	VERSION_LIB_API std::vector<VersionLib::VersionReleaseDataC> findAndGetBuildTypes (std::string& version, long long start = -1, long long end = -1);
+	VERSION_LIB_API std::vector<VersionLib::VersionReleaseData> findAndGetBuildTypes (std::string& version, long long start = -1, long long end = -1);
 
 	/**
 	 * @brief Extract the build metadata from string version. This method must be used before any version string algorithm analysis.

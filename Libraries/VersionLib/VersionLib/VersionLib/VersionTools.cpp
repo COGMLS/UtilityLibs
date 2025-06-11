@@ -388,7 +388,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE)
 	bool processedType = false;
 	bool processedRevision = false;
-	std::vector<VersionLib::VersionReleaseDataC> build_types;
+	std::vector<VersionLib::VersionReleaseData> build_types;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
 	for (size_t i = 0; i < tokens.size(); i++)
@@ -440,7 +440,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 				build_types[0].releaseIdentified = true;
 				processedType = true;
 
-				//std::vector<VersionLib::VersionReleaseDataC> buildTypes = VersionLib::findAndGetBuildTypes(tokens[i].str);
+				//std::vector<VersionLib::VersionReleaseData> buildTypes = VersionLib::findAndGetBuildTypes(tokens[i].str);
 				//VersionLib::setVersionBuildTypeC(v.build_type, buildTypes.data(), static_cast<unsigned short>(buildTypes.size()));
 				#else
 				VersionLib::setVersionBuildTypeC(v.build_type, VersionLib::str2BuildType(tokens[i].str));
@@ -729,14 +729,14 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 }
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
 
-std::vector<VersionLib::VersionReleaseDataC> VersionLib::findAndGetBuildTypes(std::string &version, long long start, long long end)
+std::vector<VersionLib::VersionReleaseData> VersionLib::findAndGetBuildTypes(std::string &version, long long start, long long end)
 {
 	size_t verStrSize = version.size();
 
 	std::string tmp;
 
 	long releaseArrIndex = -1;
-	std::vector<VersionLib::VersionReleaseDataC> releaseArr;
+	std::vector<VersionLib::VersionReleaseData> releaseArr;
 	
 	bool foundBuild = false;
 	bool foundBuildTypeField = false;
@@ -894,7 +894,7 @@ std::vector<VersionLib::VersionReleaseDataC> VersionLib::findAndGetBuildTypes(st
 					
 					if (isRev == 0)
 					{
-						VersionLib::VersionReleaseDataC release = VersionLib::initVersionReleaseDataC();
+						VersionLib::VersionReleaseData release = VersionLib::initVersionReleaseDataC();
 						release.release = VersionLib::str2BuildType(tmp.substr(start, end - start + 1));
 						releaseArr.push_back(release);
 						releaseArrIndex++;
