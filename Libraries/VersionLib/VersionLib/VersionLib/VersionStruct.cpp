@@ -15,12 +15,14 @@ VersionLib::VersionStruct VersionLib::initVersionStruct()
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 	v.build = 0ull;
+	#ifndef VERSION_LIB_PURE_CPP_DATA_STRUCT
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	v.build_type = VersionLib::initVersionBuildTypeC();
 	#else
 	v.build_revision = 0u;
 	v.build_type = VERSION_LIB_DEFAULT_BUILD_RELEASE_TYPE_INIT;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+	#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 	v.compare_build = false;
 	v.versionType = VersionLib::VersionType::UNKNOWN_VERSION_TYPE;
@@ -67,6 +69,7 @@ int VERSION_LIB_API VersionLib::destroyVersionStruct(VersionLib::VersionStruct &
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
+	#ifndef VERSION_LIB_PURE_CPP_DATA_STRUCT
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	if (versionData.build_type.releases != nullptr)
 	{
@@ -76,13 +79,18 @@ int VERSION_LIB_API VersionLib::destroyVersionStruct(VersionLib::VersionStruct &
 		}
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+	#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	if (versionData.metadata != nullptr)
 	{
 		try
 		{
+			#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+			delete versionData.metadata;
+			#else
 			delete[] versionData.metadata;
+			#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 			versionData.metadata = nullptr;
 		}
 		catch(const std::exception&)

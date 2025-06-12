@@ -32,6 +32,11 @@
 
 #include "BuildTypes.hpp"
 
+#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+	#include <vector>
+	#include "BuildReleaseId.hpp"
+#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
+
 namespace VersionLib
 {
 	/**
@@ -50,18 +55,26 @@ namespace VersionLib
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 		unsigned long long build;					// Build number
+		#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+		std::vector<VersionLib::BuildRelease> releases;	// Vector to hold multiple build type and revision data
+		#else
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 		VersionLib::VersionBuildTypeC build_type;	// Build type (alpha, a.1, beta, etc)
 		#else
 		VersionLib::BuildType build_type;	// Build type (alpha, a, beta, etc)
 		unsigned int build_revision;		// Build revision (alpha.1, rc.3)
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
+		#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 		bool compare_build;							// Build comparison control
 		VersionLib::VersionType versionType;		// Versioning Type Id
 
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+		#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+		std::string* metadata;						// Metadata string (If nullptr, means no metadata is available)
+		#else
 		char* metadata;								// Metadata string (If nullptr, means no metadata is available)
+		#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	};
 
@@ -69,7 +82,7 @@ namespace VersionLib
 	 * @brief Initialize the VersionStruct. This function is designed to reduce the possibility of failure of new struct variables.
 	 * @return Return a initialized VersionStruct
 	 * @note This function resolve the uninitialized variables to other methods
-	 * @warning It's recommended to use initVersionStruct method to safely destroy the internal data
+	 * @warning It's recommended to use destroyVersionStruct method to safely delete the internal data
 	 */
 	VersionLib::VersionStruct VERSION_LIB_API initVersionStruct();
 
