@@ -1,26 +1,5 @@
 #include "CommonTools.hpp"
 
-const char *VersionLib::tolower_Cstr(const std::string &value)
-{
-	size_t strlen = value.size();
-	char* tmp = new char[strlen];
-	char c = '\0';
-	for (size_t i = 0; i < strlen; i++)
-	{
-		c = value[i];
-
-		if (std::isupper(c))
-		{
-			tmp[i] = std::tolower(c);
-		}
-		else
-		{
-			tmp[i] = c;
-		}
-	}
-	return const_cast<const char*>(tmp);
-}
-
 std::string VersionLib::tolower_str(const std::string &value)
 {
 	std::string tmp;
@@ -39,51 +18,6 @@ std::string VersionLib::tolower_str(const std::string &value)
 		}
 	}
 	return tmp;
-}
-
-unsigned int VersionLib::extractBuildTypeNumber(const char* buildType)
-{
-	buildType = VersionLib::tolower_Cstr(buildType);
-	char* cValue = const_cast<char*>(buildType);
-	const char token[] = ".";
-	char* cStr = std::strtok(cValue, token);
-	bool foundBuildType = false;
-	unsigned int build_revision = 0;
-	while (token)
-	{
-		if (foundBuildType)
-		{
-			try
-			{
-				build_revision = std::stoul(token);
-			}
-			catch(const std::exception&)
-			{
-				build_revision = 0;
-			}
-		}
-		if (std::strcmp(token, "alpha") == 0 || std::strcmp(token, "a") == 0)
-		{
-			foundBuildType = true;
-		}
-
-		if (std::strcmp(token, "beta") == 0 || std::strcmp(token, "b") == 0)
-		{
-			foundBuildType = true;
-		}
-
-		if (std::strcmp(token, "release candidate") == 0 || std::strcmp(token, "release_candidate") == 0 || std::strcmp(token, "rc") == 0)
-		{
-			foundBuildType = true;
-		}
-
-		if (std::strcmp(token, "release") == 0 || std::strcmp(token, "") == 0)
-		{
-			foundBuildType = true;
-		}
-	}
-
-    return build_revision;
 }
 
 unsigned int VersionLib::extractBuildTypeNumber(std::string buildType)
