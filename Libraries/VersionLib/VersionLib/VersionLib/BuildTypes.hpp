@@ -131,13 +131,6 @@ namespace VersionLib
 	 */
 	VERSION_LIB_API VersionLib::VersionReleaseData initVersionReleaseDataC();
 
-	/**
-	 * @brief Get the BuildType weight for enumerator values
-	 * @param type Build release type value
-	 * @return Return the curresponding weight for the actual BuildType
-	 */
-	VERSION_LIB_API unsigned short getBuildTypeWeight (VersionLib::BuildType type);
-
 	#else
 	/**
 	 * @brief Build type identifier
