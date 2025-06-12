@@ -10,6 +10,9 @@
 //
 
 #if VERSION_LIB_BUILD_TYPE == 1
+	// Enable pure C++ components on data structures:
+	#define VERSION_LIB_PURE_CPP_DATA_STRUCT
+
 	// Enable experimental comparison operator for VersionData class
 	#define VERSION_LIB_COMPARISON_OPERATORS_V2
 
