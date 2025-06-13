@@ -49,6 +49,10 @@
 	#include "VersionToken.hpp"
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
+#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+	#include "BuildReleaseId.hpp"
+#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
+
 namespace VersionLib
 {
 	/**

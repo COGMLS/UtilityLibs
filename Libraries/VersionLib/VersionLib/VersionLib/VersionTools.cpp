@@ -385,11 +385,17 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	unsigned long long build = 0;
 	#endif // !DEBUG
 
+	#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+	bool processedType = false;
+	bool processedRevision = false;
+	VersionLib::BuildRelease build_type_data;
+	#else
 	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE)
 	bool processedType = false;
 	bool processedRevision = false;
 	std::vector<VersionLib::VersionReleaseData> build_types;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+	#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 	for (size_t i = 0; i < tokens.size(); i++)
 	{
@@ -421,16 +427,20 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		}
 
 		// Set build type:
-		#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE)
+		#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE) || defined(VERSION_LIB_PURE_CPP_DATA_STRUCT)
 		if (tokens[i].type == 3 && !processedType)
 		#else
 		if (tokens[i].type == 3)
-		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE || !VERSION_LIB_PURE_CPP_DATA_STRUCT
 		{
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 				#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 				// Convert the build types in string format to BuildType enumerator:
 				
+				#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+				// Recreate the object reusing the revision data and applying a new build type:
+				build_type_data = VersionLib::BuildRelease(VersionLib::str2BuildType(tokens[i].str), build_type_data.getRevision());
+				#else
 				if (!processedRevision)
 				{
 					build_types.push_back(VersionLib::initVersionReleaseDataC());
@@ -438,6 +448,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 
 				build_types[0].release = VersionLib::str2BuildType(tokens[i].str);
 				build_types[0].releaseIdentified = true;
+				#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 				processedType = true;
 
 				//std::vector<VersionLib::VersionReleaseData> buildTypes = VersionLib::findAndGetBuildTypes(tokens[i].str);
@@ -454,16 +465,21 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 			#endif // !DEBUG
 		}
 
-		#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE)
+		#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE) || defined(VERSION_LIB_PURE_CPP_DATA_STRUCT)
 		if (tokens[i].type == 4 && !processedRevision)
 		{
+			#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+			// Recreate the object applying a new revision information:
+			build_type_data = VersionLib::BuildRelease(build_type_data.getRelease(), tokens[i].ul);
+			#else
 			if (!processedType)
 			{
 				build_types.push_back(VersionLib::initVersionReleaseDataC());
 			}
-
+			
 			build_types[0].revision = tokens[i].ul;
 			build_types[0].releaseIdentified = true;
+			#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 			processedRevision = true;
 		}
 		#else
@@ -475,7 +491,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 			build_revision = tokens[i].ul;
 			#endif // !DEBUG
 		}
-		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE || !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 		// Set build:
 		if (tokens[i].type == 6)
@@ -487,12 +503,17 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 		}
 	}
 
+	#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+	// Insert the object into the vector:
+	v.build_type = build_type_data;
+	#else
 	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE)
 	if (processedType || processedRevision)
 	{
 		VersionLib::setVersionBuildTypeC(v.build_type, build_types.data(), static_cast<unsigned short>(build_types.size()));
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT && !VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
+	#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Converted Version: " << major << "." << minor << "." << patch << "-" << build_type_str << "(" << build_type << ")." << build_revision << " build " << build << std::endl << std::endl;
