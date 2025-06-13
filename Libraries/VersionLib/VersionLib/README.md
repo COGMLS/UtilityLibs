@@ -160,6 +160,10 @@ To use a string as the source of the versioning information, the string must fol
     <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.0-alpha.2 (2025/06/12) -->
+    <dt><version-data>0.9.0-alpha.3</version-data> | Release Date: 2025/06/12</dt>
+    <dd>Internal changes to prepare the Version Library to support correctly the components for C linkage.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> revision number of the previous release (0.9.0-alpha.2) was not updated. This release has the correct value.</dd>
     <!-- 0.9.0-alpha.2 (2025/06/06) -->
     <dt><version-data>0.9.0-alpha.2</version-data> | Release Date: 2025/06/06</dt>
     <dd>Separated methods from files <code>Tools.hpp</code> <code>Tools.cpp</code> into <code>CommonTools.hpp</code> <code>CommonTools.cpp</code>, <code>ReleaseTools.hpp</code> <code>ReleaseTools.cpp</code> and <code>VersionTools.hpp</code> <code>VersionTools.cpp</code> to reduce possible future compilation cyclic dependencies</dd>
