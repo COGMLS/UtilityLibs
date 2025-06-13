@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
 	bool testVersionExceptions = false;
 	bool testVersionStrComp = false;
 	bool testVersionStructComp = false;
-	bool test_toVersionStruct3 = true;
+	bool test_toVersionStruct3 = false;
 
 	for (int i = 0; i < argc; i++)
 	{
