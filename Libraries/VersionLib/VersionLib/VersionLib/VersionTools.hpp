@@ -73,18 +73,6 @@ namespace VersionLib
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
 
 	/**
-	 * @brief Method to find and get the build type information, including the combined build types (alpha.beta)
-	 * @param version Version string or part that contains the build type(s)
-	 * @param start Predefined position to restrict the search
-	 * @param end Predefined position to restrict the search
-	 * @return Return the build type(s) extracted from version string.
-	 * @note If start parameter is defined but not the end, it will use the final version string position and will take no restrict search effect.
-	 * @exception This method throw an exception if start position is less than zero
-	 * @exception This method throw an exception if end position is bigger than version string
-	 */
-	VERSION_LIB_API std::vector<VersionLib::VersionReleaseData> findAndGetBuildTypes (std::string& version, long long start = -1, long long end = -1);
-
-	/**
 	 * @brief Extract the build metadata from string version. This method must be used before any version string algorithm analysis.
 	 * @param version Version string data
 	 * @return Return the metadata followed by the '+' signal in Semantic Versioning. If no metadata was detect, an empty string will return.

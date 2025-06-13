@@ -35,6 +35,7 @@
 #ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
 	#include <vector>
 	#include "BuildReleaseId.hpp"
+	#include "BuildTypesExt.hpp"
 #endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 
 namespace VersionLib
@@ -56,7 +57,7 @@ namespace VersionLib
 
 		unsigned long long build;					// Build number
 		#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
-		std::vector<VersionLib::BuildRelease> releases;	// Vector to hold multiple build type and revision data
+		VersionLib::VersionBuildType build_type;	// Vector to hold multiple build type and revision data
 		#else
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 		VersionLib::VersionBuildTypeC build_type;	// Build type (alpha, a.1, beta, etc)
