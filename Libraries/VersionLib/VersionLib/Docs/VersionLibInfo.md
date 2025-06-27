@@ -42,9 +42,15 @@ This document contains the information about the future plans, known bugs, depre
 - Support to Hybrid Calendar Versioning with Semantic Versioning
 - Complete support to custom versioning formats
 
-## Project Roadmap:
+## Project Diagrams:
 
-![Project Roadmap](/Libraries/VersionLib/VersionLib/Docs/VersionLibRoadmap.png)
+### Project Roadmap:
+
+![Project Roadmap](/Libraries/VersionLib/VersionLib/Docs/Images/VersionLibRoadmap.png)
+
+### Version Library Components:
+
+![Version Library Components](/Libraries/VersionLib/VersionLib/Docs/Images/VersionLibComponentsDiagram.png)
 
 ## Known Bugs:
 
