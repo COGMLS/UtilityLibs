@@ -10,6 +10,13 @@ The **Utility Libraries** repository contains some libraries that was designed f
 
 > The repository is focus on development of cross-platform projects, but a few projects can may be an exception depending the platform support or their capabilities.
 
+> [!IMPORTANT]
+>
+> NEW LIBRARY NAMING:
+>
+> Now libraries use Utility Libraries Naming Standard for binary files.
+> Check the details [here](#utility-libraries-naming-convention)
+
 ## Libraries Available:
 
 | Name | Description | Documentation | Stable Version | Last Version | Cross-platform support | Languages or Frameworks Available | Development branch | Notes |
@@ -20,6 +27,26 @@ The **Utility Libraries** repository contains some libraries that was designed f
 | VersionLib | Version Library is design to easily create relations between version information available in a program and other libraries, allowing to make fast tests of compatible versions. This library is focus on provide [semantic versioning](https://semver.org/spec/v2.0.0.html) support. It can also be permissive on other version formats, check the documentation for more details. | [README.md](/Libraries/VersionLib/VersionLib/README.md) [ReleaseNotes](/Libraries/VersionLib/VersionLib/Docs/VersionLibReleases.md) | 0.8.7-beta | 0.9.0-alpha.1 | Linux, Windows, Mac | C++20 | `VersionLibDev` | **NOTE: On version 0.9.0-alpha was redesign and may contain several bugs** |
 
 > **NOTE:** The projects with cross-platform marked with *Macintosh* support was not tested, because I do not have a Mac. But they use ISO C++, ISO C, .Net, or other language/framework that has support and their features are functional on Mac, considering the documentations available.
+
+### Utility Libraries Naming Convention:
+
+To reduce possible incompatibility issues with libraries that are available in more than one version, all libraries will pass to use a naming convention to make a standard way to avoid the possibility to call the wrong library base on the exactly name.
+
+The naming convention will follow the template: **UtilLibs.** *LibraryName* and *LibraryGeneration*
+
+The *LibraryGeneration* normally will match with the library's major version, but it's possible to not be all time like this. Some libraries may offer compatibility with older features, but they may be marked as "deprecated" and can be removed in a future release. Always check the documentation available for more details.
+
+Naming example:
+
+LoggerLib 3th generation pre naming convention: *On Linux:* `libLoggerLib.so` *On Windows:* `LoggerLib.dll`
+
+LoggerLib 3th generation pos naming convention: *On Linux:* `libUtilLibs.LoggerLib3.so` *On Windows:* `UtilLibs.LoggerLib3.dll`
+
+LoggerLib 4th generation (without naming convention): *On Linux:* `libLoggerLib.so` *On Windows:* `LoggerLib.dll`
+
+LoggerLib 4th generation (with naming convention): *On Linux:* `libUtilLibs.LoggerLib4.so` *On Windows:* `UtilLibs.LoggerLib4.dll`
+
+Now it's possible to known the library generation and avoid possible wrong library calling, especially if both libraries are installed in PATH.
 
 ## License
 
