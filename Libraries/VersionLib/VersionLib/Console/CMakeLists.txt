@@ -46,9 +46,6 @@ project(
 #
 ###########################################################
 
-# Define test console partial naming:
-set(TestConsole "")
-
 # Define library partial naming:
 set(LibraryName "VersionLib")
 
@@ -71,7 +68,7 @@ add_executable(
 
 # Define manual library link:
 set(UseManualTargetLinkLibs False)
-				
+
 # Link the library depending on naming used:
 if(UseVersionOnLibName)
 	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")

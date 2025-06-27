@@ -24,6 +24,7 @@ set(FinalBinDir "${ReposRoot}/build/bin")
 if (NOT WIN32)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${FinalBinDir})
 endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${FinalBinDir})
 
 # Utility Libraries Solution:
