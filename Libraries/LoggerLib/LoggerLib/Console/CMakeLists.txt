@@ -33,7 +33,11 @@ add_compile_definitions(UNICODE)
 add_compile_definitions(_UNICODE)
 
 # Defined the project:
-project(LoggerLibTestConsole VERSION 1.5.1 DESCRIPTION "Console to test the Settings Library.")
+project(
+			LoggerLibTestConsole
+			VERSION 1.5.1
+			DESCRIPTION "Console to test the Settings Library."
+		)
 
 ###########################################################
 #
@@ -41,13 +45,33 @@ project(LoggerLibTestConsole VERSION 1.5.1 DESCRIPTION "Console to test the Sett
 #
 ###########################################################
 
+# Define library partial naming:
+set(LibraryName "LoggerLib")
+
+# Define library generation (major version):
+set(LibraryGen 3)
+
+# Define test console final name:
+set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}.${LibraryName}${LibraryGen}")
+
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
 #include_directories("${LoggerLibReposRoot}/LoggerLib")
-target_include_directories(LoggerLib PUBLIC "${LoggerLibReposRoot}/LoggerLib")
+if(UseVersionOnLibName)
+	target_include_directories("${UtilLibsMainName}.${LibraryName}" PUBLIC "${LoggerLibReposRoot}/LoggerLib")
+else()
+	target_include_directories("${UtilLibsMainName}.${LibraryName}${LibraryGen}" PUBLIC "${LoggerLibReposRoot}/LoggerLib")
+endif()
 
 # Define the executable properties:
-add_executable(LoggerLibTestConsole "main.cpp")
+add_executable(
+					${TestConsoleFinalName}
+					"main.cpp"
+				)
 
-# Link the LoggerLibV2:
-target_link_libraries(LoggerLibTestConsole LoggerLib)
+# Link the library depending on naming used:
+if(UseVersionOnLibName)
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")
+else()
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+endif()

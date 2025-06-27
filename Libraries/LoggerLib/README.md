@@ -12,6 +12,14 @@ The library contain a custom date and time implementation to register the log en
 
 > **NOTE:** Logger Library does not provide a output formatted data or separate the log entry components at this moment. To make sure the components can be separated to be readable, use spaces or other marks to make it readable. The format output is *[title][message][data]*.
 
+> [!IMPORTANT]
+>
+> NEW LIBRARY NAMING:
+>
+> Now library uses Utility Libraries Naming Standard that follows UtilLibs.*LibraryName****LibraryGeneration***.
+>
+> This change will prepare the project for next modifications that may push to version 4.x and break current compatibility. In this case, the programs linked with this new naming convention, will be able to use version 3.x.y and keep working without the possibility to call the incompatible library.
+
 ## How to implement a logger object:
 
 ```C++
@@ -78,6 +86,7 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
 - Optimized `LogDataStore` to use less instructions to operate
 - Fix correct time format in log file format on *nix systems *(Version 3.4.0)*
 - `LogEntry` and `LogEntryW` `operator<<` **are disabled** when not using both `LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE` and `LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS` *(Version 3.3.2)*
+- New library naming. Now library uses Utility Libraries Naming Standard that follows UtilLibs.*LibraryName****LibraryGeneration***. This change will prepare the project for next modifications that may push to version 4.x and break current compatibility. In this case, the programs linked with this new naming convention, will be able to use version 3.x.y and keep working without the possibility to call the incompatible library.
 
 ### Implementations under development:
 
@@ -102,6 +111,7 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
     <dd>Added new experimental feature control: <i>LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS</i></dd>
     <dd><strong>Disabled <code>operator<<</code> when <code>LogDataStore</code> is only enabled to avoid compilation failure on Windows platforms</strong></dd>
     <dd><strong>IMPORTANT NOTE:</strong> On last release version introduced LogDataStore feature, and the testing process was not correctly followed. Before launching a release version of the library, all platforms that I have (Windows and Linux) <strong>must pass</strong> through the console test. The same console used to present the library functionalities. I did not test correctly on Windows platform. This patch fixes this mistake with almost the same expected behavior, except with <code>LogEntry</code> and <code>LogEntryW</code> Stream Insertion operators (<code>operator<<</code>) that was disabled to avoid compilation failures.</dd>
+    <dd><i>(Added in 2025/06/27)</i> <strong>Second release: </strong><strong>New library naming.</strong> Now library uses Utility Libraries Naming Standard that follows UtilLibs.<i>LibraryName<strong>LibraryGeneration</strong></i>. This change will prepare the project for next modifications that may push to version 4.x and break current compatibility. In this case, the programs linked with this new naming convention, will be able to use version 3.x.y and keep working without the possibility to call the incompatible library. <i><strong>This new release does not modify any internal components</i></strong></dd>
     <!-- 3.4.0-release candidate (2025/04/08) -->
     <dt><version-data>3.4.0-release candidate</version-data> | Release Date: 2025/04/08</dt>
     <dd>Changed private method <code>cleanData</code> to <code>setDataStore</code> in <strong>LogDataStore</strong></dd>

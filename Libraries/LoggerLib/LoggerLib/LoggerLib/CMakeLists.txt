@@ -37,7 +37,7 @@ add_compile_definitions(_UNICODE)
 # Defined the project:
 project(
 			LoggerLib
-			VERSION 3.3.0
+			VERSION 3.3.2
 			DESCRIPTION "Logger Library."
 		)
 
@@ -46,6 +46,19 @@ project(
 # Project components settings:
 #
 ###########################################################
+
+# Define library partial naming:
+set(LibraryName "LoggerLib")
+
+# Define library generation (major version):
+set(LibraryGen 3)
+
+# Define library final name:
+if(UseVersionOnLibName)
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}")
+else()
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+endif()
 
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
@@ -61,7 +74,7 @@ endif()
 # Define the library build properties:
 if (WIN32)
 	add_library(
-					LoggerLib
+					${LibraryFinalName}
 					SHARED
 					# Windows specific headers:
 					"dllmain.cpp"
@@ -82,7 +95,7 @@ if (WIN32)
 				)
 else()
 	add_library(
-					LoggerLib
+					${LibraryFinalName}
 					SHARED
 					# Logger main header:
 					"LoggerLib.hpp"
@@ -98,4 +111,10 @@ else()
 					"LoggerLibVersionTools.hpp" "LoggerLibVersionTools.cpp"
 					"LogMng.hpp" "LogMng.cpp"
 				)
+endif()
+
+# Define the version properties on binary component:
+if(UseVersionOnLibName)
+	set_target_properties(${LibraryFinalName} PROPERTIES VERSION ${PROJECT_VERSION})
+	set_target_properties(${LibraryFinalName} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 endif()
