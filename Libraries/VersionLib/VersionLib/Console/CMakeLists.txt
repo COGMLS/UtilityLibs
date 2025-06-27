@@ -46,13 +46,25 @@ project(
 #
 ###########################################################
 
+# Define test console partial naming:
+set(TestConsole "")
+
+# Define library partial naming:
+set(LibraryName "VersionLib")
+
+# Define library generation (major version):
+set(LibraryGen 0)
+
+# Define test console final name:
+set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}.${LibraryName}${LibraryGen}")
+
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
 include_directories("${VersionLibReposRoot}/VersionLib")
 
 # Define the executable properties:
 add_executable(
-					VersionLibTestConsole
+					${TestConsoleFinalName}
 					"main.cpp"
 					"formatTests.hpp" "formatTests.cpp"
 				)
@@ -60,25 +72,17 @@ add_executable(
 # Define manual library link:
 set(UseManualTargetLinkLibs False)
 				
-# Link the VersionLib:
-if(UseManualTargetLinkLibs)
-	if (WIN32)
-		if(DebugVersionLib)
-			#target_link_libraries(VersionLibTestConsole ${ReposRoot}/build/VersionLib/Libs/<lib>/Debug/VersionLib.lib)
-		else()
-			#target_link_libraries(VersionLibTestConsole ${ReposRoot}/build/VersionLib/Libs/<lib>/Release/VersionLib.lib)
-		endif()
-	else()
-		#target_link_libraries(VersionLibTestConsole ${ReposRoot}/build/bin/libVersionLib.so)
-	endif()
+# Link the library depending on naming used:
+if(UseVersionOnLibName)
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")
 else()
-	target_link_libraries(VersionLibTestConsole VersionLib)
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
 endif()
 
 # Enable tests if DEBUG is set:
 
 if (DebugVersionLib)
-	mkArgTest(VersionLib_FormatsTest VersionLibTestConsole "-test-formats")
-	mkArgTest(VersionLib_OperatorTest VersionLibTestConsole "-test-operators")
-	mkArgTest(VersionLib_ExceptionTest VersionLibTestConsole "-test-exceptions")
+	mkArgTest(VersionLib_FormatsTest ${TestConsoleFinalName} "-test-formats")
+	mkArgTest(VersionLib_OperatorTest ${TestConsoleFinalName} "-test-operators")
+	mkArgTest(VersionLib_ExceptionTest ${TestConsoleFinalName} "-test-exceptions")
 endif()

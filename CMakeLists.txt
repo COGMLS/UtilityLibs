@@ -15,9 +15,6 @@ cmake_minimum_required(VERSION 3.28)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Define if will compile test consoles:
-set(CompileTestConsole True)
-
 # Define final location for binary files output:
 set(ReposRoot ${CMAKE_CURRENT_LIST_DIR})
 set(FinalBinDir "${ReposRoot}/build/bin")
@@ -35,6 +32,32 @@ project(
 			VERSION 0.0.1
 			DESCRIPTION "Complete solution for Utility Libraries Solution repository."
 		)
+
+###########################################################
+#
+# Project naming standards:
+#
+###########################################################
+
+# Define global partial names:
+
+# Define the repository's name for partial library naming:
+set(UtilLibsMainName "UtilLibs")
+
+# Define the test consoles base name:
+set(UtilLibsTestConsoleBaseName "TestConsole")
+
+###########################################################
+#
+# Global projects custom settings:
+#
+###########################################################
+
+# Define if will compile test consoles:
+set(CompileTestConsole True)
+
+# Define if will export version into library's name:
+set(UseVersionOnLibName False)
 
 ###########################################################
 #

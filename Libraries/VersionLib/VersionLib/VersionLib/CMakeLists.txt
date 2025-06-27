@@ -37,7 +37,7 @@ add_compile_definitions(_UNICODE)
 # Defined the project:
 project(
 			VersionLib
-			VERSION 0.8.4
+			VERSION 0.9.0
 			DESCRIPTION "Version Library."
 		)
 
@@ -46,6 +46,19 @@ project(
 # Project components settings:
 #
 ###########################################################
+
+# Define library partial naming:
+set(LibraryName "VersionLib")
+
+# Define library generation (major version):
+set(LibraryGen 0)
+
+# Define library final name:
+if(UseVersionOnLibName)
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}")
+else()
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+endif()
 
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
@@ -59,7 +72,7 @@ add_compile_definitions(ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES)
 # Define the library build properties:
 if (WIN32)
 	add_library(
-					VersionLib
+					${LibraryFinalName}
 					SHARED
 					# Windows specific headers:
 					"dllmain.hpp" "dllmain.cpp"
@@ -83,7 +96,7 @@ if (WIN32)
 				)
 else()
 	add_library(
-					VersionLib
+					${LibraryFinalName}
 					SHARED
 					# Version Library main header:
 					"VersionLib.hpp"
@@ -105,28 +118,8 @@ else()
 				)
 endif()
 
-###########################################################
-# WARNING: About the linking libraries:
-# --------------------------------------------------------
-# For some reason, the methods in the libraries are not
-# recognized directly, resulting in LINK2019 with MSVC or
-# "undefined reference to" in GCC, but the methods are generated
-# and exported. To mitigate this problem, set as "True" the
-# CMake variable "UseManualTargetLinkLibs" to link then manually.
-###########################################################
-
-set(UseManualTargetLinkLibs False)
-
-if(UseManualTargetLinkLibs)
-	if (WIN32)
-		if(DebugVersionLib)
-			#target_link_libraries(VersionLib ${ReposRoot}/build/VersionLib/Libs/<lib>/Debug/<libfile>.lib)
-		else()
-			#target_link_libraries(VersionLib ${ReposRoot}/build/VersionLib/Libs/<lib>/Release/<libfile>.lib)
-		endif()
-	else()
-		#target_link_libraries(VersionLib ${ReposRoot}/build/bin/lib<libName>.so)
-	endif()
-else()
-	#target_link_libraries(VersionLib <librojectName>)
+# Define the version properties on binary component:
+if(UseVersionOnLibName)
+	set_target_properties(${LibraryFinalName} PROPERTIES VERSION ${PROJECT_VERSION})
+	set_target_properties(${LibraryFinalName} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 endif()
