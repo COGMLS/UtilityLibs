@@ -38,7 +38,7 @@
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
@@ -98,7 +98,7 @@
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS

@@ -64,7 +64,7 @@ namespace VersionLib
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct2 (std::string version);
 	
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 	/**
 	 * @brief Convert a string using Semantic Versioning with support to combined build types and build metadata
 	 * @param version String with version information
@@ -74,7 +74,7 @@ namespace VersionLib
 	 * @note All metadata information must be defined by the signal '+' before start in string version. If a empty space has in the metadata and the "build" word or a decimal numeric value exists after, will be considered as a build number information.
 	 */
 	VERSION_LIB_API VersionStruct toVersionStruct3 (std::string version);
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	/**
 	 * @brief Extract the build metadata from string version. This method must be used before any version string algorithm analysis.

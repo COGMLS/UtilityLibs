@@ -522,7 +522,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	return v;
 }
 
-#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 {
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
@@ -748,7 +748,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 
 	return v;
 }
-#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 std::string VersionLib::extractBuildMetadata(std::string &version)
 {
