@@ -1,9 +1,18 @@
 #pragma once
 
+/********************************************************************
+ * Version Library Experimental Features Control for C++ components
+ * 
+ * This file is destined to only control the experimental features
+ * available to C++ components in Version Library. Any C feature is
+ * controlled by .h file
+ * 
+********************************************************************/
+
 #ifndef VERSION_LIBRARY_EXPERIMENTAL_FEATURES_CONTROL_HPP
 #define VERSION_LIBRARY_EXPERIMENTAL_FEATURES_CONTROL_HPP
 
-#include "VersionLibVersionInfo.hpp"
+#include "VersionLibVersionInfo.h"
 
 //
 // Alpha Features:
