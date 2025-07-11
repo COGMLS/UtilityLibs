@@ -251,7 +251,7 @@ int main(int argc, const char* argv[])
 		}
 	}
 
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 	if (test_toVersionStruct3)
 	{
 		std::vector<VersionLib::VersionStruct> vData3;
@@ -266,7 +266,7 @@ int main(int argc, const char* argv[])
 
 		std::cout << "End of toVersionStruct3 test" << std::endl;
 	}
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	if (testVersionExceptions)
 	{
