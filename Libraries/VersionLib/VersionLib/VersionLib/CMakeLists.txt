@@ -78,6 +78,9 @@ if (WIN32)
 					"dllmain.hpp" "dllmain.cpp"
 					# Version Library main header:
 					"VersionLib.hpp"
+					# Version Library internal version header:
+					"VersionLibVersionInfo.h"
+					"InternalVersion.hpp"						"InternalVersion.cpp"
 					# Version Library components:
 					"BuildMetadata.hpp" 						"BuildMetadata.cpp"
 					"BuildReleaseId.hpp"						"BuildReleaseId.cpp"
@@ -89,7 +92,6 @@ if (WIN32)
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"SemVerClass.hpp"							"SemVerClass.cpp"
 					"VersionClass.hpp" 							"VersionClass.cpp"
-					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
@@ -100,6 +102,9 @@ else()
 					SHARED
 					# Version Library main header:
 					"VersionLib.hpp"
+					# Version Library internal version header:
+					"VersionLibVersionInfo.h"
+					"InternalVersion.hpp"						"InternalVersion.cpp"
 					# Version Library components:
 					"BuildMetadata.hpp" 						"BuildMetadata.cpp"
 					"BuildReleaseId.hpp"						"BuildReleaseId.cpp"
@@ -111,7 +116,6 @@ else()
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"SemVerClass.hpp"							"SemVerClass.cpp"
 					"VersionClass.hpp" 							"VersionClass.cpp"
-					"VersionLibVersionInfo.hpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"

@@ -51,4 +51,7 @@ add_subdirectory("VersionLib")
 # Compile test console:
 if(${CompileTestConsole})
 	add_subdirectory("Console")
+	if(EXISTS "${VersionLibReposRoot}/C_Console/CMakeLists.txt")
+		add_subdirectory("C_Console")
+	endif()
 endif()
