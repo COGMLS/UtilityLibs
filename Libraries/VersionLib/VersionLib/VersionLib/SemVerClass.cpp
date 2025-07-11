@@ -588,6 +588,20 @@ std::string VersionLib::SemVer::getVersionStr(bool useShortStr, bool hideBuildWo
 	return tmp;
 }
 
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+VersionLib::BuildMetadata VersionLib::SemVer::getMetadata()
+{
+	return this->metadata;
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+void VersionLib::SemVer::setMetadata (std::string str_metadata)
+{
+	this->metadata = VersionLib::BuildMetadata(str_metadata);
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 VersionLib::VersionStruct VersionLib::SemVer::toVersionStruct()
 {
 	VersionLib::VersionStruct verData = initVersionStruct();
@@ -603,6 +617,9 @@ VersionLib::VersionStruct VersionLib::SemVer::toVersionStruct()
 	verData.build_revision = this->build_revision;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	verData.compare_build = this->compare_build;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	verData.metadata = this->metadata.getRawMetadata();
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	return verData;
 }

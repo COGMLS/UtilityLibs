@@ -413,6 +413,10 @@ namespace VersionLib
 			 */
 			std::string getVersionStr (bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
 
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+			VersionLib::BuildMetadata getMetadata();
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 			//
 			// Setters:
 			//
@@ -429,10 +433,6 @@ namespace VersionLib
 			 * @brief Convert the the SemVer object into a VersionStruct data
 			 */
 			VersionLib::VersionStruct toVersionStruct();
-
-			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
-			VersionLib::BuildRelease getBuildRelease();
-			#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 
 			//
 			// Operators:

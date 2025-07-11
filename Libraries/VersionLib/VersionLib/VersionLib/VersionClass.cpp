@@ -6,7 +6,7 @@ VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct3(versionStr);
 	#else
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->numeric_version[0] = v.major;
@@ -35,7 +35,7 @@ VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	this->metadata = VersionLib::extractBuildMetadata(versionStr);
-	this->metadataPos = 5;
+	//this->metadataPos = 5;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
@@ -829,6 +829,20 @@ std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBu
 	return tmp;
 }
 
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+VersionLib::BuildMetadata VersionLib::VersionData::getMetadata()
+{
+	return this->metadata;
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+void VersionLib::VersionData::setMetadata (std::string str_metadata)
+{
+	this->metadata = VersionLib::BuildMetadata(str_metadata);
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 {
 	VersionLib::VersionStruct verData = initVersionStruct();
@@ -850,6 +864,9 @@ VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 	verData.build_revision = this->build_revision;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	verData.compare_build = this->compare_build;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	verData.metadata = this->metadata.getRawMetadata();
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	return verData;
 }
