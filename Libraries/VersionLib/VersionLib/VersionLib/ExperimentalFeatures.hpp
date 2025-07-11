@@ -35,7 +35,7 @@
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
 	// Enable experimental build metadata on version string
-	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
