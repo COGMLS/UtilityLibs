@@ -45,19 +45,42 @@ project(
 #
 ###########################################################
 
+# Define library partial naming:
+set(LibraryName "SettingsLib")
+
+# Define library generation (major version):
+set(LibraryGen 3)
+
+# Define test console final name:
+set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}.${LibraryName}${LibraryGen}")
+
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
-include_directories("${SettingsLibReposRoot}/SettingsLib")
-include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Exception")
-include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Configs/Ini")
+#include_directories("${SettingsLibReposRoot}/SettingsLib")
+#include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Exception")
+#include_directories("${SettingsLibReposRoot}/SettingsLib/Components/Configs/Ini")
+
+if(UseVersionOnLibName)
+	target_include_directories("${UtilLibsMainName}.${LibraryName}" PUBLIC "${SettingsLibReposRoot}/SettingsLib")
+	target_include_directories("${UtilLibsMainName}.${LibraryName}" PUBLIC "${SettingsLibReposRoot}/SettingsLib"/Components/Exception)
+	target_include_directories("${UtilLibsMainName}.${LibraryName}" PUBLIC "${SettingsLibReposRoot}/SettingsLib/Configs/Ini")
+else()
+	target_include_directories("${UtilLibsMainName}.${LibraryName}${LibraryGen}" PUBLIC "${SettingsLibReposRoot}/SettingsLib")
+	target_include_directories("${UtilLibsMainName}.${LibraryName}${LibraryGen}" PUBLIC "${SettingsLibReposRoot}/SettingsLib"/Components/Exception)
+	target_include_directories("${UtilLibsMainName}.${LibraryName}${LibraryGen}" PUBLIC "${SettingsLibReposRoot}/SettingsLib/Configs/Ini")
+endif()
 
 # Define the executable properties:
 add_executable(
-					SettingsLibTestConsole
+					${TestConsoleFinalName}
 					"main.cpp"
 					"test.hpp" "test.cpp"
 					"debug.hpp" "debug.cpp"
 				)
 
-# Link the SettingsLibV2:
-target_link_libraries(SettingsLibTestConsole SettingsLib)
+# Link the library depending on naming used:
+if(UseVersionOnLibName)
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")
+else()
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+endif()

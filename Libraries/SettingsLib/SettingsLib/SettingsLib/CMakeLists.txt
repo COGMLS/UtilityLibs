@@ -50,14 +50,28 @@ project(
 #
 ###########################################################
 
+# Define library partial naming:
+set(LibraryName "SettingsLib")
+
+# Define library generation (major version):
+set(LibraryGen 3)
+
+# Define library final name:
+if(UseVersionOnLibName)
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}")
+else()
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+endif()
+
 # Include libraries directories source codes:
 #include_directories("${SettingsLibReposRoot}/Libs/<lib>")
 include_directories("${SettingsLibraryRoot}")
 include_directories("${SettingsLibraryRoot}/Components/Exceptions")
 include_directories("${SettingsLibraryRoot}/Components/Configs/Ini")
 
-# Define to export the library methods if is Windows:
+# Define to export the library methods to all compatible systems:
 add_compile_definitions(SETTINGS_LIB_EXPORTS)
+
 if(WIN32)
 	# Add the export here
 endif()
@@ -65,7 +79,7 @@ endif()
 # Define the library build properties:
 if (WIN32)
 	add_library(
-					SettingsLib
+					${LibraryFinalName}
 					SHARED
 					# Library Windows headers:
 					"dllmain.hpp" 										"dllmain.cpp"
@@ -93,7 +107,7 @@ if (WIN32)
 				)
 else()
 	add_library(
-					SettingsLib
+					${LibraryFinalName}
 					SHARED
 					# Settings Library main header:
 					"SettingsLib.hpp" 									"SettingsLib.cpp"
@@ -117,4 +131,10 @@ else()
 					"Components/Configs/Ini/SettingsIniErrorCodes.hpp"
 					"Components/Configs/Ini/SettingsIniTools.hpp" 		"Components/Configs/Ini/SettingsIniTools.cpp"
 				)
+endif()
+
+# Define the version properties on binary component:
+if(UseVersionOnLibName)
+	set_target_properties(${LibraryFinalName} PROPERTIES VERSION ${PROJECT_VERSION})
+	set_target_properties(${LibraryFinalName} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 endif()
