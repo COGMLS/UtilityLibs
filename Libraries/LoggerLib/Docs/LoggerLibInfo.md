@@ -27,6 +27,12 @@ This document contains the information about the future plans, known bugs, depre
 - Logger manager self guard thread to detect application abort or any other termination that does not treat correctly the Logger Manager. *(**NOTE:** This experimental feature may not work as expected)*
 - New ***Date and Time*** components to replace the actual `LogFileDateTime` class and functions `getLoggerDateTime` and `convertDateTime2LogStrEntry` and, struct `LoggerLocalDateTime`.
 
+## Project Diagrams:
+
+### Project Roadmap:
+
+![Project Roadmap](/Libraries/LoggerLib/Docs/Images/LoggerLibRoadmap.png)
+
 ## Known Bugs:
 
 | Bug ID | Details | Notes/Workaround | Status |
