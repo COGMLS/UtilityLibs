@@ -8,17 +8,9 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 
 	this->setLogStatus(LoggerError::LOGGER_ERROR_OK);
 
-	if (std::filesystem::exists(logPath))
+	if (!std::filesystem::exists(logPath))
 	{
-		this->logPath = logPath;
-	}
-	else
-	{
-		if (std::filesystem::create_directory(logPath))
-		{
-			this->logPath = logPath;
-		}
-		else
+		if (!std::filesystem::create_directory(logPath))
 		{
 			this->setLogStatus(LoggerError::LOGGER_ERROR_PATH_DONT_EXIST);
 		}
@@ -68,9 +60,9 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 		this->dtCreation = getLoggerDateTime();
 		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 
-		this->baseFileName = baseFileName + "_" + convertDateTime2LogStrEntry(dtCreation, true);
+		baseFileName = baseFileName + "_" + convertDateTime2LogStrEntry(dtCreation, true);
 
-		this->logFilePath = std::filesystem::path(this->logPath.string() + LOGGER_DIRECTORY_PATH_SEPARATOR + this->baseFileName + LOGGER_LOG_FILE_TYPE);
+		this->logFilePath = std::filesystem::path(logPath.string() + LOGGER_DIRECTORY_PATH_SEPARATOR + baseFileName + LOGGER_LOG_FILE_TYPE);
 
 		// Create the file and make it ready to be used for write:
 
@@ -101,12 +93,10 @@ Logger::Logger(std::filesystem::path logPath, std::string baseFileName)
 
 Logger::Logger(const Logger& other)
 {
-	this->baseFileName = other.baseFileName;
 	this->lastLogStatus = other.lastLogStatus;
 	this->logEntries = other.logEntries;
 	//this->logFile = other.logFile;
 	this->logFilePath = other.logFilePath;
-	this->logPath = other.logPath;
 	this->logStatus = other.logStatus;
 	this->dtCreation = other.dtCreation;
 	this->autoSaveLogEntries = other.autoSaveLogEntries;
@@ -116,12 +106,10 @@ Logger::Logger(const Logger& other)
 
 Logger::Logger(Logger&& other) noexcept
 {
-	this->baseFileName = std::move(other.baseFileName);
 	this->lastLogStatus = std::move(other.lastLogStatus);
 	this->logEntries = std::move(other.logEntries);
 	//this->logFile = std::move(other.logFile);
 	this->logFilePath = std::move(other.logFilePath);
-	this->logPath = std::move(other.logPath);
 	this->logStatus = std::move(other.logStatus);
 	this->dtCreation = std::move(other.dtCreation);
 	this->autoSaveLogEntries = std::move(other.autoSaveLogEntries);
@@ -131,12 +119,10 @@ Logger::Logger(Logger&& other) noexcept
 
 Logger& Logger::operator=(const Logger& other)
 {
-	this->baseFileName = other.baseFileName;
 	this->lastLogStatus = other.lastLogStatus;
 	this->logEntries = other.logEntries;
 	//this->logFile = other.logFile;
 	this->logFilePath = other.logFilePath;
-	this->logPath = other.logPath;
 	this->logStatus = other.logStatus;
 	this->dtCreation = other.dtCreation;
 	this->autoSaveLogEntries = other.autoSaveLogEntries;
@@ -148,12 +134,10 @@ Logger& Logger::operator=(const Logger& other)
 
 Logger& Logger::operator=(Logger&& other) noexcept
 {
-	this->baseFileName = std::move(other.baseFileName);
 	this->lastLogStatus = std::move(other.lastLogStatus);
 	this->logEntries = std::move(other.logEntries);
 	//this->logFile = std::move(other.logFile);
 	this->logFilePath = std::move(other.logFilePath);
-	this->logPath = std::move(other.logPath);
 	this->logStatus = std::move(other.logStatus);
 	this->dtCreation = std::move(other.dtCreation);
 	this->autoSaveLogEntries = std::move(other.autoSaveLogEntries);
@@ -168,11 +152,9 @@ Logger& Logger::operator=(Logger&& other) noexcept
 bool Logger::operator==(const Logger& other) const
 {
 	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-	bool isEq = this->baseFileName == other.baseFileName &&
-				this->lastLogStatus == other.lastLogStatus &&
+	bool isEq = this->lastLogStatus == other.lastLogStatus &&
 				//this->logEntries == other.logEntries &&
 				this->logFilePath == other.logFilePath &&
-				this->logPath == other.logPath &&
 				this->logStatus == other.logStatus &&
 				this->dtCreation.calendar == other.dtCreation.calendar &&
 				this->dtCreation.hours == other.dtCreation.hours &&
@@ -210,11 +192,9 @@ bool Logger::operator==(const Logger& other) const
 
 	return isEq;
 	#else
-	return this->baseFileName == other.baseFileName &&
-			this->lastLogStatus == other.lastLogStatus &&
+	return this->lastLogStatus == other.lastLogStatus &&
 			this->logEntries == other.logEntries &&
 			this->logFilePath == other.logFilePath &&
-			this->logPath == other.logPath &&
 			this->logStatus == other.logStatus &&
 			this->dtCreation.calendar == other.dtCreation.calendar &&
 			this->dtCreation.hours == other.dtCreation.hours &&
@@ -270,7 +250,7 @@ Logger::~Logger()
 
 std::filesystem::path Logger::getLogDirectoryPath()
 {
-	return this->logPath;
+	return this->logFilePath.parent_path();
 }
 
 std::filesystem::path Logger::getLogFilePath()
@@ -455,17 +435,9 @@ LoggerW::LoggerW(std::filesystem::path logPath, std::wstring baseFileName)
 
 	this->setLogStatus(LoggerError::LOGGER_ERROR_OK);
 
-	if (std::filesystem::exists(logPath))
+	if (!std::filesystem::exists(logPath))
 	{
-		this->logPath = logPath;
-	}
-	else
-	{
-		if (std::filesystem::create_directory(logPath))
-		{
-			this->logPath = logPath;
-		}
-		else
+		if (!std::filesystem::create_directory(logPath))
 		{
 			this->setLogStatus(LoggerError::LOGGER_ERROR_PATH_DONT_EXIST);
 		}
@@ -515,9 +487,9 @@ LoggerW::LoggerW(std::filesystem::path logPath, std::wstring baseFileName)
 		this->dtCreation = getLoggerDateTime();
 		#endif // !LOGGER_ENABLE_EXPERIMENTAL_UTC_AND_LOCAL_DT
 
-		this->baseFileName = baseFileName + L"_" + convertDateTime2LogStrEntryW(dtCreation, true);
+		baseFileName = baseFileName + L"_" + convertDateTime2LogStrEntryW(dtCreation, true);
 
-		this->logFilePath = std::filesystem::path(this->logPath.wstring() + LOGGER_DIRECTORY_PATH_SEPARATOR_W + this->baseFileName + LOGGER_LOG_FILE_TYPE_W);
+		this->logFilePath = std::filesystem::path(logPath.wstring() + LOGGER_DIRECTORY_PATH_SEPARATOR_W + baseFileName + LOGGER_LOG_FILE_TYPE_W);
 
 		// Create the file and make it ready to be used for write:
 
@@ -548,12 +520,10 @@ LoggerW::LoggerW(std::filesystem::path logPath, std::wstring baseFileName)
 
 LoggerW::LoggerW(const LoggerW& other)
 {
-	this->baseFileName = other.baseFileName;
 	this->lastLogStatus = other.lastLogStatus;
 	this->logEntries = other.logEntries;
 	//this->logFile = other.logFile;
 	this->logFilePath = other.logFilePath;
-	this->logPath = other.logPath;
 	this->logStatus = other.logStatus;
 	this->dtCreation = other.dtCreation;
 	this->autoSaveLogEntries = other.autoSaveLogEntries;
@@ -563,12 +533,10 @@ LoggerW::LoggerW(const LoggerW& other)
 
 LoggerW::LoggerW(LoggerW&& other) noexcept
 {
-	this->baseFileName = std::move(other.baseFileName);
 	this->lastLogStatus = std::move(other.lastLogStatus);
 	this->logEntries = std::move(other.logEntries);
 	//this->logFile = std::move(other.logFile);
 	this->logFilePath = std::move(other.logFilePath);
-	this->logPath = std::move(other.logPath);
 	this->logStatus = std::move(other.logStatus);
 	this->dtCreation = std::move(other.dtCreation);
 	this->autoSaveLogEntries = std::move(other.autoSaveLogEntries);
@@ -578,12 +546,10 @@ LoggerW::LoggerW(LoggerW&& other) noexcept
 
 LoggerW& LoggerW::operator=(const LoggerW& other)
 {
-	this->baseFileName = other.baseFileName;
 	this->lastLogStatus = other.lastLogStatus;
 	this->logEntries = other.logEntries;
 	//this->logFile = other.logFile;
 	this->logFilePath = other.logFilePath;
-	this->logPath = other.logPath;
 	this->logStatus = other.logStatus;
 	this->dtCreation = other.dtCreation;
 	this->autoSaveLogEntries = other.autoSaveLogEntries;
@@ -595,12 +561,10 @@ LoggerW& LoggerW::operator=(const LoggerW& other)
 
 LoggerW& LoggerW::operator=(LoggerW&& other) noexcept
 {
-	this->baseFileName = std::move(other.baseFileName);
 	this->lastLogStatus = std::move(other.lastLogStatus);
 	this->logEntries = std::move(other.logEntries);
 	//this->logFile = std::move(other.logFile);
 	this->logFilePath = std::move(other.logFilePath);
-	this->logPath = std::move(other.logPath);
 	this->logStatus = std::move(other.logStatus);
 	this->dtCreation = std::move(other.dtCreation);
 	this->autoSaveLogEntries = std::move(other.autoSaveLogEntries);
@@ -615,11 +579,9 @@ LoggerW& LoggerW::operator=(LoggerW&& other) noexcept
 bool LoggerW::operator==(const LoggerW& other) const
 {
 	#ifdef LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE
-	bool isEq = this->baseFileName == other.baseFileName &&
-				this->lastLogStatus == other.lastLogStatus &&
+	bool isEq = this->lastLogStatus == other.lastLogStatus &&
 				//this->logEntries == other.logEntries &&
 				this->logFilePath == other.logFilePath &&
-				this->logPath == other.logPath &&
 				this->logStatus == other.logStatus &&
 				this->dtCreation.calendar == other.dtCreation.calendar &&
 				this->dtCreation.hours == other.dtCreation.hours &&
@@ -657,11 +619,9 @@ bool LoggerW::operator==(const LoggerW& other) const
 
 	return isEq;
 	#else
-	return this->baseFileName == other.baseFileName &&
-			this->lastLogStatus == other.lastLogStatus &&
+	return this->lastLogStatus == other.lastLogStatus &&
 			this->logEntries == other.logEntries &&
 			this->logFilePath == other.logFilePath &&
-			this->logPath == other.logPath &&
 			this->logStatus == other.logStatus &&
 			this->dtCreation.calendar == other.dtCreation.calendar &&
 			this->dtCreation.hours == other.dtCreation.hours &&
@@ -717,7 +677,7 @@ LoggerW::~LoggerW()
 
 std::filesystem::path LoggerW::getLogDirectoryPath()
 {
-	return this->logPath;
+	return this->logFilePath.parent_path();
 }
 
 std::filesystem::path LoggerW::getLogFilePath()
