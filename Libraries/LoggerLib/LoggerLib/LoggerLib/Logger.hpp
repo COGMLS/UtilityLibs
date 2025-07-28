@@ -75,8 +75,6 @@ enum LOGGER_LIB_API LoggerError : unsigned int
 class LOGGER_LIB_API Logger
 {
 	private:
-		std::filesystem::path logPath;			// Log folder
-		std::string baseFileName;				// Log file base name
 		std::filesystem::path logFilePath;		// Log file path
 		std::vector<LogEntry> logEntries;		// Log entries
 		unsigned int lastLogStatus;				// Last log error code registered
@@ -150,8 +148,6 @@ class LOGGER_LIB_API Logger
 class LOGGER_LIB_API LoggerW
 {
 	private:
-		std::filesystem::path logPath;			// Log folder
-		std::wstring baseFileName;				// Log file base name
 		std::filesystem::path logFilePath;		// Log file path
 		std::vector<LogEntryW> logEntries;		// Log entries
 		unsigned int lastLogStatus;				// Last log error code registered
