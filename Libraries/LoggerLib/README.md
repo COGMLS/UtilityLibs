@@ -87,6 +87,7 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
 - Fix correct time format in log file format on *nix systems *(Version 3.4.0)*
 - `LogEntry` and `LogEntryW` `operator<<` **are disabled** when not using both `LOGGER_ENABLE_EXPERIMENTAL_DATA_STORE` and `LOGGER_ENABLE_EXPERIMENTAL_LOG_ENTRY_OPERATORS` *(Version 3.3.2)*
 - New library naming. Now library uses Utility Libraries Naming Standard that follows UtilLibs.*LibraryName****LibraryGeneration***. This change will prepare the project for next modifications that may push to version 4.x and break current compatibility. In this case, the programs linked with this new naming convention, will be able to use version 3.x.y and keep working without the possibility to call the incompatible library.
+- Reduced memory usage *(Version 3.3.3)*
 
 ### Implementations under development:
 
@@ -103,6 +104,9 @@ The additional documentation files can be found in the local [Docs](./Docs) dire
     <link rel="stylesheet" href="./Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 3.3.3-release (2025/07/28) -->
+    <dt><version-data>3.3.3-release</version-data> | Release Date: 2025/07/28</dt>
+    <dd><strong>Optimized memory usage, removing unnecessary/redundant components</strong></dd>
     <!-- 3.3.2-release (2025/05/13) -->
     <dt><version-data>3.3.2-release</version-data> | Release Date: 2025/05/13</dt>
     <dd><fix-alert>[FIX]</fix-alert> <strong>Windows platform library compilation</strong></dd>
