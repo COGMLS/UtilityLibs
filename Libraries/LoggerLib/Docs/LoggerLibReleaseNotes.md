@@ -13,6 +13,9 @@ An copy or partial copy of this history table is available in the `README.md` fi
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 3.3.3-release (2025/07/28) -->
+    <dt><version-data>3.3.3-release</version-data> | Release Date: 2025/07/28</dt>
+    <dd><strong>Optimized memory usage, removing unnecessary/redundant components</strong></dd>
     <!-- 3.3.2-release (2025/05/13) -->
     <dt><version-data>3.3.2-release</version-data> | Release Date: 2025/05/13</dt>
     <dd><fix-alert>[FIX]</fix-alert> <strong>Windows platform library compilation</strong></dd>
