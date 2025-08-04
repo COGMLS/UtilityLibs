@@ -2,11 +2,11 @@
 
 VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 {
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
-	VersionLib::VersionStruct v = VersionLib::toVersionStruct3(versionStr);
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
+	std::vector<VersionLib::VersionToken> vTokens = VersionLib::toSemVerTokens(versionStr);
 	#else
+
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->numeric_version[0] = v.major;
@@ -25,6 +25,7 @@ VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 	this->minor = v.minor;
 	this->patch = v.patch;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 
 	this->build_type = v.build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -54,6 +55,8 @@ VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 		this->flags[5] = true;
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
 }
 
 VersionLib::VersionData::VersionData(VersionLib::VersionStruct version)
