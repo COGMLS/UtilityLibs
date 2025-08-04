@@ -18,6 +18,13 @@ VersionLib::VersionTokenData::VersionTokenData (std::string data)
 	*this->strData = data;
 }
 
+VersionLib::VersionTokenData::VersionTokenData (unsigned short data)
+{
+	this->type = VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE;
+	this->numData.reset(new VersionTokenNumData);
+	this->numData.get()->short_data = data;
+}
+
 VersionLib::VersionTokenData::VersionTokenData (unsigned int data)
 {
 	this->type = VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE;
@@ -25,9 +32,9 @@ VersionLib::VersionTokenData::VersionTokenData (unsigned int data)
 	this->numData.get()->int_data = data;
 }
 
-VersionLib::VersionTokenData::VersionTokenData (unsigned long long data)
+VersionLib::VersionTokenData::VersionTokenData (unsigned long data)
 {
-	this->type = VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE;
+	this->type = VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE;
 	this->numData.reset(new VersionTokenNumData);
 	this->numData.get()->long_data = data;
 }
@@ -143,6 +150,24 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (std::stri
 	return *this;
 }
 
+VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned short& data)
+{
+	if (this->strData)
+	{
+		this->strData.reset(nullptr);
+	}
+
+	if (!this->numData)
+	{
+		this->numData.reset(new VersionTokenNumData);
+	}
+
+	this->numData.get()->short_data = data;
+	this->type = VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE;
+
+	return *this;
+}
+
 VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned int& data)
 {
 	if (this->strData)
@@ -161,7 +186,7 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned 
 	return *this;
 }
 
-VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned long long& data)
+VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned long& data)
 {
 	if (this->strData)
 	{
@@ -174,7 +199,7 @@ VersionLib::VersionTokenData& VersionLib::VersionTokenData::operator= (unsigned 
 	}
 
 	this->numData.get()->long_data = data;
-	this->type = VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE;
+	this->type = VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE;
 
 	return *this;
 }
@@ -188,7 +213,11 @@ bool VersionLib::VersionTokenData::operator==(const VersionLib::VersionTokenData
 
 	if (this->numData && other.numData)
 	{
-		if (this->type == VersionTokenDataType::UNSIGNED_INT_TYPE)
+		if (this->type == VersionTokenDataType::UNSIGNED_SHORT_TYPE)
+		{
+			return this->numData.get()->short_data == other.numData.get()->short_data;
+		}
+		else if (this->type == VersionTokenDataType::UNSIGNED_INT_TYPE)
 		{
 			return this->numData.get()->int_data == other.numData.get()->int_data;
 		}
@@ -213,7 +242,7 @@ bool VersionLib::VersionTokenData::operator==(VersionLib::VersionTokenDataType t
 
 VersionLib::VersionTokenData::operator bool() const
 {
-	if (this->type != VersionTokenDataType::EMPTY_DATA_TYPE || this->type != VersionTokenDataType::NULL_TYPE)
+	if (this->type != VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE || this->type != VersionLib::VersionTokenDataType::NULL_TYPE)
 	{
 		if (this->numData || this->strData)
 		{
@@ -228,6 +257,11 @@ VersionLib::VersionTokenDataType VersionLib::VersionTokenData::getDataType()
 	return this->type;
 }
 
+bool VersionLib::VersionTokenData::isType (VersionLib::VersionTokenDataType type)
+{
+	return this->type == type;
+}
+
 bool VersionLib::VersionTokenData::isEmpty()
 {
 	return this->type == VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE;
@@ -240,7 +274,16 @@ bool VersionLib::VersionTokenData::isNull()
 
 bool VersionLib::VersionTokenData::isNumVal()
 {
-	if (this->numData && (this->type == VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE || this->type == VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE))
+	if (this->numData && (this->type == VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE || this->type == VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE || this->type == VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool VersionLib::VersionTokenData::isIntVal()
+{
+	if (this->numData && this->type == VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE)
 	{
 		return true;
 	}
@@ -249,7 +292,7 @@ bool VersionLib::VersionTokenData::isNumVal()
 
 bool VersionLib::VersionTokenData::isLongVal()
 {
-	if (this->numData && this->type == VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE)
+	if (this->numData && this->type == VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE)
 	{
 		return true;
 	}
@@ -275,9 +318,19 @@ std::string VersionLib::VersionTokenData::getStr()
 	return std::string();
 }
 
+unsigned short VersionLib::VersionTokenData::getShort()
+{
+	if (this->isNumVal() && !this->isIntVal() && !this->isLongVal())
+	{
+		return this->numData.get()->short_data;
+	}
+
+	return 0u;
+}
+
 unsigned int VersionLib::VersionTokenData::getInt()
 {
-	if (this->isNumVal() && !this->isLongVal())
+	if (this->isIntVal())
 	{
 		return this->numData.get()->int_data;
 	}
@@ -285,14 +338,14 @@ unsigned int VersionLib::VersionTokenData::getInt()
 	return 0u;
 }
 
-unsigned long long VersionLib::VersionTokenData::getLong()
+unsigned long VersionLib::VersionTokenData::getLong()
 {
 	if (this->isLongVal())
 	{
 		return this->numData.get()->long_data;
 	}
 
-	return 0ull;
+	return 0ul;
 }
 
 void VersionLib::VersionTokenData::clear()
@@ -339,13 +392,17 @@ VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data)
 	}
 	else if (this->data.isNumVal())
 	{
-		if (this->data.isLongVal())
+		if (this->data.isIntVal())
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+		else if (this->data.isLongVal())
 		{
 			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
 		}
 		else
 		{
-			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+			this->type = VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN;
 		}
 	}
 	else if (this->data.isStringVal())
@@ -375,13 +432,17 @@ VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, int po
 	}
 	else if (this->data.isNumVal())
 	{
-		if (this->data.isLongVal())
+		if (this->data.isIntVal())
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+		else if (this->data.isLongVal())
 		{
 			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
 		}
 		else
 		{
-			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+			this->type = VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN;
 		}
 	}
 	else if (this->data.isStringVal())
@@ -411,13 +472,17 @@ VersionLib::VersionToken::VersionToken(VersionLib::VersionTokenData data, int po
 	}
 	else if (this->data.isNumVal())
 	{
-		if (this->data.isLongVal())
+		if (this->data.isIntVal())
+		{
+			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+		}
+		else if (this->data.isLongVal())
 		{
 			this->type = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
 		}
 		else
 		{
-			this->type = VersionLib::VersionTokenType::NUMERIC_TOKEN;
+			this->type = VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN;
 		}
 	}
 	else if (this->data.isStringVal())
@@ -520,13 +585,19 @@ VersionLib::VersionToken& VersionLib::VersionToken::operator= (std::string& val)
 	return *this;
 }
 
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned short& val)
+{
+	this->data = val;
+	return *this;
+}
+
 VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned int& val)
 {
 	this->data = val;
 	return *this;
 }
 
-VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned long long& val)
+VersionLib::VersionToken& VersionLib::VersionToken::operator= (unsigned long& val)
 {
 	this->data = val;
 	return *this;
@@ -544,7 +615,16 @@ bool VersionLib::VersionToken::operator!= (VersionLib::VersionTokenType type)
 
 VersionLib::VersionToken::operator bool() const
 {
-	return true;
+	if (this->type != VersionLib::VersionTokenType::UNDEFINED_TOKEN && this->data)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool VersionLib::VersionToken::isType (VersionLib::VersionTokenType type)
+{
+	return this->type == type;
 }
 
 bool VersionLib::VersionToken::isMandatory()
@@ -559,6 +639,18 @@ bool VersionLib::VersionToken::isEmpty()
 
 bool VersionLib::VersionToken::isNumVal()
 {
+	return this->type == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN || 
+			this->type == VersionLib::VersionTokenType::NUMERIC_TOKEN || 
+			this->type == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
+}
+
+bool VersionLib::VersionToken::isShortVal()
+{
+	return this->type == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN;
+}
+
+bool VersionLib::VersionToken::isIntVal()
+{
 	return this->type == VersionLib::VersionTokenType::NUMERIC_TOKEN;
 }
 
@@ -569,7 +661,7 @@ bool VersionLib::VersionToken::isLongVal()
 
 bool VersionLib::VersionToken::isStringVal()
 {
-	return this->type == VersionLib::VersionTokenType::STRING_TOKEN;
+	return this->type == VersionLib::VersionTokenType::STRING_TOKEN || this->data.isStringVal();
 }
 
 bool VersionLib::VersionToken::isSpecialToken()
