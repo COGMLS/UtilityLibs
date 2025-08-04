@@ -522,14 +522,12 @@ VersionLib::VersionStruct VersionLib::toVersionStruct2(std::string version)
 	return v;
 }
 
-#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
-VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
+std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string version)
 {
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
 	std::cout << "Version to convert: " << version << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
-
-	VersionLib::VersionStruct v = initVersionStruct();
 
 	// Make sure the version string is complete in lowercase:
 	version = VersionLib::tolower_str(version);
@@ -653,12 +651,12 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 					// Do not generate an output or throw an error
 				}
 
-				// Try to convert to unsigned long long type if failed in previous conversion:
+				// Try to convert to unsigned long type if failed in previous conversion:
 				if (convertUInt != 1)
 				{
 					try
 					{
-						tmpData = static_cast<unsigned long long>(std::stoull(tmp));
+						tmpData = static_cast<unsigned long>(std::stoul(tmp));
 						type = 2;
 						tokenType = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
 						convertUInt = 2;
@@ -729,7 +727,7 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 				std::cout << tokens[j].getTokenData().getInt();
 				break;
 			}
-			case VersionLib::VersionTokenDataType::UNSIGNED_LONG_LONG_TYPE:
+			case VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE:
 			{
 				std::cout << tokens[j].getTokenData().getLong();
 				break;
@@ -746,9 +744,9 @@ VersionLib::VersionStruct VersionLib::toVersionStruct3(std::string version)
 	std::cout << "----------------" << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
 
-	return v;
+	return tokens;
 }
-#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 std::string VersionLib::extractBuildMetadata(std::string &version)
 {

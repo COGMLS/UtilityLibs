@@ -46,8 +46,8 @@
 	// Enable experimental build metadata on version string
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
-	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
+	// Enable the experimental toSemVerTokens method, allowing the combined build types and VersionBuildType class
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
@@ -66,6 +66,12 @@
 
 	// Enable token system support
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+
+	// Experimental features test:
+	// Use this space to add tests for compatible/incompatible experimental features
+	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD)
+		#error toSemVerTokens method requires Version Token System
+	#endif
 #endif // !VERSION_LIB_BUILD_TYPE is Alpha
 
 //
@@ -106,8 +112,8 @@
 	// Enable experimental build metadata on version string
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
-	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
+	// Enable the experimental toSemVerTokens method, allowing the combined build types and VersionBuildType class
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
