@@ -31,7 +31,7 @@
 #include "ExperimentalFeatures.hpp"
 
 #include "VersionLibVersionInfo.h"
-#include "VersionClass.hpp"
+#include "VersionData.hpp"
 #include "SemVerClass.hpp"
 
 namespace VersionLib

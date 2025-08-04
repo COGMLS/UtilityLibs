@@ -53,7 +53,7 @@
 #include "CommonTools.hpp"
 #include "ReleaseTools.hpp"
 #include "VersionTools.hpp"
-#include "VersionClass.hpp"
+#include "VersionData.hpp"
 #include "VersionStruct.hpp"
 #include "InternalVersion.hpp"
 

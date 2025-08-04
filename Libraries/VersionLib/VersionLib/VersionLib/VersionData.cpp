@@ -1,4 +1,4 @@
-#include "VersionClass.hpp"
+#include "VersionData.hpp"
 
 VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 {
