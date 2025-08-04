@@ -16,7 +16,7 @@ int main(int argc, const char* argv[])
 
 	std::string version = verStr + metadata + build;
 
-	VersionLib::VersionStruct data = VersionLib::toVersionStruct3(version);
+	std::vector<VersionLib::VersionToken> data = VersionLib::toSemVerTokens(version);
 
 	#else
 	std::vector<std::string> cli;
@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
 	bool testVersionExceptions = false;
 	bool testVersionStrComp = false;
 	bool testVersionStructComp = false;
-	bool test_toVersionStruct3 = false;
+	bool test_toSemVerTokens = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -63,9 +63,9 @@ int main(int argc, const char* argv[])
 			testVersionStructComp = true;
 		}
 
-		if (cli[i] == "-test2versionstruct3")
+		if (cli[i] == "-test2semvertokens")
 		{
-			test_toVersionStruct3 = true;
+			test_toSemVerTokens = true;
 		}
 	}
 
@@ -251,22 +251,22 @@ int main(int argc, const char* argv[])
 		}
 	}
 
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
-	if (test_toVersionStruct3)
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
+	if (test_toSemVerTokens)
 	{
-		std::vector<VersionLib::VersionStruct> vData3;
+		std::vector<std::vector<VersionLib::VersionToken>> vData3;
 
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e build 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2de build 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15+ab1c2d-e 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta+ab1c2d-e build 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200"));
-		vData3.push_back(VersionLib::toVersionStruct3("1.2.3-alpha.beta.2+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15+ab1c2d-e 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15+ab1c2de build 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15+ab1c2d-e 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15.beta+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200"));
+		vData3.push_back(VersionLib::toSemVerTokens("1.2.3-alpha.beta.2+ab1c2d-e build 9200"));
 
-		std::cout << "End of toVersionStruct3 test" << std::endl;
+		std::cout << "End of toSemVerTokens test" << std::endl;
 	}
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRUCT3_METHOD
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 	if (testVersionExceptions)
 	{
