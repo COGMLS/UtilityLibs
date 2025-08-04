@@ -67,6 +67,12 @@
 	// Enable token system support
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 
+	// Enable version tokens in generic VersionData class
+	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
+
+	// Enable version tokens in SemVer class
+	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+
 	// Experimental features test:
 	// Use this space to add tests for compatible/incompatible experimental features
 	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD)
