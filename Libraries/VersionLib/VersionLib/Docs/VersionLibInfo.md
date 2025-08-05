@@ -75,7 +75,7 @@ This document contains the information about the future plans, known bugs, depre
 | 16 | ~~`VersionStruct2` does not recognizes build type/release when revision does not appear in string data~~ |  | FIXED |
 | 17 | ~~`VersionStruct2` does not recognizes revision~~ |  | FIXED |
 | 18 | ~~`toVersionStruct3` does not generate internal tokens correctly~~ |  | FIXED |
-| 19 | `toVersionStruct3` does not convert correctly internal tokens into `VersionStruct` |  | Not fixed |
+| 19 | `toSemVerTokens` does not convert correctly the token type | All numerical values, except the first one, are defined as `UNDEFINED_TOKEN` | Not fixed |
 
 ## Deprecated Features:
 
