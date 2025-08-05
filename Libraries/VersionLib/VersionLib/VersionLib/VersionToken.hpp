@@ -478,6 +478,16 @@ namespace VersionLib
 			 */
 			void setTokenData (VersionLib::VersionTokenData& data);
 	};
+
+	//
+	// Version Token Tools:
+	//
+
+	/**
+	 * @brief Convert the VersionTokenType to string
+	 * @param type Token Type to be translated to string format
+	 */
+	std::string getTokenTypeStr (VersionLib::VersionTokenType type);
 }
 
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
