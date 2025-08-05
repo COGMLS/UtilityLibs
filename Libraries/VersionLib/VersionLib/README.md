@@ -10,7 +10,7 @@
 >
 > The components used to data transaction will be redesigned and the structures with "C" on naming will be moved to only C language files.
 
-The VersionLib is a versioning library to provide to other libraries and applications a easier way the implementation of version number control and tests to analyze if the version value is greater, equal, etc. The library also check if the *version core* is a release, beta or alpha build type. It's possible to check if the version is marked as incompatible with an application or library, using an know list of versions, provided by the dependency application or library and test it, with support to generate an exception or not.
+The VersionLib is a versioning library to provide to other libraries and applications a easier way the implementation of version number control and tests to analyze if the version value is greater, equal, etc. The library also check if the *version core* is a release, beta or alpha build type. It's possible to check if the version is marked as incompatible with an application or library, using an known list of versions, provided by the dependency application or library and test it, with support to generate an exception or not.
 
 The VersionLib contains all necessary methods and data type needed to work, allowing to consume this library without dependencies. All VersionLib methods, data types and classes, are inside the namespace `VersionLib`.
 
