@@ -540,13 +540,6 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 
 	std::vector<VersionLib::VersionToken> tokens;	// Vector of tokens
 
-	short foundMajorVer = -1;					// Found major version number position (-1 is unknown position)
-	short foundMinorVer = -1;					// Found minor version number position (-1 is unknown position)
-	short foundPatchVer = -1;					// Found patch version number position (-1 is unknown position)
-	short foundBuildTypeVer = -1;				// Found build type version (alpha, beta, etc) position (-1 is unknown position)
-	short foundBuildTypeRev = -1;				// Found the build type number position (-1 is unknown position)
-	short foundBuildStr = -1;					// Found the build word position (-1 is unknown position)
-	short foundBuild = -1;						// Found the build number position (-1 is unknown position)
 	short foundMetadata = -1;					// Found the metadata info position (-1 is unknown position)
 
 	short lastFieldProcessed = -1;				// 0.1[.2][-3.4][+5] ["6"] [7] | -1 is unknown last field
@@ -638,28 +631,35 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 			// Try to detect the type of numerical value:
 			if (type == 1)
 			{
-				short convertUInt = 0;
+				short convertUInt = 0;	// 0: Not numerical value 1: Short value 2: Int value 3: Long value
 
-				// Try to convert to unsigned int type:
+				// Try to convert to unsigned int or unsigned short type:
 				try
 				{
 					tmpData = static_cast<unsigned int>(std::stoi(tmp));
-					convertUInt = 1;
+					convertUInt = 2;
+					if (tmpData.getInt() < USHRT_MAX)
+					{
+						tmpData = static_cast<unsigned short>(tmpData.getInt());
+						tokenType = VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN;
+						convertUInt = 1;
+					}
 				}
 				catch(const std::exception&)
 				{
 					// Do not generate an output or throw an error
+					convertUInt = 0;
 				}
 
 				// Try to convert to unsigned long type if failed in previous conversion:
-				if (convertUInt != 1)
+				if (convertUInt < 1)
 				{
 					try
 					{
 						tmpData = static_cast<unsigned long>(std::stoul(tmp));
 						type = 2;
 						tokenType = VersionLib::VersionTokenType::LONG_NUMBER_TOKEN;
-						convertUInt = 2;
+						convertUInt = 3;
 					}
 					catch(const std::exception&)
 					{
@@ -668,8 +668,26 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 				}
 			}
 
+			// If is in metadata, separate the separator from metadata:
+			if (type == 4)
+			{
+				std::string s;
+				s += tmpData.getStr()[0];
+				VersionLib::VersionTokenData tmpData2(tmpData.getStr().erase(1, tmpData.getStr().size() - 1));
+				tmpToken = VersionLib::VersionToken(tmpData2, tokenType);
+				tokens.push_back(tmpToken);
+				position++;
+
+				tmpToken = VersionLib::VersionToken();
+
+				// Prepare the metadata:
+				tmpData = tmpData.getStr().erase(0, 1);
+				tokenType = VersionLib::VersionTokenType::STRING_TOKEN;
+			}
+
 			// Set the token type:
-			tmpToken = VersionLib::VersionToken(tmpData, tokenType);
+			tmpToken = VersionLib::VersionToken(tmpData, tokenType, position);
+			position++;
 
 			// Insert the token into the vector and clean the temporary string:
 			tokens.push_back(tmpToken);
@@ -686,7 +704,8 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 
 				// Set the token type:
 				tokenType = VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_SEPARATOR;
-				tmpToken = VersionLib::VersionToken(tmpData, tokenType);
+				tmpToken = VersionLib::VersionToken(tmpData, tokenType, position);
+				position++;
 	
 				tokens.push_back(tmpToken);
 				tmp.clear();
@@ -708,7 +727,7 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 	std::cout << "Detected Tokens:" << std::endl;
 	for (size_t j = 0; j < tokens.size(); j++)
 	{
-		std::cout << "[" << j << "]::";
+		std::cout << "[" << j << "][" << VersionLib::getTokenTypeStr(tokens[j].getType()) << "]::";
 		
 		switch (tokens[j].getTokenData().getDataType())
 		{
@@ -720,6 +739,11 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 			case VersionLib::VersionTokenDataType::STRING_TYPE:
 			{
 				std::cout << tokens[j].getTokenData().getStr();
+				break;
+			}
+			case VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE:
+			{
+				std::cout << tokens[j].getTokenData().getShort();
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE:
