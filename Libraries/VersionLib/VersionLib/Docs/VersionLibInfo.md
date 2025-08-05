@@ -10,27 +10,29 @@ This document contains the information about the future plans, known bugs, depre
 - Support to create objects versions without warning messages with wrapper constructors.
 - **CHANGED `build_type_number` VARIABLE TO `build_revision` TO A BETTER COMPREHENSION.**
 - Add support to compare versions with build information.
+- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
+    - *Only Alpha:* Experimental support to `VersionBuildType`
+    - *Only Alpha:* Experimental `VersionBuildType` can now hold a vector of multiple release data using `BuildRelease` objects
+- *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
+- Add `BuildRelease` class to store `BuildType` and `revision` in same place.
+- **Redesign the internal components to support correctly the new data types**
 
 ## Implementations under development:
 
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
-- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
-    - *Only Alpha:* Experimental support to `VersionBuildType`
-    - *Only Alpha:* Experimental `VersionBuildType` can now hold a vector of multiple release data using `BuildRelease` objects
-- *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
 - Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
 - Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
-- Add `BuildRelease` class to store `BuildType` and `revision` in same place.
 - Support to combined build type information. I.e. `1.0.0-alpha.beta`
 - Support to build metadata in version string
-- **Redesign the internal components to support correctly the new data types**
 - Add `VersionType` to identify the versioning type
 - Add `idVersionType` method to identify the type of versioning
 - Add generic approach to `VersionData`
 - Add official library Semantic Versioning (`SemVer`) class
 - Add updated `toVersionStruct3` method, to identify a better component detection
 - Add `BuildMetadata` class to store the build metadata
+- Add VersionToken
+- Add VersionTokenData
 
 ## Future Implementations:
 
@@ -44,13 +46,12 @@ This document contains the information about the future plans, known bugs, depre
 
 ## Project Diagrams:
 
+> [!NOTE]
+> Part of the project diagrams related to technical information have been moved to [TechnicalInformation.md](/Libraries/VersionLib/VersionLib/Docs/TechnicalInformation.md)
+
 ### Project Roadmap:
 
 ![Project Roadmap](/Libraries/VersionLib/VersionLib/Docs/Images/VersionLibRoadmap.png)
-
-### Version Library Components:
-
-![Version Library Components](/Libraries/VersionLib/VersionLib/Docs/Images/VersionLibComponentsDiagram.png)
 
 ## Known Bugs:
 
@@ -80,6 +81,7 @@ This document contains the information about the future plans, known bugs, depre
 
 | Feature | Details | Workaround | Notes |
 | :------ | :-----: | :--------: | ----: |
+| `VersionStruct` | This component has been difficult to keep with the library complexity increases. The *DataTransaction* classes will fit better this scenario and allow to keep the all internal data safe during creation, manipulation and destruction, using less external components to manage internal data. | N/A | The library is actually in *transaction phase* to start add Token System and use the already existing classes for internal Version objects |
 
 ## Removed Features:
 
