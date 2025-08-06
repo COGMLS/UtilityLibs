@@ -107,8 +107,9 @@ namespace VersionLib
 		//
 		
 		VERSION_TOKEN_VERSION_CORE_SEPARATOR,		// Version core component separators or identifiers. Normally used dot separators.
+		VERSION_TOKEN_RELEASE_SEPARATOR,			// Separator that is used to identify the portions of Version Core and Version Release(s). On Semantic Versioning is used dash '-'
 		VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION,	// Unique version release component that identify the release or pre release information segment
-		VERSION_TOKEN_RELEASE_SEPARATOR,			// Separator identifiers used by release or pre release information segment. Normally used dot to separate between release information. I.e. alpha.15
+		VERSION_TOKEN_RELEASE_REVISION_SEPARATOR,	// Separator identifiers used by release or pre release information segment. Normally used dot to separate between release information. I.e. alpha.15
 		VERSION_TOKEN_BUILD_WORD,					// A word that can appear in some version informations formats that can be used as special token identifier
 		VERSION_TOKEN_BUILD_VALUE,					// A special numeric value position that can express the build compilation value in some version formats
 		VERSION_TOKEN_BUILD_SEPARATOR,				// A separator used to build compilation segment
