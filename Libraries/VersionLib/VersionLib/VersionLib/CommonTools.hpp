@@ -77,6 +77,13 @@ namespace VersionLib
 	 * @return Return a enumeration of BuildType
 	 */
 	VERSION_LIB_API BuildType str2BuildType (std::string value);
+
+	/**
+	 * @brief Test if is a detectable release
+	 * @param value String to test
+	 * @return True if the component is detectable
+	 */
+	VERSION_LIB_API bool isReleaseStr (std::string value);
 }
 
 #endif // !VERSION_COMMON_TOOLS_HPP

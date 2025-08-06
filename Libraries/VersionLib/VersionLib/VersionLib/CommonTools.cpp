@@ -207,3 +207,8 @@ VersionLib::BuildType VersionLib::str2BuildType(std::string value)
 	
 	return BuildType::NOT_DETECTED;
 }
+
+bool VersionLib::isReleaseStr (std::string value)
+{
+	return VersionLib::str2BuildType(value) != VersionLib::BuildType::NOT_DETECTED;
+}
