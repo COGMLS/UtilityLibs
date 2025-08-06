@@ -76,12 +76,16 @@ This document contains the information about the future plans, known bugs, depre
 | 17 | ~~`VersionStruct2` does not recognizes revision~~ |  | FIXED |
 | 18 | ~~`toVersionStruct3` does not generate internal tokens correctly~~ |  | FIXED |
 | 19 | `toSemVerTokens` does not convert correctly the token type | All numerical values, except the first one, are defined as `UNDEFINED_TOKEN` | Not fixed |
+| 20 | Experimental algorithm `toSemVerTokens` does not identify some separators in version string | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
+| 21 | Experimental algorithm `toSemVerTokens` does not identify the release components | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
+| 22 | Experimental algorithm `toSemVerTokens` separate metadata with dash, creating two tokens | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
+| 23 | Experimental algorithm `toSemVerTokens` does not identify completely the build number | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
 
 ## Deprecated Features:
 
 | Feature | Details | Workaround | Notes |
 | :------ | :-----: | :--------: | ----: |
-| `VersionStruct` | This component has been difficult to keep with the library complexity increases. The *DataTransaction* classes will fit better this scenario and allow to keep the all internal data safe during creation, manipulation and destruction, using less external components to manage internal data. | N/A | The library is actually in *transaction phase* to start add Token System and use the already existing classes for internal Version objects |
+| `VersionStruct` | This component has been difficult to keep with the library complexity increases. The *DataTransaction* class will fit better this scenario and allow to keep the all internal data safe during creation, manipulation and destruction, using less external components to manage internal data. | N/A | The library is actually in *transaction phase* to start the usage of Token System and use the already existing classes for internal Version objects |
 
 ## Removed Features:
 
@@ -90,4 +94,4 @@ This document contains the information about the future plans, known bugs, depre
 | `toVersionStruct` | Deprecated method because is not reliable to convert the version information to `VersionStruct` | Use `toVersionStrut2` with more reliable semantic versioning conversion. | Removed on version **0.9.0-alpha** |
 | Original `VersionData` comparison operators are deprecated. | The original implementation of comparison operators `> >= < <=` are deprecated because are defective | No workaround is necessary | Removed on version **0.9.0-alpha** |
 | Original `VersionData` constructors are deprecated and the *experimental constructors* are the default development. | The *experimental constructors* are enabled by default with `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS`. *The constructor with string version parameter still working.* | To disable the experimental constructors, disable the `VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS` on `ExperimentalFeatures.hpp` | Removed on version **0.9.0-alpha** |
-
+| `toVersionStruct3` | The method was renamed and internal components was adapted to new approach for `toSemVerTokens` | Call the methods `toVersionStruct2` or `toSemVerTokens`, using the correct data types | Removed on version **0.9.1-alpha** |
