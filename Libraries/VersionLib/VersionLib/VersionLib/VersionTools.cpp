@@ -541,7 +541,6 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 
 	std::vector<VersionLib::VersionToken> tokens;	// Vector of tokens
 
-	short releasePos = -1;						// Found the position of release separator (-1 is unknown.)
 	short foundMetadata = -1;					// Found the metadata info position (-1 is unknown position), 0: Current separator, 1: Metadata part, 2 >= Not metadata part
 	bool isMandatoryToken = false;				// Determinate if the token is mandatory
 	
@@ -549,8 +548,6 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 	bool analyzeVerStr = true;					// Enable the analyzing loop
 	bool isVerCore = true;						// Is Version Core
 
-	short type = -1;							// Type of value -1: Not defined 0: Separator 1: Short num value 2: Numerical value 3: Long numerical value 4: String value
-	
 	char t = '\0';								// Current char in analysis
 	std::string tmp;							// Temporary variable accumulator
 	
@@ -586,7 +583,8 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 			if (
 					tokenType == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN || 
 					tokenType == VersionLib::VersionTokenType::NUMERIC_TOKEN || 
-					tokenType == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN
+					tokenType == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN || 
+					tokenType == VersionLib::VersionTokenType::UNDEFINED_TOKEN
 				)
 				{
 					tokenType = VersionLib::VersionTokenType::STRING_TOKEN;
@@ -598,8 +596,13 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 		if (t >= '0' && t <= '9')
 		{
 			tmp += t;
-			// If the first char is between 0 to 9
-			if (tokenType == VersionLib::VersionTokenType::UNDEFINED_TOKEN)
+			// If the first char is between 0 to 9 of if the accumulator still only holding numbers
+			if (
+					tokenType == VersionLib::VersionTokenType::UNDEFINED_TOKEN || 
+					tokenType == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN || 
+					tokenType == VersionLib::VersionTokenType::NUMERIC_TOKEN || 
+					tokenType == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN
+				)
 			{
 				// Test if the content is convertible:
 				try
@@ -625,6 +628,7 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 					catch(const std::exception&)
 					{
 						// Do not generate an output or throw an error
+						/// NOTE: Maybe set tokenType to STRING while catching exception
 					}
 				}
 			}
@@ -635,7 +639,11 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 		{
 			if (version[i + 1] == '.' || version[i + 1] == ' ' || version[i + 1] == '-' || version[i + 1] == '+')
 			{
-				addToken = true;
+				// If is in metadata segment, jump these characters:
+				if (!((version[i + 1] == '.' || version[i + 1] == '-') && foundMetadata == 1))
+				{
+					addToken = true;
+				}
 			}
 		}
 
