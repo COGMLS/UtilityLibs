@@ -49,9 +49,6 @@
 	// Enable the experimental toSemVerTokens method, allowing the combined build types and VersionBuildType class
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
-	// Enable the second experimental toSemVerTokens method
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2
-
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 
