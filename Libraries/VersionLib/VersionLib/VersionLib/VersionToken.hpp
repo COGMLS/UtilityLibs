@@ -115,7 +115,8 @@ namespace VersionLib
 		VERSION_TOKEN_BUILD_SEPARATOR,				// A separator used to build compilation segment
 		VERSION_TOKEN_METADATA_SEPARATOR,			// Unique version component that contains the version metadata information segment
 		VERSION_TOKEN_GENERIC_SEPARATOR,			// Generic token mark to identify a verion separator
-		VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION	// Generic token mark to identify a component version. It can be used to identify unique marks too.
+		VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION,	// Generic token mark to identify a component version. It can be used to identify unique marks too.
+		VERSION_TOKEN_GENERIC_VALUE					// Generic token value. Used to mark a content that could not be identified. I.e. Numerical values that are out of range.
 	};
 
 	/**
