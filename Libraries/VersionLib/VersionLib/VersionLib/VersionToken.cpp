@@ -740,69 +740,73 @@ std::string VersionLib::getTokenTypeStr (VersionLib::VersionTokenType type)
 {
 	switch (type)
 	{
-		case UNDEFINED_TOKEN:
+		case VersionLib::VersionTokenType::UNDEFINED_TOKEN:
 		{
 			return "UNDEFINED_TOKEN";
 		}
-		case EMPTY_TOKEN:
+		case VersionLib::VersionTokenType::EMPTY_TOKEN:
 		{
 			return "EMPTY_TOKEN";
 		}
-		case SHORT_NUMERIC_TOKEN:
+		case VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN:
 		{
 			return "SHORT_NUMERIC_TOKEN";
 		}
-		case NUMERIC_TOKEN:
+		case VersionLib::VersionTokenType::NUMERIC_TOKEN:
 		{
 			return "NUMERIC_TOKEN";
 		}
-		case LONG_NUMBER_TOKEN:
+		case VersionLib::VersionTokenType::LONG_NUMBER_TOKEN:
 		{
 			return "LONG_NUMBER_TOKEN";
 		}
-		case STRING_TOKEN:
+		case VersionLib::VersionTokenType::STRING_TOKEN:
 		{
 			return "STRING_TOKEN";
 		}
-		case VERSION_TOKEN_VERSION_CORE_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_VERSION_CORE_SEPARATOR:
 		{
 			return "VERSION_TOKEN_VERSION_CORE_SEPARATOR";
 		}
-		case VERSION_TOKEN_RELEASE_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_RELEASE_SEPARATOR:
 		{
 			return "VERSION_TOKEN_RELEASE_SEPARATOR";
 		}
-		case VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION:
 		{
 			return "VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION";
 		}
-		case VERSION_TOKEN_RELEASE_REVISION_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_RELEASE_REVISION_SEPARATOR:
 		{
 			return "VERSION_TOKEN_RELEASE_REVISION_SEPARATOR";
 		}
-		case VERSION_TOKEN_BUILD_WORD:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_WORD:
 		{
 			return "VERSION_TOKEN_BUILD_WORD";
 		}
-		case VERSION_TOKEN_BUILD_VALUE:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_VALUE:
 		{
 			return "VERSION_TOKEN_BUILD_VALUE";
 		}
-		case VERSION_TOKEN_BUILD_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_SEPARATOR:
 		{
 			return "VERSION_TOKEN_BUILD_SEPARATOR";
 		}
-		case VERSION_TOKEN_METADATA_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_METADATA_SEPARATOR:
 		{
 			return "VERSION_TOKEN_METADATA_SEPARATOR";
 		}
-		case VERSION_TOKEN_GENERIC_SEPARATOR:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_SEPARATOR:
 		{
 			return "VERSION_TOKEN_GENERIC_SEPARATOR";
 		}
-		case VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION:
+		case VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION:
 		{
 			return "VERSION_TOKEN_GENERIC_COMPONENT_DEFINITION";
+		}
+		case VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_VALUE:
+		{
+			return "VERSION_TOKEN_GENERIC_VALUE";
 		}
 		default:
 		{
