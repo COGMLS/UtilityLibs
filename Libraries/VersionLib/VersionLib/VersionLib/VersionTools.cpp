@@ -765,6 +765,37 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 				tmpData = VersionLib::VersionTokenData(tmp);
 			}
 
+			// Possibles situations to detect the build value:
+			// After "build" word
+			// After a space and current token is a numerical
+			if (
+					(
+						lastTokenType == VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_WORD || 
+						lastTokenType == VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_SEPARATOR || 
+						lastTokenType == VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_SEPARATOR
+					) && (
+						tokenType == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN || 
+						tokenType == VersionLib::VersionTokenType::NUMERIC_TOKEN || 
+						tokenType == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN
+					)
+				)
+			{
+				// Build value must be a unsigned long type:
+
+				// For short type:
+				if (tokenType == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN)
+				{
+					tmpData = VersionLib::VersionTokenData(static_cast<unsigned long>(tmpData.getShort()));
+				}
+				// For int type:
+				if (tokenType == VersionLib::VersionTokenType::NUMERIC_TOKEN)
+				{
+					tmpData = VersionLib::VersionTokenData(static_cast<unsigned long>(tmpData.getInt()));
+				}
+
+				tokenType = VersionLib::VersionTokenType::VERSION_TOKEN_BUILD_VALUE;
+			}
+
 			tmpToken = VersionLib::VersionToken(tmpData, tokenType, position, isMandatoryToken);
 			tokens.push_back(tmpToken);
 
