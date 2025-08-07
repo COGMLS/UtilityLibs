@@ -584,7 +584,8 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 					tokenType == VersionLib::VersionTokenType::SHORT_NUMERIC_TOKEN || 
 					tokenType == VersionLib::VersionTokenType::NUMERIC_TOKEN || 
 					tokenType == VersionLib::VersionTokenType::LONG_NUMBER_TOKEN || 
-					tokenType == VersionLib::VersionTokenType::UNDEFINED_TOKEN
+					tokenType == VersionLib::VersionTokenType::UNDEFINED_TOKEN || 
+					tokenType == VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_VALUE
 				)
 				{
 					tokenType = VersionLib::VersionTokenType::STRING_TOKEN;
@@ -628,7 +629,8 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 					catch(const std::exception&)
 					{
 						// Do not generate an output or throw an error
-						/// NOTE: Maybe set tokenType to STRING while catching exception
+						/// NOTE: tokenType to GENERIC VALUE while catching exception
+						tokenType = VersionLib::VersionTokenType::VERSION_TOKEN_GENERIC_VALUE;
 					}
 				}
 			}
@@ -811,12 +813,6 @@ std::vector<VersionLib::VersionToken> VersionLib::toSemVerTokens(std::string ver
 			isMandatoryToken = false;
 			tmp.clear();
 			position++;
-
-			// Break the loop if there is no more elements to analyze
-			//if (i == verStrSize)
-			//{
-			//	break;
-			//}
 		}
 
 		i++;
