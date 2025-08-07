@@ -29,7 +29,7 @@ This document contains the information about the future plans, known bugs, depre
 - Add `idVersionType` method to identify the type of versioning
 - Add generic approach to `VersionData`
 - Add official library Semantic Versioning (`SemVer`) class
-- Add updated `toVersionStruct3` method, to identify a better component detection
+- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
 - Add `BuildMetadata` class to store the build metadata
 - Add VersionToken
 - Add VersionTokenData
@@ -75,11 +75,12 @@ This document contains the information about the future plans, known bugs, depre
 | 16 | ~~`VersionStruct2` does not recognizes build type/release when revision does not appear in string data~~ |  | FIXED |
 | 17 | ~~`VersionStruct2` does not recognizes revision~~ |  | FIXED |
 | 18 | ~~`toVersionStruct3` does not generate internal tokens correctly~~ |  | FIXED |
-| 19 | `toSemVerTokens` does not convert correctly the token type | All numerical values, except the first one, are defined as `UNDEFINED_TOKEN` | Not fixed |
-| 20 | Experimental algorithm `toSemVerTokens` does not identify some separators in version string | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
-| 21 | Experimental algorithm `toSemVerTokens` does not identify the release components | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
-| 22 | Experimental algorithm `toSemVerTokens` separate metadata with dash, creating two tokens | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
-| 23 | Experimental algorithm `toSemVerTokens` does not identify completely the build number | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
+| 19 | `toSemVerTokens` does not convert correctly the token type | NOTE 1: All numerical values, except the first one, are defined as `UNDEFINED_TOKEN`. NOTE 2: Possible workaround is enabling `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | Not fixed |
+| 20 | ~~Experimental algorithm `toSemVerTokens` does not identify some separators in version string~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
+| 21 | ~~Experimental algorithm `toSemVerTokens` does not identify the release components~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
+| 22 | ~~Experimental algorithm `toSemVerTokens` separate metadata with dash, creating two tokens~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
+| 23 | ~~Experimental algorithm `toSemVerTokens` does not identify completely the build number~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
+| 24 | Experimental algorithm `toSemVerTokens` does not identify the correct data type for build number | Build number must be treated as `unsigned long` | Not fixed |
 
 ## Deprecated Features:
 

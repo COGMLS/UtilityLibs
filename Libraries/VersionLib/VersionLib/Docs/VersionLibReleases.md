@@ -10,7 +10,31 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
-    <!-- 0.9.0-alpha.2 (2025/06/12) -->
+    <!-- 0.9.1-alpha.1 (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha.1</version-data> | Release Date: 2025/08/06</dt>
+    <dd><fix-alert>[FIX]</fix-alert> identification of release types in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata with dashes and dots are not recognized correctly in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> identification of build value in <code>toSemVerTokens</code></dd>
+    <dd><bug-alert>[BUG]</bug-alert> build value is classified as short numerical value and not long type in <code>toSemVerTokens</code></dd>
+    <dd>Removed unused variables in <code>toSemVerTokens</code></dd>
+    <!-- 0.9.1-alpha (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha</version-data> | Release Date: 2025/08/06</dt>
+    <dd>Added support to <code>unsigned short</code></dd>
+    <dd>Added <code>VersionTokenType</code> enum</dd>
+    <dd>Added <code>VersionTokenDataType</code> enum</dd>
+    <dd>Added <code>VersionTokenData</code> class</dd>
+    <dd>Added <code>VersionToken</code> class</dd>
+    <dd>Added <code>toSemVerTokens</code> method</dd>
+    <dd>Added auxiliary method <code>getTokenTypeStr</code></dd>
+    <dd>Added new experimental feature <strong>VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2</strong> for alternative algorithm in <i>toSemVerTokens</i></dd>
+    <dd>Added <code>isRelease</code> method</dd>
+    <dd>Changed <code>unsigned long long</code> to <code>unsigned long</code></dd>
+    <dd>Changed <code>VersionClass</code> to <code>VersionData</code></dd>
+    <dd>Removed <code>toVersionStruct3</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata treatment in <code>toSemVerTokens</code></dd>
+    <dd><strong>Deprecated <code>VersionStruct</code></strong></dd>
+    <dd><strong>NOTE:</strong> <code>VersionData</code> use temporary <code>toVersionStruct2</code></dd>
+    <!-- 0.9.0-alpha.3 (2025/06/12) -->
     <dt><version-data>0.9.0-alpha.3</version-data> | Release Date: 2025/06/12</dt>
     <dd>Internal changes to prepare the Version Library to support correctly the components for C linkage.</dd>
     <dd><fix-alert>[FIX]</fix-alert> revision number of the previous release (0.9.0-alpha.2) was not updated. This release has the correct value.</dd>

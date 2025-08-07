@@ -9,6 +9,10 @@
 > The C linkage components will be calling the C++ internal components. All files for C programs will use a `*.h` extension file. A proper version of `version.hpp` file, for C programs, will be called `version.h` and will not use the namespace `VersionLib` to make easier to other developers to call the C linkage methods. All these functions will use the naming with `VersionLib_`
 >
 > The components used to data transaction will be redesigned and the structures with "C" on naming will be moved to only C language files.
+>
+> ***As part of the definitive design for Version Library, all structures will only be used by C linkage, as data transaction, and internal components will focus on classes and C++ code.***
+
+> **NOTE:** *The README.md file will be fully updated in 2025/08/10*
 
 The VersionLib is a versioning library to provide to other libraries and applications a easier way the implementation of version number control and tests to analyze if the version value is greater, equal, etc. The library also check if the *version core* is a release, beta or alpha build type. It's possible to check if the version is marked as incompatible with an application or library, using an known list of versions, provided by the dependency application or library and test it, with support to generate an exception or not.
 
@@ -24,7 +28,7 @@ The Version Library contains a main header, `VersionLib.hpp`. This header provid
 
 The library was designed to work finking on C++ and to work with C external linkage (*C linkage is not ready*). To make it available, there is the `VersionStruct`, a C-Style data struct used inside the library. This struct is used as data transaction between classes and functions to avoid possible cyclic compilation problems and can also offer a way to convert a internal data into another (this is not recommended). The library also offers multiple version data types, a generic one, called `VersionData` and the most recommended type, `SemVer` class for C++ context. Both libraries can work with Semantic Versioning but, `SemVer` class is specialized to make sure all rules for Semantic Versioning will be followed. The `VersionStruct`, `VersionData` and `SemVer` types holds the same information: `major`, `minor`, `patch`, `build_type` (on `VersionStruct` is used `VersionBuildTypeC` struct), `build` variables a flag control `cmpBuild` and the versioning type ID (`VersionType`) variable `type` to identify the type of version. The version type can be: UNKNOWN, SEMANTIC_VERSIONING, CALENDAR_VERSIONING or GENERIC_VERSION. Some `VersionType` values are reserved to future updates.
 
-The redesigned Version Library (starting from version 0.9.0-alpha) now contains four new types, `VersionReleaseDataC`, `VersionBuildTypeC` structures and `BuildRelease`, and `VersionBuildType` classes. The types `VersionBuildTypeC` and `BuildRelease` holds now both, release type (*old build_type variable*) and the revision number. While the `VersionBuildTypeC` and `VersionBuildType` holds an array or vector of `VersionReleaseDataC` and `BuildRelease` respectively, to support rare cases of combined release information, like *alpha.beta*.
+The redesigned Version Library (starting from version 0.9.0-alpha) now contains two new types, `BuildRelease`, and `VersionBuildType` classes. The type `BuildRelease` holds now both, release type (*old build_type variable*) and the revision number. While the `VersionBuildType` holds an array or vector of `BuildRelease` to support rare cases of combined release information, like *alpha.beta*. ***On version 0.9.0-alpha.1 all structures was deprecated to use in C++ code and will be used only for data transaction to C linkage***.
 
 The generic `VersionData` and `SemVer` classes contains multiple constructors to allow the easiest object creation of the version object and use the internal operators to compare with other object version.
 
@@ -110,7 +114,7 @@ To use a string as the source of the versioning information, the string must fol
 >
 > **TO DISABLE THE EXPERIMENTAL FEATURES, COMMENT THE LINES IN `ExperimentalFeatures.hpp`**
 
-> **WARNING: ON VERSION 0.9.0-alpha SEVERAL MODIFICATIONS WAS MADE AND TO PROVIDE SUPPORT TO THE ADDITIONAL AUXILIARY DATA TYPES SOME METHODS HAVE THEIR DATA TYPES RETURN MODIFIED. THOSE MODIFICATION CAN BREAK YOUR CODE IF YOU USE THOSE FUNCTIONS.**
+> **WARNING: ON VERSION 0.9.0-alpha SEVERAL MODIFICATIONS WAS MADE AND TO PROVIDE SUPPORT TO THE ADDITIONAL AUXILIARY DATA TYPES AND SOME METHODS HAVE THEIR DATA TYPES RETURN MODIFIED. THOSE MODIFICATIONS CAN BREAK YOUR CODE IF YOU USE THOSE FUNCTIONS.**
 
 ### Recent Implementations:
 
@@ -120,27 +124,29 @@ To use a string as the source of the versioning information, the string must fol
 - Support to create objects versions without warning messages with wrapper constructors.
 - **CHANGED `build_type_number` VARIABLE TO `build_revision` TO A BETTER COMPREHENSION.**
 - Add support to compare versions with build information.
+- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
+    - *Only Alpha:* Experimental support to `VersionBuildType`
+    - *Only Alpha:* Experimental `VersionBuildType` can now hold a vector of multiple release data using `BuildRelease` objects
+- *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
+- Add `BuildRelease` class to store `BuildType` and `revision` in same place.
+- **Redesign the internal components to support correctly the new data types**
 
 ### Implementations under development:
 
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
-- Replace `BuildType` enum to `VersionBuildType` class as main storage of version release type
-    - *Only Alpha:* Experimental support to `VersionBuildType`
-    - *Only Alpha:* Experimental `VersionBuildType` can now hold a vector of multiple release data using `BuildRelease` objects
-- *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
 - Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
 - Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
-- Add `BuildRelease` class to store `BuildType` and `revision` in same place.
 - Support to combined build type information. I.e. `1.0.0-alpha.beta`
 - Support to build metadata in version string
-- **Redesign the internal components to support correctly the new data types**
 - Add `VersionType` to identify the versioning type
 - Add `idVersionType` method to identify the type of versioning
 - Add generic approach to `VersionData`
 - Add official library Semantic Versioning (`SemVer`) class
-- Add updated `toVersionStruct3` method, to identify a better component detection
+- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
 - Add `BuildMetadata` class to store the build metadata
+- Add VersionToken
+- Add VersionTokenData
 
 ### Future Implementations:
 
@@ -160,7 +166,31 @@ To use a string as the source of the versioning information, the string must fol
     <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
-    <!-- 0.9.0-alpha.2 (2025/06/12) -->
+    <!-- 0.9.1-alpha.1 (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha.1</version-data> | Release Date: 2025/08/06</dt>
+    <dd><fix-alert>[FIX]</fix-alert> identification of release types in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata with dashes and dots are not recognized correctly in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> identification of build value in <code>toSemVerTokens</code></dd>
+    <dd><bug-alert>[BUG]</bug-alert> build value is classified as short numerical value and not long type in <code>toSemVerTokens</code></dd>
+    <dd>Removed unused variables in <code>toSemVerTokens</code></dd>
+    <!-- 0.9.1-alpha (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha</version-data> | Release Date: 2025/08/06</dt>
+    <dd>Added support to <code>unsigned short</code></dd>
+    <dd>Added <code>VersionTokenType</code> enum</dd>
+    <dd>Added <code>VersionTokenDataType</code> enum</dd>
+    <dd>Added <code>VersionTokenData</code> class</dd>
+    <dd>Added <code>VersionToken</code> class</dd>
+    <dd>Added <code>toSemVerTokens</code> method</dd>
+    <dd>Added auxiliary method <code>getTokenTypeStr</code></dd>
+    <dd>Added new experimental feature <strong>VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2</strong> for alternative algorithm in <i>toSemVerTokens</i></dd>
+    <dd>Added <code>isRelease</code> method</dd>
+    <dd>Changed <code>unsigned long long</code> to <code>unsigned long</code></dd>
+    <dd>Changed <code>VersionClass</code> to <code>VersionData</code></dd>
+    <dd>Removed <code>toVersionStruct3</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata treatment in <code>toSemVerTokens</code></dd>
+    <dd><strong>Deprecated <code>VersionStruct</code></strong></dd>
+    <dd><strong>NOTE:</strong> <code>VersionData</code> use temporary <code>toVersionStruct2</code></dd>
+    <!-- 0.9.0-alpha.3 (2025/06/12) -->
     <dt><version-data>0.9.0-alpha.3</version-data> | Release Date: 2025/06/12</dt>
     <dd>Internal changes to prepare the Version Library to support correctly the components for C linkage.</dd>
     <dd><fix-alert>[FIX]</fix-alert> revision number of the previous release (0.9.0-alpha.2) was not updated. This release has the correct value.</dd>
@@ -211,21 +241,6 @@ To use a string as the source of the versioning information, the string must fol
     <dd><fix-alert>[FIX]</fix-alert> some permissive formats were not being detected or partially detected by <code>toVersionStruct2</code></dd>
     <dd><fix-alert>[FIX]</fix-alert> some Semantic Versioning formats were not being fully detected or some version components were confused with others.</dd>
     <dd><i>Added in 2025/03/05:</i> <bug-alert>[BUG]</bug-alert> [Experimental Operators] Comparing with a version that has <code>major</code> as zero and another version with <code>major</code> greater than zero will always fail in comparison with the other version, when using the operators: > >= < <=</dd>
-    <!-- 0.8.5-beta (2025/02/18) -->
-    <dt><version-data>0.8.5-beta</version-data> | Release Date: 2025/02/18</dt>
-    <dd>Added <code>getErrorMessage</code> function to translate the <code>VersionExceptionCode</code> into error messages</dd>
-    <dd>Added support to <code>internalVersionData</code> to use experimental constructors when enabled</dd>
-    <dd>Added wrapper constructors to avoid compilation warnings when using integers in <code>VersionData</code></dd>
-    <dd>Added new <code>VersionException</code> throws in few unaccepted conditions</dd>
-    <dd>Renamed to <code>VersionExceptionCode</code></dd>
-    <dd>Renamed <code>VersionExceptionCode</code> values</dd>
-    <dd>Renamed experimental guards</dd>
-    <dd>Renamed definitions for experimental features</dd>
-    <dd>Changed experimental constructors parameters</dd>
-    <dd>Changed <code>msg_val</code> to std::string to avoid missing control on memory block</dd>
-    <dd><fix-alert>[FIX]</fix-alert> <code>VersionException</code> class</dd>
-    <dd><fix-alert>[FIX]</fix-alert> <code>what</code> method in VersionException</dd>
-    <dd><warning-alert>[WARNING]</warning-alert> These modifications may break any code that uses experimental constructors</dd>
 </dl>
 
 *Older versions was not tracked*
