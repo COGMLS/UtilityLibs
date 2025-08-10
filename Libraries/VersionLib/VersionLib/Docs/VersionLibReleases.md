@@ -10,6 +10,10 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.1-alpha.2 (2025/08/07) -->
+    <dt><version-data>0.9.1-alpha.2</version-data> | Release Date: 2025/08/07</dt>
+    <dd>Added <code>FAIL_TO_IDENTIFY_TOKEN</code> in <strong>VersionTokenType</strong></dd>
+    <dd><fix-alert>[FIX]</fix-alert> experimental algorithm <code>toSemVerTokens</code> does not identify the correct data type for build number</dd>
     <!-- 0.9.1-alpha.1 (2025/08/06) -->
     <dt><version-data>0.9.1-alpha.1</version-data> | Release Date: 2025/08/06</dt>
     <dd><fix-alert>[FIX]</fix-alert> identification of release types in <code>toSemVerTokens</code></dd>
