@@ -4,6 +4,8 @@
 
 VersionLib::SemVer::SemVer(std::string versionStr, bool cmpBuild)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+	#else
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
 
 	this->major = v.major;
@@ -15,6 +17,7 @@ VersionLib::SemVer::SemVer(std::string versionStr, bool cmpBuild)
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build = v.build;
 	this->compare_build = cmpBuild;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
 }
 
 VersionLib::SemVer::SemVer(VersionLib::VersionStruct version)
