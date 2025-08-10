@@ -51,36 +51,6 @@
  * the sequence of tokens and use the internal data to get the
  * numeric values to version classes.
  * 
- * Token Generation Rules:
- * 
- * The token generator look for strict two types of string
- * components: Token Marks (tm) and Token Separator (ts)
- * 
- * The Token Mars, can be used using three possible containers:
- * Braces {} : Block of components, can contain mandatory and
- * optional components combinations.
- * 
- * Brackets [] : Strict component that MUST be inside the version
- * string data
- * 
- * Parentheses () : Optional component the may be part of the
- * version string data
- * 
- * Additional Support:
- * 
- * Symbols support:
- * 
- * Symbol OR : |
- * Symbol AND : &
- * Symbol NOT : ! Must be on front of the component
- * 
- * --------------------------------------------------------
- * Example of Token Usage:
- * 
- * SemVer support:
- * 
- * [Major].[Minor].[Patch](-[[alpha|a]|[beta|b]|[release candidate|release_candidate|rc]](.[Revision]))
- * 
  * 
 */
 
