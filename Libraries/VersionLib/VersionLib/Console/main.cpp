@@ -27,6 +27,8 @@ int main(int argc, const char* argv[])
 	bool testVersionStrComp = false;
 	bool testVersionStructComp = false;
 	bool test_toSemVerTokens = false;
+	bool test_tokenClassifiers = false;
+	bool test_semVerDictionary = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -67,6 +69,32 @@ int main(int argc, const char* argv[])
 		{
 			test_toSemVerTokens = true;
 		}
+
+		if (cli[i] == "-testtokenclassifiers")
+		{
+			test_tokenClassifiers = true;
+		}
+
+		if (cli[i] == "-testsemverdict")
+		{
+			test_semVerDictionary = true;
+		}
+	}
+
+	// If the Version Token system was not compiled:
+	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY)
+	if (test_tokenClassifiers || test_semVerDictionary)
+	{
+		std::cout << "The program is tring to execute an missing component: Token System" << std::endl;
+		return 2;
+	}
+	#endif // VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+
+	// Stop the program if any classifier dictionary is enabled, but not the main parameter:
+	if (!test_tokenClassifiers && test_semVerDictionary)
+	{
+		std::cout << "The parameters -testTokenClassifiers must be used to test any type of classifier!" << std::endl;
+		return 1;
 	}
 
 	#if VERSION_LIB_VERSION_INFO_MINOR_VERSION <= 8
@@ -313,6 +341,28 @@ int main(int argc, const char* argv[])
 		VersionLib::VersionData ver5(7, 8, 1, VersionLib::BuildType::RELEASE_CANDIDATE, 3, 1000, true);
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSIONDATA_CONSTRUCTORS
 	#endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
+	if (test_tokenClassifiers)
+	{
+		if (test_semVerDictionary)
+		{
+			std::vector<std::vector<VersionLib::VersionToken>> vClassifiedTokens;
+
+			VersionLib::Dictionaries::SemVerClassifier semver_classifier;
+
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15+ab1c2d-e build 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15+ab1c2d-e 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15+ab1c2de build 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15+ab1c2d-e 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15.beta+ab1c2d-e build 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200"));
+			vClassifiedTokens.push_back(semver_classifier.extractTokens("1.2.3-alpha.beta.2+ab1c2d-e build 9200"));
+
+			std::cout << "End of Semantic Versioning Classifier test" << std::endl;
+		}
+	}
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
 
 	#endif // !TEST_LIBRARY_COMPONENTS
 
