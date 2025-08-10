@@ -90,11 +90,16 @@ if (WIN32)
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
-					"SemVerClass.hpp"							"SemVerClass.cpp"
-					"VersionData.hpp" 							"VersionData.cpp"
+					"TokenClassifier.hpp"						"TokenClassifier.cpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
+					# Version Library Formats:
+					"Formats/SemVerClass.hpp"					"Formats/SemVerClass.cpp"
+					"Formats/VersionData.hpp" 					"Formats/VersionData.cpp"
+					# Version Library Dictionaries:
+					"TokenDictionaries.hpp"						"TokenDictionaries.cpp"
+					"Dictionaries/SemVerDict.hpp"				"Dictionaries/SemVerDict.cpp"
 				)
 else()
 	add_library(
@@ -114,11 +119,16 @@ else()
 					"ExceptionComponents.hpp"
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
-					"SemVerClass.hpp"							"SemVerClass.cpp"
-					"VersionData.hpp" 							"VersionData.cpp"
+					"TokenClassifier.hpp"						"TokenClassifier.cpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
+					# Version Library Formats:
+					"Formats/SemVerClass.hpp"					"Formats/SemVerClass.cpp"
+					"Formats/VersionData.hpp" 					"Formats/VersionData.cpp"
+					# Version Library Dictionaries:
+					"TokenDictionaries.hpp"						"TokenDictionaries.cpp"
+					"Dictionaries/SemVerDict.hpp"				"Dictionaries/SemVerDict.cpp"
 				)
 endif()
 
