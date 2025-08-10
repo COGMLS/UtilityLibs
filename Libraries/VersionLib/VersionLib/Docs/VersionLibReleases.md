@@ -10,6 +10,14 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.1-alpha.3 (2025/08/10) -->
+    <dt><version-data>0.9.1-alpha.3</version-data> | Release Date: 2025/08/10</dt>
+    <dd>Added <code>TokenClassifier</code> base class</dd>
+    <dd>Added <code>SemVerDict</code> token classifiers for Semantic Versioning</dd>
+    <dd>Added <strong>TokenDictionaries.hpp</strong> main header</dd>
+    <dd><note-alert>[NOTE]</note-alert> The <code>SemVerDict</code> class contain the same algorithm from <code>toSemVerTokens</code> as part of the preparations to make the library fully compatible with token system</dd>
+    <dd><strong>Moved <code>SemVer</code> and <code>VersionData</code> classes files to <i>Formats</i> subdirectory</strong></dd>
+    <dd>Adapted the library files to new use <i>Formats</i> subdirectory location</dd>
     <!-- 0.9.1-alpha.2 (2025/08/07) -->
     <dt><version-data>0.9.1-alpha.2</version-data> | Release Date: 2025/08/07</dt>
     <dd>Added <code>FAIL_TO_IDENTIFY_TOKEN</code> in <strong>VersionTokenType</strong></dd>
