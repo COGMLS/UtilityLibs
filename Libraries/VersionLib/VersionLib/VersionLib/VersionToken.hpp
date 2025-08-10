@@ -34,10 +34,7 @@
 
 #include <string>
 #include <vector>
-#include <array>
-#include <map>
 #include <memory>
-#include <list>
 
 /** Generic Version Library Token components
  * --------------------------------------------------------
