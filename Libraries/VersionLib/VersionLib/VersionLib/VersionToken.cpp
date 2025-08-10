@@ -740,6 +740,10 @@ std::string VersionLib::getTokenTypeStr (VersionLib::VersionTokenType type)
 {
 	switch (type)
 	{
+		case VersionLib::VersionTokenType::FAIL_TO_IDENTIFY_TOKEN:
+		{
+			return "FAIL_TO_IDENTIFY_TOKEN";
+		}
 		case VersionLib::VersionTokenType::UNDEFINED_TOKEN:
 		{
 			return "UNDEFINED_TOKEN";

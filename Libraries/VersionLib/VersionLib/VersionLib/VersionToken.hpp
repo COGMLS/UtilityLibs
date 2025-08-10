@@ -92,6 +92,7 @@ namespace VersionLib
 	 */
 	enum VersionTokenType : unsigned short
 	{
+		FAIL_TO_IDENTIFY_TOKEN,						// THIS FLAG IS NOT A TOKEN IDENTIFICATION, but an error flag. Use only in exceptions and errors. Otherwise, use UNDEFINED_TOKEN.
 		UNDEFINED_TOKEN,							// Token that was not identified. This value can appear when an empty token is used
 		EMPTY_TOKEN,								// EMPTY token id
 		SHORT_NUMERIC_TOKEN,						// Any type of numeric value inside the version that fits in the short integer (16-bits) range. It can be major, minor, patch or revision
