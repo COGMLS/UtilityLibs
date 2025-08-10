@@ -1,6 +1,24 @@
 # Technical Information
 
-> ***2025/04/17: THIS SECTION WAS MOVED, BUT NOT UPDATED YET***
+The Version Library is composed by internal components that allow create version object that can allow test then between others and check if a version satisfy a specifics conditions to make a program run or execute a code depending the version. The library offer basic two ways to create version objects, applying numerical values to constructors parameters or using a string version value. This last one can use values that came from outside the application, like a server or a informational file, offering a the possibility to convert it's value into known versions with a dictionary versioning list or using a custom one. By default, the Version Library **always** use Semantic Versioning, including internal library version is reported in same format.
+
+The version objects are separated by *Version Core*, *Version Release*, *Version Revision*, *Build Metadata*, *Build number*. These components are very common in various versioning formats and can be easily reused with a dictionary system and a tokenization system. Those systems allow the Version Library use complex formats and also help to keep a high flexibility to test multiple formats. **It is important to known that different formats can not be tested between then!**
+
+Version Library offers predefined formats with custom and specialized classes that make the implementation easier for well known formats like: `SemVer` (Semantic Versioning), `CalVer` (Calendar Versioning), `SemCalVer` (Hybrid Semantic and Calendar Versioning), `WinVer` (Windows Versioning). All those classes are specializations to make the implementation easier of the version objects.
+
+## About Diagrams:
+
+Part of the documentation of the Version Library is done with diagram pages that helps to understand the process behind and known how to create custom formats.
+
+### Diagrams
+
+#### Version Library C++ and C Linkage Components
+![Version Library C++ and C Linkage Components](/Libraries/VersionLib/VersionLib/Docs/Images/Diagram_Cpp_and_C_Linkage.png)
+
+#### Version Library VersionData diagram
+![Version Library VersionData diagram](/Libraries/VersionLib/VersionLib/Docs/Images/Diagram_VersionDataClass.png)
+
+***IMPORTANT: THE TechnicalInformation FILE IS BEEN UPDATED***
 
 ## About BuildType:
 

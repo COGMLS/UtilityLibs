@@ -10,6 +10,49 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.1-alpha.3 (2025/08/10) -->
+    <dt><version-data>0.9.1-alpha.3</version-data> | Release Date: 2025/08/10</dt>
+    <dd>Added <code>TokenClassifier</code> base class</dd>
+    <dd>Added <code>SemVerDict</code> token classifiers for Semantic Versioning</dd>
+    <dd>Added <strong>TokenDictionaries.hpp</strong> main header</dd>
+    <dd><note-alert>[NOTE]</note-alert> The <code>SemVerDict</code> class contain the same algorithm from <code>toSemVerTokens</code> as part of the preparations to make the library fully compatible with token system</dd>
+    <dd><strong>Moved <code>SemVer</code> and <code>VersionData</code> classes files to <i>Formats</i> subdirectory</strong></dd>
+    <dd>Adapted the library files to new use <i>Formats</i> subdirectory location</dd>
+    <!-- 0.9.1-alpha.2 (2025/08/07) -->
+    <dt><version-data>0.9.1-alpha.2</version-data> | Release Date: 2025/08/07</dt>
+    <dd>Added <code>FAIL_TO_IDENTIFY_TOKEN</code> in <strong>VersionTokenType</strong></dd>
+    <dd><fix-alert>[FIX]</fix-alert> experimental algorithm <code>toSemVerTokens</code> does not identify the correct data type for build number</dd>
+    <!-- 0.9.1-alpha.1 (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha.1</version-data> | Release Date: 2025/08/06</dt>
+    <dd><fix-alert>[FIX]</fix-alert> identification of release types in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata with dashes and dots are not recognized correctly in <code>toSemVerTokens</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> identification of build value in <code>toSemVerTokens</code></dd>
+    <dd><bug-alert>[BUG]</bug-alert> build value is classified as short numerical value and not long type in <code>toSemVerTokens</code></dd>
+    <dd>Removed unused variables in <code>toSemVerTokens</code></dd>
+    <!-- 0.9.1-alpha (2025/08/06) -->
+    <dt><version-data>0.9.1-alpha</version-data> | Release Date: 2025/08/06</dt>
+    <dd>Added support to <code>unsigned short</code></dd>
+    <dd>Added <code>VersionTokenType</code> enum</dd>
+    <dd>Added <code>VersionTokenDataType</code> enum</dd>
+    <dd>Added <code>VersionTokenData</code> class</dd>
+    <dd>Added <code>VersionToken</code> class</dd>
+    <dd>Added <code>toSemVerTokens</code> method</dd>
+    <dd>Added auxiliary method <code>getTokenTypeStr</code></dd>
+    <dd>Added new experimental feature <strong>VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2</strong> for alternative algorithm in <i>toSemVerTokens</i></dd>
+    <dd>Added <code>isRelease</code> method</dd>
+    <dd>Changed <code>unsigned long long</code> to <code>unsigned long</code></dd>
+    <dd>Changed <code>VersionClass</code> to <code>VersionData</code></dd>
+    <dd>Removed <code>toVersionStruct3</code></dd>
+    <dd><fix-alert>[FIX]</fix-alert> metadata treatment in <code>toSemVerTokens</code></dd>
+    <dd><strong>Deprecated <code>VersionStruct</code></strong></dd>
+    <dd><strong>NOTE:</strong> <code>VersionData</code> use temporary <code>toVersionStruct2</code></dd>
+    <!-- 0.9.0-alpha.3 (2025/06/12) -->
+    <dt><version-data>0.9.0-alpha.3</version-data> | Release Date: 2025/06/12</dt>
+    <dd>Internal changes to prepare the Version Library to support correctly the components for C linkage.</dd>
+    <dd><fix-alert>[FIX]</fix-alert> revision number of the previous release (0.9.0-alpha.2) was not updated. This release has the correct value.</dd>
+    <!-- 0.9.0-alpha.2 (2025/06/06) -->
+    <dt><version-data>0.9.0-alpha.2</version-data> | Release Date: 2025/06/06</dt>
+    <dd>Separated methods from files <code>Tools.hpp</code> <code>Tools.cpp</code> into <code>CommonTools.hpp</code> <code>CommonTools.cpp</code>, <code>ReleaseTools.hpp</code> <code>ReleaseTools.cpp</code> and <code>VersionTools.hpp</code> <code>VersionTools.cpp</code> to reduce possible future compilation cyclic dependencies</dd>
     <!-- 0.9.0-alpha.1 (2025/04/18) -->
     <dt><version-data>0.9.0-alpha.1</version-data> | Release Date: 2025/04/18</dt>
     <dd><fix-alert>[FIX]</fix-alert> toVersionStruct2 missing revision</dd>

@@ -1,27 +1,84 @@
-#include "SemVerClass.hpp"
+#include "VersionData.hpp"
 
-#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
-
-VersionLib::SemVer::SemVer(std::string versionStr, bool cmpBuild)
+VersionLib::VersionData::VersionData(std::string versionStr, bool cmpBuild)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
+	std::vector<VersionLib::VersionToken> vTokens = VersionLib::toSemVerTokens(versionStr);
+	#else
+
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = v.major;
+	this->numeric_version[1] = v.minor;
+	this->numeric_version[2] = v.patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = v.major;
 	this->minor = v.minor;
 	this->patch = v.patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+
 	this->build_type = v.build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build_revision = v.build_revision;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build = v.build;
 	this->compare_build = cmpBuild;
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	this->metadata = VersionLib::extractBuildMetadata(versionStr);
+	//this->metadataPos = 5;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	if (this->typePos == 0)
+	{
+		this->flags[3] = true;
+	}
+
+	if (this->buildPos == 0)
+	{
+		this->flags[4] = true;
+	}
+
+	if (this->metadataPos == 0)
+	{
+		this->flags[5] = true;
+	}
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
 }
 
-VersionLib::SemVer::SemVer(VersionLib::VersionStruct version)
+VersionLib::VersionData::VersionData(VersionLib::VersionStruct version)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = version.major;
+	this->numeric_version[1] = version.minor;
+	this->numeric_version[2] = version.patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = version.major;
 	this->minor = version.minor;
 	this->patch = version.patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build_type = version.build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build_revision = version.build_revision;
@@ -30,11 +87,26 @@ VersionLib::SemVer::SemVer(VersionLib::VersionStruct version)
 	this->compare_build = version.compare_build;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	
 	this->build = 0;
 	this->build_type = VersionLib::BuildType::RELEASE;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -43,7 +115,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type)
 {
 	if (build_type == nullptr)
 	{
@@ -55,9 +127,24 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 		throw e;
 	}
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -66,11 +153,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = VersionLib::str2BuildType(build_type);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -79,11 +181,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -92,7 +209,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision)
 {
 	if (build_type == nullptr)
 	{
@@ -104,9 +221,24 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 		throw e;
 	}
 	
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = VersionLib::BuildRelease(VersionLib::str2BuildType(build_type), build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -115,11 +247,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = VersionLib::BuildRelease(VersionLib::str2BuildType(build_type), build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -128,11 +275,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = 0;
 	this->build_type = VersionLib::BuildRelease(build_type, build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -141,7 +303,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
 {
 	if (build_type == nullptr)
 	{
@@ -153,9 +315,24 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 		throw e;
 	}
 	
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = build;
 	this->build_type = VersionLib::BuildRelease(VersionLib::str2BuildType(build_type), build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -164,11 +341,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = build;
 	this->build_type = VersionLib::BuildRelease(VersionLib::str2BuildType(build_type), build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -177,11 +369,26 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version[0] = major;
+	this->numeric_version[1] = minor;
+	this->numeric_version[2] = patch;
+
+	this->flags[0] = true;
+	this->flags[1] = true;
+	this->flags[2] = true;
+	
+	this->typePos = 4;
+	this->buildPos = 6;
+	this->metadataPos = 0;
+	#else
 	this->major = major;
 	this->minor = minor;
 	this->patch = patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+
 	this->build = build;
 	this->build_type = VersionLib::BuildRelease(build_type, build_revision);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -194,7 +401,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 // Wrappers Constructors:
 //
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch)
+VersionLib::VersionData::VersionData(int major, int minor, int patch)
 {
 	if (major < 0 || minor < 0 || patch < 0)
 	{
@@ -206,14 +413,14 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch)
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch)
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_type)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char* build_type)
 {
 	if (build_type == nullptr)
 	{
@@ -235,7 +442,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -243,7 +450,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_type)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type)
 {
 	if (major < 0 || minor < 0 || patch < 0)
 	{
@@ -255,7 +462,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -263,7 +470,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildType build_type)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type)
 {
 	if (major < 0 || minor < 0 || patch < 0)
 	{
@@ -275,7 +482,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -283,7 +490,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_type, int build_revision)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char* build_type, int build_revision)
 {
 	if (build_type == nullptr)
 	{
@@ -305,7 +512,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -314,7 +521,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char* build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_type, int build_revision)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type, int build_revision)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build_revision < 0)
 	{
@@ -326,7 +533,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -335,7 +542,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build_revision < 0)
 	{
@@ -347,7 +554,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -356,7 +563,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, const char *build_type, int build_revision, long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, const char *build_type, int build_revision, long long build, bool cmpBuild)
 {
 	if (build_type == nullptr)
 	{
@@ -378,7 +585,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char *build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -389,7 +596,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, const char *build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_type, int build_revision, long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, std::string build_type, int build_revision, long long build, bool cmpBuild)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_revision < 0)
 	{
@@ -401,7 +608,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -412,7 +619,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, std::string build_ty
 	);
 }
 
-VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision, long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(int major, int minor, int patch, VersionLib::BuildType build_type, int build_revision, long long build, bool cmpBuild)
 {
 	if (major < 0 || minor < 0 || patch < 0 || build < 0 || build_revision < 0)
 	{
@@ -424,7 +631,7 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 		throw e;
 	}
 
-	*this = VersionLib::SemVer(
+	*this = VersionLib::VersionData(
 		static_cast<unsigned int>(major),
 		static_cast<unsigned int>(minor),
 		static_cast<unsigned int>(patch),
@@ -435,57 +642,91 @@ VersionLib::SemVer::SemVer(int major, int minor, int patch, VersionLib::BuildTyp
 	);
 }
 
-VersionLib::SemVer::SemVer(const VersionLib::SemVer &other)
+VersionLib::VersionData::VersionData(const VersionLib::VersionData &other)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version = other.numeric_version;
+	this->typePos = other.typePos;
+	this->buildPos = other.buildPos;
+	this->metadataPos = other.metadataPos;
+	this->flags = other.flags;
+	#else
 	this->major = other.major;
 	this->minor = other.minor;
 	this->patch = other.patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->build = other.build;
 	this->build_type = other.build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build_revision = other.build_revision;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->compare_build = other.compare_build;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	this->metadata = other.metadata;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 }
 
-VersionLib::SemVer::SemVer(VersionLib::SemVer &&other) noexcept
+VersionLib::VersionData::VersionData(VersionLib::VersionData &&other) noexcept
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version = std::move(other.numeric_version);
+	this->typePos = std::move(other.typePos);
+	this->buildPos = std::move(other.buildPos);
+	this->metadataPos = std::move(other.metadataPos);
+	this->flags = std::move(other.flags);
+	#else
 	this->major = std::move(other.major);
 	this->minor = std::move(other.minor);
 	this->patch = std::move(other.patch);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->build = std::move(other.build);
 	this->build_type = std::move(other.build_type);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->build_revision = std::move(other.build_revision);
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->compare_build = std::move(other.compare_build);
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	this->metadata = std::move(other.metadata);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 }
 
-VersionLib::SemVer::~SemVer()
+VersionLib::VersionData::~VersionData()
 {
 }
 
-unsigned int VersionLib::SemVer::getMajor()
+unsigned int VersionLib::VersionData::getMajor()
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	return this->numeric_version[0];
+	#else
     return this->major;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 }
 
-unsigned int VersionLib::SemVer::getMinor()
+unsigned int VersionLib::VersionData::getMinor()
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	return this->numeric_version[1];
+	#else
     return this->minor;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 }
 
-unsigned int VersionLib::SemVer::getPatch()
+unsigned int VersionLib::VersionData::getPatch()
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	return this->numeric_version[2];
+	#else
     return this->patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 }
 
-unsigned long long VersionLib::SemVer::getBuild()
+unsigned long long VersionLib::VersionData::getBuild()
 {
     return this->build;
 }
 
-const char *VersionLib::SemVer::getBuildTypeCstr(bool useShortStr)
+const char *VersionLib::VersionData::getBuildTypeCstr(bool useShortStr)
 {
 	std::string verStr = this->getBuildTypeStr(useShortStr);
 	size_t strLen = verStr.size();
@@ -494,7 +735,7 @@ const char *VersionLib::SemVer::getBuildTypeCstr(bool useShortStr)
 	return const_cast<const char*>(tmp);
 }
 
-std::string VersionLib::SemVer::getBuildTypeStr(bool useShortStr)
+std::string VersionLib::VersionData::getBuildTypeStr(bool useShortStr)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 		#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
@@ -508,12 +749,12 @@ std::string VersionLib::SemVer::getBuildTypeStr(bool useShortStr)
 }
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-VersionLib::VersionBuildType VersionLib::SemVer::getBuildType()
+VersionLib::VersionBuildType VersionLib::VersionData::getBuildType()
 {
 	return this->build_type;
 }
 #else
-VersionLib::BuildType VersionLib::SemVer::getBuildType()
+VersionLib::BuildType VersionLib::VersionData::getBuildType()
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 		#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
@@ -524,13 +765,13 @@ VersionLib::BuildType VersionLib::SemVer::getBuildType()
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 }
 
-unsigned int VersionLib::SemVer::getBuildRevision()
+unsigned int VersionLib::VersionData::getBuildRevision()
 {
 	return this->build_revision;
 }
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
-const char *VersionLib::SemVer::getBuildTypeCompleteCstr(bool useShortStr, bool showReleaseType)
+const char *VersionLib::VersionData::getBuildTypeCompleteCstr(bool useShortStr, bool showReleaseType)
 {
 	std::string verStr = this->getBuildTypeComplete(useShortStr, showReleaseType);
 	size_t strLen = verStr.size();
@@ -539,7 +780,7 @@ const char *VersionLib::SemVer::getBuildTypeCompleteCstr(bool useShortStr, bool 
 	return const_cast<const char*>(tmp);
 }
 
-std::string VersionLib::SemVer::getBuildTypeComplete(bool useShortStr, bool showReleaseType)
+std::string VersionLib::VersionData::getBuildTypeComplete(bool useShortStr, bool showReleaseType)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	return this->build_type.getBuildTypeStr(useShortStr, showReleaseType);
@@ -562,10 +803,12 @@ std::string VersionLib::SemVer::getBuildTypeComplete(bool useShortStr, bool show
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 }
 
-std::string VersionLib::SemVer::getVersionStr(bool useShortStr, bool hideBuildWord, bool showReleaseType)
+std::string VersionLib::VersionData::getVersionStr(bool useShortStr, bool hideBuildWord, bool showReleaseType)
 {
 	std::string tmp;
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	#else
 	tmp += std::to_string(this->major) + ".";
 	tmp += std::to_string(this->minor) + ".";
 	tmp += std::to_string(this->patch);
@@ -584,17 +827,38 @@ std::string VersionLib::SemVer::getVersionStr(bool useShortStr, bool hideBuildWo
 	}
 
 	tmp += std::to_string(this->build);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 	return tmp;
 }
 
-VersionLib::VersionStruct VersionLib::SemVer::toVersionStruct()
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+VersionLib::BuildMetadata VersionLib::VersionData::getMetadata()
+{
+	return this->metadata;
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+void VersionLib::VersionData::setMetadata (std::string str_metadata)
+{
+	this->metadata = VersionLib::BuildMetadata(str_metadata);
+}
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+VersionLib::VersionStruct VersionLib::VersionData::toVersionStruct()
 {
 	VersionLib::VersionStruct verData = initVersionStruct();
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	verData.major = this->numeric_version[0];
+	verData.minor = this->numeric_version[1];
+	verData.patch = this->numeric_version[2];
+	#else
 	verData.major = this->major;
 	verData.minor = this->minor;
 	verData.patch = this->patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	verData.build = this->build;
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	verData.build_type = this->build_type.toStruct();
@@ -603,20 +867,30 @@ VersionLib::VersionStruct VersionLib::SemVer::toVersionStruct()
 	verData.build_revision = this->build_revision;
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	verData.compare_build = this->compare_build;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	verData.metadata = this->metadata.getRawMetadata();
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	return verData;
 }
 
-VersionLib::SemVer &VersionLib::SemVer::operator=(const VersionLib::SemVer &other)
+VersionLib::VersionData &VersionLib::VersionData::operator=(const VersionLib::VersionData &other)
 {
 	if (this == &other)
 	{
 		return *this;
 	}
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version = other.numeric_version;
+	this->typePos = other.typePos;
+	this->buildPos = other.buildPos;
+	this->metadataPos = other.metadataPos;
+	#else
 	this->major = other.major;
 	this->minor = other.minor;
 	this->patch = other.patch;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->build = other.build;
 	this->build_type = other.build_type;
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -624,19 +898,30 @@ VersionLib::SemVer &VersionLib::SemVer::operator=(const VersionLib::SemVer &othe
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->compare_build = other.compare_build;
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	this->metadata = other.metadata;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 	return *this;
 }
 
-VersionLib::SemVer &VersionLib::SemVer::operator=(VersionLib::SemVer &&other) noexcept
+VersionLib::VersionData &VersionLib::VersionData::operator=(VersionLib::VersionData &&other) noexcept
 {
 	if (this == &other)
 	{
 		return *this;
 	}
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	this->numeric_version = std::move(other.numeric_version);
+	this->typePos = std::move(other.typePos);
+	this->buildPos = std::move(other.buildPos);
+	this->metadataPos = std::move(other.metadataPos);
+	#else
 	this->major = std::move(other.major);
 	this->minor = std::move(other.minor);
 	this->patch = std::move(other.patch);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->build = std::move(other.build);
 	this->build_type = std::move(other.build_type);
 	#ifndef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
@@ -644,11 +929,24 @@ VersionLib::SemVer &VersionLib::SemVer::operator=(VersionLib::SemVer &&other) no
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 	this->compare_build = std::move(other.compare_build);
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	this->metadata = std::move(other.metadata);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 	return *this;
 }
 
-bool VersionLib::SemVer::operator==(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator==(const VersionData &other)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
+	for (size_t i = 0; i < this->numeric_version.size() && i < other.numeric_version.size(); i++)
+	{
+		if (!(this->flags[i] || other.flags[i]) || (this->flags[i] && other.flags[i] && this->numeric_version[i] != other.numeric_version[i]))
+		{
+			return false;
+		}
+	}
+	#else
 	if (this->major != other.major)
 	{
 		return false;
@@ -663,6 +961,7 @@ bool VersionLib::SemVer::operator==(const VersionLib::SemVer &other)
 	{
 		return false;
 	}
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_COMPARISON
 	if (this->compare_build || other.compare_build)
@@ -689,12 +988,12 @@ bool VersionLib::SemVer::operator==(const VersionLib::SemVer &other)
     return true;
 }
 
-bool VersionLib::SemVer::operator!=(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator!=(const VersionData &other)
 {
     return !(*this == other);
 }
 
-bool VersionLib::SemVer::operator>(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator>(const VersionData &other)
 {
 	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	if (this->major > other.major)
@@ -1113,7 +1412,7 @@ bool VersionLib::SemVer::operator>(const VersionLib::SemVer &other)
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::SemVer::operator>=(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator>=(const VersionData &other)
 {
 	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major >= other.major && this->minor >= other.minor && this->patch >= other.patch && this->build_type >= other.build_type && this->build_revision >= other.build_revision) return true;
@@ -1129,7 +1428,7 @@ bool VersionLib::SemVer::operator>=(const VersionLib::SemVer &other)
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::SemVer::operator<(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator<(const VersionData &other)
 {
 	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_revision < other.build_revision) return true;
@@ -1550,7 +1849,7 @@ bool VersionLib::SemVer::operator<(const VersionLib::SemVer &other)
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::SemVer::operator<=(const VersionLib::SemVer &other)
+bool VersionLib::VersionData::operator<=(const VersionData &other)
 {
 	#ifdef VERSION_LIB_COMPARISON_OPERATORS_V2
 	//if (this->major <= other.major && this->minor <= other.minor && this->patch <= other.patch && this->build_type <= other.build_type && this->build_revision <= other.build_revision) return true;
@@ -1566,64 +1865,62 @@ bool VersionLib::SemVer::operator<=(const VersionLib::SemVer &other)
 	#endif // !VERSION_LIB_COMPARISON_OPERATORS_V2
 }
 
-bool VersionLib::SemVer::operator==(const VersionLib::VersionStruct &other)
+bool VersionLib::VersionData::operator==(const VersionLib::VersionStruct &other)
 {
-    return *this == VersionLib::SemVer(other);
+    return *this == VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator!=(const VersionLib::VersionStruct& other)
+bool VersionLib::VersionData::operator!=(const VersionLib::VersionStruct& other)
 {
-	return *this != VersionLib::SemVer(other);
+	return *this != VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator>(const VersionLib::VersionStruct& other)
+bool VersionLib::VersionData::operator>(const VersionLib::VersionStruct& other)
 {
-	return *this > VersionLib::SemVer(other);
+	return *this > VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator>=(const VersionLib::VersionStruct& other)
+bool VersionLib::VersionData::operator>=(const VersionLib::VersionStruct& other)
 {
-	return *this >= VersionLib::SemVer(other);
+	return *this >= VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator<(const VersionLib::VersionStruct& other)
+bool VersionLib::VersionData::operator<(const VersionLib::VersionStruct& other)
 {
-	return *this < VersionLib::SemVer(other);
+	return *this < VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator<=(const VersionLib::VersionStruct& other)
+bool VersionLib::VersionData::operator<=(const VersionLib::VersionStruct& other)
 {
-	return *this <= VersionLib::SemVer(other);
+	return *this <= VersionLib::VersionData(other);
 }
 
-bool VersionLib::SemVer::operator==(const std::string &verStr)
+bool VersionLib::VersionData::operator==(const std::string &verStr)
 {
-    return *this == VersionLib::SemVer(verStr);
+    return *this == VersionLib::VersionData(verStr);
 }
 
-bool VersionLib::SemVer::operator!=(const std::string &verStr)
+bool VersionLib::VersionData::operator!=(const std::string &verStr)
 {
-    return *this != VersionLib::SemVer(verStr);
+    return *this != VersionLib::VersionData(verStr);
 }
 
-bool VersionLib::SemVer::operator>(const std::string &verStr)
+bool VersionLib::VersionData::operator>(const std::string &verStr)
 {
-    return *this > VersionLib::SemVer(verStr);
+    return *this > VersionLib::VersionData(verStr);
 }
 
-bool VersionLib::SemVer::operator>=(const std::string &verStr)
+bool VersionLib::VersionData::operator>=(const std::string &verStr)
 {
-    return *this >= VersionLib::SemVer(verStr);
+    return *this >= VersionLib::VersionData(verStr);
 }
 
-bool VersionLib::SemVer::operator<(const std::string &verStr)
+bool VersionLib::VersionData::operator<(const std::string &verStr)
 {
-    return *this < VersionLib::SemVer(verStr);
+    return *this < VersionLib::VersionData(verStr);
 }
 
-bool VersionLib::SemVer::operator<=(const std::string &verStr)
+bool VersionLib::VersionData::operator<=(const std::string &verStr)
 {
-    return *this <= VersionLib::SemVer(verStr);
+    return *this <= VersionLib::VersionData(verStr);
 }
-
-#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS

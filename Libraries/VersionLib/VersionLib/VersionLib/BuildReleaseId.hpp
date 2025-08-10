@@ -30,8 +30,8 @@
 
 #include "ExperimentalFeatures.hpp"
 
-#include "Tools.hpp"
 #include "BuildTypes.hpp"
+#include "CommonTools.hpp"
 #include "ReleaseTools.hpp"
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
@@ -81,10 +81,10 @@ namespace VersionLib
 			BuildRelease (VersionLib::BuildType release, unsigned short revision = 0);
 
 			/**
-			 * @brief Create an object representing a build release information, using the VersionReleaseDataC struct.
+			 * @brief Create an object representing a build release information, using the VersionReleaseData struct.
 			 * @param build_release Release data
 			 */
-			BuildRelease (VersionLib::VersionReleaseDataC& build_release);
+			BuildRelease (VersionLib::VersionReleaseData& build_release);
 
 			BuildRelease (const VersionLib::BuildRelease& other);
 
@@ -132,9 +132,9 @@ namespace VersionLib
 			std::string toString (bool useShortStr = true, bool showReleaseType = false);
 
 			/**
-			 * @brief Export the internal data to VersionReleaseDataC struct
+			 * @brief Export the internal data to VersionReleaseData struct
 			 */
-			VersionLib::VersionReleaseDataC toReleaseDataC();
+			VersionLib::VersionReleaseData toReleaseDataC();
 
 			//
 			// Build Release Operators:
@@ -157,6 +157,22 @@ namespace VersionLib
 			bool operator<= (const VersionLib::BuildRelease& other);
 			bool operator>= (const VersionLib::BuildRelease& other);
 	};
+
+	/**
+	 * @brief Method to find and get the build type information, including the combined build types (alpha.beta)
+	 * @param version Version string or part that contains the build type(s)
+	 * @param start Predefined position to restrict the search
+	 * @param end Predefined position to restrict the search
+	 * @return Return the build type(s) extracted from version string.
+	 * @note If start parameter is defined but not the end, it will use the final version string position and will take no restrict search effect.
+	 * @exception This method throw an exception if start position is less than zero
+	 * @exception This method throw an exception if end position is bigger than version string
+	 */
+	#ifdef VERSION_LIB_PURE_CPP_DATA_STRUCT
+	VERSION_LIB_API std::vector<VersionLib::BuildRelease> findAndGetBuildTypes (std::string& version, long long start = -1, long long end = -1);
+	#else
+	VERSION_LIB_API std::vector<VersionLib::VersionReleaseData> findAndGetBuildTypes (std::string& version, long long start = -1, long long end = -1);
+	#endif // !VERSION_LIB_PURE_CPP_DATA_STRUCT
 }
 
 #endif // !VERSION_BUILD_RELEASE_ID_HPP

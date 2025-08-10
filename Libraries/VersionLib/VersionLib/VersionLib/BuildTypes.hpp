@@ -47,6 +47,7 @@ namespace VersionLib
 	 */
 	enum BuildType : unsigned short
 	{
+		NOT_DETECTED,
 		PRE_ALPHA,
 		ALPHA,
 		CANARY,
@@ -74,7 +75,7 @@ namespace VersionLib
 	/**
 	 * @brief Build release data, contains the BuildType information and the build type revision together. This struct include a flag to detect if the data was correctly identified.
 	 */
-	struct VersionReleaseDataC
+	struct VersionReleaseData
 	{
 		VersionLib::BuildType release;		// Build release type
 		unsigned short revision;			// Build release revision
@@ -87,7 +88,7 @@ namespace VersionLib
 	struct VersionBuildTypeC
 	{
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
-		VersionLib::VersionReleaseDataC* releases;	// Build releases
+		VersionLib::VersionReleaseData* releases;	// Build releases
 		unsigned short size;						// Size of releases array
 		#else
 		VersionLib::BuildType type;		// Build release data
@@ -122,20 +123,13 @@ namespace VersionLib
 	 * @param size Size of build_type array.
 	 * @note This method applies correctly the changes on struct if VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE is enabled.
 	 */
-	VERSION_LIB_API bool setVersionBuildTypeC (VersionLib::VersionBuildTypeC& buildTypeStruct, VersionLib::VersionReleaseDataC* build_type, unsigned short size);
+	VERSION_LIB_API bool setVersionBuildTypeC (VersionLib::VersionBuildTypeC& buildTypeStruct, VersionLib::VersionReleaseData* build_type, unsigned short size);
 
 	/**
-	 * @brief Initialize a VersionReleaseDataC struct with default values
+	 * @brief Initialize a VersionReleaseData struct with default values
 	 * @note The struct initialization set the flag 'releaseIdentified' as false
 	 */
-	VERSION_LIB_API VersionLib::VersionReleaseDataC initVersionReleaseDataC();
-
-	/**
-	 * @brief Get the BuildType weight for enumerator values
-	 * @param type Build release type value
-	 * @return Return the curresponding weight for the actual BuildType
-	 */
-	VERSION_LIB_API unsigned short getBuildTypeWeight (VersionLib::BuildType type);
+	VERSION_LIB_API VersionLib::VersionReleaseData initVersionReleaseDataC();
 
 	#else
 	/**

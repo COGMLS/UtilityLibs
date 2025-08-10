@@ -28,25 +28,25 @@
 	#endif
 #endif // !WIN32
 
-#include "BuildTypes.hpp"
-#include "Tools.hpp"
+#include "../BuildTypes.hpp"
+#include "../VersionTools.hpp"
 
 #ifdef ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
-#include "ExperimentalFeatures.hpp"
+#include "../ExperimentalFeatures.hpp"
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
-	#include "ExceptionComponents.hpp"
+	#include "../ExceptionComponents.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_LIB_EXCEPTIONS
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-	#include "BuildTypesExt.hpp"
+	#include "../BuildTypesExt.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 	#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
-	#include "BuildReleaseId.hpp"
+	#include "../BuildReleaseId.hpp"
 	#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
-	#include "BuildMetadata.hpp"
+	#include "../BuildMetadata.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
@@ -413,6 +413,10 @@ namespace VersionLib
 			 */
 			std::string getVersionStr (bool useShortStr = true, bool hideBuildWord = false, bool showReleaseType = false);
 
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+			VersionLib::BuildMetadata getMetadata();
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
 			//
 			// Setters:
 			//
@@ -429,10 +433,6 @@ namespace VersionLib
 			 * @brief Convert the the SemVer object into a VersionStruct data
 			 */
 			VersionLib::VersionStruct toVersionStruct();
-
-			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
-			VersionLib::BuildRelease getBuildRelease();
-			#endif // !VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 
 			//
 			// Operators:

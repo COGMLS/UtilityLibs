@@ -12,8 +12,8 @@ cmake_minimum_required(VERSION 3.28)
 #
 ###########################################################
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 # Define if is Windows Environment:
 
@@ -35,9 +35,9 @@ add_compile_definitions(_UNICODE)
 
 # Defined the project:
 project(
-			VersionLibTestConsole
+			VersionLibTestConsole_C
 			VERSION 1.0.0
-			DESCRIPTION "Console to test the Settings Library."
+			DESCRIPTION "C language version of console test"
 		)
 
 ###########################################################
@@ -53,7 +53,7 @@ set(LibraryName "VersionLib")
 set(LibraryGen 0)
 
 # Define test console final name:
-set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}.${LibraryName}${LibraryGen}")
+set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}_C.${LibraryName}${LibraryGen}")
 
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
@@ -62,12 +62,8 @@ include_directories("${VersionLibReposRoot}/VersionLib")
 # Define the executable properties:
 add_executable(
 					${TestConsoleFinalName}
-					"main.cpp"
-					"formatTests.hpp" "formatTests.cpp"
+					"main.c"
 				)
-
-# Define manual library link:
-set(UseManualTargetLinkLibs False)
 
 # Link the library depending on naming used:
 if(UseVersionOnLibName)
@@ -79,7 +75,4 @@ endif()
 # Enable tests if DEBUG is set:
 
 if (DebugVersionLib)
-	mkArgTest(VersionLib_FormatsTest ${TestConsoleFinalName} "-test-formats")
-	mkArgTest(VersionLib_OperatorTest ${TestConsoleFinalName} "-test-operators")
-	mkArgTest(VersionLib_ExceptionTest ${TestConsoleFinalName} "-test-exceptions")
 endif()

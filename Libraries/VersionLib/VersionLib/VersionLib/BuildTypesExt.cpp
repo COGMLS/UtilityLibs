@@ -31,7 +31,7 @@ VersionLib::VersionBuildType::VersionBuildType(std::string build_type_str)
     }
     else
     {
-        std::vector<VersionLib::VersionReleaseDataC> releases = VersionLib::findAndGetBuildTypes(build_type_str);
+        std::vector<VersionLib::BuildRelease> releases = VersionLib::findAndGetBuildTypes(build_type_str);
         for (size_t i = 0; i < releases.size(); i++)
         {
             this->types.push_back(releases[i]);
@@ -90,7 +90,7 @@ std::string VersionLib::VersionBuildType::getBuildTypeStr(bool useShortStr, bool
 VersionLib::VersionBuildTypeC VersionLib::VersionBuildType::toStruct()
 {
     VersionLib::VersionBuildTypeC buildType = VersionLib::initVersionBuildTypeC();
-    std::vector<VersionLib::VersionReleaseDataC> tmp;
+    std::vector<VersionLib::VersionReleaseData> tmp;
     for (size_t i = 0; i < this->types.size(); i++)
     {
         tmp.push_back(this->types[i].toReleaseDataC());

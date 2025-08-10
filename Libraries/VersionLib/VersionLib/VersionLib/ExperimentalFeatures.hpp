@@ -1,15 +1,27 @@
 #pragma once
 
+/********************************************************************
+ * Version Library Experimental Features Control for C++ components
+ * 
+ * This file is destined to only control the experimental features
+ * available to C++ components in Version Library. Any C feature is
+ * controlled by .h file
+ * 
+********************************************************************/
+
 #ifndef VERSION_LIBRARY_EXPERIMENTAL_FEATURES_CONTROL_HPP
 #define VERSION_LIBRARY_EXPERIMENTAL_FEATURES_CONTROL_HPP
 
-#include "VersionLibVersionInfo.hpp"
+#include "VersionLibVersionInfo.h"
 
 //
 // Alpha Features:
 //
 
 #if VERSION_LIB_BUILD_TYPE == 1
+	// Enable pure C++ components on data structures:
+	#define VERSION_LIB_PURE_CPP_DATA_STRUCT
+
 	// Enable experimental comparison operator for VersionData class
 	#define VERSION_LIB_COMPARISON_OPERATORS_V2
 
@@ -32,10 +44,10 @@
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_SUPPORT_2_COMBINED_BUILD_TYPE
 
 	// Enable experimental build metadata on version string
-	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
-	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	// Enable the experimental toSemVerTokens method, allowing the combined build types and VersionBuildType class
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
@@ -48,6 +60,31 @@
 
 	// Enable the SemVer class
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
+
+	// Enable generic version detection algorithm
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_ALGORITHM
+
+	// Enable token system support
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
+
+	// Enable version tokens in generic VersionData class
+	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
+
+	// Enable version tokens in SemVer class
+	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+
+	// Enable dictionary version classes
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
+
+	// Experimental features test:
+	// Use this space to add tests for compatible/incompatible experimental features
+	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD)
+		#error toSemVerTokens method requires Version Token System
+	#endif
+
+	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY)
+		#error Dictionary system depends on Version Token component
+	#endif
 #endif // !VERSION_LIB_BUILD_TYPE is Alpha
 
 //
@@ -88,8 +125,8 @@
 	// Enable experimental build metadata on version string
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
-	// Enable the experimental toVersionStruct3 method, allowing the combined build types and VersionBuildType class
-	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOVERSIONSTRCUT3_METHOD
+	// Enable the experimental toSemVerTokens method, allowing the combined build types and VersionBuildType class
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD
 
 	// Enable the experimental BuildRelease class
 	#define VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS

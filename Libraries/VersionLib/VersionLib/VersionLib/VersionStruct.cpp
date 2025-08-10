@@ -5,8 +5,6 @@ VersionLib::VersionStruct VersionLib::initVersionStruct()
 	VersionLib::VersionStruct v;
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
-	v.numCompSize = 3;
-	v.numeric_components = new unsigned int[v.numCompSize];
 	v.compLoc = nullptr;
 	#else
 	v.major = 0u;
@@ -15,19 +13,9 @@ VersionLib::VersionStruct VersionLib::initVersionStruct()
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
 	v.build = 0ull;
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-	v.build_type = VersionLib::initVersionBuildTypeC();
-	#else
-	v.build_revision = 0u;
-	v.build_type = VERSION_LIB_DEFAULT_BUILD_RELEASE_TYPE_INIT;
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
 
 	v.compare_build = false;
 	v.versionType = VersionLib::VersionType::UNKNOWN_VERSION_TYPE;
-
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
-	v.metadata = nullptr;
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
     
 	return v;
 }
@@ -37,21 +25,6 @@ int VERSION_LIB_API VersionLib::destroyVersionStruct(VersionLib::VersionStruct &
 	int status = 0;
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
-	// Delete the numeric values:
-	if (versionData.numeric_components != nullptr)
-	{
-		try
-		{
-			delete[] versionData.numeric_components;
-			versionData.numeric_components = nullptr;
-			versionData.numCompSize = 0;
-		}
-		catch(const std::exception&)
-		{
-			status += 1;
-		}
-	}
-
 	// Delete the components location:
 	if (versionData.compLoc != nullptr)
 	{
@@ -67,32 +40,41 @@ int VERSION_LIB_API VersionLib::destroyVersionStruct(VersionLib::VersionStruct &
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
-	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-	if (versionData.build_type.releases != nullptr)
-	{
-		if (!VersionLib::destroyVersionBuildTypeC(versionData.build_type))
-		{
-			status += 4;
-		}
-	}
-	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT
-
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
-	if (versionData.metadata != nullptr)
-	{
-		try
-		{
-			delete[] versionData.metadata;
-			versionData.metadata = nullptr;
-		}
-		catch(const std::exception&)
-		{
-			status += 8;
-		}
-	}
+	//if (versionData.metadata != nullptr)
+	//{
+	//	try
+	//	{
+	//		versionData.metadata.reset(nullptr);
+	//	}
+	//	catch(const std::exception&)
+	//	{
+	//		status += 8;
+	//	}
+	//}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	versionData.versionType = VersionLib::VersionType::UNKNOWN_VERSION_TYPE;
 
 	return status;
+}
+
+bool VersionLib::chkVersionStructFlg(const VersionLib::VersionStruct &versionData, std::bitset<4> flags)
+{
+	return (versionData.flags & flags).to_ulong() > 0ul;
+}
+
+void VersionLib::enableVersionStructFlg(VersionLib::VersionStruct &versionData, std::bitset<4> flags)
+{
+	versionData.flags = versionData.flags & flags;
+}
+
+void VersionLib::disableVersionStructFlg(VersionLib::VersionStruct &versionData, std::bitset<4> flags)
+{
+	versionData.flags =  versionData.flags & ~flags;
+}
+
+void VersionLib::applyVersionStructFlg(VersionLib::VersionStruct &versionData, std::bitset<4> flags)
+{
+	versionData.flags = flags;
 }
