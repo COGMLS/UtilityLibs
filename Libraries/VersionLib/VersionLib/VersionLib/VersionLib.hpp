@@ -45,20 +45,35 @@
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
-	#include "SemVerClass.hpp"
+	#include "Formats/SemVerClass.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
 
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 	#include "VersionToken.hpp"
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
+		#include "TokenClassifier.hpp"
+		#include "TokenDictionaries.hpp"
+		#include "Dictionaries/SemVerDict.hpp"
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
+
+//
+// Internal Components
+//
 
 #include "BuildTypes.hpp"
 #include "CommonTools.hpp"
 #include "ReleaseTools.hpp"
 #include "VersionTools.hpp"
-#include "VersionData.hpp"
 #include "VersionStruct.hpp"
 #include "InternalVersion.hpp"
+
+//
+// Formats:
+//
+
+#include "Formats/VersionData.hpp"
+
 
 #endif // !VERSION_LIBRARY_HPP
