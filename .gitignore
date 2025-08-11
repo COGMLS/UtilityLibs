@@ -1,20 +1,38 @@
 ﻿#####################################################################
 #                       Git Ignore Settings
 #                       Utility Libraries
-#   Ver. 1.0            Date: 2023/11/15
+#   Ver. 1.3            Date: 2023/11/15
+#####################################################################
+
+#####################################################################
+# IMPORTANT: This is a template based file
+# -----------------------------------------------
+#
+# * Disable/Change the settings that are fit better for your repository
+#
+# * The git attributes settings are based on
+# https://github.com/gitattributes/gitattributes under MIT License
+#
+# * The git ignore settings are based on
+# https://github.com/github/gitignore under license CC0 1.0 Universal
 #####################################################################
 
 #####################################################################
 # Custom Project Git Ignore Settings:
 #####################################################################
 
+# Custom Files Extensions to Ignore:
+*.cache
+*.temp
+
+# Custom Folders to Ignore:
+/[Pp]ackages
+/[Rr]eleases
+/[Tt]emp
+/out
 [Tt]emp
 [Tt]est
 [Tt]ests
-
-# For consoles and files to make tests that has in the end of name will be ignored
-*_[Cc]onsole[Tt]est*
-*_Tt]est*
 
 #####################################################################
 # Visual Studio Code Git Ignore Settings:
@@ -71,7 +89,7 @@ $RECYCLE.BIN/
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
-# KDE directory preferences
+# Metadata left by Dolphin file manager, which comes with KDE Plasma
 .directory
 
 # Linux trash folder which might appear on any partition or disk
@@ -79,6 +97,70 @@ $RECYCLE.BIN/
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
+
+# Log files created by default by the nohup command
+nohup.out
+
+#####################################################################
+# MacOS Operation System Git Ignore Settings:
+#####################################################################
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon[
+]
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+#####################################################################
+# LibreOffice Git Ignore Settings:
+#####################################################################
+
+# LibreOffice locks
+.~lock.*#
+
+#####################################################################
+# Microsoft Office Git Ignore Settings:
+#####################################################################
+
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Word Auto Backup File
+Backup of *.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+# PowerPoint temporary
+~$*.ppt*
+
+# Visio autosave temporary files
+*.~vsd*
 
 #####################################################################
 # C Git Ignore Settings:
@@ -173,6 +255,137 @@ dkms.conf
 *.exe
 *.out
 *.app
+
+#####################################################################
+# CMake Git Ignore Settings:
+#####################################################################
+
+#CMakeLists.txt.user
+#CMakeCache.txt
+#CMakeFiles
+#CMakeScripts
+#Testing
+#Makefile
+#cmake_install.cmake
+#install_manifest.txt
+#compile_commands.json
+#CTestTestfile.cmake
+#_deps
+#CMakeUserPresets.json
+
+# CLion
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+#cmake-build-*
+
+#####################################################################
+# Images Git Ignore Settings:
+#####################################################################
+
+# JPEG
+#*.jpg
+#*.jpeg
+#*.jpe
+#*.jif
+#*.jfif
+#*.jfi
+
+# JPEG 2000
+#*.jp2
+#*.j2k
+#*.jpf
+#*.jpx
+#*.jpm
+#*.mj2
+
+# JPEG XR
+#*.jxr
+#*.hdp
+#*.wdp
+
+# Graphics Interchange Format
+#*.gif
+
+# RAW
+#*.raw
+
+# Web P
+#*.webp
+
+# Portable Network Graphics
+#*.png
+
+# Animated Portable Network Graphics
+#*.apng
+
+# Multiple-image Network Graphics
+#*.mng
+
+# Tagged Image File Format
+#*.tiff
+#*.tif
+
+# Scalable Vector Graphics
+#*.svg
+#*.svgz
+
+# Portable Document Format
+#*.pdf
+
+# X BitMap
+#*.xbm
+
+# BMP
+#*.bmp
+#*.dib
+
+# ICO
+#*.ico
+
+# 3D Images
+#*.3dm
+#*.max
+
+#####################################################################
+# OpenSSL Git Ignore Settings:
+#####################################################################
+
+# OpenSSL-related files best not committed
+
+## Certificate Authority
+*.ca
+
+## Certificate
+*.crt
+
+## Certificate Sign Request
+*.csr
+
+## Certificate
+*.der
+
+## Key database file
+*.kdb
+
+## OSCP request data
+*.org
+
+## PKCS #12
+*.p12
+
+## PEM-encoded certificate data
+*.pem
+
+## Random number seed
+*.rnd
+
+## SSLeay data
+*.ssleay
+
+## S/MIME message
+*.smime
 
 #####################################################################
 # Python Git Ignore Settings:
@@ -274,20 +487,29 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
+# UV
+#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#uv.lock
+
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 #poetry.lock
+#poetry.toml
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
 #pdm.lock
 #   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
 #   in version control.
-#   https://pdm.fming.dev/#use-with-ide
+#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
 .pdm.toml
+.pdm-python
+.pdm-build/
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
@@ -339,6 +561,32 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Abstra
+# Abstra is an AI-powered process automation framework.
+# Ignore directories containing user credentials, local state, and settings.
+# Learn more at https://abstra.io/docs
+.abstra/
+
+# Visual Studio Code
+#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#  you could uncomment the following to ignore the entire vscode folder
+# .vscode/
+
+# Ruff stuff:
+.ruff_cache/
+
+# PyPI configuration file
+.pypirc
+
+# Cursor
+#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
+#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
+#  refer to https://docs.cursor.com/context/ignore-files
+.cursorignore
+.cursorindexingignore
+
 #####################################################################
 # Visual Studio Git Ignore Settings:
 #####################################################################
@@ -371,9 +619,11 @@ x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
+[Aa][Rr][Mm]64[Ee][Cc]/
 bld/
 [Bb]in/
 [Oo]bj/
+[Oo]ut/
 [Ll]og/
 [Ll]ogs/
 
@@ -420,6 +670,7 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
+*.idb
 *.iobj
 *.pch
 *.pdb
@@ -427,6 +678,8 @@ StyleCopReport.xml
 *.pgc
 *.pgd
 *.rsp
+# but not Directory.Build.rsp, as it configures directory-level build defaults
+!Directory.Build.rsp
 *.sbr
 *.tlb
 *.tli
@@ -498,6 +751,7 @@ coverage*.info
 
 # NCrunch
 _NCrunch_*
+.NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
 
@@ -696,6 +950,9 @@ ASALocalRun/
 
 # MSBuild Binary and Structured Log
 *.binlog
+
+# AWS SAM Build and Temporary Artifacts folder
+.aws-sam
 
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
