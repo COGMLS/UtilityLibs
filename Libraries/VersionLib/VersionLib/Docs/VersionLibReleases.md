@@ -10,6 +10,10 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.1-alpha.3 (2025/08/14) -->
+    <dt><version-data>0.9.1-alpha.4</version-data> | Release Date: 2025/08/14</dt>
+    <dd>Added <code>TokenMapper</code> base class for implement the components to interpret the version tokens from <code>TokenClassifier</code></dd>
+    <dd>Added <code>SemVerMap</code> class based on <code>TokenMapper</code> to translate the tokens to version components</dd>
     <!-- 0.9.1-alpha.3 (2025/08/10) -->
     <dt><version-data>0.9.1-alpha.3</version-data> | Release Date: 2025/08/10</dt>
     <dd>Added <code>TokenClassifier</code> base class</dd>
