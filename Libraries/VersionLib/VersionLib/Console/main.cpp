@@ -29,6 +29,7 @@ int main(int argc, const char* argv[])
 	bool test_toSemVerTokens = false;
 	bool test_tokenClassifiers = false;
 	bool test_semVerDictionary = false;
+	bool test_semVerMapper = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -78,6 +79,11 @@ int main(int argc, const char* argv[])
 		if (cli[i] == "-testsemverdict")
 		{
 			test_semVerDictionary = true;
+		}
+
+		if (cli[i] == "-testsemvermap")
+		{
+			test_semVerMapper = true;
 		}
 	}
 
@@ -361,6 +367,13 @@ int main(int argc, const char* argv[])
 
 			std::cout << "End of Semantic Versioning Classifier test" << std::endl;
 		}
+
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
+		if (test_semVerMapper)
+		{
+			// Reserved for future implementations
+		}
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
 
