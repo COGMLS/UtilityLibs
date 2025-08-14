@@ -109,6 +109,14 @@ namespace VersionLib
 			// Getters and Auxiliary methods:
 			//
 
+			/**
+			 * @brief Verify if the VersionBuildType has release objects
+			 */
+			bool isEmpty();
+
+			/**
+			 * @brief Return the stored release build information objects
+			 */
 			std::vector<VersionLib::BuildRelease> getBuildType();
 
 			/**
