@@ -49,7 +49,7 @@ namespace VersionLib
 
 				~SemVerMapper();
 
-				bool processTokens (std::vector<VersionLib::VersionToken>& tokens);
+				int processTokens (std::vector<VersionLib::VersionToken>& tokens);
 		};
 	}
 }

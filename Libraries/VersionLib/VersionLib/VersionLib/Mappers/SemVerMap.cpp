@@ -16,9 +16,9 @@ VersionLib::Mappers::SemVerMapper::~SemVerMapper()
 	this->classifier.reset(nullptr);
 }
 
-bool VersionLib::Mappers::SemVerMapper::processTokens (std::vector<VersionLib::VersionToken>& tokens)
+int VersionLib::Mappers::SemVerMapper::processTokens (std::vector<VersionLib::VersionToken>& tokens)
 {
-	return true;
+	return 1;
 }
 
 #endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM && !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY && !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
