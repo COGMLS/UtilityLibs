@@ -3,6 +3,18 @@
 #if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER)
 
 //
+// Protected methods:
+//
+
+void VersionLib::TokenMapper::setBuildCompilation(unsigned long build)
+{
+	if (this->useBuild != 0)
+	{
+		this->build = build;
+	}
+}
+
+//
 // Constructors:
 //
 
@@ -11,11 +23,6 @@ VersionLib::TokenMapper::TokenMapper() {}
 VersionLib::TokenMapper::TokenMapper (VersionLib::TokenClassifier classifier)
 {
 	this->classifier.reset(new VersionLib::TokenClassifier(classifier));
-}
-
-VersionLib::TokenMapper::TokenMapper (VersionLib::TokenClassifier* classifier)
-{
-	this->classifier.reset(classifier);
 }
 
 VersionLib::TokenMapper::TokenMapper (const VersionLib::TokenMapper& other)
@@ -104,19 +111,19 @@ VersionLib::TokenClassifier* VersionLib::TokenMapper::access()
 //	return VersionLib::VersionToken();
 //}
 
-bool VersionLib::TokenMapper::processTokens (std::string version_str)
+int VersionLib::TokenMapper::processTokens (std::string version_str)
 {
-	return false;
+	return -1;
 }
 
-bool VersionLib::TokenMapper::processTokens (std::vector<VersionLib::VersionToken>& tokens)
+int VersionLib::TokenMapper::processTokens (std::vector<VersionLib::VersionToken>& tokens)
 {
-	return false;
+	return -1;
 }
 
-bool VersionLib::TokenMapper::processTokens (VersionLib::TokenClassifier* classifier, std::string version_str)
+int VersionLib::TokenMapper::processTokens (VersionLib::TokenClassifier* classifier, std::string version_str)
 {
-    return false;
+    return -1;
 }
 
 //
@@ -135,10 +142,10 @@ bool VersionLib::TokenMapper::hasVersionBuildType()
 
 bool VersionLib::TokenMapper::hasMetadata()
 {
-	return this->metadata.isEmpty();
+	return !this->metadata.isEmpty();
 }
 
-bool VersionLib::TokenMapper::hasBuildCompilation()
+short VersionLib::TokenMapper::hasBuildCompilation()
 {
 	return this->useBuild;
 }
@@ -164,7 +171,11 @@ VersionLib::BuildMetadata VersionLib::TokenMapper::getBuildMetadata()
 
 unsigned long VersionLib::TokenMapper::getBuildCompilation()
 {
-	return this->build;
+	if (this->useBuild == 2)
+	{
+		return this->build;
+	}
+	return 0ul;
 }
 
 void VersionLib::TokenMapper::clean()
