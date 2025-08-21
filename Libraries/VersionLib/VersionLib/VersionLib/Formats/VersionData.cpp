@@ -303,7 +303,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->compare_build = false;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	if (build_type == nullptr)
 	{
@@ -341,7 +341,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->numeric_version[0] = major;
@@ -369,7 +369,7 @@ VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, uns
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::VersionData::VersionData(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 	this->numeric_version[0] = major;
@@ -721,7 +721,7 @@ unsigned int VersionLib::VersionData::getPatch()
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 }
 
-unsigned long long VersionLib::VersionData::getBuild()
+unsigned long VersionLib::VersionData::getBuild()
 {
     return this->build;
 }
