@@ -371,7 +371,17 @@ int main(int argc, const char* argv[])
 		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 		if (test_semVerMapper)
 		{
-			// Reserved for future implementations
+			VersionLib::Mappers::SemVerMapper semVerMap;
+
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2de build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e 9200");
+			semVerMap.processTokens("1.2.3-alpha.15.beta+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.beta.2+ab1c2d-e build 9200");
+
+			std::cout << "End of Semantic Versioning Classifier test" << std::endl;
 		}
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 	}
