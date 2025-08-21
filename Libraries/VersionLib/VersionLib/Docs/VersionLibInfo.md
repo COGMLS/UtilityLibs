@@ -81,6 +81,7 @@ This document contains the information about the future plans, known bugs, depre
 | 22 | ~~Experimental algorithm `toSemVerTokens` separate metadata with dash, creating two tokens~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
 | 23 | ~~Experimental algorithm `toSemVerTokens` does not identify completely the build number~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
 | 24 | ~~Experimental algorithm `toSemVerTokens` does not identify the correct data type for build number~~ | Build number must be treated as `unsigned long` | FIXED |
+| 25 | `SemVerMapper` is not mapping the tokens as expected |  | Not fixed |
 
 ## Deprecated Features:
 
