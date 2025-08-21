@@ -16,6 +16,14 @@ VersionLib::Mappers::SemVerMapper::~SemVerMapper()
 	this->classifier.reset(nullptr);
 }
 
+int VersionLib::Mappers::SemVerMapper::processTokens (std::string version_str)
+{
+	this->clean();
+	std::vector<VersionLib::VersionToken> tokens;
+	tokens = this->classifier->extractTokens(version_str);
+	return this->processTokens(tokens);
+}
+
 int VersionLib::Mappers::SemVerMapper::processTokens (std::vector<VersionLib::VersionToken>& tokens)
 {
 	this->clean();

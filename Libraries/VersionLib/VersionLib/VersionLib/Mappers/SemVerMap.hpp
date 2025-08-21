@@ -41,6 +41,9 @@ namespace VersionLib
 {
 	namespace Mappers
 	{
+		/**
+		 * @brief Semantic Versioning Mapper
+		 */
 		class VERSION_LIB_API SemVerMapper : public VersionLib::TokenMapper
 		{
 			public:
@@ -49,6 +52,19 @@ namespace VersionLib
 
 				~SemVerMapper();
 
+				/**
+				 * @brief Process a string version in Semantic Versioning format
+				 * @param version_str Version data string
+				 * @return Return the processToken value from token vector parameters
+				 */
+				int processTokens (std::string version_str);
+
+				/**
+				 * @brief Process the given tokens
+				 * @param tokens 
+				 * @return 
+				 * @note When this method is called, all stored components are erased before start the analysis
+				 */
 				int processTokens (std::vector<VersionLib::VersionToken>& tokens);
 		};
 	}
