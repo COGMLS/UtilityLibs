@@ -48,6 +48,10 @@
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 	#include "../BuildMetadata.hpp"
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+	#include "../Mappers/SemVerMap.hpp"
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES
 
 #ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
@@ -64,7 +68,7 @@ namespace VersionLib
 			unsigned int major;							// Major version number
 			unsigned int minor;							// Minor version number
 			unsigned int patch;							// Patch version number
-			unsigned long long build;					// Build number
+			unsigned long build;						// Build number
 			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 			VersionLib::VersionBuildType build_type;	// Complex Build type data to store the release type and revision, including composed types
 			#else
@@ -174,7 +178,7 @@ namespace VersionLib
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 */
-			SemVer (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			SemVer (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an SemVer object that can represent an software version data
@@ -186,7 +190,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			SemVer (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			SemVer (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an SemVer object that can represent an software version data
@@ -198,7 +202,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			SemVer (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			SemVer (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			//
 			// Wrapper Constructors:
@@ -360,7 +364,7 @@ namespace VersionLib
 			/**
 			 * @brief Get the build number
 			 */
-			unsigned long long getBuild();
+			unsigned long getBuild();
 
 			/**
 			 * @brief Get the build type (alpha, beta, etc) with C string style

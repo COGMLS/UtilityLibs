@@ -98,6 +98,11 @@ namespace VersionLib
 			//
 
 			/**
+			 * @brief Verify if has metadata
+			 */
+			bool isEmpty();
+
+			/**
 			 * @brief Check if the metadata object is blocked to modifications
 			 */
 			bool getMetadataBlocked();

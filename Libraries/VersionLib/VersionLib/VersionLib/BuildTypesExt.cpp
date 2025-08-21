@@ -58,6 +58,11 @@ VersionLib::VersionBuildType::~VersionBuildType()
 {
 }
 
+bool VersionLib::VersionBuildType::isEmpty()
+{
+    return this->types.empty();
+}
+
 std::vector<VersionLib::BuildRelease> VersionLib::VersionBuildType::getBuildType()
 {
     return this->types;

@@ -128,6 +128,16 @@ bool VersionLib::BuildMetadata::operator==(std::string &other)
     return false;
 }
 
+bool VersionLib::BuildMetadata::isEmpty()
+{
+	if (this->metadata)
+	{
+		return this->metadata.get()->empty();
+	}
+
+	return true;
+}
+
 bool VersionLib::BuildMetadata::getMetadataBlocked()
 {
     return this->blockMetadataMod;

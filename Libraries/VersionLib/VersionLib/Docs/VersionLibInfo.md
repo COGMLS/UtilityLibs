@@ -16,22 +16,22 @@ This document contains the information about the future plans, known bugs, depre
 - *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
 - Add `BuildRelease` class to store `BuildType` and `revision` in same place.
 - **Redesign the internal components to support correctly the new data types**
+- Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
+- Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
+- Support to combined build type information. I.e. `1.0.0-alpha.beta`
+- Add official library Semantic Versioning (`SemVer`) class
+- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
+- Add `BuildMetadata` class to store the build metadata
+- Add VersionToken
 
 ## Implementations under development:
 
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
-- Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
-- Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
-- Support to combined build type information. I.e. `1.0.0-alpha.beta`
 - Support to build metadata in version string
 - Add `VersionType` to identify the versioning type
 - Add `idVersionType` method to identify the type of versioning
 - Add generic approach to `VersionData`
-- Add official library Semantic Versioning (`SemVer`) class
-- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
-- Add `BuildMetadata` class to store the build metadata
-- Add VersionToken
 - Add VersionTokenData
 
 ## Future Implementations:
@@ -81,6 +81,7 @@ This document contains the information about the future plans, known bugs, depre
 | 22 | ~~Experimental algorithm `toSemVerTokens` separate metadata with dash, creating two tokens~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
 | 23 | ~~Experimental algorithm `toSemVerTokens` does not identify completely the build number~~ | Disable `VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD2` | FIXED |
 | 24 | ~~Experimental algorithm `toSemVerTokens` does not identify the correct data type for build number~~ | Build number must be treated as `unsigned long` | FIXED |
+| 25 | `SemVerMapper` is not mapping the tokens as expected |  | Not fixed |
 
 ## Deprecated Features:
 

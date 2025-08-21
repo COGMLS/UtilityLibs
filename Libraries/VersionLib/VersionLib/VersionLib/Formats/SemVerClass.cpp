@@ -5,6 +5,39 @@
 VersionLib::SemVer::SemVer(std::string versionStr, bool cmpBuild)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+	VersionLib::Mappers::SemVerMapper semVerMap;
+	semVerMap.processTokens(versionStr);
+	if (semVerMap.hasCoreSeq())
+	{
+		std::vector<unsigned short> core = semVerMap.getCoreNumSeq();
+		
+		this->major = core[0];
+		
+		if (core.size() >= 1)
+		{
+			this->minor = core[1];
+		}
+
+		if (core.size() == 2)
+		{
+			this->patch = core[2];
+		}
+	}
+
+	if (semVerMap.hasVersionBuildType())
+	{
+		this->build_type = semVerMap.getBuildTypeComponents();
+	}
+
+	if (semVerMap.hasMetadata())
+	{
+		this->metadata = semVerMap.getBuildMetadata();
+	}
+
+	if (semVerMap.hasBuildCompilation())
+	{
+		this->build = semVerMap.getBuildCompilation();
+	}
 	#else
 	VersionLib::VersionStruct v = VersionLib::toVersionStruct2(versionStr);
 
@@ -144,7 +177,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = false;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, const char *build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	if (build_type == nullptr)
 	{
@@ -167,7 +200,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	this->major = major;
 	this->minor = minor;
@@ -180,7 +213,7 @@ VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int 
 	this->compare_build = cmpBuild;
 }
 
-VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild)
+VersionLib::SemVer::SemVer(unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long build, bool cmpBuild)
 {
 	this->major = major;
 	this->minor = minor;
@@ -483,7 +516,7 @@ unsigned int VersionLib::SemVer::getPatch()
     return this->patch;
 }
 
-unsigned long long VersionLib::SemVer::getBuild()
+unsigned long VersionLib::SemVer::getBuild()
 {
     return this->build;
 }

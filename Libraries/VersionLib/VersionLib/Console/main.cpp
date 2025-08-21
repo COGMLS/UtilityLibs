@@ -29,6 +29,7 @@ int main(int argc, const char* argv[])
 	bool test_toSemVerTokens = false;
 	bool test_tokenClassifiers = false;
 	bool test_semVerDictionary = false;
+	bool test_semVerMapper = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -78,6 +79,11 @@ int main(int argc, const char* argv[])
 		if (cli[i] == "-testsemverdict")
 		{
 			test_semVerDictionary = true;
+		}
+
+		if (cli[i] == "-testsemvermap")
+		{
+			test_semVerMapper = true;
 		}
 	}
 
@@ -361,6 +367,23 @@ int main(int argc, const char* argv[])
 
 			std::cout << "End of Semantic Versioning Classifier test" << std::endl;
 		}
+
+		#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
+		if (test_semVerMapper)
+		{
+			VersionLib::Mappers::SemVerMapper semVerMap;
+
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2de build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15+ab1c2d-e 9200");
+			semVerMap.processTokens("1.2.3-alpha.15.beta+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.15.beta.2+ab1c2d-e build 9200");
+			semVerMap.processTokens("1.2.3-alpha.beta.2+ab1c2d-e build 9200");
+
+			std::cout << "End of Semantic Versioning Classifier test" << std::endl;
+		}
+		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
 

@@ -54,6 +54,9 @@
 		#include "TokenClassifier.hpp"
 		#include "TokenDictionaries.hpp"
 		#include "Dictionaries/SemVerDict.hpp"
+			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
+			#include "Mappers/SemVerMap.hpp"
+			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM
 #endif // !ENABLE_VERSION_LIBRARY_EXPERIMENTAL_FEATURES

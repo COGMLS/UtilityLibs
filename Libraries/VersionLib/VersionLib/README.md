@@ -130,22 +130,22 @@ To use a string as the source of the versioning information, the string must fol
 - *Only Alpha:* Experimental support to new `BuildType` entries: `PRE_ALPHA`, `CANARY`, `DEVELOPMENT`, `PRE_RELEASE`. **NOTE: Those new entries are not part of Semantic Versioning and can be removed in other development versions if they do not stand for a better permissive approach.**
 - Add `BuildRelease` class to store `BuildType` and `revision` in same place.
 - **Redesign the internal components to support correctly the new data types**
+- Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
+- Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
+- Support to combined build type information. I.e. `1.0.0-alpha.beta`
+- Add official library Semantic Versioning (`SemVer`) class
+- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
+- Add `BuildMetadata` class to store the build metadata
+- Add VersionToken
 
 ### Implementations under development:
 
 - Add Version Lib errors and exceptions components
 - Add and update all documentation for the Version Library
-- Complete support to Semantic Versioning (including combined releases - alpha.beta and others)
-- Support to mathematical approach to determinate the release and revision information data is higher, lower or equal to another.
-- Support to combined build type information. I.e. `1.0.0-alpha.beta`
 - Support to build metadata in version string
 - Add `VersionType` to identify the versioning type
 - Add `idVersionType` method to identify the type of versioning
 - Add generic approach to `VersionData`
-- Add official library Semantic Versioning (`SemVer`) class
-- Add updated ~~`toVersionStruct3`~~ `toSemVerTokens` method, to identify a better component detection
-- Add `BuildMetadata` class to store the build metadata
-- Add VersionToken
 - Add VersionTokenData
 
 ### Future Implementations:
@@ -166,6 +166,17 @@ To use a string as the source of the versioning information, the string must fol
     <link rel="stylesheet" href="Libraries/VersionLib/VersionLib/Docs/CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.2-alpha (2025/08/20) -->
+    <dt><version-data>0.9.2-alpha</version-data> | Release Date: 2025/08/20</dt>
+    <dd>Revised <code>BuildMetadata</code> and <code>VersionBuildType</code> classes</dd>
+    <dd>Added base class <code>TokenMapper</code></dd>
+    <dd>Added Semantic Versioning Mapper (<code>SemVerMapper</code>)</dd>
+    <dd>Added support to <code>SemVerMapper</code> to <code>SemVer</code> class</dd>
+    <dd><bug-alert>[BUG]</bug-alert> <code>SemVerMapper</code> is not mapping the tokens as expected</dd>
+    <!-- 0.9.1-alpha.4 (2025/08/14) -->
+    <dt><version-data>0.9.1-alpha.4</version-data> | Release Date: 2025/08/14</dt>
+    <dd>Added <code>TokenMapper</code> base class for implement the components to interpret the version tokens from <code>TokenClassifier</code></dd>
+    <dd>Added <code>SemVerMap</code> class based on <code>TokenMapper</code> to translate the tokens to version components</dd>
     <!-- 0.9.1-alpha.3 (2025/08/10) -->
     <dt><version-data>0.9.1-alpha.3</version-data> | Release Date: 2025/08/10</dt>
     <dd>Added <code>TokenClassifier</code> base class</dd>

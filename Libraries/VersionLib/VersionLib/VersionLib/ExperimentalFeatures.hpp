@@ -71,10 +71,13 @@
 	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2VERSIONDATA
 
 	// Enable version tokens in SemVer class
-	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
 
 	// Enable dictionary version classes
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
+
+	// Enable mapper version classes
+	#define VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 
 	// Experimental features test:
 	// Use this space to add tests for compatible/incompatible experimental features
@@ -84,6 +87,10 @@
 
 	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY)
 		#error Dictionary system depends on Version Token component
+	#endif
+
+	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER) && (!defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY))
+		#error Mapper classes need Token System and Dictionary components
 	#endif
 #endif // !VERSION_LIB_BUILD_TYPE is Alpha
 

@@ -91,6 +91,7 @@ if (WIN32)
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"TokenClassifier.hpp"						"TokenClassifier.cpp"
+					"TokenMapper.hpp"							"TokenMapper.cpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
@@ -100,6 +101,8 @@ if (WIN32)
 					# Version Library Dictionaries:
 					"TokenDictionaries.hpp"						"TokenDictionaries.cpp"
 					"Dictionaries/SemVerDict.hpp"				"Dictionaries/SemVerDict.cpp"
+					# Version Library Mappers:
+					"Mappers/SemVerMap.hpp"						"Mappers/SemVerMap.cpp"
 				)
 else()
 	add_library(
@@ -120,6 +123,7 @@ else()
 					"ExperimentalFeatures.hpp"
 					"ReleaseTools.hpp"							"ReleaseTools.cpp"
 					"TokenClassifier.hpp"						"TokenClassifier.cpp"
+					"TokenMapper.hpp"							"TokenMapper.cpp"
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
@@ -129,6 +133,8 @@ else()
 					# Version Library Dictionaries:
 					"TokenDictionaries.hpp"						"TokenDictionaries.cpp"
 					"Dictionaries/SemVerDict.hpp"				"Dictionaries/SemVerDict.cpp"
+					# Version Library Mappers:
+					"Mappers/SemVerMap.hpp"						"Mappers/SemVerMap.cpp"
 				)
 endif()
 

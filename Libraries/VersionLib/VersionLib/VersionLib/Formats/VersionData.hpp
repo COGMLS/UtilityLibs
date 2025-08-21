@@ -87,7 +87,7 @@ namespace VersionLib
 			unsigned int patch;							// Patch version number
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 			
-			unsigned long long build;					// Build number
+			unsigned long build;						// Build number
 
 			#ifdef VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS
 			VersionLib::VersionBuildType build_type;	// Complex Build type data to store the release type and revision, including composed types
@@ -130,21 +130,21 @@ namespace VersionLib
 
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_GENERIC_VERSION_DATA
 
-			VersionData (std::array<unsigned int, 1> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 1> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long build, bool cmpBuild = false);
 
-			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long build, bool cmpBuild = false);
 
-			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long long build, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned long build, bool cmpBuild = false);
 
-			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long build, unsigned short buildPos, bool cmpBuild = false);
 
-			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long build, unsigned short buildPos, bool cmpBuild = false);
 
 			#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
-			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 2> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
 
-			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
+			VersionData (std::array<unsigned int, 3> numVerSeq, VersionLib::VersionBuildType build_type, unsigned short typePos, unsigned long build, unsigned short buildPos, VersionLib::BuildMetadata metadata, unsigned short metadataPos, bool cmpBuild = false);
 
 			#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS
 
@@ -228,7 +228,7 @@ namespace VersionLib
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 * @throw If build_type is nullptr, will throw a exception VersionErrorCode_Invalid_Nullptr_Data_Passed
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, const char* build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -240,7 +240,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, std::string build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			/**
 			 * @brief Create an VersionData object that can represent an software version data
@@ -252,7 +252,7 @@ namespace VersionLib
 			 * @param build Build of the version
 			 * @param cmpBuild Set to compare the build with other version data. By default the build is not compared.
 			 */
-			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long long build, bool cmpBuild = false);
+			VersionData (unsigned int major, unsigned int minor, unsigned int patch, VersionLib::BuildType build_type, unsigned int build_revision, unsigned long build, bool cmpBuild = false);
 
 			//
 			// Wrapper Constructors:
@@ -414,7 +414,7 @@ namespace VersionLib
 			/**
 			 * @brief Get the build number
 			 */
-			unsigned long long getBuild();
+			unsigned long getBuild();
 
 			/**
 			 * @brief Get the build type (alpha, beta, etc) with C string style
