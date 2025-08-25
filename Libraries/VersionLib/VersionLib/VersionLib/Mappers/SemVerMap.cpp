@@ -35,6 +35,10 @@ int VersionLib::Mappers::SemVerMapper::processTokens (std::vector<VersionLib::Ve
 
 	for (size_t i = 0; i < tokens_size; i++)
 	{
+		#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
+		std::string debug_info = "[PROCESS TOKENS]::[" + std::to_string(i) + "][" + tokens[i].getTokenData().getTypeStr() + "]::" + tokens[i].getTokenStr();
+		std::cout << debug_info << std::endl;
+		#endif // !Check for IOSTREAM and DEBUG
 		// Get the current token:
 		lastType = type;
 		type = tokens[i].getType();
