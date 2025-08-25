@@ -308,6 +308,41 @@ bool VersionLib::VersionTokenData::isStringVal()
 	return false;
 }
 
+std::string VersionLib::VersionTokenData::getTypeStr()
+{
+	switch (this->getDataType())
+	{
+		case VersionLib::VersionTokenDataType::EMPTY_DATA_TYPE:
+		{
+			return "EMPTY_DATA_TYPE";
+		}
+		case VersionLib::VersionTokenDataType::NULL_TYPE:
+		{
+			return "NULL_TYPE";
+		}
+		case VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE:
+		{
+			return "UNSIGNED_SHORT_TYPE";
+		}
+		case VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE:
+		{
+			return "UNSIGNED_INT_TYPE";
+		}
+		case VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE:
+		{
+			return "UNSIGNED_LONG_TYPE";
+		}
+		case VersionLib::VersionTokenDataType::STRING_TYPE:
+		{
+			return "STRING_TYPE";
+		}
+		default:
+		{
+			return "**UNKNOWN_TOKEN_TYPE**";
+		}
+	}
+}
+
 std::string VersionLib::VersionTokenData::getStr()
 {
 	if (this->isStringVal())

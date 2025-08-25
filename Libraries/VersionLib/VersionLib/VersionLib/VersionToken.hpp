@@ -236,6 +236,11 @@ namespace VersionLib
 			//
 
 			/**
+			 * @brief Get the Version Token Type string
+			 */
+			std::string getTypeStr();
+
+			/**
 			 * @brief Get the string value, if exist
 			 * @return If exist, the string value will be returned. Otherwise, it will return an empty string.
 			 * @note Check the data type TokenData holds before call this function
