@@ -715,13 +715,20 @@ std::string VersionLib::VersionToken::getTokenStr()
 
 	if (this->data)
 	{
-		if (this->data.isLongVal())
+		if (this->isNumVal())
 		{
-			tmp = this->data.getLong();
-		}
-		else if (this->data.isNumVal())
-		{
-			tmp = data.getInt();
+			if (this->isShortVal())
+			{
+				tmp = std::to_string(this->data.getShort());
+			}
+			else if (this->isIntVal())
+			{
+				tmp = std::to_string(this->data.getInt());
+			}
+			else
+			{
+				tmp = std::to_string(this->data.getLong());
+			}
 		}
 		else
 		{
