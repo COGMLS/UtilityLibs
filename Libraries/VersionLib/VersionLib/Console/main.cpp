@@ -30,6 +30,7 @@ int main(int argc, const char* argv[])
 	bool test_tokenClassifiers = false;
 	bool test_semVerDictionary = false;
 	bool test_semVerMapper = false;
+	bool test_semVerClass = false;
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -84,6 +85,11 @@ int main(int argc, const char* argv[])
 		if (cli[i] == "-testsemvermap")
 		{
 			test_semVerMapper = true;
+		}
+
+		if (cli[i] == "-testsemverclass")
+		{
+			test_semVerClass = true;
 		}
 	}
 
@@ -386,6 +392,16 @@ int main(int argc, const char* argv[])
 		#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
+	if (test_semVerClass)
+	{
+		std::cout << "Semantic Versioning Class test:" << std::endl;
+		VersionLib::SemVer test1("2.4.17-beta.2+abc-15fd");
+		std::cout << "test1 : " << test1.getVersionStr(false, true, false) << std::endl;
+		std::cout << "End of Semantic Versioning Class test:" << std::endl;
+	}
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
 
 	#endif // !TEST_LIBRARY_COMPONENTS
 
