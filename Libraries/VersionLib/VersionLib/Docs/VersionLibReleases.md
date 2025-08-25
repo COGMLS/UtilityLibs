@@ -10,6 +10,10 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
+    <!-- 0.9.2-alpha.1 (Not released yet) -->
+    <dt><version-data>0.9.2-alpha</version-data> | Release Date: Not released yet</dt>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionTokenType</code> class fails to return the string converted numerical values</dd>
+    <dd>Added <code>getTypeStr</code> for <strong>VersionTokenData</strong> class</dd>
     <!-- 0.9.2-alpha (2025/08/20) -->
     <dt><version-data>0.9.2-alpha</version-data> | Release Date: 2025/08/20</dt>
     <dd>Revised <code>BuildMetadata</code> and <code>VersionBuildType</code> classes</dd>
