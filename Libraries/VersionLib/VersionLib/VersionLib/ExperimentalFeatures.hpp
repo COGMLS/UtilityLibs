@@ -79,18 +79,25 @@
 	// Enable mapper version classes
 	#define VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER
 
+	// Enable Version Base class
+	//#define VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_BASE_CLASS
+
 	// Experimental features test:
 	// Use this space to add tests for compatible/incompatible experimental features
 	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) && defined(VERSION_LIB_ENABLE_EXPERIMENTAL_TOSEMVERTOKENS_METHOD)
 		#error toSemVerTokens method requires Version Token System
 	#endif
 
-	#if !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY)
+	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY) && !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM)
 		#error Dictionary system depends on Version Token component
 	#endif
 
 	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_MAPPER) && (!defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_TOKEN_SYSTEM) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_DICTIONARY))
 		#error Mapper classes need Token System and Dictionary components
+	#endif
+
+	#if defined(VERSION_LIB_ENABLE_EXPERIMENTAL_VERSION_BASE_CLASS) && (!defined(VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT) || !defined(VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS) || !defined(VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS))
+		#error Version Base class support only has support if VERSION_LIB_ENABLE_EXPERIMENTAL_CLASS_BUILD_TYPE_COMPONENT, VERSION_LIB_ENABLE_BUILD_RELEASE_CLASS and VERSION_LIB_ENABLE_EXPERIMENTAL_BUILD_METADATA_CLASS are enabled
 	#endif
 #endif // !VERSION_LIB_BUILD_TYPE is Alpha
 
