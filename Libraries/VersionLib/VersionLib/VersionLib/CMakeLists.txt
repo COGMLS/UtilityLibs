@@ -95,6 +95,8 @@ if (WIN32)
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
+					# Version Library Debugger Components:
+					"Debugger/TokenDebugger.hpp"				"Debugger/TokenDebugger.cpp"
 					# Version Library Formats:
 					"Formats/SemVerClass.hpp"					"Formats/SemVerClass.cpp"
 					"Formats/VersionData.hpp" 					"Formats/VersionData.cpp"
@@ -127,6 +129,8 @@ else()
 					"VersionStruct.hpp" 						"VersionStruct.cpp"
 					"VersionToken.hpp"							"VersionToken.cpp"
 					"VersionTools.hpp"							"VersionTools.cpp"
+					# Version Library Debugger Components:
+					"Debugger/TokenDebugger.hpp"				"Debugger/TokenDebugger.cpp"
 					# Version Library Formats:
 					"Formats/SemVerClass.hpp"					"Formats/SemVerClass.cpp"
 					"Formats/VersionData.hpp" 					"Formats/VersionData.cpp"
