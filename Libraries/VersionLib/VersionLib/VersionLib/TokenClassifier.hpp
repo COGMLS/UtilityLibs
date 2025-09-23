@@ -37,6 +37,10 @@
 
 #include "VersionToken.hpp"
 
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	#include "Debugger/TokenDebugger.hpp"
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+
 #define VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 
 /** Generic Version Library Token components
@@ -103,6 +107,7 @@ namespace VersionLib
 			 * 0 - 3: Very reduced integer to store values in a nibble. Value range: from 0 to 3 (The rest values are reserved).
 			 * 4	: allowExtractTokenMethod: Boolean value
 			 * 5	: readyForUse: Boolean
+			 * 6	: debugTokenClassifier: Boolean
 			 * 
 			 * *The rest fields are reserved*
 			 * 
@@ -115,12 +120,15 @@ namespace VersionLib
 			 * [short] allowClassifyMethod		= 0		| Determinate if the classifier is qualified to use 'classify' methods. 0: Not qualified. 1: Qualified to use one or both 'classify' methods. 2: Same as '1', with allowing additional custom method. 3: Use a custom 'classify' method and not the given from base class.
 			 * 
 			 * [bool] allowExtractTokensMethod	= false	| Determinate if the classifier is qualified to use 'extractTokens' method
+			 * 
+			 * [bool] debugTokenClassifier		= false | Determinate if the classifier is in debug mode to create and export logs of translations and behaviors
 			*/
 			char flags = 0;
 			#else
 			bool readyForUse = false;				// Determinate if the classifier is ready to be used or not. This variable indicates if the classifier was configured correctly or if is using the base class. All inherent classes must change this value to 'true' to be able to work.
 			short allowClassifyMethod = 0;			// Determinate if the classifier is qualified to use 'classify' methods. 0: Not qualified. 1: Qualified to use one or both 'classify' methods. 2: Same as '1', with allowing additional custom method. 3: Use a custom 'classify' method and not the given from base class.
 			bool allowExtractTokensMethod = false;	// Determinate if the classifier is qualified to use 'extractTokens' method
+			bool debugTokenClassifier = false;		// Determinate if the classifier is in debug mode to create and export logs of translations and behaviors
 			#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 
 			//
@@ -130,6 +138,20 @@ namespace VersionLib
 			TokenClassifier();										// Only protected. 'TokenClassifier' method must have parameters to work.
 
 			virtual VersionLib::VersionTokenType classify();		// Only protected. 'classify' method must have parameters to work.
+
+			//
+			// Debugger Methods:
+			//
+
+			void write_log (std::string entry);
+
+		private:
+
+			/** Token Classifier Debugger:
+			 * ----------------------------------
+			 * The token debugger is designed to be restricted to only accessible by internal methods.
+			*/
+			std::unique_ptr<VersionLib::Debugger::DbgToken> dbg;
 
 		public:
 
@@ -184,6 +206,28 @@ namespace VersionLib
 
 			VersionLib::TokenClassifier& operator= (const VersionLib::TokenClassifier& other);
 			VersionLib::TokenClassifier& operator= (VersionLib::TokenClassifier&& other) noexcept;
+
+			//
+			// TokenDebugger Access:
+			//
+
+			/**
+			 * @brief Set the Token Classifier debugger status
+			 * @param status Set true to enable and false to disable
+			 */
+			void set_logger (bool status);
+
+			/**
+			 * @brief Check the Token Classifier debugger status
+			 * @return If true, the debugger is enabled
+			 */
+			bool is_logger_enabled();
+
+			/**
+			 * @brief Get the exported log entries and clean the internal entries
+			 * @return Return a vector of string allocated in heap memory.
+			 */
+			std::unique_ptr<std::vector<std::string>> export_log();
 
 			//
 			// Getters:

@@ -77,6 +77,7 @@ VersionLib::TokenClassifier::TokenClassifier (const VersionLib::TokenClassifier 
 	this->allowClassifyMethod = other.allowClassifyMethod;
 	this->allowExtractTokensMethod = other.allowExtractTokensMethod;
 	this->readyForUse = other.readyForUse;
+	this->debugTokenClassifier = other.debugTokenClassifier;
 	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 }
 
@@ -99,6 +100,7 @@ VersionLib::TokenClassifier::TokenClassifier (VersionLib::TokenClassifier &&othe
 	this->allowClassifyMethod = std::move(other.allowClassifyMethod);
 	this->allowExtractTokensMethod = std::move(other.allowExtractTokensMethod);
 	this->readyForUse = std::move(other.readyForUse);
+	this->debugTokenClassifier = std::move(other.debugTokenClassifier);
 	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 }
 
@@ -108,6 +110,9 @@ VersionLib::TokenClassifier::TokenClassifier (VersionLib::TokenClassifier &&othe
 
 VersionLib::TokenClassifier::~TokenClassifier()
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->dbg.reset(nullptr);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 }
 
 //
@@ -140,6 +145,10 @@ VersionLib::TokenClassifier &VersionLib::TokenClassifier::operator= (const Versi
 	this->readyForUse = other.readyForUse;
 	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	*this->dbg = *other.dbg;
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+
 	return *this;
 }
 
@@ -169,8 +178,68 @@ VersionLib::TokenClassifier &VersionLib::TokenClassifier::operator= (VersionLib:
 	this->readyForUse = std::move(other.readyForUse);
 	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
 
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->dbg = std::move(other.dbg);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+
 	return *this;
 }
+
+#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+
+//
+// Token Classifier Debugger:
+//
+
+void VersionLib::TokenClassifier::write_log (std::string entry)
+{
+	if (this->dbg && this->is_logger_enabled())
+	{
+		this->dbg->push_log(entry);
+	}
+}
+
+void VersionLib::TokenClassifier::set_logger (bool status)
+{
+	if (!this->is_logger_enabled() && status)
+	{
+		this->dbg.reset(new VersionLib::Debugger::DbgToken(VERSION_LIB_TOKEN_DEBUGGER_MAX_SIZE, false));
+	}
+
+	if (this->is_logger_enabled() && !status)
+	{
+		this->dbg.reset(nullptr);
+	}
+	
+	#ifdef VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
+	this->flags = this->flags | (status << 6);
+	#else
+	this->debugTokenClassifier = status;
+	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
+}
+
+bool VersionLib::TokenClassifier::is_logger_enabled()
+{
+	#ifdef VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
+	return (this->flags >> 6) & 0b0000'0001;
+	#else
+	return this->debugTokenClassifier = status;
+	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
+}
+
+std::unique_ptr<std::vector<std::string>> VersionLib::TokenClassifier::export_log()
+{
+	std::unique_ptr<std::vector<std::string>> pLogs;
+
+	if (this->dbg && this->is_logger_enabled())
+	{
+		pLogs = this->dbg->export_log();
+	}
+
+	return pLogs;
+}
+
+#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 
 //
 // Getters:
