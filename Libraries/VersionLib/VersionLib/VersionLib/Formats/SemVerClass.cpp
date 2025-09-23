@@ -6,19 +6,19 @@ VersionLib::SemVer::SemVer(std::string versionStr, bool cmpBuild)
 {
 	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKENS2SEMVER
 	VersionLib::Mappers::SemVerMapper semVerMap;
-	semVerMap.processTokens(versionStr);
+	int tokenStatus = semVerMap.processTokens(versionStr);
 	if (semVerMap.hasCoreSeq())
 	{
 		std::vector<unsigned short> core = semVerMap.getCoreNumSeq();
 		
 		this->major = core[0];
 		
-		if (core.size() >= 1)
+		if (core.size() > 1)
 		{
 			this->minor = core[1];
 		}
 
-		if (core.size() == 2)
+		if (core.size() > 2)
 		{
 			this->patch = core[2];
 		}
