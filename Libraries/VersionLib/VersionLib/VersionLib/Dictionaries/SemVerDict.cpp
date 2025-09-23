@@ -25,6 +25,10 @@ VersionLib::Dictionaries::SemVerClassifier::SemVerClassifier()
 	this->allowClassifyMethod = 0;
 	this->allowExtractTokensMethod = true;
 	#endif // !VERSION_LIB_ENABLE_TOKEN_CLASSIFIER_FLAGS
+
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->set_logger(true);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 }
 
 VersionLib::Dictionaries::SemVerClassifier::~SemVerClassifier()
@@ -33,9 +37,13 @@ VersionLib::Dictionaries::SemVerClassifier::~SemVerClassifier()
 
 std::vector<VersionLib::VersionToken> VersionLib::Dictionaries::SemVerClassifier::extractTokens (std::string version)
 {
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	std::string ver_report = "Version to convert: " + version;
+	this->write_log(ver_report);
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	std::cout << "Version to convert: " << version << std::endl;
+	std::cout << ver_report << std::endl;
 	#endif // !Check for IOSTREAM and DEBUG
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 
 	// Make sure the version string is complete in lowercase:
 	version = VersionLib::tolower_str(version);
@@ -332,48 +340,61 @@ std::vector<VersionLib::VersionToken> VersionLib::Dictionaries::SemVerClassifier
 	}
 
 	#if defined(DEBUG) && (defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_))
-	std::cout << "Detected Tokens:" << std::endl;
+	std::string tokenLog = "";
+	tokenLog = "Detected Tokens:";
+	std::cout << tokenLog << std::endl;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->write_log(tokenLog);
+	tokenLog.clear();
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 	for (size_t j = 0; j < tokens.size(); j++)
 	{
-		std::cout << "[" << j << "][" << VersionLib::getTokenTypeStr(tokens[j].getType()) << "]::";
+		tokenLog += std::string("[") + std::to_string(j) + std::string("][") + VersionLib::getTokenTypeStr(tokens[j].getType()) + std::string("]::");
 		
 		switch (tokens[j].getTokenData().getDataType())
 		{
 			case VersionLib::VersionTokenDataType::NULL_TYPE:
 			{
-				std::cout << "NULL_TOKEN_DATA";
+				tokenLog += "NULL_TOKEN_DATA";
 				break;
 			}
 			case VersionLib::VersionTokenDataType::STRING_TYPE:
 			{
-				std::cout << tokens[j].getTokenData().getStr();
+				tokenLog += tokens[j].getTokenData().getStr();
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_SHORT_TYPE:
 			{
-				std::cout << tokens[j].getTokenData().getShort();
+				tokenLog += std::to_string(tokens[j].getTokenData().getShort());
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_INT_TYPE:
 			{
-				std::cout << tokens[j].getTokenData().getInt();
+				tokenLog += std::to_string(tokens[j].getTokenData().getInt());
 				break;
 			}
 			case VersionLib::VersionTokenDataType::UNSIGNED_LONG_TYPE:
 			{
-				std::cout << tokens[j].getTokenData().getLong();
+				tokenLog += std::to_string(tokens[j].getTokenData().getLong());
 				break;
 			}
 			default:
 			{
-				std::cout << "EMPTY_TOKEN_DATA";
+				tokenLog += "EMPTY_TOKEN_DATA";
 				break;
 			}
 		}
 		
-		std::cout << std::endl;
+		tokenLog += "\n";
 	}
-	std::cout << "----------------" << std::endl;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->write_log(tokenLog);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	tokenLog += "----------------";
+	std::cout << tokenLog << std::endl;
+	#ifdef VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
+	this->write_log(tokenLog);
+	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER
 	#endif // !Check for IOSTREAM and DEBUG
 
 	return tokens;
