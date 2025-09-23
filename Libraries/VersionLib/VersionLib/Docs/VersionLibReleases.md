@@ -10,10 +10,16 @@ This document contain the complete change history to Version Library
     <link rel="stylesheet" href="./CSS/ReleaseNotes.css">
 </head>
 <dl>
-    <!-- 0.9.2-alpha.1 (Not released yet) -->
-    <dt><version-data>0.9.2-alpha</version-data> | Release Date: Not released yet</dt>
-    <dd><fix-alert>[FIX]</fix-alert> <code>VersionTokenType</code> class fails to return the string converted numerical values</dd>
+    <!-- 0.9.2-alpha.1 (2025/09/23) -->
+    <dt><version-data>0.9.2-alpha.1</version-data> | Release Date: 2025/09/23</dt>
     <dd>Added <code>getTypeStr</code> for <strong>VersionTokenData</strong> class</dd>
+    <dd>Added new experimental feature <strong>VERSION_LIB_ENABLE_EXPERIMENTAL_TOKEN_DEBUGGER</strong></dd>
+    <dd>Added experimental <code>TokenDebugger</code> class</dd>
+    <dd>Added experimental <i>TokenDebugger</i> in <code>SemVerDict</code> class</dd>
+    <dd>Changed the way on how the metadata is treated. Now the flag of block modifications is not send to a new object. <i>Each <code>BuildMetadata</code> object should manage it's own flag of block modification data</i></dd>
+    <dd><fix-alert>[FIX]</fix-alert> <code>VersionTokenType</code> class fails to return the string converted numerical values</dd>
+    <dd><fix-alert>[FIX]</fix-alert> token translation to <code>core</code> components</dd>
+    <dd><fix-alert>[FIX]</fix-alert> accumulation release components from tokens</dd>
     <!-- 0.9.2-alpha (2025/08/20) -->
     <dt><version-data>0.9.2-alpha</version-data> | Release Date: 2025/08/20</dt>
     <dd>Revised <code>BuildMetadata</code> and <code>VersionBuildType</code> classes</dd>
