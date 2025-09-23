@@ -66,8 +66,9 @@ namespace VersionLib
 			std::vector<unsigned short> core;							// Version Core components
 			VersionLib::VersionBuildType release;						// Version Release components
 			VersionLib::BuildMetadata metadata;							// Version Metadata
-			short useBuild = 0;											// Flag to determinate if build is used. 0: No used in version classifier. 1: Used by version classifier, but not set. 2: Used by classifier and set the build value.
+			short useBuild = 0;											// Flag to determinate if build is used. 0: Not used in version classifier. 1: Used by version classifier, but not set. 2: Used by classifier and set the build value.
 			unsigned long build;										// Version build compilation
+			bool debug_mapper = false;									// Enable TokenMapper debugger
 
 			/**
 			 * @brief Empty constructor. Only for inherence.
