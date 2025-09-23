@@ -399,7 +399,7 @@ int main(int argc, const char* argv[])
 		std::cout << "Semantic Versioning Class test:" << std::endl;
 		VersionLib::SemVer test1("2.4.17-beta.2+abc-15fd");
 		std::cout << "test1 : " << test1.getVersionStr(false, true, false) << std::endl;
-		std::cout << "End of Semantic Versioning Class test:" << std::endl;
+		std::cout << "End of Semantic Versioning Class test" << std::endl;
 	}
 	#endif // !VERSION_LIB_ENABLE_EXPERIMENTAL_SEMVER_CLASS
 
