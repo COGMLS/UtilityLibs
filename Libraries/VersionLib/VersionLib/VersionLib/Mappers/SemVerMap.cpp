@@ -71,17 +71,18 @@ int VersionLib::Mappers::SemVerMapper::processTokens (std::vector<VersionLib::Ve
 		}
 
 		// Test for release data:
-		if (tokens[i].isType(VersionLib::VersionTokenType::VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION))
+		if (type == VersionLib::VersionTokenType::VERSION_TOKEN_RELEASE_COMPONENT_DEFINITION)
 		{
 			lastReleasePos++;
-			VersionLib::BuildRelease release(VersionLib::str2BuildType(tokens[lastReleasePos].getTokenData().getStr()));
+			VersionLib::BuildRelease release(VersionLib::str2BuildType(tokens[i].getTokenData().getStr()));
 			releases.push_back(release);
 		}
 
 		// Test for metadata:
 		if (lastType == VersionLib::VersionTokenType::VERSION_TOKEN_METADATA_SEPARATOR && type == VersionLib::VersionTokenType::STRING_TOKEN)
 		{
-			this->metadata = VersionLib::BuildMetadata(tokens[i].getTokenData().getStr());
+			std::string localMetadata = tokens[i].getTokenData().getStr();
+			this->metadata = VersionLib::BuildMetadata(localMetadata);	// The BuildMetadata is buggy!
 		}
 	}
 
