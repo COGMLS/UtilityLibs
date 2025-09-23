@@ -67,7 +67,7 @@ VersionLib::BuildMetadata &VersionLib::BuildMetadata::operator=(const VersionLib
 			}
 		}
 	
-		this->blockMetadataMod = other.blockMetadataMod;
+		//this->blockMetadataMod = other.blockMetadataMod; Each object should have it's own policy of block metadata modification
 	}
 	return *this;
 }
@@ -92,7 +92,7 @@ VersionLib::BuildMetadata &VersionLib::BuildMetadata::operator=(VersionLib::Buil
 			}
 		}
 	
-		this->blockMetadataMod = std::move(other.blockMetadataMod);
+		//this->blockMetadataMod = std::move(other.blockMetadataMod); The data is moved, but the object policy should be keep managed independently.
 	}
 	return *this;
 }
