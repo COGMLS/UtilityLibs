@@ -67,27 +67,27 @@ int main(int argc, const char* argv[])
 			testVersionStructComp = true;
 		}
 
-		if (cli[i] == "-test2semvertokens")
+		if (cli[i] == "-test-semvertokens")
 		{
 			test_toSemVerTokens = true;
 		}
 
-		if (cli[i] == "-testtokenclassifiers")
+		if (cli[i] == "-test-tokenclassifiers")
 		{
 			test_tokenClassifiers = true;
 		}
 
-		if (cli[i] == "-testsemverdict")
+		if (cli[i] == "-test-semverdict")
 		{
 			test_semVerDictionary = true;
 		}
 
-		if (cli[i] == "-testsemvermap")
+		if (cli[i] == "-test-semvermap")
 		{
 			test_semVerMapper = true;
 		}
 
-		if (cli[i] == "-testsemverclass")
+		if (cli[i] == "-test-semverclass")
 		{
 			test_semVerClass = true;
 		}
