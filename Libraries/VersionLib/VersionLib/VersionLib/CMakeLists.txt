@@ -55,9 +55,9 @@ set(LibraryGen 0)
 
 # Define library final name:
 if(UseVersionOnLibName)
-	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}")
-else()
 	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+else()
+	set(LibraryFinalName "${UtilLibsMainName}.${LibraryName}")	
 endif()
 
 # Include libraries directories source codes:
@@ -143,7 +143,7 @@ else()
 endif()
 
 # Define the version properties on binary component:
-if(UseVersionOnLibName)
+if(UseSoVerOnLibName)
 	set_target_properties(${LibraryFinalName} PROPERTIES VERSION ${PROJECT_VERSION})
 	set_target_properties(${LibraryFinalName} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 endif()
