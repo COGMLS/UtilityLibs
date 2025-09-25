@@ -27,6 +27,7 @@ endif()
 
 if(DebugVersionLib)
 	add_compile_definitions(DEBUG)
+	include(CTest)
 	enable_testing()
 endif()
 
@@ -53,7 +54,11 @@ set(LibraryName "VersionLib")
 set(LibraryGen 0)
 
 # Define test console final name:
-set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}_C.${LibraryName}${LibraryGen}")
+if (UseVersionOnLibName)
+	set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}_C.${LibraryName}${LibraryGen}")
+else()
+	set(TestConsoleFinalName "${UtilLibsTestConsoleBaseName}_C.${LibraryName}")
+endif()
 
 # Include libraries directories source codes:
 #include_directories("${ReposRoot}/Libraries/<lib>")
@@ -67,9 +72,9 @@ add_executable(
 
 # Link the library depending on naming used:
 if(UseVersionOnLibName)
-	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")
-else()
 	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}${LibraryGen}")
+else()
+	target_link_libraries(${TestConsoleFinalName} "${UtilLibsMainName}.${LibraryName}")
 endif()
 
 # Enable tests if DEBUG is set:
