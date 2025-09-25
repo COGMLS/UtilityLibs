@@ -57,8 +57,11 @@ set(UtilLibsTestConsoleBaseName "TestConsole")
 # Define if will compile test consoles:
 set(CompileTestConsole True)
 
-# Define if will export version into library's name:
-set(UseVersionOnLibName False)
+# Define if will export version into library's name (Default repository is set to TRUE):
+set(UseVersionOnLibName True)
+
+# Define if will use so-names on library's name:
+set(UseSoVerOnLibName False)
 
 ###########################################################
 #
@@ -68,6 +71,10 @@ set(UseVersionOnLibName False)
 
 # Make a test with specific arguments:
 function(mkArgTest test target arg)
+	message(STATUS "Registered test ${test} for target ${target}")
+	if(NOT BUILD_TESTING AND ${CompileTestConsole})
+		message(WARNING "BUILD_TESTING is set OFF!")
+	endif()
 	add_test(NAME ${test} COMMAND ${target} ${arg})
 endfunction()
 
