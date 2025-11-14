@@ -1,19 +1,5 @@
 # Version Library
 
-> **UPDATE 2025/06/06:**
->
-> **WARNING:** on version 0.9.x, the VersionLib is now receiving the preparations to bring the definitive 1.0.0 with several modifications of internal methods and data structs.
->
-> ***All internal methods created or just declared to C linkage will be moved into another file***
->
-> The C linkage components will be calling the C++ internal components. All files for C programs will use a `*.h` extension file. A proper version of `version.hpp` file, for C programs, will be called `version.h` and will not use the namespace `VersionLib` to make easier to other developers to call the C linkage methods. All these functions will use the naming with `VersionLib_`
->
-> The components used to data transaction will be redesigned and the structures with "C" on naming will be moved to only C language files.
->
-> ***As part of the definitive design for Version Library, all structures will only be used by C linkage, as data transaction, and internal components will focus on classes and C++ code.***
-
-> **NOTE:** *The README.md file will be fully updated in 2025/08/10*
-
 The VersionLib is a versioning library to provide to other libraries and applications a easier way the implementation of version number control and tests to analyze if the version value is greater, equal, etc. The library also check if the *version core* is a release, beta or alpha build type. It's possible to check if the version is marked as incompatible with an application or library, using an known list of versions, provided by the dependency application or library and test it, with support to generate an exception or not.
 
 The VersionLib contains all necessary methods and data type needed to work, allowing to consume this library without dependencies. All VersionLib methods, data types and classes, are inside the namespace `VersionLib`.
@@ -21,6 +7,8 @@ The VersionLib contains all necessary methods and data type needed to work, allo
 This library was developed using ISO C++ 20 and the internal code works with all platforms where this C++ version can be compiled. Platforms tested with the actual development stage: **Linux** and **Windows**.
 
 **IMPORTANT:** *This library is under development and the methods may not work as expected. It's important to be aware about possible modifications that may break or be not compatible with previous feature during the development time.*
+
+> Project notes was moved to the [end](#project-notes) of README file.
 
 ## Using the Version Library:
 
@@ -61,21 +49,24 @@ To use a string as the source of the versioning information, the string must fol
 
 #### Legend:
 
-| Letter | Version component |
-| ------ | ----------------- |
-| **M** | Major |
-| **m** | minor |
-| **p** | patch |
-| **r** | Revision/Build type number |
-| **b** | build number |
-| **t** | Build type |
-
-| Symbol | Description |
-| ------ | ----------- |
-| ✅️ | Format recognized |
-| ⚠️ | Format partially recognized |
-| ❕ | Not part of Semantic Versioning |
-| ❌️ | Format not recognized |
+<div style="display: flex">
+    <table>
+        <tr><th>Letter</th><th>Version component</th></tr>
+        <tr><td><strong>M</strong></td><td>Major</td></tr>
+        <tr><td><strong>m</strong></td><td>minor</td></tr>
+        <tr><td><strong>p</strong></td><td>patch</td></tr>
+        <tr><td><strong>r</strong></td><td>Revision/Build type number</td></tr>
+        <tr><td><strong>b</strong></td><td>build number</td></tr>
+        <tr><td><strong>t</strong></td><td>Build type</td></tr>
+    </table>
+    <table>
+        <tr><th>Symbol</th><th>Description</th><tr>
+        <tr><td>✅️</td><td>Format recognized</td></tr>
+        <tr><td>⚠️</td><td>Format partially recognized</td></tr>
+        <tr><td>❕</td><td>Not part of Semantic Versioning</td></tr>
+        <tr><td>❌️</td><td>Format not recognized</td></tr>
+    </table>
+</div>
 
 | Format | Status | Experimental Detection | Example | Notes |
 | ------ | ------ | ---------------------- | ------- | ----- |
@@ -99,6 +90,24 @@ To use a string as the source of the versioning information, the string must fol
 | M.m.p b | ❌️ | ✅️ | 10.2.8 456 | Build number is not detected. |
 | M.m b | ❌️ | ✅️ | 17.5 782 | Build revision is confused with patch |
 | M.m.p b | ❌️ | ✅️ | 17.9.5 125 | Build number is not detected |
+
+## Project Notes:
+
+> **UPDATE 2025/11/14:**
+>
+> **NOTE:** Actually I have been managing with my MBA in Software Engineering and the project priority was changed. I updated the roadmap with new estimated dates for Version Library release.
+>
+> **UPDATE 2025/06/06:**
+>
+> **WARNING:** on version 0.9.x, the VersionLib is now receiving the preparations to bring the definitive 1.0.0 with several modifications of internal methods and data structs.
+>
+> ***All internal methods created or just declared to C linkage will be moved into another file***
+>
+> The C linkage components will be calling the C++ internal components. All files for C programs will use a `*.h` extension file. A proper version of `version.hpp` file, for C programs, will be called `version.h` and will not use the namespace `VersionLib` to make easier to other developers to call the C linkage methods. All these functions will use the naming with `VersionLib_`
+>
+> The components used to data transaction will be redesigned and the structures with "C" on naming will be moved to only C language files.
+>
+> ***As part of the definitive design for Version Library, all structures will only be used by C linkage, as data transaction, and internal components will focus on classes and C++ code.***
 
 ## Project components implementations:
 
